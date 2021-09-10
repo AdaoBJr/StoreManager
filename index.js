@@ -7,6 +7,8 @@ const productsController = require('./controllers/productController');
 const app = express();
 app.use(bodyParser.json());
 
+app.post('/products', productsController.createProduct);
+
 app.get('/', (_request, response) => {
   response.send();
 });

@@ -1,3 +1,3 @@
-const getAll = (req, res) => {};
+const createProduct = (req, res) => {};
 
-module.exports = { getAll };
+module.exports = { createProduct };
