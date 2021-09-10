@@ -72,6 +72,24 @@ const editProduct = (req, res) => {
   .then((result) => res.status(200).json(result));
 };
 
+const getByIdBeforeDelete = (req, res, next) => {
+  const { id } = req.params;
+  productsService.getById(id)
+  .then((result) => {
+    if (!result) {
+      return res.status(422).json({ err: { code: 'invalid_data', message: 'Wrong id format' } });
+    }
+  return res.status(200).json(result);
+})
+  .catch(() => res.status(422).json({ err: { code: 'invalid_data', message: 'Wrong id format' } }));
+  next();
+};
+
+const deleteProduct = (req, _res) => {
+  const { id } = req.params;
+  productsService.deleteProduct(id);
+};
+
 module.exports = {
   router,
   validName,
@@ -81,4 +99,6 @@ module.exports = {
   getAll,
   getById,
   editProduct,
+  getByIdBeforeDelete,
+  deleteProduct,
 };
