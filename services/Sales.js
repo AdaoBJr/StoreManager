@@ -18,6 +18,7 @@ const findById = async (id) => {
 
 module.exports = {
   getAll: Sales.getAll,
+  update: Sales.update,
   create,
   findById,
 };

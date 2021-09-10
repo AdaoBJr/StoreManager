@@ -35,4 +35,13 @@ sales.post(
   }),
 );
 
+sales.put(
+  '/:id',
+  rescue(async (req, res) => {
+    const { id } = req.params;
+    const salesList = await Sales.update(id, req.body);
+    return res.status(SUCCESS).json(salesList);
+  }),
+);
+
 module.exports = sales;
