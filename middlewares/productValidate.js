@@ -1,7 +1,7 @@
-const { product } = require('../schemas');
+const { products } = require('../schemas');
 
 module.exports = (req, res, next) => {
-  const { error } = product.validate(req.body);
+  const { error } = products.validate(req.body);
   if (error) next(error);
   next();
 };
