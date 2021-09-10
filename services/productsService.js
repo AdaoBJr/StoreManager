@@ -8,8 +8,8 @@ const validateName = (name) => {
   if (isValid.error) {
     return {
       err: { 
-        message: 'Dados inválidos',
-        code: '"name" lenght must be at least 5 characters long',
+        code: 'invalid_data',
+        message: '"name" length must be at least 5 characters long',
       },
     };
   }
@@ -17,13 +17,24 @@ const validateName = (name) => {
 };
 
 const validateQuantity = (quantity) => {
-  const { error } = Joi.number().required().integer().min(1)
-  .validate(quantity);
-  if (error) {
+  if (quantity < 1) {
     return { 
       err: { 
-        message: 'Dados inválidos',
-        code: '"quantity" must be larger than or equal to 1',
+        code: 'invalid_data',
+        message: '"quantity" must be larger than or equal to 1',
+      },
+    };
+  }
+  return false;
+};
+
+const isNumber = (quantity) => {
+  console.log(typeof quantity === 'string');
+  if (typeof quantity === 'string') {
+    return { 
+      err: { 
+        code: 'invalid_data',
+        message: '"quantity" must be a number',
       },
     };
   }
@@ -32,10 +43,14 @@ const validateQuantity = (quantity) => {
 
 const registerNewProduct = (newProduct) => {
   const { name, quantity } = newProduct;
+  const quantityNotNumber = isNumber(quantity);
   const nameNotValid = validateName(name);
   const quantityNotValid = validateQuantity(quantity);
+
     if (nameNotValid) return nameNotValid;
+    if (quantityNotNumber) return quantityNotNumber;
     if (quantityNotValid) return quantityNotValid;
+
   return productsModels.registerNewProduct(newProduct);
 };
 

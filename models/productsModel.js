@@ -1,4 +1,3 @@
-// const rescue = require('express-rescue');
 const { ObjectId } = require('mongodb');
 const mongodb = require('./connection');
 
@@ -10,8 +9,8 @@ const registerNewProduct = async (newProduct) => {
   if (isNotUnique.length > 0) {
     return { 
       err: { 
-        message: 'Dados inválidos',
-        code: 'Product already exists',
+        code: 'invalid_data',
+        message: 'Product already exists',
       },
     }; 
   }
@@ -23,22 +22,27 @@ const getProducts = async () => {
   const connectedDB = await mongodb.getConnection()
   .then((db) => db.collection('products'));
   const products = await connectedDB.find().toArray();
-  return products;
+  return { products };
 };
 
 const getProductById = async (id) => {
   const connectedDB = await mongodb.getConnection()
   .then((db) => db.collection('products'));
-  const product = await connectedDB.find({ _id: ObjectId(id) }).toArray();
-  if (product.length === 0) {
-    return { 
-      err: { 
-        message: 'invalid_data',
-        code: 'Wrong id format',
-      },
-    }; 
+  try {
+    const product = await connectedDB.find({ _id: ObjectId(id) }).toArray();
+    if (product.length === 0) {
+      return { 
+        err: { 
+          code: 'invalid_data',
+          message: 'Wrong id format',
+        },
+      }; 
+    }
+    return product[0];
+  } catch (err) {
+    return { err: { code: 'invalid_data', message: 'Wrong id format' },
+    };
   }
-  return product;
 };
 
 module.exports = {
