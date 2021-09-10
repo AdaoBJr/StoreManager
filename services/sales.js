@@ -1,6 +1,6 @@
 const Sales = require('../models/Sales');
 const Product = require('../models/Products');
-const Error = require('../utils/errosService');
+const Error = require('../utils/errorsService');
 
 const findById = async (id) => {
   const sale = await Sales.findById(id);
