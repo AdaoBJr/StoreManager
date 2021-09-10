@@ -4,6 +4,8 @@ const app = express();
 const bodyParser = require('body-parser');
 
 const productRoutes = require('./Routes/ProductRoutes');
+const salesRoutes = require('./Routes/SalesRoutes');
+
 const error = require('./middlewares/error');
 
 const PORT = 3000;
@@ -15,6 +17,8 @@ app.get('/', (_request, response) => {
 });
 
 productRoutes(app);
+salesRoutes(app);
+
 app.use(error);
 
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));

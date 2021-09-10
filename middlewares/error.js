@@ -28,6 +28,12 @@ const errors = {
     message: 'Wrong id format',
     status: 422,
   },
+
+  invalidSale: {
+    code: 'invalid_data',
+    message: 'Wrong product ID or invalid quantity',
+    status: 422,
+  },
 };
 
 module.exports = (err, _req, res, _next) => {
