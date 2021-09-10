@@ -13,11 +13,9 @@ const router = express.Router();
 
 router.route('/').post(validateSaleQuantity, create);
 
-router.route('/:id')
-.get(validateSaleId, getById)
-.put(validateSaleQuantity, update)
-.delete(validateSaleId, remove);
-
+router.route('/:id').get(validateSaleId, getById)
+  .put(validateSaleQuantity, update)
+  .delete(validateSaleId, remove);
 router.route('/').get(getAll);
 
 module.exports = router;

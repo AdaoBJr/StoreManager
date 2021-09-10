@@ -2,8 +2,8 @@ const express = require('express');
 const { create,
   getAll, update,
   remove, getById } = require('../controllers/productsController');
-  const { validateProduct,
-    validateProductId } = require('../middlewares/ValidationsMiddleware');
+const { validateProduct,
+  validateProductId } = require('../middlewares/ValidationsMiddleware');
 
 const router = express.Router();
 

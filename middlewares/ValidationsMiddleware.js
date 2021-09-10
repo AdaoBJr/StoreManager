@@ -1,5 +1,5 @@
 const ProducSchema = require('../schemas/ProductSchema');
-const { findById } = require('../schemas/ProductSchema');
+const { findById } = require('../models/saleModel');
 
 const BAD_REQUEST = 404;
 const UNPROC = 422;
