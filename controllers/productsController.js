@@ -54,10 +54,8 @@ const getAllProducts = async (req, res) => {
 
 const getAProductById = async (req, res) => {
     const { id } = req.params;
-    // console.log(id);
     try {
         const product = await productsService.getProductsById(id);
-        console.log(product);
         return res.status(200).json(product);
     } catch (error) {
         return res.status(422).json({
@@ -86,6 +84,24 @@ const createProducts = async (req, res) => {
     }
 };
 
+const updateProduct = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const { name, quantity } = req.body;
+        const result = await productsService.updateProduct({ id, name, quantity });
+        console.log(result);
+        if (result) {
+            console.log('entrei422');
+            return res.status(422).json({
+                err: { code: 'invalid_data', message: 'Product already exists' },
+            });
+        }
+        return res.status(200).json({ _id: id, name, quantity });
+    } catch (error) {
+        return res.status(500).json({ message: 'Ops, algo de errado :( ' });
+    }
+};
+
 module.exports = {
     getAllProducts,
     createProducts,
@@ -93,4 +109,5 @@ module.exports = {
     validQuantity,
     validTypeQuantity,
     getAProductById,
+    updateProduct,
 };

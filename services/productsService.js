@@ -40,13 +40,15 @@ const createProduct = async ({ name, quantity }) => {
     return response;
 };
 
-// const updateSong = async ({ id, name, album }) => {
-//     if (songExists)
-//         return null;
-
-//     //Validação de outros campos também viriam aqui
-//     return await songModel.update({ id, name, album });
-// }
+const updateProduct = async ({ id, name, quantity }) => {
+    const productExists = await productsModel.productsExists(name);
+    // console.log(productExists);
+    if (productExists) {
+        const response = await productsModel.update({ id, name, quantity });
+         return response;
+    }
+    return false;
+};
 
 module.exports = { 
     createProduct,
@@ -55,4 +57,5 @@ module.exports = {
      validQuantity, 
      validTypeQuantity,
      getProductsById,
+     updateProduct,
      };

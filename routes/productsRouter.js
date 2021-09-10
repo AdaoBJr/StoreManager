@@ -10,5 +10,10 @@ productsController.validName,
 productsController.validQuantity,
 productsController.validTypeQuantity,
 productsController.createProducts);
+router.put('/:id', 
+productsController.validName, 
+productsController.validQuantity,
+productsController.validTypeQuantity,
+productsController.updateProduct);
 
 module.exports = router;
