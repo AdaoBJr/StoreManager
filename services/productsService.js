@@ -1,8 +1,8 @@
 const productsModel = require('../models/productsModels');
 
 const create = async ({ name, quantity }) => {
-  const result = await productsModel.create({ name, quantity });
-  return result;
+  const response = await productsModel.create({ name, quantity });
+  return response;
 };
 
 module.exports = { create };
