@@ -10,6 +10,14 @@ const create = async (sales) => {
   return Sales.create(sales);
 };
 
+const findById = async (id) => {
+  const sale = await Sales.findById(id);
+  if (!sale) return Error.notFound('Sale not found'); 
+  return sale;
+};
+
 module.exports = {
+  getAll: Sales.getAll,
   create,
+  findById,
 };
