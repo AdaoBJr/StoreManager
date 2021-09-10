@@ -1,8 +1,8 @@
 const { Router } = require('express');
 const { createProduct } = require('../controllers/product_controller');
-const { 
+/* const { 
     NameValidation, ExistingProduct, QuantityValidation,
-} = require('../middlewares/product_midd');
+} = require('../middlewares/product_midd'); */
 
 const routes = new Router();
 
@@ -11,6 +11,6 @@ routes.get('/', (_request, response) => {
     response.send();
   });
 
-routes.post('/products', NameValidation, ExistingProduct, QuantityValidation, createProduct);
+routes.post('/products', /*  NameValidation, ExistingProduct, QuantityValidation, */ createProduct);
 
 module.exports = routes; 
