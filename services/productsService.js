@@ -11,6 +11,10 @@ const validQuantity = (quantity) => {
     if (quantity <= 0) { return false; }
     return true;
 };
+const validTypeQuantity = (quantity) => {
+    if (typeof (quantity) === 'string') { return false; }
+    return true;
+};
 
 const getAllProducts = async () => {
     const products = productsModel.getAll();
@@ -36,4 +40,4 @@ const createProduct = async ({ name, quantity }) => {
 //     return await songModel.update({ id, name, album });
 // }
 
-module.exports = { createProduct, getAllProducts, validName, validQuantity };
+module.exports = { createProduct, getAllProducts, validName, validQuantity, validTypeQuantity };

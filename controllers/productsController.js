@@ -20,7 +20,19 @@ const validQuantity = (req, res, next) => {
     const quantityVerified = productsService.validQuantity(quantity);
     if (!quantityVerified) {
         return res.status(422).json({
-            err: { code: 'invalid_data', message: '"quantity" must be a number' }, 
+            err: { code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' }, 
+        });
+    }
+    next();
+};
+const validTypeQuantity = (req, res, next) => {
+    const { quantity } = req.body;
+    const quantityTypeVerified = productsService.validTypeQuantity(quantity);
+    if (!quantityTypeVerified) {
+        return res.status(422).json({
+            err: { 
+                code: 'invalid_data',
+                 message: '"quantity" must be a number' }, 
         });
     }
     next();
@@ -51,4 +63,4 @@ const createProducts = async (req, res) => {
     }
 };
 
-module.exports = { getAllProducts, createProducts, validName, validQuantity };
+module.exports = { getAllProducts, createProducts, validName, validQuantity, validTypeQuantity };

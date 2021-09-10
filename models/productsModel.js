@@ -18,7 +18,7 @@ const create = async ({ name, quantity }) => {
     const db = await connection();
     const createdSoundResult = await db.collection('products').insertOne({ name, quantity });
 
-    return { id: createdSoundResult.insertedId, name, quantity };
+    return { _id: createdSoundResult.insertedId, name, quantity };
 };
 
 // const update = async ({ id, name, album }) => {

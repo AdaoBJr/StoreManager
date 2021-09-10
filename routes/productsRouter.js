@@ -7,6 +7,7 @@ router.get('/', productsController.getAllProducts);
 router.post('/', 
 productsController.validName, 
 productsController.validQuantity,
+productsController.validTypeQuantity,
 productsController.createProducts);
 
 module.exports = router;
