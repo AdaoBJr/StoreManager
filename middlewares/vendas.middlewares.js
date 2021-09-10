@@ -1,7 +1,3 @@
-// const middlewarProd = require('./produtos.middlewares');
-// const { ObjectId } = require('mongodb');
-// const connection = require('../models/mongoConnection');
-
 const isValidQuantity = async (req, res, next) => {
   const retorno = req.body;
 
@@ -12,6 +8,19 @@ const isValidQuantity = async (req, res, next) => {
       err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } });
   }
 
+  next();
+};
+
+const isValidQuantityUpdate = async (req, res, next) => {
+  if (!req.params.id || typeof req.body[0].quantity === 'string') {
+    return res.status(422).json({
+      err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } });
+  }
+
+  if (req.body[0].quantity <= 0) {
+    return res.status(422).json({
+      err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } });
+  }
   next();
 };
 
@@ -26,4 +35,4 @@ const isValidSale = async (req, res, next) => {
   next();
 };
 
-module.exports = { isValidQuantity, isValidSale };
+module.exports = { isValidQuantity, isValidSale, isValidQuantityUpdate };
