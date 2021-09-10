@@ -46,17 +46,19 @@ const updateQuantityAfterCreate = async (createdSale) => {
   const saleArray = createdSale.ops[0].itensSold;
   await saleArray.forEach(async (product) => {
     const outDatedProduct = await getById(product.productId);
+    const { _id } = outDatedProduct;
     const updatedQuantity = outDatedProduct.quantity - product.quantity;
-    await updateProduct(outDatedProduct.name, updatedQuantity, outDatedProduct._id);
+    await updateProduct(outDatedProduct.name, updatedQuantity, _id);
   });
 };
 
 const updateQuantityAfterDelete = async (deletedSale) => {
-  const { _id, itensSold } = deletedSale;
+  const { itensSold } = deletedSale;
   await itensSold.forEach(async (product) => {
     const outDatedProduct = await getById(product.productId);
+    const { _id } = outDatedProduct;
     const updatedQuantity = outDatedProduct.quantity + product.quantity;
-    await updateProduct(outDatedProduct.name, updatedQuantity, outDatedProduct._id);
+    await updateProduct(outDatedProduct.name, updatedQuantity, _id);
   });
 };
 
