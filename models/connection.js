@@ -8,7 +8,7 @@ const DB_NAME = 'StoreManager';
 
 let schema = null;
 
-async function connection() {
+async function getConnection() {
   if (schema) return Promise.resolve(schema);
 
   return MongoClient
@@ -26,4 +26,4 @@ async function connection() {
     });
 }
 
-module.exports = { connection };
+module.exports = { getConnection };
