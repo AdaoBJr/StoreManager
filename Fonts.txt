@@ -1,0 +1,2 @@
+O pacote '@ hapi / joi' foi sugerido durante explicações dos colegas de tribo que me foram fornecidas no Discord.
+https://www.npmjs.com/package/@hapi/joi

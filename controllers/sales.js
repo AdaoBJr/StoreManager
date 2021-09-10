@@ -1,18 +1,57 @@
-const sales = require('../services/sales');
+const express = require('express');
+const rescue = require('express-rescue');
+const { saleValidate } = require('../middlewares');
+const Sales = require('../services/Sales');
+const { SUCCESS } = require('../utils/statusCode');
 
-const create = (req, res) => sales.create([...req.body])
-  .then(({ status, data }) => res.status(status).json(data));
+const sales = express.Router();
 
-const getAll = (_req, res) => sales.getAll()
-  .then(({ status, data }) => res.status(status).json({ sales: data }));
+sales.get(
+  '/',
+  rescue(async (req, res) => {
+    const saleList = await Sales.getAll();
+    res.status(SUCCESS).json({ sales: saleList });
+  }),
+);
 
-const getById = (req, res) => sales.getById(req.params.id)
-  .then(({ status, data }) => res.status(status).json(data));
+sales.get(
+  '/:id',
+  rescue(async (req, res, next) => {
+    const { id } = req.params;
+    const sale = await Sales.findById(id);
+    if (sale.isError) return next(sale);
+    return res.status(SUCCESS).json(sale);
+  }),
+);
 
-const update = ({ body: [...args], params: { id } }, res) => sales.update(id, args)
-  .then(({ status }) => res.status(status).json({ _id: id, itensSold: args }));
+sales.delete(
+  '/:id',
+  rescue(async (req, res, next) => {
+    const { id } = req.params;
+    const sale = await Sales.excluse(id);
+    if (sale.isError) return next(sale);
+    return res.status(SUCCESS).json(sale);
+  }),
+);
 
-const remove = (req, res) => sales.remove(req.params.id)
-  .then(({ status, data }) => res.status(status).json(data));
+sales.use(saleValidate);
 
-module.exports = { create, getAll, getById, update, remove };
+sales.post(
+  '/',
+  rescue(async (req, res, next) => {
+    const sale = await Sales.create(req.body);
+    if (sale.isError) return next(sale);
+    return res.status(SUCCESS).json(sale);
+  }),
+);
+
+sales.put(
+  '/:id',
+  rescue(async (req, res) => {
+    const { id } = req.params;
+    const salesList = await Sales.update(id, req.body);
+    return res.status(SUCCESS).json(salesList);
+  }),
+);
+
+module.exports = sales;

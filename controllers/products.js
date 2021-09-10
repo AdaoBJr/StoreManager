@@ -1,18 +1,58 @@
-const products = require('../services/products');
+const express = require('express');
+const rescue = require('express-rescue');
+const { productValidate } = require('../middlewares');
+const Products = require('../services/Products');
+const { CREATED, SUCCESS } = require('../utils/statusCode');
 
-const create = (req, res) => products.create(req.body)
-  .then(({ status, data }) => res.status(status).json(data));
+const products = express.Router();
 
-const getAll = (_req, res) => products.getAll()
-  .then(({ status, data }) => res.status(status).json({ products: data }));
+products.get(
+  '/',
+  rescue(async (req, res) => {
+    const listProducts = await Products.getAll();
+    res.status(SUCCESS).json({ products: listProducts });
+  }),
+);
 
-const getById = (req, res) => products.getById(req.params.id)
-  .then(({ status, data }) => res.status(status).json(data));
+products.get(
+  '/:id',
+  rescue(async (req, res, next) => {
+    const { id } = req.params;
+    const product = await Products.findById(id);
+    if (product.isError) return next(product);
+    return res.status(SUCCESS).json(product);
+  }),
+);
 
-const update = (req, res) => products.update(req.params.id, req.body)
-  .then(({ status }) => res.status(status).json({ _id: req.params.id, ...req.body }));
+products.delete(
+  '/:id',
+  rescue(async (req, res, next) => {
+    const { id } = req.params;
+    const product = await Products.excluse(id);
+    if (product.isError) return next(product);
+    return res.status(SUCCESS).json(product);
+  }),
+);
 
-const remove = (req, res) => products.remove(req.params.id)
-  .then(({ status, data }) => res.status(status).json(data));
+products.use(productValidate);
 
-module.exports = { create, getAll, getById, update, remove };
+products.post(
+  '/',
+  rescue(async (req, res, next) => {
+    const { name, quantity } = req.body;
+    const product = await Products.create({ name, quantity });
+    if (product.isError) return next(product);
+    return res.status(CREATED).json(product);
+  }),
+);
+
+products.put(
+  '/:id',
+  rescue(async (req, res) => {
+    const { id } = req.params;
+    const product = await Products.update(id, req.body);
+    return res.status(SUCCESS).json(product);
+  }),
+);
+
+module.exports = products;

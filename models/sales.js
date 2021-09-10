@@ -1,22 +1,47 @@
-const { ObjectID } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
-const create = (itensSold) => connection().then((db) =>
-  db.collection('sales').insertOne({ itensSold })).then(({ ops }) => ops[0]);
+const getAll = async () => {
+  const db = await connection();
+  return db.collection('sales').find().toArray();
+};
 
-const getAll = () => connection().then((db) =>
-  db.collection('sales').find().toArray());
+const findById = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await connection();
+  return db.collection('sales').findOne(ObjectId(id));
+};
 
-const getById = (id) => connection().then((db) =>
-  db.collection('sales').findOne(ObjectID(id)));
+const create = async (sales) => {
+  const db = await connection();
+  const { insertedId } = await db.collection('sales').insertOne({ itensSold: sales });
+  return {
+    _id: insertedId,
+    itensSold: sales,
+  };
+};
 
-const update = (id, itensSold) => connection().then((db) =>
-  db.collection('sales').updateOne({ _id: ObjectID(id) }, { $set: { itensSold } }));
+const update = async (id, updates) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await connection();
+  await db
+    .collection('sales')
+    .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: updates } });
+  return findById(id);
+};
 
-const remove = (id) => connection().then((db) =>
-  db.collection('sales').findOneAndDelete({ _id: ObjectID(id) }));
+const exclude = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await connection();
+  const sales = await findById(id);
+  db.collection('sales').deleteOne({ _id: ObjectId(id) });
+  return sales;
+};
 
-const updateStock = (id, quantity) => connection().then((db) =>
-  db.collection('products').updateOne({ _id: ObjectID(id) }, { $inc: { quantity } }));
-
-module.exports = { create, getAll, getById, update, remove, updateStock };
+module.exports = {
+  create,
+  getAll,
+  findById,
+  update,
+  exclude,
+};
