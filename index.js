@@ -1,14 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { create } = require('./controllers/productsController');
-const { validateProducts } = require('./middlewares/productsMiddleware');
+const { create, getAll, findById } = require('./controllers/productsController');
+const { validateProducts, isValidId } = require('./middlewares/productsMiddleware');
 
 const app = express();
 const PORT = 3000;
 
 app.use(bodyParser.json());
 app.get('/', (_request, response) => { response.send(); });
+
+app.get('/products', getAll);
+app.get('/products/:id', isValidId, findById);
 
 app.post('/products', validateProducts, create);
 
