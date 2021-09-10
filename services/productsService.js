@@ -1,4 +1,4 @@
-const { isProductValid, alreadyExists } = require('../validations/productValidations'); 
+const { isProductValid, alreadyExists } = require('../validations/productsValidations'); 
 const { createProduct } = require('../models/productsModel');
 
 const create = async (name, quantity) => {

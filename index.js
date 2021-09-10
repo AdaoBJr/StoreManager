@@ -6,7 +6,7 @@ app.use(express.json());
 
 const PORT = '3000';
 
-// não remova esse endpoint, é para o avaliador funcionar
+// do not remove, is for the evaluator to work correctly
 app.get('/', (_request, response) => {
   response.send();
 });
