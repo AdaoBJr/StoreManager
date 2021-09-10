@@ -20,3 +20,8 @@ const findSaleById = async (id) => {
   const sale = await findById(id);
   return sale;
 };
+
+const updateSale = async (id, productId, quantity) => {
+  const sale = await updateSaleData(id, productId, quantity);
+  return sale;
+};

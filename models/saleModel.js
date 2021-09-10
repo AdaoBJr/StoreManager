@@ -32,3 +32,24 @@ const findById = async (id) => {
 
   return sale;
 };
+
+const updateSaleData = async (id, productId, quantity) => {
+  await connection().then((db) =>
+    db
+      .collection('sales')
+      .updateOne(
+        { _id: ObjectId(id) },
+        { $set: { 'itensSold.$[item].quantity': quantity } },
+        { arrayFilters: [{ 'item.productId': productId }], upsert: true },
+      ));
+
+  return {
+    _id: id,
+    itensSold: [
+      {
+        productId,
+        quantity,
+      },
+    ],
+  };
+};

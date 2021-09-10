@@ -27,3 +27,12 @@ const getById = async (req, res) => {
   const sales = await findSaleById(id);
   res.status(STATUS_SUCCESS).json(sales);
 };
+
+const update = async (req, res) => {
+  const body = req.body[0];
+  const { id } = req.params;
+  const { productId, quantity } = body;
+
+  const sales = await updateSale(id, productId, quantity);
+  return res.status(STATUS_SUCCESS).json(sales);
+};
