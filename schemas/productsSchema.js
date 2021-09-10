@@ -37,7 +37,6 @@ const validateQuanty = (quantity, resultValidate) => {
 const validadteEqualName = async (name, resultValidate) => {
   if (resultValidate.isNotOk) return { ...resultValidate };
   const existsProduct = await findByName(name);
-  console.log(!existsProduct);
   switch (true) {
     case !existsProduct:
       return { ...resultValidate, message: errors.productExists, isNotOk: true, code };
