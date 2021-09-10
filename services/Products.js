@@ -22,6 +22,14 @@ const checkValidQuantity = (quantity) => {
   }
 };
 
+const checkProductId = (productId) => {
+  if (!productId) {
+    const error = new Error();
+    error.statusCode = 'invalidIdFormat';
+    throw error;
+  }
+};
+
 const findProductByName = async (name) => {
   const product = await model.findByName(name);
   if (product) {
@@ -39,6 +47,16 @@ const createProduct = async (name, quantity) => {
   return result;
 };
 
+const getAll = () => model.getAll();
+
+const getById = async (id) => {
+  const result = await model.findById(id);
+  checkProductId(result);
+  return result;
+};
+
 module.exports = {
   createProduct,
+  getAll,
+  getById,
 };

@@ -22,10 +22,15 @@ const errors = {
     message: '"quantity" must be a number',
     status: 422,
   },
+
+  invalidIdFormat: {
+    code: 'invalid_data',
+    message: 'Wrong id format',
+    status: 422,
+  },
 };
 
 module.exports = (err, _req, res, _next) => {
-  console.log(err);
   console.log(errors[err.statusCode]);
   if (err.statusCode) {
     const { code, message, status } = errors[err.statusCode];
