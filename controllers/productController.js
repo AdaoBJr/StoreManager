@@ -1,15 +1,17 @@
+const statusCode = require('http-status-codes');
 const productService = require('../service/productService');
 
 const create = async (req, res) => {
 	const { name, quantity } = req.body;
 
-	const product = await productService.create({ name, quantity });
+	const product = await productService.create(name, quantity);
+  const { id } = product;
 
-	if (!product) {
-		return res.status(400).json({ message: 'Dados inválidos', code: 400 });
+	if (product.message) {
+		return res.status(statusCode.UNPROCESSABLE_ENTITY).json(product.message);
 	}
 
-	res.status(201).json({ name, quantity });
+	return res.status(statusCode.OK).json({ id, name, quantity });
 };
 
 /* const getAll = async (_req, res) => {

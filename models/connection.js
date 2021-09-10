@@ -1,17 +1,19 @@
-const mongoose = require('mongoose');
+const { MongoClient } = require('mongodb');
 
-mongoose.Promise = global.Promise;
-
+const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
 const DB_NAME = 'StoreManager';
 
-// Connect MongoDB at default port 27017.
-mongoose.connect(`mongodb://localhost:27017/${DB_NAME}`, {
-   /* useNewUrlParser: true,
-    useCreateIndex: true, */
-}, (err) => {
-    if (!err) {
-        console.log('MongoDB Connection Succeeded.');
-    } else {
-        console.log(`Error in DB connection: ${err}`);
-    }
-});
+const getConnection = () => MongoClient
+    .connect(MONGO_DB_URL, {
+    //   urlNewParser: true,
+      useUnifiedTopology: true,
+    })
+    .then((conn) => conn.db(DB_NAME)) // nome do banco de dados
+    .catch((err) => {
+      console.error(err);
+      process.exit();
+    });
+
+module.exports = {
+    getConnection,
+};

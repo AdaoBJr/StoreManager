@@ -1,41 +1,52 @@
 const productModel = require('../models/productsModel');
 
 const isValidName = (name) => {
-  if (typeof name !== 'string' || name.length <= 5) return false;
+  const ifString = typeof name !== 'string';
+  const lengthName = name.length <= 5;
+  if (ifString || lengthName) {
+    return false;
+  }
 
   return true;
 };
 
-const isValidQuantity = (quantity) => {
-    const moreZero = quantity > 0;
-    if (!moreZero || typeof quantity !== 'number') return false;
+const isValidQuantityZero = (quantity) => {
+    const moreZero = quantity > 0;    
+    if (!moreZero) {
+      return false;
+    }
     return true;
   };
-  
-const create = async ({ name, quantity }) => {
-  const isProductNameValid = isValidName(name);
-  const isProductQuantityValid = isValidQuantity(quantity); 
-  if (!isProductNameValid || isProductQuantityValid) return false;
 
-  const { id } = await productModel.create({ name, quantity });
-  return {
-    id,
-    name,
-    quantity,
-  };
+const isValidQuantityNotNumber = (quantity) => {
+  const notNumber = typeof quantity !== 'number';
+  if (notNumber) {
+    return false;
+  }
+  return true;
 };
+  
+const create = async (name, quantity) => {
+  const isProductNameValid = isValidName(name);
+  const isProductQuantityValidZero = isValidQuantityZero(quantity);
+  const isProductQuantityNotNumber = isValidQuantityNotNumber(quantity);  
+  if (!isProductNameValid) {
+    return { code: 'invalid_data', message: '"name" length must be at least 5 caracters long' }; 
+  }
+  if (!isProductQuantityValidZero) {
+    return { code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' };
+  }
 
-/* const getNewMovie = (movieData) => {
-  const { id, title, directedBy, releaseYear } = movieData;
+  if (!isProductQuantityNotNumber) {
+    return {
+      code: 'invalid_data',
+      message: '"quantity" must be a number',
+    }; 
+  }
 
-  return { id, title, directedBy, releaseYear };
-}; */
-
-// const getAll = async () => {
-//   const productData = await MoviesModel
-//     .getAll();
-//   return moviesData.map(getNewMovie);
-// };
+  const { id } = await productModel.create(name, quantity);
+  return { id, name, quantity };
+};
 
 module.exports = {
   create,
