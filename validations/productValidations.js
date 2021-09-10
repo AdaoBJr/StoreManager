@@ -2,7 +2,7 @@ const { StatusCodes: { UNPROCESSABLE_ENTITY } } = require('http-status-codes');
 const { productExists } = require('../models/productsModel');
 
 const errors = {
-  nameLength: '"name" length must be at least 5 characters long',
+  nameLengthInvalid: '"name" length must be at least 5 characters long',
   isNotNumber: '"quantity" must be a number',
   quantLessThanOne: '"quantity" must be larger than or equal to 1',
   alreadyExists: 'Product already exists',
@@ -15,7 +15,7 @@ const isNumber = (quant) => typeof quant !== 'number';
 const isProductValid = (name, quant) => {
 switch (true) {
   case checkNameLenght(name): 
-    return { code: UNPROCESSABLE_ENTITY, message: errors.nameLength };
+    return { code: UNPROCESSABLE_ENTITY, message: errors.nameLengthInvalid };
   case isNumber(quant):
     return { code: UNPROCESSABLE_ENTITY, message: errors.isNotNumber };
   case checkQuantity(quant):

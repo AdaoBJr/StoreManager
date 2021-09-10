@@ -4,7 +4,7 @@ const createProduct = async (name, quantity) => {
   const db = await connection();
   const createdProduct = await db.collection('products').insertOne({ name, quantity });
 
-  return { id: createdProduct.insertedId, name, quantity };
+  return { _id: createdProduct.insertedId, name, quantity };
 };
 
 const productExists = async (name) => {
