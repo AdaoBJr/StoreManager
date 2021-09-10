@@ -24,14 +24,24 @@ products.get(
   }),
 );
 
+products.use(productValidate);
+
 products.post(
   '/',
-  productValidate,
   rescue(async (req, res, next) => {
     const { name, quantity } = req.body;
     const product = await Products.create({ name, quantity });
     if (product.isError) return next(product);
     return res.status(CREATED).json(product);
+  }),
+);
+
+products.put(
+  '/:id',
+  rescue(async (req, res) => {
+    const { id } = req.params;
+    const product = await Products.update(id, req.body);
+    return res.status(SUCCESS).json(product);
   }),
 );
 
