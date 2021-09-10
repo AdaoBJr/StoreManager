@@ -18,10 +18,17 @@ const create = async ({ name, quantity }) => {
     };
   };
 
-  // const findById = async (name) => Connection.getConnection().then(db.collection('products').findOne({ name }));
+const findByName = async (name) => {
+  const productsCollection = await Connection.getConnection()
+  .then((db) => db.collection('products'));
+
+  const product = await productsCollection.findOne({ name });
+  
+  return product;
+};
   
 module.exports = {
   create,
   // getAll,
-  // findById,
+  findByName,
 }; 
