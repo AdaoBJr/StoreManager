@@ -8,7 +8,7 @@ const {
 
 const validateProductName = async (name, methodPut) => {
   const minLength = 5;
-  const products = await productsModel.getAllProducts();
+  const { products } = await productsModel.getAllProducts();
   const productExists = products.find((product) => product.name === name);
 
   if (productExists && !methodPut) {
@@ -50,7 +50,7 @@ const createProduct = async (product) => {
 // REQUISITO 2
 const getProducts = async (id) => {
   const products = await productsModel.getAllProducts();
-    const product = await productsModel.getProductById(id);
+  const product = await productsModel.getProductById(id);
   // const product = products.find(({ _id }) => _id == id);
 
   if (id) {
