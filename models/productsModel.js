@@ -24,9 +24,18 @@ const getById = (id) => {
   .then((db) => db.collection('products').findOne(ObjectId(id))); 
 };
 
+const editProduct = (id, name, quantity) => {
+  connection()
+  .then((db) => db.collection('products')
+  .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } }));
+
+  return { _id: id, name, quantity };
+};
+
 module.exports = { 
   findProductByName,
   createProduct,
   getAll,
   getById,
+  editProduct,
 };
