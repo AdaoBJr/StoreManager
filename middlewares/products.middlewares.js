@@ -1,9 +1,9 @@
+const { ObjectId } = require('mongodb');
 const connection = require('../models/mongoConnection');
 
 const producAlreadyExists = async (req, res, next) => {
   const db = await connection();
   const { name } = req.body;
-  console.log(name);
   const productNameExists = await db.collection('products').findOne({ name });
   if (productNameExists) {
     return res.status(422).json({
@@ -18,7 +18,6 @@ const producAlreadyExists = async (req, res, next) => {
 };
 
 const isValidProductName = async (req, res, next) => {
-  console.log('cheguei aqui');
   const { name } = req.body;
   if (name.length < 5) {
     return res.status(422).json({
@@ -28,7 +27,6 @@ const isValidProductName = async (req, res, next) => {
       },
     });
   }
-  
   next();
 };
 
@@ -55,8 +53,23 @@ const isValidProductQuantity = async (req, res, next) => {
   next();
 };
 
+const isValidProductId = async (req, res, next) => {
+  const { id } = req.params;
+  if (!id || !ObjectId.isValid(id)) {
+    return res.status(422).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    });
+  }
+
+  next();
+};
+
 module.exports = {
   producAlreadyExists,
   isValidProductName,
   isValidProductQuantity,
+  isValidProductId,
 };
