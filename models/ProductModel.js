@@ -1,6 +1,6 @@
 const Connection = require('./connection');
 
-const registration = async ({ name, quantity }) => {
+const create = async ({ name, quantity }) => {
   const productsCollection = await Connection.getConnection()
     .then((db) => db.collection('products'));
 
@@ -24,6 +24,6 @@ const registration = async ({ name, quantity }) => {
 // };
 
 module.exports = {
-  registration,
+  create,
   // getAll,
 }; 
