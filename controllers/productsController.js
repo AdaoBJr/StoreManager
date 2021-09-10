@@ -56,4 +56,16 @@ router.put(
   }),
 );
 
+router.delete(
+  '/:id',
+  rescue(async (req, res) => {
+    const { id } = req.params;
+  const deletedProduct = await services.deleteProduct(id);
+
+  if (deletedProduct.err) return res.status(STATUS_FAIL).json(deletedProduct);
+
+  return res.status(STATUS_OK).json(deletedProduct);
+  }),
+);
+
 module.exports = router;
