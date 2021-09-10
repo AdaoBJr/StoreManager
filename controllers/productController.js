@@ -5,15 +5,15 @@ const create = async (req, res) => {
 	const { name, quantity } = req.body;
 
 	const product = await productService.create(name, quantity);
-  const { id } = product;
-
+	const { id } = product;
+	
 	if (product.message) {
-	return res.status(statusCode.UNPROCESSABLE_ENTITY).json(
-		{ err: { code: product.code, message: product.message } },
-	);
+		return res.status(statusCode.UNPROCESSABLE_ENTITY).json(
+			{ err: { code: product.code, message: product.message } },
+		);
 	}
 
-	return res.status(statusCode.OK).json({ id, name, quantity });
+	return res.status(statusCode.CREATED).json({ _id: id, name, quantity });
 };
 
 /* const getAll = async (_req, res) => {
