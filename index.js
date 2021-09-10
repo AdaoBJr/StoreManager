@@ -4,7 +4,6 @@ const { validName,
   validQuantity,
   create,
   getAll,
-  validId,
   getById } = require('./controllers/productController');
 
 const app = express();
