@@ -69,8 +69,21 @@ const findProduct = async (id) => {
   return product;
 };
 
+const updateProduct = async (id, name, quantity) => {
+  const validateName = productName(name);
+  if (validateName) return validateName;
+
+  const validateQuantity = await checkQuantity(quantity);
+  if (validateQuantity) return validateQuantity;
+
+  const newProduct = await productModel.update(id, name, quantity);
+
+  return newProduct;
+};
+
 module.exports = {
     newProducts,
     getProducts,
     findProduct,
+    updateProduct,
 };

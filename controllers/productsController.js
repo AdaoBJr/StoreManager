@@ -42,4 +42,18 @@ router.get(
   }),
 );
 
+router.put(
+  '/:id',
+  rescue(async (req, res) => {
+    const { id } = req.params;
+    const { name, quantity } = req.body;
+
+    const updateProduct = await services.updateProduct(id, name, quantity);
+
+    if (updateProduct.err) return res.status(STATUS_FAIL).json(updateProduct);
+
+    return res.status(STATUS_OK).json(updateProduct);
+  }),
+);
+
 module.exports = router;
