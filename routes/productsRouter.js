@@ -13,4 +13,6 @@ router.get('/:id', checkiDInputed, productsController.getProductById);
 
 router.get('/', productsController.getAllProducts);
 
+router.put('/:id', checkiDInputed, checkNewProductInput, productsController.updateProduct);
+
 module.exports = router;
