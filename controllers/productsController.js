@@ -64,13 +64,8 @@ async function create(req, res) {
 }
 
 async function getAll(_req, res) {
-  const products = await productService.getAll();
-
-  // if (!products) {
-  //   return res.status(404).json({ message: 'Not found' });
-  // }
-
-  return res.status(200).json({ products });
+  productService.getAll()
+  .then((result) => res.status(200).json({ products: result }));
 }
 
 async function getById(req, res) {
