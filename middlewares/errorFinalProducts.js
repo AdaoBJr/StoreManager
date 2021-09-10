@@ -17,7 +17,7 @@ const errorMiddleProducts = (err, _req, res, _next) => {
       message: err.details[0].message,
     };
 
-    return res.status(STATUS_CODE_ANAUTORAZED).json(newError);
+    return res.status(STATUS_CODE_ANAUTORAZED).json({ err: newError });
   }
 };
 

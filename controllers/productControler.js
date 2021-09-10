@@ -8,6 +8,7 @@ const { validateProductInput } = require('../middlewares/validateProducts');
 const routerProducts = express.Router();
 
 const STATUS_CODE_OK = 200;
+const STATUS_CODE_CREATE = 201;
 
 routerProducts.get('/', async (_req, res) => {
   const products = await getAll();
@@ -57,7 +58,7 @@ routerProducts.post('/', validateProductInput, rescue(async (req, res, next) => 
     quantity,
   };
   
-  return res.status(STATUS_CODE_OK).json(newProduct);
+  return res.status(STATUS_CODE_CREATE).json(newProduct);
 }));
 
 module.exports = routerProducts;

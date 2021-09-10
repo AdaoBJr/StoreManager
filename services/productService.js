@@ -14,7 +14,7 @@ const filterById = async (id) => {
 const createService = async (name, quantity) => {
   const fliterName = await getByName(name);
   if (fliterName) {
-    return errorBusiness('produto já existe'); 
+    return errorBusiness('Product already exists'); 
   }
 
   const createProduct = await create(name, quantity);
