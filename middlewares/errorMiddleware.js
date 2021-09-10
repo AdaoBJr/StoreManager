@@ -22,6 +22,7 @@ const errServer = () => ({
 });
 
 module.exports = (err, req, res, _next) => {
+  console.log(err);
   if (err.isJoi) return res.status(INVALID_DATE).json(errJoi(err));
   if (err.isError) return res.status(INVALID_DATE).json(errService(err));
   res.status(INTERNAL_ERROR).json(errServer());

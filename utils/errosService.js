@@ -10,4 +10,5 @@ module.exports = {
   notFound: (message) => error('404', message),
   badRequest: (message) => error('400', message),
   invalidData: (message) => error('invalid_data', message),
+  stockProblem: (message) => error('stock_problem', message),
 };

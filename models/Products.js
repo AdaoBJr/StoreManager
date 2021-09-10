@@ -38,6 +38,27 @@ const excluse = async (id) => {
   return product;
 };
 
+const checkQuantity = async ({ productId, quantity: quantUpdate }) => {
+  const db = await connection();
+  return db.collection('products').findOne({
+    _id: ObjectId(productId),
+    quantity: { $gte: quantUpdate },
+  });
+};
+
+const updateQuantity = async ({ productId, quantity: quantUpdate }) => {
+  const MAGIC = 2;
+  const db = await connection();
+  const { modifiedCount } = await db.collection('products').updateOne(
+    {
+      _id: ObjectId(productId),
+      quantity: { $gte: quantUpdate },
+    },
+    { $inc: { quantity: quantUpdate - quantUpdate * MAGIC } },
+  );
+  return modifiedCount;
+};
+
 module.exports = {
   create,
   findByName,
@@ -45,4 +66,6 @@ module.exports = {
   findById,
   update,
   excluse,
+  checkQuantity,
+  updateQuantity,
 };
