@@ -22,7 +22,8 @@ const errServer = () => ({
 });
 
 module.exports = (err, req, res, _next) => {
-  const statusCode = err.code === 'not_found' ? NOT_FOUND : INVALID_DATE;
+  const code404 = ['not_found', 'stock_problem'].some((error) => error === err.code);
+  const statusCode = code404 ? NOT_FOUND : INVALID_DATE;
   if (err.isJoi) return res.status(INVALID_DATE).json(errJoi(err));
   if (err.isError) return res.status(statusCode).json(errService(err));
   res.status(INTERNAL_ERROR).json(errServer());
