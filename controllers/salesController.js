@@ -20,3 +20,10 @@ const getAll = async (req, res) => {
   const sales = await getAllSales();
   res.status(STATUS_SUCCESS).json(sales);
 };
+
+const getById = async (req, res) => {
+  const { id } = req.params;
+
+  const sales = await findSaleById(id);
+  res.status(STATUS_SUCCESS).json(sales);
+};

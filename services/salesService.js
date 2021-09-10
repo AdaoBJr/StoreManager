@@ -15,3 +15,8 @@ const getAllSales = async () => {
   const sales = await getAllSalesData();
   return sales;
 };
+
+const findSaleById = async (id) => {
+  const sale = await findById(id);
+  return sale;
+};

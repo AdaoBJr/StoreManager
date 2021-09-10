@@ -13,6 +13,8 @@ const router = express.Router();
 
 router.route('/').post(validateSaleQuantity, create);
 
+router.route('/:id').get(validateSaleId, getById);
+
 router.route('/').get(getAll);
 
 module.exports = router;

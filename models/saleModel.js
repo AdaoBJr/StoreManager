@@ -24,3 +24,11 @@ const getAllSalesData = async () => {
     sales: allSales,
   };
 };
+
+const findById = async (id) => {
+  const sale = await connection()
+    .then((db) => db.collection('sales').findOne(ObjectId(id)))
+    .then((result) => result);
+
+  return sale;
+};
