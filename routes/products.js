@@ -3,6 +3,15 @@ const productsController = require('../controllers/products');
 
 const route = express.Router();
 
-route.get('/', productsController.getAll);
+route.get(
+  '/:id',
+  productsController.validateId,
+  productsController.getById,
+);
+
+route.get(
+  '/',
+  productsController.getAll,
+);
 
 module.exports = route;
