@@ -1,3 +1,4 @@
+const rescue = require('express-rescue');
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
@@ -7,20 +8,23 @@ const createSale = async (sales) => {
   const db = await connection();
   const insertSales = await db.collection('sales').insertOne({ itensSold: sales });
   // o insertProduct.ops retorna inserção que acabamos de fazer
-  console.log(insertSales.ops);
   return insertSales.ops[0];
 };
 
 const getAllSales = async () => {
   const db = await connection();
   const sales = await db.collection('sales').find({}).toArray();
-  return sales;
+  return { sales };
 };
 
 const getSaleById = async (id) => {
-  const db = await connection();
-  const sale = await db.collection('sales').findOne({ _id: ObjectId(id) });
-  return sale;
+  try {
+    const db = await connection();
+    const sale = await db.collection('sales').findOne({ _id: ObjectId(id) });
+    return sale;  
+  } catch (error) {
+    rescue(error);
+  }
 };
 
 const updateSale = async (id, sale) => {

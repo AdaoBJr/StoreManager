@@ -9,8 +9,20 @@ const createSale = async (req, res) => {
   res.status(status).json(createdSale);
 };
 
+// REQUISITO 6
+const getSales = async (req, res) => {
+  const { id } = req.params;
+  if (id) {
+    const { status, sale } = await salesService.getSales(id);
+    return res.status(status).json(sale);
+  }
+  const { status, sales } = await salesService.getSales();
+  return res.status(status).json(sales);
+};
+
 // -----------------------------------------------------------------------------------------------
 
 module.exports = {
   createSale,
+  getSales,
 };

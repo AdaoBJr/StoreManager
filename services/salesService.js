@@ -1,8 +1,8 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const productsModel = require('../models/productsModel');
 const salesModel = require('../models/salesModel');
 
-const { ERROR_PROD_ID_OR_QTY } = require('./msgErrors');
+const { ERROR_PROD_ID_OR_QTY, ERROR_SALE_NOT_FOUND } = require('./msgErrors');
 
 // VALIDAÇÕES -----------------------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ const validateQy = (qty) => {
   }
 };
 
-// const validateId = (id) => (ObjectId.isValid(id));
+const validateId = (id) => (ObjectId.isValid(id));
 // verifica se o valor passado é um id no válido - padrão mongoDB
 
 // -----------------------------------------------------------------------------------------------
@@ -39,8 +39,31 @@ const createSale = async (sale) => {
   };
 };
 
+// REQUISITO 6
+const getSales = async (id) => {
+  const sales = await salesModel.getAllSales();
+  const sale = await salesModel.getSaleById(id);
+
+  if (id) {
+    if (!validateId(id) || !sale) {
+      throw ERROR_SALE_NOT_FOUND;
+    } else {
+      return {
+        status: 200,
+        sale,
+      };
+    }
+  }
+
+  return {
+    status: 200,
+    sales,
+  };
+};
+
 // -----------------------------------------------------------------------------------------------
 
 module.exports = {
   createSale,
+  getSales,
 };
