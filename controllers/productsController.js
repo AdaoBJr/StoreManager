@@ -15,7 +15,7 @@ function validName(req, res, next) {
   next();
 }
 
-async function validNameDistintic(req, res, next) {
+async function validDistinticName(req, res, next) {
   const { name } = req.body;
   const sameProduct = await productService.isValidNameDifferentName(name);
 
@@ -65,7 +65,7 @@ async function createProduct(req, res) {
 
 module.exports = {
   validName,
-  validNameDistintic,
+  validDistinticName,
   validQuantity,
   createProduct,
 };
