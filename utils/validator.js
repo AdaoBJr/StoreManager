@@ -39,7 +39,7 @@ const saleId = async (id) => {
   if (!ObjectID.isValid(id)) throw err('invalid_data', 'Wrong sale ID format');
 };
 
-const stock = async (itensSold) => {
+/* const stock = async (itensSold) => {
   const arr = await products.getAll();
   const available = itensSold.every(({ productId, quantity }) => {
     const stock = arr.find((e) => e._id.toString() === productId);
@@ -47,5 +47,5 @@ const stock = async (itensSold) => {
   });
   if (!available) throw err('stock_problem', 'Such amount is not permitted to sell');
 };
-
+ */
 module.exports = { product, productExists, productId, sale, saleExists, saleId, stock };
