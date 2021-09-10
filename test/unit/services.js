@@ -194,7 +194,77 @@ describe('Services - Validações para a rota "/products"', () => {
     })
   });
 
-  describe.skip('Atualizar um produto', () => {
+  describe('Atualizar um produto', () => {
+    describe('Verifica que não é possivel inserir um produto', () => {
+      it('Verfica que retorna erro ao tentar inserir um produto com menos de cinco caracteres', async () => {
+        const products =  {
+          _id: id,
+          name: "Pf",
+          quantity: 1,
+        }
+
+        const { _id, name, quantity } = products;
+        const response = await ProductService.updateProduct(_id, name, quantity)
+        expect(response).to.deep.equals(ERR_LENGTH_NAME);
+      });
+
+      describe('Verfica a propriedade "quantity"', () => {
+        it('Verfica que retorna erro ao tentar inserir um produto com quantidade menor que zero ', async () => {
+          const products =  {
+            _id: id,
+            name: "Produto teste",
+            quantity: -1,
+          }
+          const { _id, name, quantity } = products;
+          const response = await ProductService.updateProduct(_id, { name, quantity })
+          expect(response).to.deep.equals(ERR_QUANTITY);
+        });
+
+        it('Verfica que retorna erro ao tentar inserir um produto com quantidade igual a zero ', async () => {
+          const products =  {
+            _id: id,
+            name: "Produto teste",
+            quantity: 0,
+          }
+          const { _id, name, quantity } = products;
+          const response = await ProductService.updateProduct(_id, { name, quantity })
+          expect(response).to.deep.equals(ERR_QUANTITY);
+        });
+
+        it('Verfica que retorna erro ao tentar inserir um produto com quantidade não é um numero', async () => {
+          const products =  {
+            _id: id,
+            name: "Produto teste",
+            quantity: "1",
+          }
+
+          const { _id, name, quantity } = products;
+          const response = await ProductService.insert(_id, { name, quantity })
+          expect(response).to.deep.equals(ERR_TYPE_QUANTITY);
+        });
+
+      });
+
+      describe('Verfica se existe um produto com mesmo nome cadastrado', () => {
+        before(() => {
+          sinon.stub(ProductModel, 'findByName')
+          .resolves(true);
+        });
+        after(() => {
+          ProductModel.findByName.restore();
+        });
+        it('Verifica que retorna um erro ao cadastrar um produto com um nome já cadastrado', async () => {
+          const product = {
+            _id: id,
+            name: "Produto teste",
+            quantity: 1,
+          }
+          const response = await ProductService.updateProduct(product._id, product.name, product.quantity)
+          expect(response).to.deep.equals(ERR_NAME_EXISTS)
+        })
+      })
+
+    })
     const products =  {
       _id: id,
       name: "Produto teste",
