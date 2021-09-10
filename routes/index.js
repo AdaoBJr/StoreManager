@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { createProduct, listAll, productById,
-  updateProduct } = require('../controllers/produtos.controller');
+  updateProduct, deleteProduct } = require('../controllers/produtos.controller');
 const { productIsValid, isValidName,
   isValidQuantity, isValidProduct } = require('../middlewares/produtos.middlewares');
 
@@ -23,5 +23,7 @@ routes.get('/products/:id', isValidProduct, productById);
 
 routes.put('/products/:id', isValidName,
 isValidQuantity, updateProduct);
+
+routes.delete('/products/:id', deleteProduct);
 
 module.exports = routes;

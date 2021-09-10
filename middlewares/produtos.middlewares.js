@@ -1,4 +1,4 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const connection = require('../models/mongoConnection');
 
 const productIsValid = async (req, res, next) => {
@@ -10,6 +10,15 @@ const productIsValid = async (req, res, next) => {
     err: { code: 'invalid_data', message: 'Product already exists' } });
   }
   next();
+};
+
+const productExists = async ({ id }) => {
+  const db = await connection();
+  if (!id || id.length !== 24) {
+    return null;
+  }
+  const product = await db.collection('products').findOne(ObjectId(id));
+  return product;
 };
 
 const isValidName = async (req, res, next) => {
@@ -48,4 +57,4 @@ const isValidProduct = async (req, res, next) => {
   next();
 };
 
-module.exports = { productIsValid, isValidName, isValidQuantity, isValidProduct };
+module.exports = { productIsValid, isValidName, isValidQuantity, isValidProduct, productExists };

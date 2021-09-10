@@ -14,6 +14,12 @@ const listProducts = async () => {
   return produtos;
 };
 
+const deleteProduct = async ({ id }) => {
+  const db = await connection();
+  const produtos = await db.collection('products').deleteOne({ _id: ObjectId(id) });
+  return produtos;
+};
+
 const listById = async (id) => {
   const db = await connection();
   const produto = await db.collection('products').findOne(ObjectId(id));
@@ -33,4 +39,4 @@ const updateProduct = async ({ id, name, quantity }) => {
   return produto;
 };
 
-module.exports = { newProduct, listProducts, listById, updateProduct };
+module.exports = { newProduct, listProducts, listById, updateProduct, deleteProduct };

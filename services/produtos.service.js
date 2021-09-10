@@ -1,8 +1,21 @@
-const { newProduct, listProducts, listById, updateProduct } = require('../models/produtos.model');
+const { newProduct, listProducts, listById,
+  updateProduct, deleteProduct } = require('../models/produtos.model');
+const { productExists } = require('../middlewares/produtos.middlewares');
 
 const criar = async ({ name, quantity }) => {
   const newProducts = await newProduct({ name, quantity });
   return newProducts;
+};
+
+const remove = async ({ id }) => {
+  const product = await productExists({ id });
+
+  if (!product) {
+    return product;
+  }
+  const { name, quantity, _id } = product;
+  await deleteProduct({ id });
+  return { name, quantity, _id };
 };
 
 const getAll = async () => {
@@ -20,4 +33,4 @@ const update = async ({ id, name, quantity }) => {
   return updateProducts;
 };
 
-module.exports = { criar, getAll, getById, update };
+module.exports = { criar, getAll, getById, update, remove };
