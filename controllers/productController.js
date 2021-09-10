@@ -58,4 +58,19 @@ const getAll = async (_req, res) => {
   res.status(HTTP_OK_STATUS).json({ products });
 };
 
-module.exports = { create, validName, validQuantity, getAll };
+const getById = async (req, res) => {
+  const { id } = req.params;
+  const product = await service.getById(id);
+  switch (product) {
+    case 'bad id': return res.status(UNPROCESSABLE)
+        .json({ err: {
+          code: 'invalid_data',
+          message: 'Wrong id format',
+        } });
+        default:
+        break;
+      }
+  res.status(HTTP_OK_STATUS).json(product);
+};
+
+module.exports = { create, validName, validQuantity, getAll, getById };

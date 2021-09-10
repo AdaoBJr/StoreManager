@@ -15,12 +15,20 @@ const validateQuantity = (quantity) => {
 
 const create = async (name, quantity) => {
   const { id } = await model.create(name, quantity);
-
   return { id };
+};
+
+const getById = async (id) => {
+  const product = await model.getById(id);
+  if (!product) {
+    return 'bad id';
+  }
+  return product;
 };
 
 module.exports = {
   create,
   validateName,
   validateQuantity,
+  getById,
 }; 
