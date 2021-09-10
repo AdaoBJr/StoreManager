@@ -102,4 +102,21 @@ const update = async (id, updates) => {
   const updatedProduct = await Product.update(id, updates);
   return { code: 200, updatedProduct };
 };
-module.exports = { create, getAll, getProductById, update };
+
+const removeProduct = async (id) => {
+  const isValid = isIdValid(id);
+  if (isValid.err) return isValid;
+  const product = await Product.getProductById(id);
+  if (!product) {
+    return {
+      code: 422,
+      err: {
+        code: 'invalid_data', message: 'Wrong id format',
+      },
+    };
+  }
+  await Product.removeProduct(id);
+  return { code: 200, product };
+};
+
+module.exports = { create, getAll, getProductById, update, removeProduct };

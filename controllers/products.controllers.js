@@ -24,4 +24,11 @@ const update = async (req, res) => {
   if (err) return res.status(code).json({ err });
   return res.status(code).json(updatedProduct);
 };
-module.exports = { create, getAll, getProductById, update };
+
+const removeProduct = async (req, res) => {
+  const { id } = req.params;
+  const { code, err, product } = await Product.removeProduct(id);
+  if (err) return res.status(code).json({ err });
+  return res.status(code).json(product);
+};
+module.exports = { create, getAll, getProductById, update, removeProduct };
