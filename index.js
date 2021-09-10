@@ -15,6 +15,6 @@ app.get('/', (_request, response) => {
 });
 
 // rotas
-app.get('/products', productsController.create);
+app.post('/products', productsController.create);
 
 app.listen(PORT, () => console.log(`Servido rodando na porta: ${PORT}`));
