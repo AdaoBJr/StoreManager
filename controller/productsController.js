@@ -11,11 +11,20 @@ const createProduct = async (req, res) => {
 };
 
 const getAllProducts = async (_req, res) => {
-    const allProducts = await productsService.getAllProducts();
-    return res.status(HTTP_OK_STATUS).send(allProducts);
+    const data = await productsService.getAllProducts();
+
+    return res.status(HTTP_OK_STATUS).send(data);
+};
+
+const getProductById = async (req, res) => {
+    const { id } = req.params;
+    const data = await productsService.getProductById(id);
+
+    return res.status(HTTP_OK_STATUS).send(data);
 };
 
 module.exports = {
     createProduct,
     getAllProducts,
+    getProductById,
 };
