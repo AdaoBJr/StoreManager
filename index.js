@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const ProductService = require('./services/ProductService');
+const errorMiddleware = require('./middlewares/error');
+const ProductController = require('./controllers/ProductController');
 
 const app = express();
 const PORT = 3000;
@@ -13,10 +14,8 @@ app.get('/', (_req, res) => {
   res.send();
 });
 
-app.post('/products', async (req, res) => {
-  const { name, quantity } = req.body;
-  const product = await ProductService.create(name, quantity);
-  res.send(product);
-});
+app.post('/products', ProductController.create);
+
+app.use(errorMiddleware);
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));
