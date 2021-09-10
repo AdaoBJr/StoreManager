@@ -55,6 +55,13 @@ const getById = async (id) => {
   return result;
 };
 
+// const updateProduct = async (name, quantity) => {
+//   checkNameLength(name);
+//   checkValidQuantity(quantity);
+//   // const result =
+
+// };
+
 module.exports = {
   createProduct,
   getAll,

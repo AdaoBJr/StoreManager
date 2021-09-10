@@ -6,7 +6,8 @@ const productRoutes = (app) => {
     .get(rescue(controller.getAll))
     .post(rescue(controller.createProduct));
   app.route('/products/:id')
-    .get(rescue(controller.getById));
+    .get(rescue(controller.getById))
+    .put();
 };
 
 module.exports = productRoutes;
