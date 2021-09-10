@@ -21,3 +21,4 @@ app.use(router);
 app.use(errorMiddleProducts);
 
 app.listen(PORT, () => console.log('ouvindo a porta 3000'));
+// teste servidor
