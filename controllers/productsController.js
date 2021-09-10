@@ -1,3 +1,11 @@
+const {
+  createProduct,
+  getAllProducts,
+  getProductById,
+  updateProduct,
+  removeProduct,
+} = require('../services/productService');
+
 const STATUS_CREATED_SUCCESS = 201;
 const STATUS_SUCCESS = 200;
 const BAD_REQUEST = 422;
