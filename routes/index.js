@@ -1,5 +1,6 @@
 const { Router } = require('express');
-const { createProduct, listAll, productById } = require('../controllers/produtos.controller');
+const { createProduct, listAll, productById,
+  updateProduct } = require('../controllers/produtos.controller');
 const { productIsValid, isValidName,
   isValidQuantity, isValidProduct } = require('../middlewares/produtos.middlewares');
 
@@ -19,5 +20,8 @@ routes.post('/products',
 routes.get('/products', listAll);
 
 routes.get('/products/:id', isValidProduct, productById);
+
+routes.put('/products/:id', isValidName,
+isValidQuantity, updateProduct);
 
 module.exports = routes;

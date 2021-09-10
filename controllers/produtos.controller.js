@@ -1,10 +1,18 @@
-const { criar, getAll, getById } = require('../services/produtos.service');
+const { criar, getAll, getById, update } = require('../services/produtos.service');
 
 const createProduct = async (req, res) => {
   const { name, quantity } = req.body;
 
   const product = await criar({ name, quantity });
   return res.status(201).json(product);
+};
+
+const updateProduct = async (req, res) => {
+  const { name, quantity } = req.body;
+  const { id } = req.params;
+
+  await update({ id, name, quantity });
+  return res.status(200).json({ id, name, quantity });
 };
 
 const listAll = async (req, res) => {
@@ -21,4 +29,4 @@ const productById = async (req, res) => {
   return res.status(products.status).json(products.err);
 };
 
-module.exports = { createProduct, listAll, productById };
+module.exports = { createProduct, listAll, productById, updateProduct };
