@@ -12,8 +12,11 @@ app.get('/', (_request, response) => {
 });
 
 const products = require('./routers/productsRouter');
+const sales = require('./routers/salesRouter');
 
 app.use('/products', products);
+
+app.use('/sales', sales);
 
 app.listen(PORT, () => {
   console.log('Online');
