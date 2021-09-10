@@ -9,7 +9,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoConnection = require('../../models/connection');
 const ProductModel = require('../../models/ProductModels')
 
-describe('Validações para a rota "/products"', () => {
+describe.skip('Models - Validações para a rota "/products"', () => {
   const id = ObjectId('604cb554311d68f491ba5781');
 
   let connectionMock;
@@ -169,8 +169,4 @@ describe('Validações para a rota "/products"', () => {
 
     });
   });
-});
-
-describe.skip('Validações para a rota "/sales"', () => {
-
 });

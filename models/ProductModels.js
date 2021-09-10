@@ -18,12 +18,12 @@ async function findById(id) {
 
 async function create(name, quantity) {
   const db = await mongoConnection.connection();
-  const insert = await db.collection('products').insertOne({name, quantity});
+  const insert = await db.collection('products').insertOne({ name, quantity });
 
   return insert.ops[0];
 }
 
-async function update(id, {name, quantity}) {
+async function update(id, { name, quantity }) {
   if (!ObjectId.isValid(id)) return null;
 
   const db = await mongoConnection.connection();
@@ -40,8 +40,16 @@ async function exclude(id) {
 
   const db = await mongoConnection.connection();
 
-  const result = await db.collection('products').findOne({_id: ObjectId(id)});
+  const result = await db.collection('products').findOne({ _id: ObjectId(id) });
   await db.collection('products').deleteOne({ _id: ObjectId(id) });
+
+  return result;
+}
+
+async function findByName(name) {
+
+  const db = await mongoConnection.connection();
+  const result = await db.collection('products').findOne({ name });
 
   return result;
 }
@@ -52,4 +60,5 @@ module.exports = {
   create,
   update,
   exclude,
+  findByName,
 };
