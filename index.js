@@ -22,6 +22,8 @@ app.get('/products', ProductsController.getAll);
 
 app.get('/products/:id', ProductsController.getById);
 
+app.put('/products/:id', ProductsController.updateById);
+
 app.use(errorMiddleware);
 
 app.listen(PORT, () => {

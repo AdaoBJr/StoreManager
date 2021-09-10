@@ -52,8 +52,31 @@ const getById = rescue(async (req, res, _next) => {
   return res.status(200).json(product);
 });
 
+const updateById = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  const { error } = Joi.object({
+    name: Joi.string().min(5).required(),
+    quantity: Joi.number().min(1).required(),
+  }).validate(req.body);
+  if (error) {
+    return next(error);
+  }
+  const verify = await ProductsService.getById(id);
+  if (!verify) {
+    return res.status(422).json({
+      err: { code: 'invalid_data', message: 'Product doesn\'t exist' },
+    });
+  }
+
+  const updated = await ProductsService.updateById(id, name, quantity);
+  if (!updated) return console.log(updated);
+  return res.status(200).json({ _id: id, name, quantity });
+});
+
 module.exports = {
   create,
   getAll,
   getById,
+  updateById,
 };
