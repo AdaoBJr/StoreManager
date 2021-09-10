@@ -1,4 +1,4 @@
-const { ObjectID } = require('mongodb');
+/* const { ObjectID } = require('mongodb');
 const products = require('../models/products');
 const sales = require('../models/sales');
 
@@ -48,4 +48,4 @@ const stock = async (itensSold) => {
   if (!available) throw err('stock_problem', 'Such amount is not permitted to sell');
 };
 
-module.exports = { product, productExists, productId, sale, saleExists, saleId, stock };
+module.exports = { product, productExists, productId, sale, saleExists, saleId, stock }; */
