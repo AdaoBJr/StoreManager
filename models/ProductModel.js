@@ -1,29 +1,27 @@
 const Connection = require('./connection');
 
+// const getAll = async () => Connection.getConnection().then((db) => {
+//  db.collection('products').find().toArray();
+//   });
+
 const create = async ({ name, quantity }) => {
   const productsCollection = await Connection.getConnection()
     .then((db) => db.collection('products'));
-
-  const { insertedId: id } = await productsCollection
+    
+    const { insertedId: id } = await productsCollection
     .insertOne({ name, quantity });
-
-  return {
-    id,
-    name,
-    quantity,
+    
+    return {
+      id,
+      name,
+      quantity,
+    };
   };
-};
 
-// const getAll = async () => {
-//   const db = await Connection.getConnection();
-//   const movies = await db.collection('movies')
-//     .find()
-//     .toArray();
-
-//   return movies;
-// };
-
+  // const findById = async (name) => Connection.getConnection().then(db.collection('products').findOne({ name }));
+  
 module.exports = {
   create,
   // getAll,
+  // findById,
 }; 

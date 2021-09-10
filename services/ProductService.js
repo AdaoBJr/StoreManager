@@ -1,84 +1,57 @@
 const ProductModel = require('../models/ProductModel');
 
-// const getAll = async () => {
-//   return await ProductModel.getAll();
-// };
-
 const isValidName = (name) => {
-  // name deve ser uma string com mais de 5 caracteres e deve ser único;
-  if (typeof name !== 'string') {
-    console.log(typeof name);
-    return false;/* {
-      err: {
-        code: 'invalid_data',
-        message: 'name must be string ',
-      },
-    }; */
-  }
-  
-  if (name.length < 5) {
-    return false;/* {
-      err: {
-        code: 'invalid_data',
-        message: 'name length must be at least 5 characters long',
-      },
-    }; */
-  }
+  if (!name) return { code: 'invalid_data', message: 'name is required' };
 
-  // const product = ProductModel.findOne({ name });
-  // if (!product) {
-  //   return {
-  //     err: {
-  //       code: 'invalid_data',
-  //       message: 'Product already exists',
-  //     },
-  //   };
-  // }
-  
+  if (typeof name !== 'string') return { code: 'invalid_data', message: '"name" must be string' };
+
+  if (name.length < 5) {
+ return {
+     code: 'invalid_data', message: '"name" length must be at least 5 characters long' }; 
+}
   return true;
-};
+  };
 
 const isValidQuantity = (quantity) => {
-  if (typeof quantity !== 'number') return false;
+  if (!quantity) return { code: 'invalid_data', message: '"quantity" is required' };
+
+  if (typeof quantity !== 'number') {
+     return { code: 'invalid_data', message: '"quantity" must be a number' }; 
+}
  
-  if (quantity < 0) {
-    return false; /* {
-      err: {
-        code: 'invalid_data',
-        message: 'quantity must be larger than or equal to 1',
-      },
-    }; */
-  }
+  if (quantity <= 0) {
+ return {
+     code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' }; 
+}
 
   return true;
-};  
+}; 
 
-const create = async ({ name, quantity }) => {
-  const isNameValid = isValidName(name);
-  const isQuantityValid = isValidQuantity(quantity);
+// const getAll = async () => {
+  //   return await ProductModel.getAll();
+// };
 
-  if (!isNameValid || !isQuantityValid) return false;
-  
-  const { id } = await ProductModel
+// const findById = async (id) => {
+//   return await ProductModel.findById(id);
+// };
+
+const create = async (name, quantity) => {
+  const productNameValid = isValidName(name);
+  const productQuantityValid = isValidQuantity(quantity);
+  if (productNameValid !== true) return productNameValid;
+  if (productQuantityValid !== true) return productQuantityValid;
+
+  const product = await ProductModel
     .create({ name, quantity });
 
   return {
-    id,
-    name,
-    quantity,
+    code: 201,
+    product,
   };
 };
 
-// const getNewMovie = (movieData) => {
-//   const { id, title, directedBy, releaseYear } = movieData;
-
-//   return { id, title, directedBy, releaseYear };
-// };
-
-// const getAll = async () => {
-//   const moviesData = await ProductModel
-//     .getAll();
-//   return moviesData.map(getNewMovie);
+// const update = async (id, name, quantity) => {
+//   return await ProductModel.update(id, name, quantity);
 // };
 
 module.exports = {
