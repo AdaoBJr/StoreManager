@@ -1,5 +1,5 @@
-const connection = require('./connection');
 const { ObjectID } = require('mongodb');
+const connection = require('./connection');
 
 const create = (product) => connection().then((db) =>
   db.collection('products').insertOne(product)).then(({ ops }) => ops[0]);
