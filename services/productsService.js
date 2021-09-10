@@ -2,23 +2,23 @@ const Joi = require('joi');
 const productsModels = require('../models/productsModel');
 
 const validateName = (name) => {
-  const { error } = Joi.string().required().min(5)
+  const isValid = Joi.string().min(5)
   .validate(name);
-  console.log(error);
-  if (error.message) {
-    return { 
+  console.log(isValid.error);
+  if (isValid.error) {
+    return {
       err: { 
         message: 'Dados inválidos',
         code: '"name" lenght must be at least 5 characters long',
       },
     };
   }
+  return false;
 };
 
 const validateQuantity = (quantity) => {
-  const { error } = Joi.number().required().integer().min(0)
+  const { error } = Joi.number().required().integer().min(1)
   .validate(quantity);
-  // console.log(error);
   if (error) {
     return { 
       err: { 
@@ -27,12 +27,15 @@ const validateQuantity = (quantity) => {
       },
     };
   }
+  return false;
 };
 
 const registerNewProduct = (newProduct) => {
   const { name, quantity } = newProduct;
-    validateName(name);
-    validateQuantity(quantity);
+  const nameNotValid = validateName(name);
+  const quantityNotValid = validateQuantity(quantity);
+    if (nameNotValid) return nameNotValid;
+    if (quantityNotValid) return quantityNotValid;
   return productsModels.registerNewProduct(newProduct);
 };
 

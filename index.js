@@ -17,3 +17,7 @@ app.listen(PORT, () => {
 });
 
 app.post('/products', productController.registerNewProduct);
+
+app.get('/products', productController.getProducts);
+
+app.get('/products/:id', productController.getProductById);
