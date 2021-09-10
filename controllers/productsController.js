@@ -22,3 +22,10 @@ const getAll = async (req, res) => {
   const products = await getAllProducts();
   res.status(STATUS_SUCCESS).json(products);
 };
+
+const getById = async (req, res) => {
+  const { id } = req.params;
+
+  const product = await getProductById(id);
+  return res.status(STATUS_SUCCESS).json(product);
+};

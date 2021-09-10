@@ -22,3 +22,8 @@ const getAllProducts = async () => {
   const response = await getAllProds();
   return response;
 };
+
+const getProductById = async (id) => {
+  const response = await getProdById(id);
+  return response;
+};

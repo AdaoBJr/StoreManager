@@ -20,3 +20,11 @@ const getAllProds = async () => {
     products: result,
   };
 };
+
+const getProdById = async (id) => {
+  const product = await connection()
+    .then((db) => db.collection('products').findOne(ObjectId(id)))
+    .then((result) => result);
+
+  return product;
+};
