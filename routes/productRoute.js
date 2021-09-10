@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const { productValid, validName, validQuantity } = require('middlewares');
+const { productValid, validName, validQuantity } = require('../middlewares/productMiddlewares');
 const { createProduct } = require('../controllers/productController');
 
 const routes = new Router();
