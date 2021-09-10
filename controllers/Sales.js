@@ -24,6 +24,16 @@ sales.get(
   }),
 );
 
+sales.delete(
+  '/:id',
+  rescue(async (req, res, next) => {
+    const { id } = req.params;
+    const sale = await Sales.excluse(id);
+    if (sale.isError) return next(sale);
+    return res.status(SUCCESS).json(sale);
+  }),
+);
+
 sales.use(saleValidate);
 
 sales.post(

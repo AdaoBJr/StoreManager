@@ -59,6 +59,13 @@ const updateQuantity = async ({ productId, quantity: quantUpdate }) => {
   return modifiedCount;
 };
 
+const updateDelete = async ({ productId, quantity: quantUpdate }) => {
+  const db = await connection();
+  return db
+    .collection('products')
+    .updateOne({ _id: ObjectId(productId) }, { $inc: { quantity: quantUpdate } });
+};
+
 module.exports = {
   create,
   findByName,
@@ -68,4 +75,5 @@ module.exports = {
   excluse,
   checkQuantity,
   updateQuantity,
+  updateDelete,
 };

@@ -2,6 +2,12 @@ const Sales = require('../models/Sales');
 const Product = require('../models/Products');
 const Error = require('../utils/errosService');
 
+const findById = async (id) => {
+  const sale = await Sales.findById(id);
+  if (!sale) return Error.notFound('Sale not found'); 
+  return sale;
+};
+
 const create = async (sales) => {
   const resolve = await Promise.all(sales.map((s) => Product.checkQuantity(s)));
   const productsQuantities = resolve.every(((sale) => sale));
@@ -10,10 +16,12 @@ const create = async (sales) => {
   return Sales.create(sales);
 };
 
-const findById = async (id) => {
+const excluse = async (id) => {
   const sale = await Sales.findById(id);
-  if (!sale) return Error.notFound('Sale not found'); 
-  return sale;
+  const saleResult = await Sales.excluse(id);
+  if (!sale || !saleResult) return Error.invalidData('Wrong sale ID format');
+  sale.itensSold.forEach((products) => Product.updateDelete(products));
+  return saleResult;
 };
 
 module.exports = {
@@ -21,4 +29,5 @@ module.exports = {
   update: Sales.update,
   create,
   findById,
+  excluse,
 };
