@@ -59,6 +59,13 @@ const updateProduct = async (id, name, quantity) => {
   checkNameLength(name);
   checkValidQuantity(quantity);
   const result = await model.updateProduct(id, name, quantity);
+  checkProductId(result);
+  return result;
+};
+
+const deleteProduct = async (id) => {
+  const result = await model.deleteProduct(id);
+  checkProductId(result);
   return result;
 };
 
@@ -67,4 +74,5 @@ module.exports = {
   getAll,
   getById,
   updateProduct,
+  deleteProduct,
 };
