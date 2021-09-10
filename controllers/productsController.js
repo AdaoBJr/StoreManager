@@ -1,9 +1,10 @@
 const express = require('express');
+
 const router = express.Router();
 const productsService = require('../services/productsService');
 const {
   validateProductData,
-  validateProductId
+  validateProductId,
 } = require('../middlewares/productsMiddleware');
 
 const responseCodes = {

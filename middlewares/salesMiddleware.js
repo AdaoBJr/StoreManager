@@ -8,27 +8,26 @@ const validateSaleData = async (req, res, next) => {
     if (validation) {
       return res.status(validation.response).json({ err: validation.err });
     }
-    const quantityValidation = await salesSchema.checkProductInventory(
-      itensSold[index], req.method);
+    const quantityValidation = await salesSchema
+      .checkProductInventory(itensSold[index], req.method);
     if (quantityValidation) {
-      return res.status(
-        quantityValidation.response).json({ err: quantityValidation.err });
+      return res.status(quantityValidation.response).json({ err: quantityValidation.err });
     }
   }
   next();
 };
 
-const validateSaleId = (req, res, next) => {
+const validateSaleId = async (req, res, next) => {
   const { id } = req.params;
-  const validation = salesSchema.idIsNotValid(id);
-  if(validation) {
+  const validation = await salesSchema.idIsNotValid(id);
+  if (validation) {
     return res.status(validation.response).json({ err: validation.err });
   }
   next();
 };
 
 const validateSaleExists = async (req, res, next) => {
-  const  { id } = req.params;
+  const { id } = req.params;
   const { method } = req;
   const validation = await salesSchema.saleExists(id, method);
   if (validation) {

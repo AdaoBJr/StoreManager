@@ -10,7 +10,7 @@ const errorsMessages = {
 };
 
 const errorsCodes = {
-  invalid_data: 'invalid_data',
+  invalidData: 'invalid_data',
 };
 
 const responseCodes = {
@@ -38,30 +38,36 @@ const isNotUnique = async (name, id) => {
   return true;
 };
 
+const isBlankOrLowerThanMinValue = (name, length, nameLength) => (
+  isBlank(name) || isLowerthanMinValue(length, nameLength)
+);
+
 const validateProduct = async (id, name, quantity) => {
+  const { nameLength } = fieldMinValues;
+  const isBlankOrLower = isBlankOrLowerThanMinValue(name, name.length, nameLength);
+  console.log(isBlankOrLower, name, nameLength);
   switch (true) {
-  case isBlank(name) || isLowerthanMinValue(name.length, fieldMinValues.nameLength):
+  case isBlankOrLower:
     return { response: responseCodes.unprocessableEntity,
-      err: { code: errorsCodes.invalid_data, message: errorsMessages.nameTooShort } };
+      err: { code: errorsCodes.invalidData, message: errorsMessages.nameTooShort } };
   case await isNotUnique(name, id):
     return { response: responseCodes.unprocessableEntity,
-      err: { code: errorsCodes.invalid_data, message: errorsMessages.productExists } };
+      err: { code: errorsCodes.invalidData, message: errorsMessages.productExists } };
   case isString(quantity):
     return { response: responseCodes.unprocessableEntity,
       err: {
-        code: errorsCodes.invalid_data, message: errorsMessages.quantityNotNumber } };
+        code: errorsCodes.invalidData, message: errorsMessages.quantityNotNumber } };
   case isLowerthanMinValue(quantity, fieldMinValues.quantity):
     return { response: responseCodes.unprocessableEntity,
-      err: { code: errorsCodes.invalid_data, message: errorsMessages.quantityTooLow } };
-  default:
-    return {};
+      err: { code: errorsCodes.invalidData, message: errorsMessages.quantityTooLow } };
+  default: return {};
   }
 };
 
 const idIsNotValid = (id) => {
-  if(!ObjectId.isValid(id)) {
+  if (!ObjectId.isValid(id)) {
     return { response: responseCodes.unprocessableEntity,
-      err: { code: errorsCodes.invalid_data, message: errorsMessages.wrongIdFormat } };
+      err: { code: errorsCodes.invalidData, message: errorsMessages.wrongIdFormat } };
   }
 };
 
@@ -73,5 +79,5 @@ module.exports = {
   isProductObject,
   responseCodes,
   errorsMessages,
-  errorsCodes
+  errorsCodes,
 };

@@ -17,16 +17,16 @@ const createProduct = async (name, quantity) => {
 
 const updateProduct = async (id, name, quantity) => {
   const { matchedCount } = await products.update(id, name, quantity);
-  if(matchedCount) {
+  if (matchedCount) {
     return { _id: id, name, quantity };
   }
-  return {err: {code: 'bd_acess_error', message: 'error trying update product'}};
+  return { err: { code: 'bd_acess_error', message: 'error trying update product' } };
 };
 
 const deleteProduct = async (id) => {
   const product = await products.findById(id);
   if (!product) {
-    return { err: {code: 'invalid_data', message: 'Wrong id format'} };
+    return { err: { code: 'invalid_data', message: 'Wrong id format' } };
   }
   await products.remove(id);
   const { name, quantity } = product;

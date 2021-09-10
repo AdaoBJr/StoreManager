@@ -1,10 +1,10 @@
-const productsServices = require('../services/productsService');
+const productsServices = require('./productsService');
 const sales = require('../models/sales');
 
-const operation = {
+const operations = {
   CREATE_SALE: 'sale',
   UPDATE_SALE: 'update',
-  DELETE_SALE: 'delete'
+  DELETE_SALE: 'delete',
 };
 
 const getAll = async () => {
@@ -17,33 +17,37 @@ const findById = async (saleId) => {
   return sale;
 };
 
+const checkUpdateIsValid = (item, itemInventory, operation, saleQuantityDiference) => (
+  (
+    itemInventory.quantity < item.quantity && operation !== 'update'
+  )
+  || (
+    itemInventory.quantity < saleQuantityDiference
+    )
+);
+
 const validateItemSoldQuantity = async (item, operation, saleQuantityDiference) => {
   const itemInventory = await productsServices.findById(item.productId);
-  if (
-    (itemInventory.quantity < item.quantity && operation != 'update')
-    ||
-    itemInventory.quantity < saleQuantityDiference
-  ) {
-    return {err: 'error on first test to update quantity'};
-  }
+  const updateIsValid = checkUpdateIsValid(item, itemInventory, operation, saleQuantityDiference);
+  if (updateIsValid) return { err: 'error on first test to update quantity' };
   switch (true) {
-  case (operation === 'sale'):
-    itemInventory.quantity -= item.quantity;
+  case (operation === 'sale'): itemInventory.quantity -= item.quantity;
     break;
-  case (operation === 'update'):
-    itemInventory.quantity -= saleQuantityDiference;
-  case (operation === 'delete'):
-    itemInventory.quantity += item.quantity;
+  case (operation === 'update'): itemInventory.quantity -= saleQuantityDiference;
+    break;
+  case (operation === 'delete'): itemInventory.quantity += item.quantity;
+    break;
   default:
     break;
   }
   await productsServices.updateProduct(
-    itemInventory._id, itemInventory.name, itemInventory.quantity);
+    itemInventory._id, itemInventory.name, itemInventory.quantity,
+  );
 };
 
 const createSale = async (itensSold) => {
   itensSold.forEach((item) => {
-    validateItemSoldQuantity(item, operation.CREATE_SALE);
+    validateItemSoldQuantity(item, operations.CREATE_SALE);
   });
   const { insertedId } = await sales.create(itensSold);
   return { _id: insertedId, itensSold };
@@ -53,14 +57,15 @@ const updateSale = async (saleId, itemSold) => {
   const { itensSold } = await findById(saleId);
   itensSold.forEach((item) => {
     if (item.productId === itemSold.productId) {
-      saleQuantityDiference = itemSold.quantity - item.quantity;
+      const saleQuantityDiference = itemSold.quantity - item.quantity;
       validateItemSoldQuantity(
-        item, operation.UPDATE_SALE, saleQuantityDiference);
+        item, operations.UPDATE_SALE, saleQuantityDiference,
+      );
       item.quantity = itemSold.quantity;
     }
   });
   const { modifiedCount } = await sales.update(saleId, itensSold);
-  if(modifiedCount) {
+  if (modifiedCount) {
     return { _id: saleId, itensSold };
   }
 };
@@ -69,7 +74,8 @@ const deleteSale = async (id) => {
   const sale = await findById(id);
   sale.itensSold.forEach((item) => {
     validateItemSoldQuantity(
-      item, operation.DELETE_SALE);
+      item, operations.DELETE_SALE,
+    );
   });
   sales.remove(id);
   return sale;

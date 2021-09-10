@@ -1,11 +1,12 @@
 const express = require('express');
+
 const salesService = require('../services/salesService');
 const {
   validateSaleData,
   validateSaleId,
   validateSaleExists,
 } = require('../middlewares/salesMiddleware');
-const { route } = require('./productsController');
+// const { route } = require('./productsController');
 const router = express.Router();
 
 const responseCode = {
@@ -21,13 +22,13 @@ router.get('/', async (_req, res) => {
   res.status(responseCode.success).json(salesList);
 });
 
-router.get('/:id', validateSaleId, validateSaleExists, async(req, res) => {
+router.get('/:id', validateSaleId, validateSaleExists, async (req, res) => {
   const { id } = req.params;
   const sale = await salesService.findById(id);
   res.status(responseCode.success).json(sale);
 });
 
-router.post('/', validateSaleData, async(req, res) => {
+router.post('/', validateSaleData, async (req, res) => {
   try {
     const itensSold = req.body;
     const createdSale = await salesService.createSale(itensSold);
