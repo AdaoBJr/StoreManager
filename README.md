@@ -361,7 +361,7 @@ O projeto deve rodar na porta `http://localhost:3000`
 
 - `name` deve ser uma _string_ com mais de 5 caracteres e deve ser único;
 
-- `quantity` deve ser um número inteiro maior que 0;
+- `quantity`  deve ser um número inteiro maior que 0;
 
 - Cada produto deve ter um id que seja único e gerado no momento em que o recurso for criado. Você pode utilizar o ID gerado pelo MongoDB
 
