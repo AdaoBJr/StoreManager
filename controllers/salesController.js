@@ -50,4 +50,15 @@ route.put(
   }),
 );
 
+route.delete(
+  '/:id',
+  rescue(async (req, res) => {
+    const { id } = req.params;
+    const deleteSales = await salesService.deleteSales(id);
+    if (deleteSales.err) return res.status(STATUS_FAIL).json(deleteSales);
+
+    return res.status(STATUS_OK).json(deleteSales);
+  }),
+);
+
 module.exports = route;

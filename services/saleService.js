@@ -74,6 +74,10 @@ const deleteSales = async (id) => {
       },
     };
   }
+
+  const sale = await salesModel.excluse(id);
+
+  return sale && salesId;
 };
 
 module.exports = {
