@@ -29,6 +29,21 @@ const getProdById = async (id) => {
   return product;
 };
 
+const updateProdQuantity = async (id, newQuant, value) => {
+  const newValue = value === 'increase' ? +newQuant : -newQuant;
+  await connection().then((db) =>
+    db.collection('products')
+      .updateOne({ _id: ObjectId(id) }, { $inc: { quantity: newValue } }));
+};
+
+const getProdByName = async (name) => {
+  const product = await connection()
+    .then((db) => db.collection('products').findOne({ name }))
+    .then((result) => result);
+
+  return product;
+};
+
 const updateProd = async (id, name, quantity) => {
   const { insertedId } = await connection().then((db) =>
     db.collection('products')
@@ -45,4 +60,14 @@ const deleteProduct = async (id) => {
   const { value } = await connection().then((db) =>
     db.collection('products').findOneAndDelete({ _id: ObjectId(id) }));
   return value;
+};
+
+module.exports = {
+  createProd,
+  getAllProds,
+  getProdById,
+  updateProd,
+  deleteProduct,
+  updateProdQuantity,
+  getProdByName,
 };

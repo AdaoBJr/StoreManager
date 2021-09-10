@@ -42,3 +42,11 @@ const remove = async (req, res) => {
   const product = await removeProduct(id);
   res.status(STATUS_SUCCESS).json(product);
 };
+
+module.exports = {
+  create,
+  getAll,
+  update,
+  remove,
+  getById,
+};

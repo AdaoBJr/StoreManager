@@ -37,3 +37,11 @@ const removeProduct = async (id) => {
   const product = await deleteProduct(id);
   return product;
 };
+
+module.exports = {
+  createProduct,
+  getAllProducts,
+  getProductById,
+  updateProduct,
+  removeProduct,
+};
