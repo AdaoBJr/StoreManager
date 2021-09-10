@@ -11,7 +11,8 @@ router.route('/').post(validateProduct, create);
 
 router.route('/:id')
   .get(validateProductId, getById)
-  .put(validateProduct, update);
+  .put(validateProduct, update)
+  .delete(validateProductId, remove);
 
 router.route('/').get(getAll);
 

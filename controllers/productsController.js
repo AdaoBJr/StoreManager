@@ -36,3 +36,9 @@ const update = async (req, res) => {
   const product = await updateProduct(id, name, quantity);
   return res.status(STATUS_SUCCESS).json({ ...product });
 };
+
+const remove = async (req, res) => {
+  const { id } = req.params;
+  const product = await removeProduct(id);
+  res.status(STATUS_SUCCESS).json(product);
+};
