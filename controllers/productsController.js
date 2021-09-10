@@ -10,13 +10,13 @@ const create = rescue(async (req, res, next) => {
   }).validate(req.body);
 
   if (error) {
-    return next({ err: { code: 'invalidData', message: error } });
+    return next(error);
   }
 
   const verify = await ProductsService.findByName(name);
   if (verify) {
     return res.status(409).json({
-      error: { code: 'invalid_data', message: 'Product already exists' },
+      err: { code: 'invalid_data', message: 'Product already exists' },
     });
   }
 
