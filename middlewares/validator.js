@@ -29,4 +29,3 @@ const stock = async (req, _res, next) => validate.stock([...req.body])
   .catch((err) => next({ status: 404, err }));
 
 module.exports = { product, productExists, productId, sale, saleExists, saleId, stock };
-

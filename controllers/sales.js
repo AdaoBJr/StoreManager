@@ -4,7 +4,7 @@ const create = (req, res) => sales.create([...req.body])
   .then(({ status, data }) => res.status(status).json(data));
 
 const getAll = (_req, res) => sales.getAll()
-  .then(({ status, data }) => res.status(status).json({ 'sales': data }));
+  .then(({ status, data }) => res.status(status).json({ sales: data }));
 
 const getById = (req, res) => sales.getById(req.params.id)
   .then(({ status, data }) => res.status(status).json(data));

@@ -1,7 +1,7 @@
 const sales = require('../models/sales');
 
 const create = (itensSold) => {
-  itensSold.forEach((i) => sales.updateStock(i.productId,-i.quantity));
+  itensSold.forEach((i) => sales.updateStock(i.productId, -i.quantity));
   return sales.create(itensSold).then((data) => ({ status: 200, data }));
 };
 
