@@ -15,7 +15,7 @@ const ExistingProduct = async (req, res, next) => {
 
     const { name } = req.body;
 
-    const productExist = await db.connection('products').findOne({ name });
+    const productExist = await db.collection('products').findOne({ name });
 
     if (productExist) {
         res.status(422).json({ err: { 
@@ -28,12 +28,12 @@ const ExistingProduct = async (req, res, next) => {
 const QuantityValidation = async (req, res, next) => {
     const { quantity } = req.body;
 
-    if (quantity.length < 1) {
+    if (quantity <= 0) {
         res.status(422).json({ err: { 
             code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' } });
     }
 
-    if (quantity !== 'number') {
+    if (typeof quantity !== 'number') {
         res.status(422).json({ err: { 
             code: 'invalid_data', message: '"quantity" must be a number' } });
     }
