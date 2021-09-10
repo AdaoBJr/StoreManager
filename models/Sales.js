@@ -1,5 +1,9 @@
 const connection = require('./connection');
 
+const getAll = async () =>
+  connection()
+    .then((db) => db.collection('sales').find().toArray());
+
 const newSale = async (sale) =>
   connection()
     .then((db) => db.collection('sales').insertOne({ itensSold: sale }))
@@ -7,4 +11,5 @@ const newSale = async (sale) =>
 
 module.exports = {
   newSale,
+  getAll,
 };

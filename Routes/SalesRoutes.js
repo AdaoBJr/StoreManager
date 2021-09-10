@@ -4,6 +4,7 @@ const controller = require('../controllers/Sales');
 
 const salesRoutes = (app) => {
   app.route('/sales')
+    .get()
     .post(rescue(controller.newSale));
 };
 

@@ -10,6 +10,8 @@ const validateSale = (sale) => {
   });
 };
 
+const getAll = () => model.getAll();
+
 const newSale = async (sale) => {
   validateSale(sale);
   const result = await model.newSale(sale);
@@ -18,4 +20,5 @@ const newSale = async (sale) => {
 
 module.exports = {
   newSale,
+  getAll,
 };
