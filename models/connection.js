@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
-const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
-// const DB_NAME = 'StoreManager';
+const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
+const DB_NAME = 'StoreManager';
 
 let schema = null;
 async function connection() {
@@ -10,7 +10,7 @@ async function connection() {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-    .then((conn) => conn.db('formulaOne'))
+    .then((conn) => conn.db(DB_NAME))
     .then((dbSchema) => {
       schema = dbSchema;
       return schema;
