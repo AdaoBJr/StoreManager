@@ -5,7 +5,7 @@ const mongoDbUrl = 'mongodb://localhost:27017';
 const url = 'http://localhost:3000';
 const invalidId = 99999;
 
-describe('1 - Crie um endpoint para o cadastro de produtos', () => {
+describe.only('1 - Crie um endpoint para o cadastro de produtos', () => {
   let connection;
   let db;
 
@@ -114,6 +114,7 @@ describe('1 - Crie um endpoint para o cadastro de produtos', () => {
         body = JSON.parse(body);
         const error = body.err.code;
         const { message } = body.err;
+        console.log(error, message)
         expect(error).toEqual('invalid_data');
         expect(message).toEqual('"quantity" must be a number');
       });

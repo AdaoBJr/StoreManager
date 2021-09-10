@@ -2,7 +2,7 @@
 module.exports = (err, req, res, _next) => {
     if (err.isJoi) {
       return res.status(422)
-        .json({ error: { 
+        .json({ err: { 
             code: 'invalid_data',
             message: err.details[0].message } });
     }
@@ -14,7 +14,7 @@ module.exports = (err, req, res, _next) => {
   
     const status = statusByErrorCode[err.code] || 500;
   
-    res.status(status).json({ error: { 
+    res.status(status).json({ err: { 
         code: 'invalid_data',
         message: err.message } });
   };

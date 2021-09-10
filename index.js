@@ -9,9 +9,9 @@ const app = express();
 app.use(bodyParser.json());
 
 app.post('/products', Products.create);
-app.get('/test', (req, res) => {
-  res.send('batata');
-});
+app.get('/products/:id', Products.findById);
+app.get('/products', Products.getAll);
+
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.send();
