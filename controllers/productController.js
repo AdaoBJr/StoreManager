@@ -8,7 +8,9 @@ const create = async (req, res) => {
   const { id } = product;
 
 	if (product.message) {
-		return res.status(statusCode.UNPROCESSABLE_ENTITY).json(product.message);
+	return res.status(statusCode.UNPROCESSABLE_ENTITY).json(
+		{ err: { code: product.code, message: product.message } },
+	);
 	}
 
 	return res.status(statusCode.OK).json({ id, name, quantity });
