@@ -1,37 +1,43 @@
-const rescue = require('express-rescue');
 const express = require('express');
-const productsModel = require('../models/productsModel');
+const productsService = require('../services/productsService');
 
 const router = express.Router();
 
 const validName = (req, res, next) => {
   const { name } = req.body;
-  if (name.length < 5 || typeof (name) !== 'string') {
-   return { 
+  if (!productsService.validNameService(name)) {
+   return res.status(422).json({ 
      err: { 
        code: 'invalid_data', 
        message: '"name" length must be at least 5 characters long', 
-      } };
+      } });
   }
   next();
 };
 
 const validQuantity = (req, res, next) => {
   const { quantity } = req.body;
-  if (quantity <= 0 || typeof (quantity) !== 'number' || Number.isInteger(quantity)) {
+  if (!productsService.validQuantityService(quantity)) {
     return res.status(422).json({ 
       err: { code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' }, 
+    }); 
+  }
+
+  if (productsService.validQuantityNumberService(quantity)) {
+    return res.status(422).json({ 
+      err: { code: 'invalid_data', message: '"quantity" must be a number' }, 
     }); 
   }
 
   next();
 };
 
-const verifyExistance = (req, res, next) => {
-  const productExists = productsModel.findProductByName(name);
+const verifyExistance = async (req, res, next) => {
+  const { name } = req.body;
+  const productExists = await productsService.verifyExistanceService(name);
 
   if (productExists) {
- res.status(422).json({ 
+ return res.status(422).json({ 
     err: { code: 'invalid_data', message: 'Product already exists' }, 
   }); 
 }
@@ -40,7 +46,7 @@ next();
 
 const addNewProduct = (req, res) => {
   const { name, quantity } = req.body;
-  productsModel.createProduct({ name, quantity })
+  productsService.createProductService({ name, quantity })
   .then((result) => res.status(201).json(result));
 };
 

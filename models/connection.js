@@ -1,25 +1,22 @@
 const { MongoClient } = require('mongodb');
 
-// conexão com o banco
-const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
+require('dotenv').config();
 
-// conexão para os testes
-// const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
-
-// conexão abaixo, comentar e descomentar acima para usar a conexão correta
+const MONGO_DB_URL = process.env.MONGO_DB_URL || 'mongodb://mongodb:27017/StoreManager';
 
 const DB_NAME = 'StoreManager';
 let db = null;
 
-const OPTIONS = { useNewUrlParser: true, useUnifiedTopology: true };
-
-const connection = async () => {
-  if (!db) {
-    const conn = await MongoClient.connect(MONGO_DB_URL, OPTIONS);
-    db = conn.db(DB_NAME);
-    return db;
-  }
-  return Promise.resolve(db);
+const OPTIONS = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 };
 
-module.exports = connection;  
+const connection = () => (db
+    ? Promise.resolve(db)
+    : MongoClient.connect(MONGO_DB_URL, OPTIONS).then((conn) => {
+      db = conn.db(DB_NAME);
+      return db;
+    }));
+
+module.exports = connection;
