@@ -24,4 +24,5 @@ const createServ = async ({ name, quantity }) => {
 
 module.exports = {
   createServ,
+  isValid,
 };
