@@ -67,9 +67,32 @@ async function insert(name, quantity) {
   return insertProduct;
 }
 
+async function updateProduct(id, { name, quantity }) {
+  if (!isValidLengthName(name)) return ERR_LENGTH_NAME;
+  if (!isValidQuantity(quantity)) return ERR_QUANTITY;
+  if (!isValidTypeQuantity(quantity)) return ERR_TYPE_QUANTITY;
+
+  const nameExists = await isValidNameExists(name);
+  if (!nameExists) return ERR_NAME_EXISTS;
+
+  const product = await ProductModel.update(id, { name, quantity });
+
+  return product;
+}
+
+async function deleteProduct(id) {
+  const product = await ProductModel.findById(id);
+  if (!product) return ERR_ID;
+
+  const exludeProduct = await ProductModel.exclude(id);
+
+  return exludeProduct;
+}
+
 module.exports = {
   getAllProduct,
   getProductById,
   insert,
-
+  updateProduct,
+  deleteProduct,
 };

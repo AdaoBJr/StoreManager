@@ -1,5 +1,7 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
+const { ObjectId } = require('mongodb');
+
 const ERR_ID = {
   err: { code: 'invalid_data', message: 'Wrong id format' },
 };
@@ -20,7 +22,7 @@ const ProductModel = require('../../models/ProductModels');
 const ProductService = require('../../services/ProductService');
 
 describe('Services - Validações para a rota "/products"', () => {
-  const id = '604cb554311d68f491ba5781';
+  const id = ObjectId('604cb554311d68f491ba5781');
 
   describe('Listar todos os produtos', () => {
     before(() => {
@@ -57,7 +59,7 @@ describe('Services - Validações para a rota "/products"', () => {
     describe('Quando não existe produto cadastrado', () => {
       before(() => {
         sinon.stub(ProductModel, 'findById')
-        .resolves(ERR_ID);
+        .resolves(false);
       });
 
       after(() => {
@@ -66,6 +68,7 @@ describe('Services - Validações para a rota "/products"', () => {
 
       it('Quando não existe o produto cadastrado', async () => {
         const response = await ProductService.getProductById(id);
+        console.log(response)
         expect(response).to.deep.equals(ERR_ID);
       });
     });
@@ -170,11 +173,6 @@ describe('Services - Validações para a rota "/products"', () => {
 
       describe('Verfica se existe um produto com mesmo nome cadastrado', () => {
         before(() => {
-          const productsModel =  {
-            _id: id,
-            name: "Produto teste",
-            quantity: 1,
-          }
           sinon.stub(ProductModel, 'findByName')
           .resolves(true);
         });
@@ -204,7 +202,7 @@ describe('Services - Validações para a rota "/products"', () => {
         }
 
         const { _id, name, quantity } = products;
-        const response = await ProductService.updateProduct(_id, name, quantity)
+        const response = await ProductService.updateProduct(_id, {name, quantity})
         expect(response).to.deep.equals(ERR_LENGTH_NAME);
       });
 
@@ -223,7 +221,7 @@ describe('Services - Validações para a rota "/products"', () => {
         it('Verfica que retorna erro ao tentar inserir um produto com quantidade igual a zero ', async () => {
           const products =  {
             _id: id,
-            name: "Produto teste",
+            name: "Produto teste 2",
             quantity: 0,
           }
           const { _id, name, quantity } = products;
@@ -234,12 +232,12 @@ describe('Services - Validações para a rota "/products"', () => {
         it('Verfica que retorna erro ao tentar inserir um produto com quantidade não é um numero', async () => {
           const products =  {
             _id: id,
-            name: "Produto teste",
+            name: "Produto teste 45",
             quantity: "1",
           }
 
           const { _id, name, quantity } = products;
-          const response = await ProductService.insert(_id, { name, quantity })
+          const response = await ProductService.updateProduct(_id, { name, quantity })
           expect(response).to.deep.equals(ERR_TYPE_QUANTITY);
         });
 
@@ -259,68 +257,50 @@ describe('Services - Validações para a rota "/products"', () => {
             name: "Produto teste",
             quantity: 1,
           }
-          const response = await ProductService.updateProduct(product._id, product.name, product.quantity)
+          const { _id, name, quantity } = product;
+          const response = await ProductService.updateProduct(_id, { name, quantity })
           expect(response).to.deep.equals(ERR_NAME_EXISTS)
-        })
-      })
-
-    })
-    const products =  {
-      _id: id,
-      name: "Produto teste",
-      quantity: 1,
-    }
-
-    const updateProduct = {
-      _id: id,
-      name: "Produto atualizado",
-      quantity: 5,
-    }
-    before(async () => {
-      const db = await mongoConnection.connection();
-      await db.collection('products').insertOne(products);
+        });
+      });
     });
-
-    after(async () => {
-      const db = await mongoConnection.connection();
-      await db.collection('products').drop();
-    });
-
-    it('Verifica se retorna os dados atualizados', async () => {
-      const { _id, name, quantity } = updateProduct;
-      const response = await ProductModel.update(_id, { name, quantity });
-      expect(response).to.deep.equals(updateProduct);
-    })
   });
 
-  describe.skip('Deletar um produto', () => {
-    const products =  {
-      _id: id,
-      name: "Produto teste",
-      quantity: 1,
-    }
-    beforeEach(async () => {
-      const db = await mongoConnection.connection();
-      await db.collection('products').insertOne(products);
+  describe('Deletar um produto', () => {
+    describe('Verfica se existe o produto cadastrado', () => {
+      before(() => {
+        sinon.stub(ProductModel, 'findById')
+        .resolves(false);
+      });
+
+      after(() => {
+        ProductModel.findById.restore();
+      });
+
+      it('Quando não existe o produto cadastrado', async () => {
+        const response = await ProductService.deleteProduct(id);
+        expect(response).to.deep.equals(ERR_ID);
+      });
     });
+    describe('Verifica se o produto deletado é retornado', () => {
+      const product = {
+        _id: id,
+        name: 'Produto teste',
+        quantity: 1
+      }
+      before(() => {
+        sinon.stub(ProductModel, 'findById').resolves(true);
+        sinon.stub(ProductModel, 'exclude').resolves(product);
+      });
 
-    afterEach(async () => {
-      const db = await mongoConnection.connection();
-      await db.collection('products').drop();
-    });
+      after(() => {
+        ProductModel.findById.restore();
+        ProductModel.exclude.restore();
+      });
 
-    it('Verifica se retorna o produto deletado', async () => {
-      const response = await ProductModel.exclude(id);
-      expect(response).to.deep.equals(products);
-    });
-
-    it('Verifica se o produto é deletado com suceso', async () => {
-      await ProductModel.exclude(id);
-
-      const db = await mongoConnection.connection();
-      const response = await db.collection('products').findOne({_id: id});
-      expect(response).to.be.null;
-
-    });
+      it('Quando não existe o produto cadastrado', async () => {
+        const response = await ProductService.deleteProduct(id);
+        expect(response).to.deep.equals(product);
+      });
+    })
   });
 });
