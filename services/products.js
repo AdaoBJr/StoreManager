@@ -1,15 +1,29 @@
-const products = require('../models/products');
 
-const create = (product) => products.create(product)
-  .then((data) => ({ status: 201, data }));
+const Products = require('../models/Products');
+const Error = require('../utils/errosService');
 
-const getAll = () => products.getAll().then((data) => ({ status: 200, data }));
+const create = async (product) => {
+  const checkProduct = await Products.findByName(product.name);
+  if (checkProduct) return Error.invalidData('Product already exists');
+  return Products.create(product);
+};
 
-const getById = (id) => products.getById(id).then((data) => ({ status: 200, data }));
+const findById = async (id) => {
+  const product = await Products.findById(id);
+  if (!product) return Error.invalidData('Wrong id format');
+  return product;
+};
 
-const update = (id, product) => products.update(id, product)
-  .then((data) => ({ status: 200, data }));
+const excluse = async (id) => {
+  const product = await Products.excluse(id);
+  if (!product) return Error.invalidData('Wrong id format');
+  return product;
+};
 
-const remove = (id) => products.remove(id).then((data) => ({ status: 200, data }));
-
-module.exports = { create, getAll, getById, update, remove };
+module.exports = {
+  getAll: Products.getAll,
+  update: Products.update,
+  create,
+  findById,
+  excluse,
+};

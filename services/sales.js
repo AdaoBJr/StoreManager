@@ -1,23 +1,33 @@
-const sales = require('../models/sales');
+const Sales = require('../models/Sales');
+const Product = require('../models/Products');
+const Error = require('../utils/errosService');
 
-const create = (itensSold) => {
-  itensSold.forEach((i) => sales.updateStock(i.productId, -i.quantity));
-  return sales.create(itensSold).then((data) => ({ status: 200, data }));
+const findById = async (id) => {
+  const sale = await Sales.findById(id);
+  if (!sale) return Error.notFound('Sale not found'); 
+  return sale;
 };
 
-const getAll = () => sales.getAll().then((data) => ({ status: 200, data }));
-
-const getById = (id) => sales.getById(id).then((data) => ({ status: 200, data }));
-
-const update = (id, itensSold) => {
-  itensSold.forEach((i) => sales.updateStock(i.productId, -i.quantity));
-  return sales.update(id, itensSold).then((data) => ({ status: 200, data }));
+const create = async (sales) => {
+  const resolve = await Promise.all(sales.map((s) => Product.checkQuantity(s)));
+  const productsQuantities = resolve.every(((sale) => sale));
+  if (!productsQuantities) return Error.stockProblem('Such amount is not permitted to sell');
+  sales.forEach((sale) => { Product.updateQuantity(sale); });
+  return Sales.create(sales);
 };
 
-const remove = (id) => {
-  sales.getById(id).then(({ itensSold }) =>
-    itensSold.forEach((i) => sales.updateStock(i.productId, i.quantity)));
-  return sales.remove(id).then((data) => ({ status: 200, data }));
+const excluse = async (id) => {
+  const sale = await Sales.findById(id);
+  const saleResult = await Sales.excluse(id);
+  if (!sale || !saleResult) return Error.invalidData('Wrong sale ID format');
+  sale.itensSold.forEach((products) => Product.updateDelete(products));
+  return saleResult;
 };
 
-module.exports = { create, getAll, getById, update, remove };
+module.exports = {
+  getAll: Sales.getAll,
+  update: Sales.update,
+  create,
+  findById,
+  excluse,
+};
