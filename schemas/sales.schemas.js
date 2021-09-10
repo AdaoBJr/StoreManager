@@ -1,6 +1,20 @@
+const ID_SIZE = 24;
+
+const isIdValid = (id) => {
+  if (id.length !== ID_SIZE) {
+    return {
+      code: 404,
+      err: {
+        code: 'not_found', message: 'Sale not found',
+      },
+    };
+  }
+  return true;
+};
 const isQuantityValid = (sales) => {
   let erro = 0;
   sales.forEach((sale) => {
+    // https://stackoverflow.com/questions/51593287/javascript-foreach-manage-exceptions
     if (sale.quantity < 1 || typeof sale.quantity !== 'number') {
       erro += 1;
     }
@@ -16,4 +30,4 @@ const isQuantityValid = (sales) => {
   return true;
 };
 
-module.exports = { isQuantityValid };
+module.exports = { isQuantityValid, isIdValid };
