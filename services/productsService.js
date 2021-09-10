@@ -1,7 +1,6 @@
 const productsModel = require('../models/productsModel');
 
 const validName = (name) => {
-    console.log(name);
     if (name.length < 5 || typeof (name) !== 'string') return false;
 
   return true;
@@ -23,6 +22,15 @@ const getAllProducts = async () => {
     }
     return products;
 };
+
+const getProductsById = async (id) => {
+  //  console.log(id);
+    const product = productsModel.getById(id);
+    if (!product) {
+        return null;
+    }
+    return product;
+};
 const createProduct = async ({ name, quantity }) => {
     const productExists = await productsModel.productsExists(name);
     if (productExists) {
@@ -40,4 +48,11 @@ const createProduct = async ({ name, quantity }) => {
 //     return await songModel.update({ id, name, album });
 // }
 
-module.exports = { createProduct, getAllProducts, validName, validQuantity, validTypeQuantity };
+module.exports = { 
+    createProduct,
+     getAllProducts, 
+     validName, 
+     validQuantity, 
+     validTypeQuantity,
+     getProductsById,
+     };

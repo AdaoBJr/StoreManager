@@ -3,7 +3,6 @@ const productsService = require('../services/productsService');
 const validName = (req, res, next) => {
     const { name } = req.body;
     const nameVerified = productsService.validName(name);
-    console.log(nameVerified);
     if (!nameVerified) {
         return res.status(422).json({
             err: {
@@ -20,7 +19,7 @@ const validQuantity = (req, res, next) => {
     const quantityVerified = productsService.validQuantity(quantity);
     if (!quantityVerified) {
         return res.status(422).json({
-            err: { code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' }, 
+            err: { code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' },
         });
     }
     next();
@@ -30,9 +29,10 @@ const validTypeQuantity = (req, res, next) => {
     const quantityTypeVerified = productsService.validTypeQuantity(quantity);
     if (!quantityTypeVerified) {
         return res.status(422).json({
-            err: { 
+            err: {
                 code: 'invalid_data',
-                 message: '"quantity" must be a number' }, 
+                message: '"quantity" must be a number',
+            },
         });
     }
     next();
@@ -40,10 +40,32 @@ const validTypeQuantity = (req, res, next) => {
 
 const getAllProducts = async (req, res) => {
     try {
-        const products = await productsService.getAllProducts();
-        return res.status(200).json(products);
+        const Allproducts = await productsService.getAllProducts();
+        return res.status(200).json({ products: Allproducts });
     } catch (error) {
-        return res.status(500).json({ message: 'Ops, algo de errado :( ' });
+        return res.status(422).json({
+            err: {
+                code: 'invalid_data',
+                message: 'Wrong id format ',
+            },
+        });
+    }
+};
+
+const getAProductById = async (req, res) => {
+    const { id } = req.params;
+    // console.log(id);
+    try {
+        const product = await productsService.getProductsById(id);
+        console.log(product);
+        return res.status(200).json(product);
+    } catch (error) {
+        return res.status(422).json({
+            err: {
+                code: 'invalid_data',
+                message: 'Wrong id format',
+            },
+        });
     }
 };
 
@@ -54,8 +76,9 @@ const createProducts = async (req, res) => {
         const result = await productsService.createProduct({ name, quantity });
 
         if (!result) {
-            return res.status(422).json({ 
-                err: { code: 'invalid_data', message: 'Product already exists' } });
+            return res.status(422).json({
+                err: { code: 'invalid_data', message: 'Product already exists' },
+            });
         }
         return res.status(201).json(result);
     } catch (error) {
@@ -63,4 +86,11 @@ const createProducts = async (req, res) => {
     }
 };
 
-module.exports = { getAllProducts, createProducts, validName, validQuantity, validTypeQuantity };
+module.exports = {
+    getAllProducts,
+    createProducts,
+    validName,
+    validQuantity,
+    validTypeQuantity,
+    getAProductById,
+};
