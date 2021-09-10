@@ -5,6 +5,8 @@ const { create,
 
 const router = express.Router();
 
+router.route('/').post(validateProduct, create);
+
 router.route('/').get(getAll);
 
 module.exports = router;
