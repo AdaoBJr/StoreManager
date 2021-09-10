@@ -2,43 +2,61 @@ const productsModel = require('../models/productsModel');
 
 const errors = {
   nameLength: '"name" length must be at least 5 characters long',
-  productExists: 'Product already exists',
-  quantityLargerThan1: '"quantity" must be larger than or equal to 1',
   quantityNotNumber: '"quantity" must be a number',
+  quantityValue: '"quantity" must be larger than or equal to 1',
+  productExists: 'Product already exists',
   wrongId: 'Wrong id format',
 };
 
-const checkNameLength = (name, len) => name.length <= len;
-
-const checkIsNumber = (quantity) => typeof quantity !== 'number';
-
-const checkLessThanZ = (quantity) => quantity <= 0;
-
-const isProductValid = (name, quantity) => {
-switch (true) {
-  case checkNameLength(name, 5): return { code: 422, message: errors.nameLength };
-  case checkIsNumber(quantity): return { code: 422, message: errors.quantityNotNumber };
-  case checkLessThanZ(quantity): return { code: 422, message: errors.quantityLargerThan1 };
-  default:
-    return {};
-}
+const validNameLength = (req, res, next) => {
+  const { name } = req.body;
+  if (name.length <= 5) {
+    return res.status(422).json({ err: { code: 'invalid_data', message: errors.nameLength } });
+  }
+  next();
 };
 
-const productExists = async (name) => {
+const validQntType = (req, res, next) => {
+  const { quantity } = req.body;
+  if (typeof quantity !== 'number') {
+    return res.status(422)
+    .json({ err: { code: 'invalid_data', message: errors.quantityNotNumber } });
+  }
+  next();
+};
+
+const validQntValue = (req, res, next) => {
+  const { quantity } = req.body;
+  if (quantity <= 0) {
+    return res.status(422)
+    .json({ err: { code: 'invalid_data', message: errors.quantityValue } });
+  }
+  next();
+};
+
+const productExists = async (req, res, next) => {
+  const { name } = req.body;
   const product = await productsModel.findByName(name);
-  if (product) return { code: 422, message: 'Product already exists' }; // nao rolou no validation
-  return true;
+  if (product) {
+    return res.status(422)
+    .json({ err: { code: 'invalid_data', message: errors.productExists } });
+  }
+  next();
 };
 
-const checkId = async (id) => {
-  if (id.length !== 24) return { code: 422, message: errors.wrongId };
-  const validId = await productsModel.getProductById(id);
-  if (!validId) return { code: 422, message: errors.wrongId };
-  return validId;
+const validId = async (req, res, next) => {
+  const { id } = req.params;
+  if (id.length !== 24) {
+    return res.status(422)
+    .json({ err: { code: 'invalid_data', message: errors.wrongId } });
+  }
+  next();
 };
 
 module.exports = {
-  isProductValid,
-  checkId,
+  validNameLength,
+  validQntType,
+  validQntValue,
   productExists,
+  validId,
 };
