@@ -1,3 +1,4 @@
+// const { ObjectId } = require('mongodb');
 const connection = require('../models/mongoConnection');
 
 const productIsValid = async (req, res, next) => {
@@ -13,12 +14,10 @@ const productIsValid = async (req, res, next) => {
 
 const isValidName = async (req, res, next) => {
   const { name } = req.body;
-
   if (name.length < 5) {
     return res.status(422).json({
       err: { code: 'invalid_data', message: '"name" length must be at least 5 characters long' } });
   }
-
   next();
 };
 
@@ -38,4 +37,15 @@ const isValidQuantity = async (req, res, next) => {
   next();
 };
 
-module.exports = { productIsValid, isValidName, isValidQuantity };
+const isValidProduct = async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!id || id.length !== 24) {
+    return res.status(422).json({
+      err: { code: 'invalid_data', message: 'Wrong id format' } });
+  }
+
+  next();
+};
+
+module.exports = { productIsValid, isValidName, isValidQuantity, isValidProduct };
