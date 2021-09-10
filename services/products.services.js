@@ -1,6 +1,7 @@
 const Product = require('../models/products.models');
 
 const MIN_NAME_LENGTH = 5;
+const ID_SIZE = 24;
 
 const isProductExists = async (name) => {
   const productExists = await Product.getByname(name);
@@ -47,6 +48,18 @@ const isNameValid = (name) => {
   return true;
 };
 
+const isIdValid = (id) => {
+  if (id.length !== ID_SIZE) {
+    return {
+      code: 422,
+      err: {
+        code: 'invalid_data', message: 'Wrong id format',
+      },
+    };
+  }
+  return true;
+};
+
 const create = async ({ name, quantity }) => {
   const validationName = isNameValid(name);
   if (validationName.err) return validationName;
@@ -57,4 +70,24 @@ const create = async ({ name, quantity }) => {
   const newProduct = await Product.create({ name, quantity });
   return { code: 201, newProduct };
 };
-module.exports = { create };
+
+const getAll = async () => {
+  const products = await Product.getAll();
+  return { code: 200, products };
+};
+
+const getProductById = async (id) => {
+  const isValid = isIdValid(id);
+  if (isValid.err) return isValid;
+  const product = await Product.getProductById(id);
+  if (!product) {
+    return {
+      code: 422,
+      err: {
+        code: 'invalid_data', message: 'Wrong id format',
+      },
+    };
+  }
+  return { code: 200, product };
+};
+module.exports = { create, getAll, getProductById };

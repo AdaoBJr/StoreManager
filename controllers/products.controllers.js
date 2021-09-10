@@ -6,5 +6,15 @@ const create = async (req, res) => {
   if (err) return res.status(code).json({ err });
   return res.status(code).json(newProduct);
 };
+const getAll = async (_req, res) => {
+  const { code, products } = await Product.getAll();
+  return res.status(code).json({ products });
+};
 
-module.exports = { create };
+const getProductById = async (req, res) => {
+  const { id } = req.params;
+  const { code, err, product } = await Product.getProductById(id);
+  if (err) return res.status(code).json({ err });
+  return res.status(code).json(product);
+};
+module.exports = { create, getAll, getProductById };
