@@ -10,16 +10,6 @@ const createMod = async ({ name, quantity }) => {
   return { _id, name, quantity };
 };
 
-const getAll = async () => {
-  const db = await mongoConnection.getConnection();
-  const products = await db.collection('products')
-    .find()
-    .toArray();
-
-  return products;
-};
-
 module.exports = {
   createMod,
-  getAll,
 };

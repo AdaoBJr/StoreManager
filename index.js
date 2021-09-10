@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const productController = require('./controllers/productController');
+const productListController = require('./controllers/productListController');
 
 const app = express();
 app.use(bodyParser.json());
@@ -11,6 +12,8 @@ app.get('/', (_request, response) => {
 });
 
 app.post('/products', productController.createContr);
+app.get('/products', productListController.prodList)
+  .get('/products/:id', productListController.prodId);
 
 app.listen(3000, () => {
   console.log('Ouvindo a porta 3000');
