@@ -18,7 +18,7 @@ switch (true) {
     return { code: UNPROCESSABLE_ENTITY, message: errors.nameLength };
   case isNumber(quant):
     return { code: UNPROCESSABLE_ENTITY, message: errors.isNotNumber };
-  case checkQuantity(name):
+  case checkQuantity(quant):
     return { code: UNPROCESSABLE_ENTITY, message: errors.quantLessThanOne };
   default:
     return {};
