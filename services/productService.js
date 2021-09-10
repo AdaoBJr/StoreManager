@@ -7,6 +7,12 @@ const validateName = async (name) => {
   if (product) return 'product exist';
 };
 
+const validateQuantity = async (quantity) => {
+  if (quantity <= 0) return 'less equal 0';
+  if (typeof quantity !== 'number') return 'not a number';
+  return true;
+};
+
 const create = async (name, quantity) => {
   const { id } = await model.create(name, quantity);
 
@@ -16,4 +22,5 @@ const create = async (name, quantity) => {
 module.exports = {
   create,
   validateName,
+  validateQuantity,
 }; 

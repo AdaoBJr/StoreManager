@@ -2,7 +2,6 @@ const service = require('../services/productService');
 
 const CREATED = 201;
 const UNPROCESSABLE = 422;
-const HTTP_BAD_REQUEST = 400;
 
 const validName = async (req, res, next) => {
   const { name } = req.body;
@@ -26,8 +25,20 @@ const validName = async (req, res, next) => {
 
 const validQuantity = async (req, res, next) => {
   const { quantity } = req.body;
-  if (!quantity) {
-    return res.status(HTTP_BAD_REQUEST).json({ message: 'O campo "quantity" é obrigatório' });
+  const checkQtd = await service.validateQuantity(quantity);
+  switch (checkQtd) {
+    case 'less equal 0': return res.status(UNPROCESSABLE)
+        .json({ err: {
+          code: 'invalid_data',
+          message: '"quantity" must be larger than or equal to 1',
+        } });
+    case 'not a number': return res.status(UNPROCESSABLE)
+        .json({ err: {
+          code: 'invalid_data',
+          message: '"quantity" must be a number',
+        } }); 
+    default:
+      break;
   }
   next();
 };
