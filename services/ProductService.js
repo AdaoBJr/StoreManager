@@ -5,7 +5,7 @@ const ERR_ID = {
 };
 
 const ERR_LENGTH_NAME = {
-  err:{code:'invalid_data', message: '"name" length must be at least 5 characters long'}
+  err: { code: 'invalid_data', message: '"name" length must be at least 5 characters long' },
 };
 
 const ERR_NAME_EXISTS = {

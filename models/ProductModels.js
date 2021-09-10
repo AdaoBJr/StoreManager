@@ -47,7 +47,6 @@ async function exclude(id) {
 }
 
 async function findByName(name) {
-
   const db = await mongoConnection.connection();
   const result = await db.collection('products').findOne({ name });
 
