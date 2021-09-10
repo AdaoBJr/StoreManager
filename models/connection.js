@@ -1,24 +1,17 @@
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 
-const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
+mongoose.Promise = global.Promise;
+
 const DB_NAME = 'StoreManager';
-// let schema = null;
 
-async function getConnection() {
-  if (DB_NAME) return Promise.resolve(DB_NAME);
-  return MongoClient
-    .connect(MONGO_DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
-    .then((conn) => conn.db('model_example'))
-    .then((dbSchema) => {
-        DB_NAME = dbSchema;
-      return DB_NAME;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-}
-
-module.exports = { getConnection }; 
+// Connect MongoDB at default port 27017.
+mongoose.connect(`mongodb://localhost:27017/${DB_NAME}`, {
+   /* useNewUrlParser: true,
+    useCreateIndex: true, */
+}, (err) => {
+    if (!err) {
+        console.log('MongoDB Connection Succeeded.');
+    } else {
+        console.log(`Error in DB connection: ${err}`);
+    }
+});

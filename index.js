@@ -1,13 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-// const MovieController = require('./controllers/movieController');
+const ProductController = require('./controllers/productController');
 
 const app = express();
 
 app.use(bodyParser.json());
-
-// app.post('/movies', MovieController.create);
 
 const PORT = process.env.PORT || 3000;
 
@@ -15,6 +13,8 @@ const PORT = process.env.PORT || 3000;
 app.get('/', (_request, response) => {
   response.send();
 });
+
+app.post('/products', ProductController.create);
 
 app.listen(PORT, () => {
   console.log(`Ouvindo a porta ${PORT}`);
