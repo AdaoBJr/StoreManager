@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { ObjectId } = require('mongodb');
 const productsModels = require('../models/productsModels');
 
 const create = async ({ name, quantity }) => {
@@ -12,10 +13,10 @@ const create = async ({ name, quantity }) => {
   }).validate({ name, quantity });
 
   if (error) return error;
-
+  
   const { id } = await productsModels
   .create({ name, quantity });
-
+  
   return {
     id,
     name,
@@ -23,6 +24,22 @@ const create = async ({ name, quantity }) => {
   };
 };
 
+const getAll = async () => {
+  const allProducts = await productsModels.getAll();
+  return allProducts;
+};
+
+const getById = async ({ id }) => {
+  const idIsValid = await ObjectId.isValid(id);
+
+  if (!idIsValid) return 'idNaoExiste';
+
+  const allProducts = await productsModels.getById({ id });
+  return allProducts;
+};
+
 module.exports = {
   create,
+  getAll,
+  getById,
 };
