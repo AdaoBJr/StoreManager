@@ -10,7 +10,8 @@ const router = express.Router();
 router.route('/').post(validateProduct, create);
 
 router.route('/:id')
-  .get(validateProductId, getById);
+  .get(validateProductId, getById)
+  .put(validateProduct, update);
 
 router.route('/').get(getAll);
 

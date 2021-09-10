@@ -27,3 +27,8 @@ const getProductById = async (id) => {
   const response = await getProdById(id);
   return response;
 };
+
+const updateProduct = async (id, name, quantity) => {
+  const product = await updateProd(id, name, quantity);
+  return product;
+};

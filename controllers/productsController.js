@@ -29,3 +29,10 @@ const getById = async (req, res) => {
   const product = await getProductById(id);
   return res.status(STATUS_SUCCESS).json(product);
 };
+
+const update = async (req, res) => {
+  const { name, quantity } = req.body;
+  const { id } = req.params;
+  const product = await updateProduct(id, name, quantity);
+  return res.status(STATUS_SUCCESS).json({ ...product });
+};
