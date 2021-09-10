@@ -289,5 +289,6 @@ $RECYCLE.BIN/
 *.lnk
 
 newProduct.json
+newSale.json
 
 # End of https://www.toptal.com/developers/gitignore/api/node,macos,windows,linux,visualstudiocode,intellij
