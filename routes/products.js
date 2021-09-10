@@ -9,6 +9,12 @@ route.get(
   productsController.getById,
 );
 
+route.post(
+  '/',
+  productsController.validateName,
+  productsController.createProduct,
+);
+
 route.get(
   '/',
   productsController.getAll,

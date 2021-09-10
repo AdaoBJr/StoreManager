@@ -13,7 +13,16 @@ const getById = async (id) => {
   return products;
 };
 
+const getByName = async (name) => {
+  const db = await connection();
+  const products = await db.collection('products').findOne({
+    name,
+  });
+  return products;
+};
+
 module.exports = {
   getAll,
   getById,
+  getByName,
 };
