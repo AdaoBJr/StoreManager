@@ -61,7 +61,6 @@ describe('Validações para a rota "/products"', () => {
     it('Verifica se retorna todos os produtos', async () => {
       const response = await ProductModel.getAll()
       expect(response.products[0]).to.be.includes.keys('_id', 'name', 'quantity');
-
     })
   });
 
@@ -100,16 +99,75 @@ describe('Validações para a rota "/products"', () => {
     });
   });
 
-  describe.skip('Criar um produto', () => {
-
+  describe('Criar um produto', () => {
+    const products =  {
+      name: "Produto teste",
+      quantity: 1,
+    }
+    it('Verifica se é retornado as propriedades inseridas', async () => {
+      const response = await ProductModel.create(products)
+      expect(response).to.include.all.keys('_id', 'name', 'quantity');
+    })
   });
 
-  describe.skip('Atualizar um produto', () => {
+  describe('Atualizar um produto', () => {
+    const products =  {
+      _id: id,
+      name: "Produto teste",
+      quantity: 1,
+    }
 
+    const updateProduct = {
+      _id: id,
+      name: "Produto atualizado",
+      quantity: 5,
+    }
+    before(async () => {
+      const db = await mongoConnection.connection();
+      await db.collection('products').insertOne(products);
+    });
+
+    after(async () => {
+      const db = await mongoConnection.connection();
+      await db.collection('products').drop();
+    });
+
+    it('Verifica se retorna os dados atualizados', async () => {
+      const { _id, name, quantity } = updateProduct;
+      const response = await ProductModel.update(_id, { name, quantity });
+      expect(response).to.deep.equals(updateProduct);
+    })
   });
 
-  describe.skip('Deletar um produto', () => {
+  describe('Deletar um produto', () => {
+    const products =  {
+      _id: id,
+      name: "Produto teste",
+      quantity: 1,
+    }
+    beforeEach(async () => {
+      const db = await mongoConnection.connection();
+      await db.collection('products').insertOne(products);
+    });
 
+    afterEach(async () => {
+      const db = await mongoConnection.connection();
+      await db.collection('products').drop();
+    });
+
+    it('Verifica se retorna o produto deletado', async () => {
+      const response = await ProductModel.exclude(id);
+      expect(response).to.deep.equals(products);
+    });
+
+    it('Verifica se o produto é deletado com suceso', async () => {
+      await ProductModel.exclude(id);
+
+      const db = await mongoConnection.connection();
+      const response = await db.collection('products').findOne({_id: id});
+      expect(response).to.be.null;
+
+    });
   });
 });
 
