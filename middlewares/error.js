@@ -1,6 +1,19 @@
 const INVALID_DATA_CODE = 422;
 const INTERNAL_SERVER_ERROR_CODE = 500;
 
+const checkErrorCode = (code) => {
+  switch (code) {
+    case 'not_found':
+      return 404;
+
+    case 'invalid_data':
+      return 422;
+
+    default:
+      return false;
+  }
+};
+
 module.exports = (err, _req, res, _next) => {
   if (err.isJoi) {
     return res.status(INVALID_DATA_CODE).json({
@@ -10,13 +23,7 @@ module.exports = (err, _req, res, _next) => {
 
   // Verificamos se esse é um erro de domínio
   if (err.code) {
-    const statusByErrorCode = {
-      notFound: 404,
-      alreadyExists: 409,
-      invalid_data: 422,
-    };
-
-    const status = statusByErrorCode[err.code] || INTERNAL_SERVER_ERROR_CODE;
+    const status = checkErrorCode(err.code) || INTERNAL_SERVER_ERROR_CODE;
 
     return res.status(status).json({ err });
   }
