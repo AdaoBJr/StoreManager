@@ -27,8 +27,6 @@ const isValidQuantityNotNumber = (quantity) => {
 };
 
 const create = async (name, quantity) => {
-  /* const number = Number(quantity); */
-  console.log(typeof quantity);
   const isProductNameValid = isValidName(name);
   const isProductQuantityValidZero = isValidQuantityZero(quantity);
   const isProductQuantityNotNumber = isValidQuantityNotNumber(quantity);
