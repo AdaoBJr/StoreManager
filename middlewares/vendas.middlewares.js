@@ -7,7 +7,6 @@ const isValidQuantity = async (req, res, next) => {
 
   const quantityIsValid = retorno.every((result) => result.quantity > 0);
 
-  console.log(quantityIsValid);
   if (!quantityIsValid) {
     return res.status(422).json({
       err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } });
@@ -16,4 +15,15 @@ const isValidQuantity = async (req, res, next) => {
   next();
 };
 
-module.exports = { isValidQuantity };
+const isValidSale = async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!id || id.length !== 24) {
+    return res.status(404).json({
+      err: { code: 'not_found', message: 'Sale not found' } });
+  }
+
+  next();
+};
+
+module.exports = { isValidQuantity, isValidSale };
