@@ -21,6 +21,4 @@ const productId = async (id) => {
   if (!ObjectID.isValid(id)) throw err('invalid_data', 'Wrong id format');
 };
 
-
-
 module.exports = { product, productExists, productId };
