@@ -34,6 +34,14 @@ const checkQuantity = (quantity) => {
   }
 };
 
+const checkId = async (id) => {
+  const selectProduct = await productModel.getById(id);
+  if (!selectProduct) {
+    err.message = 'Wrong id format';
+    return { err };
+  }
+};
+
 const newProducts = async (name, quantity) => {
   const validateProduct = await checkProduct(name);
   if (validateProduct) return validateProduct;
@@ -48,9 +56,21 @@ const newProducts = async (name, quantity) => {
   return newProduct;
 };
 
+const getProducts = async () => {
+  const products = await productModel.getAll();
+  return { products };
+};
+
+const findProduct = async (id) => {
+  const validId = await checkId(id);
+  if (validId) return validId;
+
+  const product = await productModel.getById(id);
+  return product;
+};
+
 module.exports = {
     newProducts,
-    productName,
-    checkProduct,
-    checkQuantity,
+    getProducts,
+    findProduct,
 };
