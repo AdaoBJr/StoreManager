@@ -1,7 +1,8 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const productsModel = require('../models/productsModel');
 const {
-  ERROR_PROD_EXISTS, ERROR_NAME_LENGTH, ERROR_QTY_VALUE, ERROR_QTY_TYPE } = require('./msgErrors');
+  ERROR_PROD_EXISTS, ERROR_NAME_LENGTH, ERROR_QTY_VALUE, ERROR_QTY_TYPE, ERROR_ID_FORMAT,
+} = require('./msgErrors');
 
 // VALIDAÇÕES -----------------------------------------------------------------------------------
 
@@ -29,7 +30,7 @@ const validateQy = (qty) => {
   }
 };
 
-// const validateId = (id) => (ObjectId.isValid(id));
+const validateId = (id) => (ObjectId.isValid(id));
 // verifica se o valor passado é um id no válido - padrão mongoDB
 
 // -----------------------------------------------------------------------------------------------
@@ -46,8 +47,32 @@ const createProduct = async (product) => {
   };
 };
 
+// REQUISITO 2
+const getProducts = async (id) => {
+  const products = await productsModel.getAllProducts();
+    const product = await productsModel.getProductById(id);
+  // const product = products.find(({ _id }) => _id == id);
+
+  if (id) {
+    if (!validateId(id) || !product) {
+      throw ERROR_ID_FORMAT;
+    } else {
+      return {
+        status: 200,
+        product,
+      };
+    }
+  }
+
+  return {
+    status: 200,
+    products,
+  };
+};
+
 // -----------------------------------------------------------------------------------------------
 
 module.exports = {
   createProduct,
+  getProducts,
 };
