@@ -1,11 +1,11 @@
 const error = (code, message) => ({
   isError: true,
   code,
-  message
+  message,
 });
 
 module.exports = {
   errorInternal: (message) => error('invalid_data', message),
   errorBusiness: (message) => error('invalid_data', message),
-  errorNotFound: (message) => error('not_found', message)
+  errorNotFound: (message) => error('not_found', message),
 };

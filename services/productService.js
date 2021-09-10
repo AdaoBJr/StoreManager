@@ -4,7 +4,7 @@ const { errorBusiness } = require('../helpers/errors');
 
 const filterById = async (id) => {
   const products = await getById(id);
-  if(!products) {
+  if (!products) {
     return errorBusiness('wrong id format');
   }
 
@@ -13,7 +13,7 @@ const filterById = async (id) => {
 
 const createService = async (name, quantity) => {
   const fliterName = await getByName(name);
-  if(fliterName) {
+  if (fliterName) {
     return errorBusiness('produto já existe'); 
   }
 
@@ -23,7 +23,7 @@ const createService = async (name, quantity) => {
 
 const excludeService = async (id) => {
   const products = await exclude(id);
-  if(!products) return errorBusiness('Wrong id format');
+  if (!products) return errorBusiness('Wrong id format');
   return products;
 };
 
@@ -32,5 +32,5 @@ module.exports = {
   getAll,
   filterById,
   update,
-  excludeService
+  excludeService,
 };
