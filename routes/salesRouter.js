@@ -15,7 +15,8 @@ router.route('/').post(validateSaleQuantity, create);
 
 router.route('/:id')
 .get(validateSaleId, getById)
-.put(validateSaleQuantity, update);
+.put(validateSaleQuantity, update)
+.delete(validateSaleId, remove);
 
 router.route('/').get(getAll);
 

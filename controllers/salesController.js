@@ -36,3 +36,18 @@ const update = async (req, res) => {
   const sales = await updateSale(id, productId, quantity);
   return res.status(STATUS_SUCCESS).json(sales);
 };
+
+const remove = async (req, res) => {
+  const { id } = req.params;
+  const sale = await removeSale(id);
+
+  res.status(STATUS_SUCCESS).json(sale);
+};
+
+module.exports = {
+  create,
+  getAll,
+  getById,
+  update,
+  remove,
+};

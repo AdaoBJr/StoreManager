@@ -53,3 +53,22 @@ const updateSaleData = async (id, productId, quantity) => {
     ],
   };
 };
+
+const removeSaleData = async (id) => {
+  const { value } = await connection().then((db) =>
+    db.collection('sales').findOneAndDelete({ _id: ObjectId(id) }));
+
+  value.itensSold.forEach((el) => {
+    updateProdQuantity(el.productId, el.quantity, 'increase');
+  });
+
+  return value;
+};
+
+module.exports = {
+  createSaleData,
+  getAllSalesData,
+  findById,
+  updateSaleData,
+  removeSaleData,
+};

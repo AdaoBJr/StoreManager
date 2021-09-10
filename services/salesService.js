@@ -25,3 +25,16 @@ const updateSale = async (id, productId, quantity) => {
   const sale = await updateSaleData(id, productId, quantity);
   return sale;
 };
+
+const removeSale = async (id) => {
+  const sale = await removeSaleData(id);
+  return sale;
+};
+
+module.exports = {
+  createSale,
+  getAllSales,
+  findSaleById,
+  updateSale,
+  removeSale,
+};
