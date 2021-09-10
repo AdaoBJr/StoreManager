@@ -1,6 +1,8 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
+const hexValue = 24;
+
 const create = async (product) => {
   const sale = await connection()
   .then((db) => db.collection('sales').insertOne({ itensSold: [...product] }));
@@ -10,12 +12,13 @@ const create = async (product) => {
 
 const getAll = async () => {
   const product = await connection()
-  .then((db) => db.collection('sales').find({}).toArray());
+  .then((db) => db.collection('sales').find().toArray());
 
   return product;
 };
 
 const getById = async (id) => {
+  if (id.length !== hexValue) return null;
   const sale = await connection()
   .then((db) => db.collection('sales').findOne({ _id: new ObjectId(id) }));
 

@@ -13,17 +13,17 @@ const checkQuantity = (quantity) => {
 };
 
 const validateQuantity = (products) => {
-  const salesQuantity = products.some((product) => checkQuantity(product.quantity));
-  if (salesQuantity) {
+  const testedQuantity = products.some((product) => checkQuantity(product.quantity));
+  if (testedQuantity) {
     err.message = 'Wrong product ID or invalid quantity';
     return { err };
   }
 };
 
 const checkId = async (id) => {
-  const sales = await salesModel.getById(id);
-  if (!sales) {
-    return {
+  const sale = await salesModel.getById(id);
+  if (!sale) {
+    return {  
       err: {
         code: 'not_found',
         message: 'Sale not found',
@@ -43,16 +43,16 @@ const newSales = async (products) => {
 
 const getSales = async () => {
   const sales = await salesModel.getAll();
+
   return { sales };
 };
 
 const findSales = async (id) => {
-  const salesId = await checkId(id);
-  if (salesId) return salesId;
+  const validId = await checkId(id);
+  if (validId) return validId;
 
-  const sales = await salesModel.getById(id);
-  
-  return sales;
+  const sale = await salesModel.getById(id);
+  return sale;
 };
 
 const updateSales = async (id, product) => {
