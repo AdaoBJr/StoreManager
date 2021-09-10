@@ -26,14 +26,26 @@ async function isValidDifferentName(name) {
   return true;
 }
 
-async function createProduct({ name, quantity }) {
-  const product = await productsModel.createProduct({ name, quantity });
+async function create({ name, quantity }) {
+  const product = await productsModel.create({ name, quantity });
 
   return product;
 }
 
+async function getAll() {
+  const products = await productsModel.getAll();
+  return products;
+}
+
+async function getById(id) {
+  const product = await productsModel.getById(id);
+  return product;
+}
+
 module.exports = {
-  createProduct,
+  create,
+  getAll,
+  getById,
   isValidName,
   isValidQuantity,
   isValidQuantityMin,

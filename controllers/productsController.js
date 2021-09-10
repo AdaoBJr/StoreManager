@@ -55,17 +55,52 @@ function validateQuantity(req, res, next) {
   next();
 }
 
-async function createProduct(req, res) {
+async function create(req, res) {
     const { name, quantity } = req.body;
 
-    const product = await productService.createProduct({ name, quantity });
+    const product = await productService.create({ name, quantity });
 
-    res.status(201).json(product);
+    return res.status(201).json(product);
+}
+
+async function getAll(_req, res) {
+  const products = await productService.getAll();
+
+  // if (!products) {
+  //   return res.status(404).json({ message: 'Not found' });
+  // }
+
+  return res.status(200).json({ products });
+}
+
+async function getById(req, res) {
+  try {
+    const { id } = req.params;
+    const product = await productService.getById(id);
+
+    if (product === null) {
+      return res.status(422).json({
+        err: { 
+         code: 'invalid_data', 
+          message: 'Wrong id format', 
+        } });
+    }
+
+    return res.status(200).json(product);
+  } catch (error) {
+    return res.status(422).json({
+      err: { 
+        code: 'invalid_data', 
+        message: 'Wrong id format', 
+      } });
+  }
 }
 
 module.exports = {
   validateNameLength,
   validateDistinctName,
   validateQuantity,
-  createProduct,
+  create,
+  getAll,
+  getById,
 };

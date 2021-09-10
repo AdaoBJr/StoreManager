@@ -6,13 +6,19 @@ const {
   validateQuantity, 
   validateNameLength, 
   validateDistinctName, 
-  createProduct,
+  create,
+  getAll,
+  getById,
 } = require('../../controllers/productsController');
 
 router.post('/',
   validateNameLength,
   validateDistinctName,
   validateQuantity,
-  createProduct);
+  create);
+
+router.get('/', getAll);
+
+router.get('/:id', getById);
 
 module.exports = router;
