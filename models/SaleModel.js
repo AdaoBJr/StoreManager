@@ -1,9 +1,9 @@
 const { ObjectId } = require('mongodb');
-const connection = require('./connection');
+const mongoConnection = require('./connection');
 const ProductModel = require('./ProductModels');
 
 async function create(salesInfo) {
-  const db = await connection();
+  const db = await mongoConnection.connection();
 
   const { name, quantity } = await ProductModel.findById(salesInfo[0].productId);
 
@@ -21,7 +21,7 @@ async function create(salesInfo) {
 }
 
 async function getAll() {
-  const db = await connection();
+  const db = await mongoConnection.connection();
   const result = await db.collection('sales').find().toArray();
 
   return { sales: result };
@@ -30,7 +30,7 @@ async function getAll() {
 async function findById(id) {
   if (!ObjectId.isValid(id)) return null;
 
-  const db = await connection();
+  const db = await mongoConnection.connection();
   const result = await db.collection('sales').findOne({ _id: ObjectId(id) });
 
   return result;
@@ -39,7 +39,7 @@ async function findById(id) {
 async function update(id, salesInfo) {
   if (!ObjectId.isValid(id)) return null;
 
-  const db = await connection();
+  const db = await mongoConnection.connection();
   const insert = await db.collection('sales').findOneAndUpdate(
     { _id: ObjectId(id) },
     { $set: { itensSold: salesInfo } },
@@ -59,7 +59,7 @@ async function exclude(id) {
 
   await ProductModel.update(_id, { name, quantity: newQuantity });
 
-  const db = await connection();
+  const db = await mongoConnection.connection();
 
   const result = await db.collection('sales').findOne({ _id: ObjectId(id) });
   await db.collection('sales').deleteOne({ _id: ObjectId(id) });
