@@ -9,7 +9,7 @@ const createProduct = async (req, res) => {
 
 const getAll = async (req, res) => {
   const result = await productsService.getAll();
-  return res.status(ok).json({products: result});
+  return res.status(ok).json({ products: result });
 };
 
 const getById = async (req, res) => {
@@ -19,7 +19,7 @@ const getById = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-  const {name, quantity} = req.body;
+  const { name, quantity } = req.body;
   const { id } = req.params;
   const result = await productsService.updateProduct(name, quantity, id);
   return res.status(ok).json(result);

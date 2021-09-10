@@ -5,11 +5,12 @@ const checkStock = async (salesArray) => {
   const stockLimit = 0;
   const zero = 0;
 
-  for (let index = zero; index < salesArray.length; index++) {
+  for (let index = zero; index < salesArray.length; index += 1) {
     const productOrder = salesArray[index];
     const currentProduct = await productsModel.getById(productOrder.productId);
-    if ((currentProduct.quantity - productOrder.quantity) < stockLimit)
-      return {error: { message: 'Such amount is not permitted to sell'}};
+    if
+    ((currentProduct.quantity - productOrder.quantity)
+    < stockLimit) return { error: { message: 'Such amount is not permitted to sell' } };
   }
 
   return {};
@@ -21,13 +22,13 @@ const createSale = async (salesArray) => {
     return checkStockResult;
   }
   const result = await salesModel.createSale(salesArray);
-  const createdSale = {'_id': result.ops[0]._id, 'itensSold': result.ops[0].itensSold};
+  const createdSale = { _id: result.ops[0]._id, itensSold: result.ops[0].itensSold };
   return createdSale;
 };
 
 const getAllSales = async () => {
   const result = await salesModel.getAllSales();
-  return {'sales': result};
+  return { sales: result };
 };
 
 const getSaleById = async (id) => {
@@ -44,7 +45,6 @@ const deleteSale = async (id) => {
   const deletedData = await salesModel.deleteSale(id);
   return deletedData;
 };
-
 
 module.exports = {
   createSale,
