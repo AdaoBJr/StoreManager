@@ -31,4 +31,14 @@ const findAll = rescue(async (_req, res, _next) => {
   res.status(200).json({ products });
 });
 
-module.exports = { create, findAll };
+const findById = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  
+  const product = await ProductService.findById(id);
+
+  if (product.err) return next(product.err);
+
+  res.status(200).json(product);
+});
+
+module.exports = { create, findAll, findById };
