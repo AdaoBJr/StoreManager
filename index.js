@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 
 app.use('/products', productsRouter);
 
-const { PORT } = process.env;
+const { PORT } = process.env || 3000;
 
 app.listen(PORT, () => console.log(`App Online on Port:${PORT}`));
 
