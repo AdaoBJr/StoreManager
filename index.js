@@ -4,7 +4,9 @@ const bodyParser = require('body-parser');
 const productsController = require('./controllers/productsController');
 const salesController = require('./controllers/salesController');
 const middlewares = require('./middlewares/middlewares');
-const { errorMiddleware } = require('./middlewares/errorMiddleware');
+const { errorMiddleware,
+  errorMiddleware2,
+  errorMiddleware3 } = require('./middlewares/errorMiddleware');
 
 const app = express();
 const defaultPORT = 3000;
@@ -55,7 +57,7 @@ app.delete('/sales/:id',
   middlewares.checkSaleIdFormat,
   salesController.deleteSale);
 
-app.use(errorMiddleware);
+app.use(errorMiddleware, errorMiddleware2, errorMiddleware3);
 
 const PORT = process.env.PORT || defaultPORT;
  

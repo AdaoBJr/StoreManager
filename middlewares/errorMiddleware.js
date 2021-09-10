@@ -5,8 +5,8 @@ const errorMiddleware = (error, req, res, next) => {
     return res.status(unprocessableEntity).json({
       err: {
         code: 'invalid_data',
-        message: error.message
-      }
+        message: error.message,
+      },
     });
   }
 
@@ -14,17 +14,21 @@ const errorMiddleware = (error, req, res, next) => {
     return res.status(unprocessableEntity).json({
       err: {
         code: 'invalid_data',
-        message: error.message
-      }
+        message: error.message,
+      },
     });
   }
 
+next(error);
+};
+
+const errorMiddleware2 = (error, req, res, next) => {
   if (error.isInvalidId) {
     return res.status(unprocessableEntity).json({
       err: {
         code: 'invalid_data',
-        message: 'Wrong id format'
-      }
+        message: 'Wrong id format',
+      },
     });
   }
 
@@ -32,17 +36,20 @@ const errorMiddleware = (error, req, res, next) => {
     return res.status(unprocessableEntity).json({
       err: {
         code: 'invalid_data',
-        message: error.message
-      }
+        message: error.message,
+      },
     });
   }
+  next(error);
+};
 
+const errorMiddleware3 = (error, req, res, next) => {
   if (error.isSaleIdInvalid) {
     return res.status(notFound).json({
       err: {
         code: 'not_found',
-        message: error.message
-      }
+        message: error.message,
+      },
     });
   }
 
@@ -50,12 +57,15 @@ const errorMiddleware = (error, req, res, next) => {
     return res.status(unprocessableEntity).json({
       err: {
         code: 'invalid_data',
-        message: error.message
-      }
+        message: error.message,
+      },
     });
   }
+  next(error);
 };
 
 module.exports = {
   errorMiddleware,
+  errorMiddleware2,
+  errorMiddleware3,
 };
