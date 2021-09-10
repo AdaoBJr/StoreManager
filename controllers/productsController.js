@@ -20,9 +20,18 @@ const getProducts = async (req, res) => {
   return res.status(status).json(products);
 };
 
+// REQUISITO 3
+const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const product = req.body;
+  const { status, updatedProduct } = await productsService.updateProduct(id, product);
+  return res.status(status).json(updatedProduct);
+};
+
 // -----------------------------------------------------------------------------------------------
 
 module.exports = {
   createProduct,
   getProducts,
+  updateProduct,
 };

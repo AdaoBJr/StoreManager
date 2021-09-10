@@ -70,9 +70,28 @@ const getProducts = async (id) => {
   };
 };
 
+// REQUISITO 3
+const updateProduct = async (id, product) => {
+  const { name, quantity } = product;
+  const methodPut = true;
+
+  if (!validateId(id) || !product) {
+    throw ERROR_ID_FORMAT;
+  }
+
+  await validateProductName(name, methodPut);
+  await validateQy(quantity);
+  const updatedProduct = await productsModel.updateProduct(id, product);
+  return {
+    status: 200,
+    updatedProduct,
+  };
+};
+
 // -----------------------------------------------------------------------------------------------
 
 module.exports = {
   createProduct,
   getProducts,
+  updateProduct,
 };
