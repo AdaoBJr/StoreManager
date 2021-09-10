@@ -263,6 +263,8 @@ describe('test sales model', () => {
   describe('update sale', () => {
     describe('when update is successful', () => {
       it('should update when existing sale', async () => {
+        const beginning = await productsModel.getAll()
+        console.log(beginning);
         const product1 = await productsModel
         .createProduct(payloadProduct.name, payloadProduct.quantity);
 
@@ -291,7 +293,7 @@ describe('test sales model', () => {
       const stringProduct1Id = String(product1._id)
       expect(outDatedProduct.quantity).to.equal(2)
       const updatedSale = await salesModel.updateSale(stringId, product1._id, quantityToUpdate)
-      console.log(updatedSale);
+      // console.log(updatedSale);
       })
     })
   })

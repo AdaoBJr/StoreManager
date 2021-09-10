@@ -4,16 +4,17 @@ const productsModel = require('../models/productsModel');
 const checkStock = async (salesArray) => {
   const stockLimit = 0;
   const zero = 0;
-  const results = [];
+  const resultsPromises = [];
   for (let index = zero; index < salesArray.length; index += 1) {
     const productOrder = salesArray[index];
-    results.push(productsModel.getById(productOrder.productId));
+    resultsPromises.push(productsModel.getById(productOrder.productId));
   }
-  await Promise.all(results);
-  console.log(results[0]);
-  for (let index = zero; index < results.length; index += 1) {
+
+ const result = await Promise.all(resultsPromises);
+
+  for (let index = zero; index < result.length; index += 1) {
     const productOrder = salesArray[index];
-    const currentProduct = results[index];
+    const currentProduct = result[index];
   if
   ((currentProduct.quantity - productOrder.quantity)
   < stockLimit) return { error: { message: 'Such amount is not permitted to sell' } };
