@@ -11,6 +11,8 @@ const { create,
 
 const router = express.Router();
 
+router.route('/').post(validateSaleQuantity, create);
+
 router.route('/').get(getAll);
 
 module.exports = router;
