@@ -18,4 +18,14 @@ const getSaleById = async (id) => {
   return db.collection('sales').findOne(ObjectId(id));
 };
 
-module.exports = { create, getAll, getSaleById };
+const update = async (id, updates) => {
+  const db = await connection();
+  const { matchedCount } = await db.collection('sales')
+    .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: updates } });
+  if (matchedCount) {
+    const sale = await getSaleById(id);
+    return sale;
+  }
+};
+
+module.exports = { create, getAll, getSaleById, update };

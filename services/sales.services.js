@@ -30,4 +30,13 @@ const getSaleById = async (id) => {
   return { code: 200, sale };
 };
 
-module.exports = { create, getAll, getSaleById };
+const update = async (id, updates) => {
+  const validationQuantity = Validation.isQuantityValid(updates);
+  if (validationQuantity.err) return validationQuantity;
+  const isValid = Validation.isIdValid(id);
+  if (isValid.err) return isValid;
+  const updatedSale = await Sale.update(id, updates);
+  return { code: 200, updatedSale };
+};
+
+module.exports = { create, getAll, getSaleById, update };
