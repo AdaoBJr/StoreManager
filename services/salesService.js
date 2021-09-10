@@ -26,10 +26,16 @@ const getById = async (id) => {
   return product;
 };
 
+const editSale = async (id, sale) => {
+  const editedSale = await salesModel.editSale(id, sale);
+  return editedSale;
+};
+
 module.exports = {
   verifyQuantities,
   verifyQuantitiesString,
   createSales,
   getAll,
   getById,
+  editSale,
 };

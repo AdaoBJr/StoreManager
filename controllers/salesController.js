@@ -36,10 +36,18 @@ const getById = (req, res) => {
   .catch(() => res.status(404).json({ err: { code: 'not_found', message: 'Sale not found' } }));
 };
 
+const editSale = (req, res) => {
+  const { id } = req.params;
+  const editedSale = req.body;
+  salesService.editSale(id, editedSale)
+  .then((result) => res.status(200).json(result));
+};
+
 module.exports = {
   router,
   createSales,
   verifyQuantities,
   getAll,
   getById,
+  editSale,
 };
