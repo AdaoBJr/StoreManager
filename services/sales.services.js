@@ -39,4 +39,19 @@ const update = async (id, updates) => {
   return { code: 200, updatedSale };
 };
 
-module.exports = { create, getAll, getSaleById, update };
+const removeSale = async (id) => {
+  const isValid = Validation.isIdValid(id);
+  if (isValid.err) {
+    return {
+      code: 422,
+      err: {
+        code: 'invalid_data', message: 'Wrong sale ID format',
+      },
+    };
+  }
+  const sale = await Sale.getSaleById(id);
+  await Sale.removeSale(id);
+  return { code: 200, sale };
+};
+
+module.exports = { create, getAll, getSaleById, update, removeSale };

@@ -28,4 +28,10 @@ const update = async (id, updates) => {
   }
 };
 
-module.exports = { create, getAll, getSaleById, update };
+const removeSale = async (id) => {
+  const db = await connection();
+  const { deletedCount } = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+  return deletedCount;
+};
+
+module.exports = { create, getAll, getSaleById, update, removeSale };

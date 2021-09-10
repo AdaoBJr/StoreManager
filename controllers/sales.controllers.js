@@ -26,4 +26,11 @@ const update = async (req, res) => {
   return res.status(code).json(updatedSale);
 };
 
-module.exports = { create, getAll, getSaleById, update };
+const removeSale = async (req, res) => {
+  const { id } = req.params;
+  const { code, err, sale } = await Sale.removeSale(id);
+  if (err) return res.status(code).json({ err });
+  return res.status(code).json(sale);
+};
+
+module.exports = { create, getAll, getSaleById, update, removeSale };
