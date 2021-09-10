@@ -26,7 +26,8 @@ const findById = async (id) => {
 const updateProduct = async (id, name, quantity) => {
   if (!ObjectId.isValid(id)) return null;
   await connection()
-    .then((db) => db.collection('products').updateOne({ _id: ObjectId(id) }, { name, quantity }));
+    .then((db) => db
+      .collection('products').updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } }));
   return {
     id, name, quantity,
   };
