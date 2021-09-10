@@ -28,10 +28,24 @@ const listById = async (id) => {
 
 const updateSale = async ({ id, productId, quantity }) => {
   const db = await connection();
-  const venda = await db.collection('sales').updateOne({ _id: ObjectId(id) },
-    { $set: { itensSold: [{ productId, quantity }] } });
 
-  return { _id: ObjectId(id), itensSold: venda.ops[0].itensSold };
+  const xablau = await listById(id);
+  if (xablau.err) {
+    return {
+      err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } };
+  }
+  const { venda: { itensSold } } = xablau;
+
+  itensSold.forEach((item, index) => {
+    if (item.productId === productId) {
+      itensSold[index].quantity = quantity;
+    }
+  });
+
+  await db.collection('sales').updateOne({ _id: ObjectId(id) },
+    { $set: { itensSold } });
+
+  return { _id: ObjectId(id), itensSold };
 };
 
 module.exports = { newSales, listSales, listById, updateSale };
