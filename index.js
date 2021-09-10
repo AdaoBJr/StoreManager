@@ -3,11 +3,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const productsRouter = require('./routes/productsRouter');
+const salesRouter = require('./routes/salesRouter');
 
 const app = express();
 app.use(bodyParser.json());
 
 app.use('/products', productsRouter);
+
+app.use('/sales', salesRouter);
 
 const { PORT } = process.env || 3000;
 
