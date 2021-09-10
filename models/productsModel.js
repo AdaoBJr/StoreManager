@@ -3,15 +3,22 @@ const connection = require('./connection');
 
 const getAll = async () => {
     const db = await connection();
-    const get = await db.collection('songs').find().toArray();
+    const get = await db.collection('products').find().toArray();
     return get;
 };
 
-const create = async ({ name, album }) => {
+const productsExists = async (name) => {
     const db = await connection();
-    const createdSoundResult = await db.collection('songs').insertOne({ name, album });
+    const product = await db.collection('products').findOne({ name });
 
-    return { id: createdSoundResult.insertedId, name, album };
+    return product !== null;
+};
+
+const create = async ({ name, quantity }) => {
+    const db = await connection();
+    const createdSoundResult = await db.collection('products').insertOne({ name, quantity });
+
+    return { id: createdSoundResult.insertedId, name, quantity };
 };
 
 // const update = async ({ id, name, album }) => {
@@ -30,4 +37,4 @@ const create = async ({ name, album }) => {
 //     return await db.collection('songs').deleteOne({ _id: ObjectId(id) });
 // }
 
-module.exports = { getAll, create };
+module.exports = { getAll, create, productsExists };
