@@ -1,10 +1,11 @@
 const rescue = require('express-rescue');
 const Joi = require('joi');
 const { ObjectId } = require('mongodb');
-const ProductsServices = require('../services/products');
+const ServicesProducts = require('../services/products');
 
 const httpStatus = {
   ok: 200,
+  created: 201,
   notFound: 404,
   invalidData: 422,
 };
@@ -17,61 +18,87 @@ const validateId = (req, res, next) => {
   }).validate(req.params);
   if (schema.error || !ObjectId.isValid(id)) {
     return res.status(httpStatus.invalidData).json({
-      message: 'Wrong id format',
-      error: 'invalid_data',
-      code: httpStatus.invalidData,
+      err: {
+        message: 'Wrong id format',
+        code: 'invalid_data',
+      },
     });
   }
   next();
 };
 
 const checkUniqueName = async (name) => {
-  const product = await ProductsServices.getByName(name);
+  const product = await ServicesProducts.getByName(name);
   return product;
 };
 
 const validateName = rescue(async (req, res, next) => {
-  const { name } = req.body;
   const schema = Joi.object({
     name: Joi.string().min(5).required(),
-  }).validate(req.body);
-
+  }).validate({ name: req.body.name });
+  
   if (schema.error) {
     const { error: { message } } = schema;
-    return res.status(httpStatus.invalidData).json({ code: 'invalid_data', message });
+    return res.status(httpStatus.invalidData).json({ err: { code: 'invalid_data', message } });
   }
   
+  const { name } = req.body;
   const isUnique = await checkUniqueName(name);
 
   if (isUnique) {
     return res
       .status(httpStatus.invalidData)
-      .json({ code: 'invalid_data', message: 'Product already exists' });
+      .json({ err: { code: 'invalid_data', message: 'Product already exists' } });
   }
 
   next();
 });
 
+const validatePostQuantity = (req, res, next) => {
+  const schema = Joi.object({
+    quantity: Joi.number().strict().min(1).required(),
+  }).validate({ quantity: req.body.quantity });
+
+  if (schema.error) {
+    let { error: { message } } = schema;
+    message = message.replace('greater', 'larger');
+    return res.status(httpStatus.invalidData).json({ err: { code: 'invalid_data', message } });
+  }
+
+  next();
+};
+
 // responses after validation
 const getAll = rescue(async (_req, res) => {
-  const allProducts = await ProductsServices.getAll();
+  const allProducts = await ServicesProducts.getAll();
   res.status(httpStatus.ok).json(allProducts);
 });
 
 const getById = rescue(async (req, res) => {
   const { id } = req.params;
-  const product = await ProductsServices.getById(id);
-  res.status(200).json(product);
+  const product = await ServicesProducts.getById(id);
+  if (!product) {
+    return res.status(httpStatus.invalidData).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    });
+  }
+  res.status(httpStatus.ok).json(product);
 });
 
 const createProduct = rescue(async (req, res) => {
-
+  const { name, quantity } = req.body;
+  const createdProduct = await ServicesProducts.createProduct(name, quantity);
+  res.status(httpStatus.created).json({ _id: createdProduct, name, quantity });
 });
 
 module.exports = {
   getAll,
   getById,
   createProduct,
-  validateId,
   validateName,
+  validateId,
+  validatePostQuantity,
 };

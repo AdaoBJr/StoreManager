@@ -1,23 +1,31 @@
 const express = require('express');
-const productsController = require('../controllers/products');
+const {
+  validateId,
+  getById,
+  validateName,
+  validatePostQuantity,
+  createProduct,
+  getAll,
+} = require('../controllers/products');
 
 const route = express.Router();
 
 route.get(
   '/:id',
-  productsController.validateId,
-  productsController.getById,
+  validateId,
+  getById,
 );
 
 route.post(
   '/',
-  productsController.validateName,
-  productsController.createProduct,
+  validateName,
+  validatePostQuantity,
+  createProduct,
 );
 
 route.get(
   '/',
-  productsController.getAll,
+  getAll,
 );
 
 module.exports = route;

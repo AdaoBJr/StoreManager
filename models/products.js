@@ -10,6 +10,7 @@ const getAll = async () => {
 const getById = async (id) => {
   const db = await connection();
   const products = await db.collection('products').findOne({ _id: ObjectId(id) });
+  console.log(products);
   return products;
 };
 
@@ -21,8 +22,18 @@ const getByName = async (name) => {
   return products;
 };
 
+const createProduct = async (name, quantity) => {
+  const db = await connection();
+  const product = await db.collection('products').insertOne({
+    name,
+    quantity,
+  });
+  return product;
+};
+
 module.exports = {
   getAll,
   getById,
   getByName,
+  createProduct,
 };
