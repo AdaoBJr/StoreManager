@@ -361,7 +361,7 @@ O projeto deve rodar na porta `http://localhost:3000`
 
 - `name` deve ser uma _string_ com mais de 5 caracteres e deve ser único;
 
-- `quantity`  deve ser um número inteiro maior que 0;
+- `quantity` deve ser um número inteiro maior que 0;
 
 - Cada produto deve ter um id que seja único e gerado no momento em que o recurso for criado. Você pode utilizar o ID gerado pelo MongoDB
 
@@ -370,7 +370,7 @@ O projeto deve rodar na porta `http://localhost:3000`
 **O que será verificado:**
 
 - Será validado que não é possível criar um produto com o nome menor que 5 caracteres
-  - Se o produto tiver o nome menor que cinco caracteres o resultado retornado deverá ser conforme exibido abaixo, com um status http `422`:
+  - Se o produto tiver o nome menor que cinco caracteres o resultado retornado deverá ser conforme exibido abaixo, com um status http  `422`:
 
 ![Nome menor que 5](./public/nomeMenorQue5.png)
 (As contrabarras `\` estão escapando as aspas de dentro da string)
