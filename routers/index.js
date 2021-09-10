@@ -2,7 +2,7 @@ const express = require('express');
 const rescue = require('express-rescue');
 
 const {
-  createProduct, getProducts, updateProduct,
+  createProduct, getProducts, updateProduct, deleteProduct,
 } = require('../controllers/productsController');
 
 // PRODUCTS ROUTERS
@@ -12,7 +12,7 @@ productsRouter.get('/', rescue(getProducts));
 productsRouter.get('/:id', rescue(getProducts));
 productsRouter.post('/', rescue(createProduct));
 productsRouter.put('/:id', rescue(updateProduct));
-// productsRouter.delete('/:id', rescue(deleteProduct));
+productsRouter.delete('/:id', rescue(deleteProduct));
 
 // SALES ROUTERS
 

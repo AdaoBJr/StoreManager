@@ -88,10 +88,28 @@ const updateProduct = async (id, product) => {
   };
 };
 
+// REQUISITO 4
+const deleteProduct = async (id) => {
+  const productExists = await productsModel.getProductById(id);
+
+  if (!validateId(id) || !productExists) {
+    throw ERROR_ID_FORMAT;
+  }
+
+  const { deletedProduct, checkDelete } = await productsModel.deleteProduct(id);
+  if (!checkDelete) {
+    return {
+      status: 200,
+      deletedProduct,
+    };
+  }
+};
+
 // -----------------------------------------------------------------------------------------------
 
 module.exports = {
   createProduct,
   getProducts,
   updateProduct,
+  deleteProduct,
 };
