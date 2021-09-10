@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { validName, validQuantity, create } = require('./controllers/productController');
+const { validName, validQuantity, create, getAll } = require('./controllers/productController');
 
 const app = express();
 app.use(bodyParser.json());
@@ -11,6 +11,10 @@ const PORT = 3000;
 app.get('/', (_request, response) => {
   response.send();
 });
+
+app.get('/products', getAll);
+
+app.get('/products/:id', () => {});
 
 app.post('/products', validName, validQuantity, create);
 

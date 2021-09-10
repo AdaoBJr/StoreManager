@@ -1,7 +1,9 @@
 const service = require('../services/productService');
+const model = require('../models/productModel');
 
 const CREATED = 201;
 const UNPROCESSABLE = 422;
+const HTTP_OK_STATUS = 200;
 
 const validName = async (req, res, next) => {
   const { name } = req.body;
@@ -50,4 +52,10 @@ const create = async (req, res) => {
   res.status(CREATED).json({ _id: product.id, name, quantity });
 };
 
-module.exports = { create, validName, validQuantity };
+const getAll = async (_req, res) => {
+  const { products } = await model.getAll();
+
+  res.status(HTTP_OK_STATUS).json({ products });
+};
+
+module.exports = { create, validName, validQuantity, getAll };
