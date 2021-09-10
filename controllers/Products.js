@@ -24,6 +24,16 @@ products.get(
   }),
 );
 
+products.delete(
+  '/:id',
+  rescue(async (req, res, next) => {
+    const { id } = req.params;
+    const product = await Products.excluse(id);
+    if (product.isError) return next(product);
+    return res.status(SUCCESS).json(product);
+  }),
+);
+
 products.use(productValidate);
 
 products.post(

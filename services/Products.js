@@ -13,9 +13,16 @@ const findById = async (id) => {
   return product;
 };
 
+const excluse = async (id) => {
+  const product = await Products.excluse(id);
+  if (!product) return Error.invalidData('Wrong id format');
+  return product;
+};
+
 module.exports = {
   getAll: Products.getAll,
   update: Products.update,
   create,
   findById,
+  excluse,
 };
