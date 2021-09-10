@@ -14,7 +14,6 @@ ProductRouters.post('/', async (req, res) => {
 });
 
 ProductRouters.get('/', async (_req, res) => {
-
   const products = await ProductService.getAllProduct();
 
   res.status(200).json(products);
@@ -34,7 +33,7 @@ ProductRouters.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
 
-  const insert = await ProductService.updateProduct(id, {name, quantity});
+  const insert = await ProductService.updateProduct(id, { name, quantity });
 
   if (insert.err) return res.status(422).json(insert);
 
