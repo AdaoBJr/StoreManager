@@ -18,10 +18,8 @@ async function getProductByName(name) {
 }
 
 async function getAll() {
-  const db = await connection();
-  const products = await db.collection('products').find().toArray();
-
-  return products;
+  connection()
+  .then((db) => db.collection('products').find({}).toArray());
 }
 
 async function getById(id) {
