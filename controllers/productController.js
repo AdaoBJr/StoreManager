@@ -47,7 +47,7 @@ const create = async (req, res) => {
   const { name, quantity } = req.body;
   const product = await service.create(name, quantity);
 
-  res.status(CREATED).json({ id: product.id, name, quantity });
+  res.status(CREATED).json({ _id: product.id, name, quantity });
 };
 
 module.exports = { create, validName, validQuantity };

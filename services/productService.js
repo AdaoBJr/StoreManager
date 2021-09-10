@@ -7,7 +7,7 @@ const validateName = async (name) => {
   if (product) return 'product exist';
 };
 
-const validateQuantity = async (quantity) => {
+const validateQuantity = (quantity) => {
   if (quantity <= 0) return 'less equal 0';
   if (typeof quantity !== 'number') return 'not a number';
   return true;
