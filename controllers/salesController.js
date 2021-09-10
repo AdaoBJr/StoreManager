@@ -39,4 +39,15 @@ route.get(
   }),
 );
 
+route.put(
+  '/:id',
+  rescue(async (req, res) => {
+    const { id } = req.params;
+    const updateSale = await salesService.updateSales(id, req.body);
+    if (updateSale.err) return res.status(STATUS_FAIL).json(updateSale);
+
+    return res.status(STATUS_OK).json(updateSale);
+  }),
+);
+
 module.exports = route;
