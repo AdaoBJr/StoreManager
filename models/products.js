@@ -31,9 +31,19 @@ const createProduct = async (name, quantity) => {
   return product;
 };
 
+const deleteById = async (id) => {
+  const db = await connection();
+  const product = await db.collection('products').deleteOne({
+    _id: ObjectId(id),
+  });
+  console.log(product);
+  return product;
+};
+
 module.exports = {
   getAll,
   getById,
   getByName,
   createProduct,
+  deleteById,
 };

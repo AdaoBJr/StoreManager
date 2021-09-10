@@ -94,10 +94,18 @@ const createProduct = rescue(async (req, res) => {
   res.status(httpStatus.created).json({ _id: createdProduct, name, quantity });
 });
 
+const deleteById = rescue(async (req, res) => {
+  const { id } = req.params;
+  const deltedProduct = await ServicesProducts.getById(id)
+    .then(() => ServicesProducts.deleteById(id));
+  res.status(200).json(deltedProduct);
+});
+
 module.exports = {
   getAll,
   getById,
   createProduct,
+  deleteById,
   validateName,
   validateId,
   validatePostQuantity,
