@@ -48,4 +48,4 @@ const saleId = async (id) => {
   if (!available) throw err('stock_problem', 'Such amount is not permitted to sell');
 };
  */
-module.exports = { product, productExists, productId, sale, saleExists, saleId, /* stock */ };
+module.exports = { product, productExists, productId, sale, saleExists, saleId, };
