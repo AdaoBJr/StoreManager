@@ -2,8 +2,12 @@ require('dotenv/config');
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const productsRouter = require('./routes/productsRouter');
+
 const app = express();
 app.use(bodyParser.json());
+
+app.use('/products', productsRouter);
 
 const { PORT } = process.env;
 
