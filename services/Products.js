@@ -1,5 +1,5 @@
 const Products = require('../models/Products');
-const Error = require('../utils/errosService');
+const Error = require('../utils/errorsService');
 
 const create = async (product) => {
   const checkProduct = await Products.findByName(product.name);
