@@ -259,5 +259,41 @@ describe('test sales model', () => {
       });
     });
   });
+
+  describe('update sale', () => {
+    describe('when update is successful', () => {
+      it('should update when existing sale', async () => {
+        const product1 = await productsModel
+        .createProduct(payloadProduct.name, payloadProduct.quantity);
+
+      const product2 = await productsModel
+        .createProduct(payloadProduct2.name, payloadProduct2.quantity);
+
+      const payloadSale = [
+        {
+          '_id': product1._id,
+          'quantity': 2
+        }, 
+        {'_id': product2._id,
+          'quantity': 5}
+      ];
+      const quantityToUpdate = 10
+      const sale = await salesModel.createSale(payloadSale);
+      const { _id } = sale.ops[0];
+      const outDatedSale = await salesModel.getSaleById(_id)
+      const aaa = String(outDatedSale.itensSold[0]._id)
+      // console.log(typeof aaa, 'aaa');
+      // console.log(product1._id)
+      // console.log(product1._id == outDatedSale.itensSold[0]._id);
+      // console.log(outDatedSale.itensSold);
+      const outDatedProduct = outDatedSale.itensSold.find((product) => String(product._id) === String(product1._id))
+      const stringId = String(_id)
+      const stringProduct1Id = String(product1._id)
+      expect(outDatedProduct.quantity).to.equal(2)
+      const updatedSale = await salesModel.updateSale(stringId, product1._id, quantityToUpdate)
+      console.log(updatedSale);
+      })
+    })
+  })
   
 });

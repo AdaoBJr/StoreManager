@@ -28,7 +28,6 @@ const getById = async (id) => {
 
 const updateProduct = async (name, quantity, id) => {
   const db = await connection();
-  console.log('id da funcao update product', id);
   await db.collection('products')
     .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
   const updatedProduct = await getById(id);

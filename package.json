@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon index.js",
     "test": "jest --runInBand",
+    "test2": "mocha ./test/unit/$NAME.test.js --exit",
     "test:mocha": "nyc --all --include models --include services --include controllers mocha test/unit/*.js --exit",
     "start": "node index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx"
