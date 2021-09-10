@@ -3,13 +3,13 @@ const express = require('express');
 const rescue = require('express-rescue');
 const services = require('../services/productService');
 
-const router = express.Router();
+const route = express.Router();
 
 const STATUS_FAIL = 422;
 const STATUS_CREATED = 201;
 const STATUS_OK = 200;
 
-router.post(
+route.post(
   '/',
   rescue(async (req, res) => {
     const { name, quantity } = req.body;
@@ -22,7 +22,7 @@ router.post(
   }),
 );
 
-router.get(
+route.get(
   '/',
   rescue(async (req, res) => {
     const getProduct = await services.getProducts();
@@ -30,7 +30,7 @@ router.get(
   }),
 );
 
-router.get(
+route.get(
   '/:id',
   rescue(async (req, res) => {
     const { id } = req.params;
@@ -42,7 +42,7 @@ router.get(
   }),
 );
 
-router.put(
+route.put(
   '/:id',
   rescue(async (req, res) => {
     const { id } = req.params;
@@ -56,7 +56,7 @@ router.put(
   }),
 );
 
-router.delete(
+route.delete(
   '/:id',
   rescue(async (req, res) => {
     const { id } = req.params;
@@ -68,4 +68,4 @@ router.delete(
   }),
 );
 
-module.exports = router;
+module.exports = route;
