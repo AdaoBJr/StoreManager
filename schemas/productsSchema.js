@@ -45,7 +45,6 @@ const isBlankOrLowerThanMinValue = (name, length, nameLength) => (
 const validateProduct = async (id, name, quantity) => {
   const { nameLength } = fieldMinValues;
   const isBlankOrLower = isBlankOrLowerThanMinValue(name, name.length, nameLength);
-  console.log(isBlankOrLower, name, nameLength);
   switch (true) {
   case isBlankOrLower:
     return { response: responseCodes.unprocessableEntity,
