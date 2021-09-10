@@ -8,7 +8,6 @@ const verifyQuantities = (req, res, next) => {
   const newSales = req.body;
   const badQuantities = salesService.verifyQuantities(newSales);
   const quantIsNotnumber = salesService.verifyQuantitiesString(newSales);
-  console.log('aqui', badQuantities, quantIsNotnumber);
   if (badQuantities.length !== 0 || quantIsNotnumber.length !== 0) {
  return res.status(422).json({ err: { 
     code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } }); 
@@ -19,14 +18,28 @@ next();
 const createSales = (req, res) => {
   const newSales = req.body;
   salesService.createSales(newSales)
-  .then((response) => {
-    console.log(response);
-    return res.status(200).json(response);
-});
+  .then((response) => res.status(200).json(response));
+};
+
+const getAll = (req, res) => salesService.getAll()
+.then((result) => res.status(200).json({ sales: result }));
+
+const getById = (req, res) => {
+  const { id } = req.params;
+  salesService.getById(id)
+  .then((result) => {
+    if (result === null) {
+      return res.status(404).json({ err: { code: 'not_found', message: 'Sale not found' } });
+    }
+  return res.status(200).json(result);
+})
+  .catch(() => res.status(404).json({ err: { code: 'not_found', message: 'Sale not found' } }));
 };
 
 module.exports = {
   router,
   createSales,
   verifyQuantities,
+  getAll,
+  getById,
 };
