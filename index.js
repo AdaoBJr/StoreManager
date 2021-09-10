@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const ProductModel = require('./models/ProductModel');
+const ProductService = require('./services/ProductService');
 
 const app = express();
 const PORT = 3000;
@@ -15,7 +15,7 @@ app.get('/', (_req, res) => {
 
 app.post('/products', async (req, res) => {
   const { name, quantity } = req.body;
-  const product = await ProductModel.create(name, quantity);
+  const product = await ProductService.create(name, quantity);
   res.send(product);
 });
 
