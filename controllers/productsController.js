@@ -1,6 +1,6 @@
 const productService = require('../services/productsService');
 
-function validName(req, res, next) {
+function validateNameLength(req, res, next) {
   const { name } = req.body;
 
   if (!productService.isValidName(name)) {
@@ -15,9 +15,9 @@ function validName(req, res, next) {
   next();
 }
 
-async function validDistinticName(req, res, next) {
+async function validateDistinctName(req, res, next) {
   const { name } = req.body;
-  const sameProduct = await productService.isValidNameDifferentName(name);
+  const sameProduct = await productService.isValidDifferentName(name);
 
   if (!sameProduct) {
     return res.status(422).json({
@@ -31,7 +31,7 @@ async function validDistinticName(req, res, next) {
   next();
 }
 
-function validQuantity(req, res, next) {
+function validateQuantity(req, res, next) {
   const { quantity } = req.body;
   
   if (!productService.isValidQuantityMin(quantity)) {
@@ -64,8 +64,8 @@ async function createProduct(req, res) {
 }
 
 module.exports = {
-  validName,
-  validDistinticName,
-  validQuantity,
+  validateNameLength,
+  validateDistinctName,
+  validateQuantity,
   createProduct,
 };

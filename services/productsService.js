@@ -8,18 +8,21 @@ function isValidName(name) {
 
 function isValidQuantity(quantity) {
   if (typeof quantity !== 'number') return false;
+
   return true;
 }
 
 function isValidQuantityMin(quantity) {
   if (Number(quantity) <= 0) return false;
+
   return true;
 }
 
-async function isValidNameDifferentName(name) {
+async function isValidDifferentName(name) {
   const productName = await productsModel.getProductByName(name);
 
   if (productName) return false;
+  
   return true;
 }
 
@@ -34,5 +37,5 @@ module.exports = {
   isValidName,
   isValidQuantity,
   isValidQuantityMin,
-  isValidNameDifferentName,
+  isValidDifferentName,
 };

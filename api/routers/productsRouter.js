@@ -3,16 +3,16 @@ const express = require('express');
 const router = express.Router();
 
 const { 
-  validQuantity, 
-  validName, 
-  validNameDistintic, 
+  validateQuantity, 
+  validateNameLength, 
+  validateDistinctName, 
   createProduct,
 } = require('../../controllers/productsController');
 
 router.post('/',
-  validName,
-  validNameDistintic,
-  validQuantity,
+  validateNameLength,
+  validateDistinctName,
+  validateQuantity,
   createProduct);
 
 module.exports = router;
