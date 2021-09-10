@@ -15,4 +15,6 @@ const create = async (name, quantity) => {
   return ProductModel.create(name, quantity);
 };
 
-module.exports = { create };
+const findAll = () => ProductModel.findAll();
+
+module.exports = { create, findAll };

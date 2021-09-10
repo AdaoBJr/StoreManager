@@ -20,4 +20,11 @@ const create = async (name, quantity) => {
   return productAdd.ops[0];
 };
 
-module.exports = { findByName, create };
+const findAll = async () => {
+  const db = await connection();
+  const products = await db.collection('products').find().toArray();
+
+  return products;
+};
+
+module.exports = { findByName, create, findAll };

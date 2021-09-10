@@ -25,4 +25,10 @@ const create = rescue(async (req, res, next) => {
   return res.status(STATUS_CREATED).json(productAdd);
 });
 
-module.exports = { create };
+const findAll = rescue(async (_req, res, _next) => {
+  const products = await ProductService.findAll();
+
+  res.status(200).json({ products });
+});
+
+module.exports = { create, findAll };
