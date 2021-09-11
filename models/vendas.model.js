@@ -1,12 +1,32 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./mongoConnection');
 
+const updateQuantity = async ({ productId, quantity, venda }) => {
+  const db = await connection();
+  const productExists = await db.collection('products').findOne({ _id: ObjectId(productId) });
+  if (venda) {
+    productExists.quantity -= quantity;
+  } else {
+    productExists.quantity += quantity;
+  }
+
+  await db.collection('products').updateOne({ _id: ObjectId(productId) },
+  { $set: productExists });
+};
+
 const newSales = async (result) => {
   const db = await connection();
   const venda = await db.collection('sales').insertOne({ itensSold: result });
   const { insertedId } = venda;
   const xablau = JSON.parse(venda);
-  return { _id: insertedId, itensSold: xablau.ops[0].itensSold };
+  const vendaConcluida = xablau.ops[0].itensSold;
+
+  result.forEach((item) => {
+    const { productId, quantity } = item;
+    updateQuantity({ productId, quantity, venda: true });
+  });
+
+  return { _id: insertedId, itensSold: vendaConcluida };
 };
 
 const listSales = async () => {
@@ -28,7 +48,13 @@ const listById = async (id) => {
 
 const deleteSale = async ({ id }) => {
   const db = await connection();
+  const { venda: { itensSold: vendaLocalizada } } = await listById(id);
   const venda = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+
+  vendaLocalizada.forEach((item) => {
+    const { productId, quantity } = item;
+    updateQuantity({ productId, quantity, venda: false });
+  });
 
   return venda;
 };

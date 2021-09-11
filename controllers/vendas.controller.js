@@ -29,7 +29,6 @@ const deleteSale = async (req, res) => {
       err: { code: 'not_found', message: 'Sale not found' } });
   }
 
-  console.log(result);
   if (result.deletedCount > 0) {
     return res.status(200).json(venda);
   }
