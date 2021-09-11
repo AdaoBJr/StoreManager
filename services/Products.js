@@ -15,6 +15,40 @@ const registerNewProduct = async (name, quantity) => {
   return addedProduct;
 };
 
+const getAllProducts = async () => {
+  const allProducts = await Products.getAllProducts();
+  if (allProducts.message) return { message: allProducts.message };
+
+  return {
+    products: allProducts,
+  };
+};
+
+const getProductById = async (id) => {
+  const validateIdMongo = validations.validateIdMongo(id);
+  if (validateIdMongo.message) {
+    return {
+      code: validateIdMongo.code,
+      message: validateIdMongo.message,
+    };
+  }
+
+  const product = await Products.getProductById(id);
+  if (product.message) return { message: product.message };
+
+  const validateIfProductExists = validations.validateIfProductExists(product);
+  if (validateIfProductExists.message) {
+    return {
+      code: validateIfProductExists.code,
+      message: validateIfProductExists.message,
+    };
+  }
+
+  return product;
+};
+
 module.exports = {
   registerNewProduct,
+  getAllProducts,
+  getProductById,
 };

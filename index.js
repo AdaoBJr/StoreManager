@@ -12,6 +12,9 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
+app.get('/products', Products.getAllProducts);
+app.get('/products/:id', Products.getProductById);
+
 app.post('/products', Products.registerNewProduct);
 
 app.use(errorMiddleware);
