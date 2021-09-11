@@ -26,6 +26,14 @@ const listById = async (id) => {
     status: 404, err: { code: 'not_found', message: 'Sale not found' } };
 };
 
+const deleteSale = async ({ _id }) => {
+  const db = await connection();
+  const venda = await listById(_id);
+  await db.collection('sales').deleteOne({ _id: ObjectId(_id) });
+
+  return venda;
+};
+
 const updateSale = async ({ id, productId, quantity }) => {
   const db = await connection();
 
@@ -48,4 +56,4 @@ const updateSale = async ({ id, productId, quantity }) => {
   return { _id: ObjectId(id), itensSold };
 };
 
-module.exports = { newSales, listSales, listById, updateSale };
+module.exports = { newSales, listSales, listById, updateSale, deleteSale };

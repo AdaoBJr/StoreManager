@@ -1,3 +1,5 @@
+const { listById } = require('../models/vendas.model');
+
 const isValidQuantity = async (req, res, next) => {
   const retorno = req.body;
 
@@ -35,4 +37,21 @@ const isValidSale = async (req, res, next) => {
   next();
 };
 
-module.exports = { isValidQuantity, isValidSale, isValidQuantityUpdate };
+const getById = async (req, res, next) => {
+  const retorno = await listById(req.params.id);
+  if (retorno.err) return retorno;
+  next();
+};
+
+const isValidId = async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!id || id.length !== 24) {
+    return res.status(422).json({
+      err: { code: 'invalid_data', message: 'Wrong sale ID format' } });
+  }
+
+  next();
+};
+
+module.exports = { isValidQuantity, isValidSale, isValidQuantityUpdate, isValidId, getById };
