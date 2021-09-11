@@ -265,7 +265,6 @@ describe('6 - Crie um endpoint para listar as vendas', () => {
       .get(`${url}/sales/`)
       .expect('status', 200)
       .then((responseAll) => {
-        console.log()
         const { body } = responseAll;
         const resultSalesAll = JSON.parse(body);
         const idSales = resultSalesAll.sales[0]._id;
@@ -664,7 +663,7 @@ describe('8 - Crie um endpoint para deletar uma venda', () => {
   });
 });
 
-describe.only('9 - Atualize a quantidade de produtos', () => {
+describe('9 - Atualize a quantidade de produtos', () => {
   let connection;
   let db;
 

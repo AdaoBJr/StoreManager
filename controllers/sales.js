@@ -83,6 +83,15 @@ const validateId = async (req, res, next) => {
 const createSales = rescue(async (req, res) => {
   const sales = req.body;
   const insertedSale = await SalesServices.createSales(sales);
+  
+  if (insertedSale.tooMuch) {
+    return res.status(404).json({ 
+      err: { 
+        code: 'stock_problem',
+        message: 'Such amount is not permitted to sell',
+      },
+    });
+  }
   res.status(httpStatus.ok).json(insertedSale);
 });
 
