@@ -11,6 +11,14 @@ router.get('/', async (_req, res) => {
   res.status(salesRes.status).json(salesRes.message);
 });
 
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  const salesService = new SalesService();
+  const salesRes = await salesService.FindById(id);
+
+  res.status(salesRes.status).json(salesRes.message);
+});
+
 router.use(salesValidation);
 
 router.post('/', async (req, res) => {

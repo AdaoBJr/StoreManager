@@ -1,4 +1,4 @@
-// const { ObjectID } = require('mongodb');   
+const { ObjectID } = require('mongodb');   
 const connection = require('../infraestructure/database/connection');
 const SalesSerializer = require('./Serializer/SalesSerializer');
 
@@ -14,6 +14,20 @@ class Sales {
    const salesList = await db.collection(this.table).find().toArray();
 
    return salesList.map((sale) => this.serializer.All(sale));
+  }
+
+  async FindById(id) {
+    try {
+      const query = { _id: ObjectID(id) };
+      const db = await this.db();
+      const foundSale = await db.collection(this.table).findOne(query);
+  
+      if (!foundSale) return null;
+  
+      return this.serializer.All(foundSale);
+    } catch (error) {
+      return null;
+    }
   }
 
   async InsertOne(sales) {

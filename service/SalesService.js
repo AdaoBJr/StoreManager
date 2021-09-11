@@ -15,6 +15,19 @@ class SalesService {
     return { status: codes.OK, message: { sales: list } };
   }
 
+  async FindById(id) {
+    const foundSale = await this.Sales.FindById(id);
+    if (!foundSale) {
+      return errorBuilder({
+        status: codes.NOT_FOUND,
+        code: codes.INVALID_NOT_FOUND,
+        message: messages.SALES_NOT_FOUND,
+      }); 
+    }
+
+    return { status: codes.OK, message: foundSale };
+  }
+
   async InsertOne(itensSold) {
       const ids = await this.findProductsFromList(itensSold);  
 
