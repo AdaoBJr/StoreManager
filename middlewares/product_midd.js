@@ -16,7 +16,6 @@ const ExistingProduct = async (req, res, next) => {
     const { name } = req.body;
 
     const productExist = await db.collection('products').findOne({ name });
-    console.log(productExist);
 
     if (productExist) {
         return res.status(422).json({ err: { 
@@ -28,7 +27,6 @@ const ExistingProduct = async (req, res, next) => {
 
 const QuantityValidation = async (req, res, next) => {
     const { quantity } = req.body;
-    console.log(quantity, 'numero');
     if (quantity <= 0) {
         return res.status(422).json({ err: { 
             code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' } });
@@ -41,8 +39,18 @@ const QuantityValidation = async (req, res, next) => {
     next();
 };
 
+const IdValidation = async (req, res, next) => {
+    const { id } = req.params;
+
+    if (!id || id.length !== 24) {
+        return res.status(422).json({ err: { code: 'invalid_data', message: 'Wrong id format' } });
+    }
+    next();
+};
+
 module.exports = {
     NameValidation,
     ExistingProduct,
     QuantityValidation,
+    IdValidation,
 };
