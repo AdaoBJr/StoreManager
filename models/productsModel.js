@@ -44,6 +44,11 @@ const removeProduct = async (id) => {
   return value;
 };
 
+const updateDB = async (id, quantity) => {
+  const db = await connection();
+  await db.collection('products').updateOne({ _id: ObjectId(id) }, { $inc: { quantity } });
+};
+
 module.exports = {
   createProduct,
   productExists,
@@ -52,4 +57,6 @@ module.exports = {
   findById,
   updateProduct,
   removeProduct,
+  updateDB,
+  
 };

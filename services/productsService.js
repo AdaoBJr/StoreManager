@@ -3,6 +3,7 @@ const {
   findById,
   updateProduct,
   removeProduct,
+  updateDB,
 } = require('../models/productsModel');
 
 const create = async (name, quantity) => createProduct(name, quantity);
@@ -16,9 +17,14 @@ const update = async (id, name, quantity) => {
   return { _id: id, name, quantity };
 };
 
+const updateStock = (id, quantity) => {
+  updateDB(id, quantity);
+};
+
 module.exports = { 
   create,
   getById,
   update,
   remove,
+  updateStock,
 };
