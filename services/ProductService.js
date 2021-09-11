@@ -40,6 +40,27 @@ const nameNotUnique = {
   },
 };
 
+const idNotExistsErr = {
+  err: { 
+    message: 'Wrong id format',
+    code: 'invalid_data',
+  },
+};
+
+const getAll = async () => {
+  const products = await ProductModel.getAll();
+
+  return products;
+};
+
+const findById = async (id) => {
+  const getProductId = await ProductModel.findById(id);
+
+  if (!getProductId) return idNotExistsErr;
+
+  return getProductId;
+};
+
 const create = async (name, quantity) => {
   const productNameValid = nameIsValid(name);
   const productQuantValid = quantityIsValid(quantity);  
@@ -68,5 +89,7 @@ const create = async (name, quantity) => {
 };
 
 module.exports = {
+  getAll,
+  findById,
   create,
 };

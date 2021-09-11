@@ -14,16 +14,6 @@ const OPTIONS = {
 
 let db = null;
 
-// const connection = () => {
-//     return db
-//     ? Promise.resolve(db)
-//     : MongoClient.connect(MONGO_DB_URL, OPTIONS)
-//     .then((conn) => {
-//     db = conn.db('StoreManager');
-//     return db;
-//     })
-// };
-
 function connection() {
     return db
     ? Promise.resolve(db)
@@ -33,15 +23,5 @@ function connection() {
       return db;
     });
 }
-
-// connection().then(res => console.log(res))
-
-// module.exports = () => db
-//   ? Promise.resolve(db)
-//   : MongoClient.connect(MONGO_DB_URL, OPTIONS)
-//   .then((conn) => {
-//   db = conn.db('StoreManager');
-//   return db;
-//   })
 
 module.exports = connection;
