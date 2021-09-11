@@ -1,4 +1,4 @@
-const { createProduct, findById } = require('../models/productsModel');
+const { createProduct, findById, updateProduct } = require('../models/productsModel');
 const {
   isProductValid,
   alreadyExists,
@@ -24,7 +24,16 @@ const getById = async (id) => {
   return result;
 };
 
+const update = async (id, name, quantity) => {
+  const validation = isProductValid(name, quantity);
+  if (validation.message) return validation;
+  
+  await updateProduct(id, name, quantity);
+  return { _id: id, name, quantity };
+};
+
 module.exports = { 
   create,
   getById,
+  update,
 };
