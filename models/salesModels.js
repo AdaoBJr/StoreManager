@@ -49,9 +49,21 @@ const updateById = async ({ id, itensSold }) => {
   };
 };
 
+const deleteById = async ({ id }) => {
+  const storeManager = await connection();
+  const sales = await storeManager.collection('sales');
+
+  const query = { _id: new ObjectId(id) };
+
+  const result = await sales.findOneAndDelete(query);
+
+  return result;
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   updateById,
+  deleteById,
 };

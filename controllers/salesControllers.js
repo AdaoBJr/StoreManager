@@ -27,7 +27,7 @@ const getById = async (req, res) => {
 
   const idExiste = await salesService.getById({ id });
 
-  if (idExiste === 'idNaoExiste') {
+  if (idExiste === 'idNaoExiste' || idExiste === null) {
     return res.status(404).json({ err: { code: CODE_NOT_FOUND, message: 'Sale not found',
     } });
   }
@@ -57,9 +57,24 @@ const updateById = async (req, res) => {
   res.status(200).json(result);
 };
 
+const deleteById = async (req, res) => {
+  const { id } = req.params;
+
+  const sales = await salesService.deleteById({ id });
+
+  if (sales === 'idNaoExiste') {
+    return res.status(422).json({ err: { code: CODE_INVALID_DATA, message: 'Wrong sale ID format',
+    } });
+  }
+
+  const result = await salesService.deleteById({ id });
+  res.status(200).json(result);
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   updateById,
+  deleteById,
 };

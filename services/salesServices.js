@@ -45,9 +45,19 @@ const updateById = async ({ id, itensSold }) => {
   return updateSales;
 };
 
+const deleteById = async ({ id }) => {
+  const idIsValid = ObjectId.isValid(id);
+
+  if (!idIsValid) return 'idNaoExiste';
+
+  const deleteSale = await salesModels.deleteById({ id });
+  return deleteSale;
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   updateById,
+  deleteById,
 };
