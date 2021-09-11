@@ -51,9 +51,16 @@ const update = async (req, res) => {
     return res.status(statusCode.OK).json(updatedProducts);
 };
 
+const exclude = async (req, res) => {
+	const { id } = req.params;
+	const excluded = await productService.exclude(id);
+	return res.status(statusCode.NO_CONTENT).json(excluded);
+};
+
 module.exports = {
 	create,
 	getAll,
 	getById,
 	update,
+	exclude,
 }; 
