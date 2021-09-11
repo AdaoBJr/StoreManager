@@ -1,4 +1,5 @@
 const { ObjectId } = require('mongodb');
+const { listProducts } = require('./produtos.model');
 const connection = require('./mongoConnection');
 
 const updateQuantity = async ({ productId, quantity, venda }) => {
@@ -16,17 +17,26 @@ const updateQuantity = async ({ productId, quantity, venda }) => {
 
 const newSales = async (result) => {
   const db = await connection();
-  const venda = await db.collection('sales').insertOne({ itensSold: result });
-  const { insertedId } = venda;
-  const xablau = JSON.parse(venda);
-  const vendaConcluida = xablau.ops[0].itensSold;
+  const allProducts = await listProducts();
 
-  result.forEach((item) => {
-    const { productId, quantity } = item;
-    updateQuantity({ productId, quantity, venda: true });
-  });
+  const permitido = result.filter((produto) => allProducts
+    .some((item) => (item.quantity - produto.quantity) <= 0)).length;
 
-  return { _id: insertedId, itensSold: vendaConcluida };
+    if (permitido === 0) {
+      const venda = await db.collection('sales').insertOne({ itensSold: result });
+      const { insertedId } = venda;
+      const xablau = JSON.parse(venda);
+      const vendaConcluida = xablau.ops[0].itensSold;
+
+      result.forEach((item) => {
+        const { productId, quantity } = item;
+        updateQuantity({ productId, quantity, venda: true });
+      });
+
+      return { _id: insertedId, itensSold: vendaConcluida };
+    }
+    return {
+      err: { code: 'stock_problem', message: 'Such amount is not permitted to sell' } };
 };
 
 const listSales = async () => {

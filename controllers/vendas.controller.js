@@ -6,6 +6,10 @@ const createSales = async (req, res) => {
   const result = req.body;
 
   const sales = await criar(result);
+  const { _id } = sales;
+  if (!_id) {
+    return res.status(404).json(sales);
+  }
   return res.status(200).json(sales);
 };
 
