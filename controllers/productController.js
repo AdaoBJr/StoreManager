@@ -22,7 +22,7 @@ const getAll = async (_req, res) => {
 		const productID = await productModel.getAll();
 		return res.status(statusCode.OK).json({ products: productID });
     } catch (error) {
-	return res.status(statusCode.UNPROCESSABLE_ENTITY).json(error);
+		return res.status(statusCode.UNPROCESSABLE_ENTITY).json(error);
 	}
 };
 
