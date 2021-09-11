@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const productsController = require('./controllers/productsController');
+const errorMiddleware = require('./middlewares/error');
 
 // declarações
 const app = express();
@@ -16,5 +17,8 @@ app.get('/', (_request, response) => {
 
 // rotas
 app.post('/products', productsController.create);
+
+// error
+app.use(errorMiddleware);
 
 app.listen(PORT, () => console.log(`Servido rodando na porta: ${PORT}`));
