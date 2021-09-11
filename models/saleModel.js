@@ -29,4 +29,12 @@ const update = async (id, sale) => {
   return updatedSale;
 };
 
-module.exports = { create, getAll, getById, update };
+const remove = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await connectionMongo();
+  const sale = await db.collection('sales').findOne({ _id: ObjectId(id) });
+  await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+  return sale;
+};
+
+module.exports = { create, getAll, getById, update, remove };

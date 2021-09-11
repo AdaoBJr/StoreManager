@@ -13,7 +13,8 @@ const { createSale,
   validQuantityOnSale,
   getAllSales,
   getSaleById,
-  updateSale } = require('./controllers/saleController');
+  updateSale,
+  removeSale } = require('./controllers/saleController');
 
 const app = express();
 app.use(bodyParser.json());
@@ -44,3 +45,5 @@ app.get('/sales', getAllSales);
 app.get('/sales/:id', getSaleById);
 
 app.put('/sales/:id', validQuantityOnSale, updateSale);
+
+app.delete('/sales/:id', removeSale);

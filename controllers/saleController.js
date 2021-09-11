@@ -52,4 +52,26 @@ const updateSale = async (req, res) => {
   res.status(HTTP_OK_STATUS).json(updatedSale);
 };
 
-module.exports = { createSale, validQuantityOnSale, getAllSales, getSaleById, updateSale };
+const removeSale = async (req, res) => {
+  const { id } = req.params;
+  const sale = await service.getSaleById(id);
+  switch (sale) {
+    case null: return res.status(UNPROCESSABLE)
+        .json({ err: {
+          code: 'invalid_data',
+          message: 'Wrong sale ID format',
+        } });
+        default:
+          await model.remove(id);
+        break;
+      }
+  res.status(HTTP_OK_STATUS).json(sale);
+};
+
+module.exports = { createSale,
+  validQuantityOnSale,
+  getAllSales,
+  getSaleById,
+  updateSale,
+  removeSale, 
+};
