@@ -10,6 +10,7 @@ const httpStatus = {
   invalidData: 422,
 };
 
+// validations
 const validateQuantityArray = (req, res, next) => {
   const sales = req.body;
   const onlyQuantity = sales.map((sale) => sale.quantity || false);
@@ -30,7 +31,7 @@ const validateQuantityArray = (req, res, next) => {
 const validateIdArray = async (req, res, next) => {
   const sales = req.body;
   const productArray = sales.map((sale) => getById(sale.productId));
-  const products = await (await Promise.all(productArray).then((results) => results));
+  const products = await (await Promise.all(productArray));
   const idsAreValid = products.every((product) => product && product.id); 
   if (idsAreValid) {
     return res.status(httpStatus.invalidData).json({
