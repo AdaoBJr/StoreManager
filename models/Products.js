@@ -2,16 +2,14 @@ const connection = require('./connection');
 
 const registerNewProduct = async (name, quantity) => {
   try {
-    await connection()
+    const addedProduct = await connection()
       .then((db) => db.collection('products').insertOne({ name, quantity }))
-      .then((result) => {
-        const addedProduct = {
+      .then((result) => ({
           _id: result.insertedId,
           name,
           quantity,
-        };
-        return addedProduct;
-      });
+      }));
+      return addedProduct;
   } catch (error) {
     return {
       message: error,
@@ -21,9 +19,10 @@ const registerNewProduct = async (name, quantity) => {
 
 const getAllProducts = async () => {
   try {
-    await connection()
+    const allProducts = await connection()
       .then((db) => db.collection('products').find().toArray())
       .then((result) => result);
+      return allProducts;
   } catch (error) {
     return {
       message: error,
