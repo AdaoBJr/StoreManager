@@ -43,6 +43,14 @@ const removeSale = async (id) => {
   
   return value;
 };
+
+const checkAvailableQuantity = async (id, quantity) => {
+  const db = await connection();
+  const stock = await db.collection('products').findOne({ _id: ObjectId(id) });
+  if (stock === null) return false;
+  
+  return stock.quantity - quantity > 0;
+};
  
 module.exports = {
   includeSales,
@@ -52,4 +60,5 @@ module.exports = {
   isValidId,
   updateSale,
   removeSale,
+  checkAvailableQuantity,
 };

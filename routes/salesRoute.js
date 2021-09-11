@@ -3,6 +3,7 @@ const {
   quantityValidations,
   existenceValidation,
   idValidation,
+  stockVerification,
  } = require('../middlewares/salesValidations');
 const {
   addSales,
@@ -17,6 +18,7 @@ const router = express.Router();
 router.route('/')
   .post(
     quantityValidations,
+    stockVerification,
     addSales,
   )
   .get(getAllSales);

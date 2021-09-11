@@ -1,10 +1,11 @@
 const { StatusCodes: { UNPROCESSABLE_ENTITY, NOT_FOUND } } = require('http-status-codes');
-const { isValidId, saleExists } = require('../models/salesModel');
+const { isValidId, saleExists, checkAvailableQuantity } = require('../models/salesModel');
 
 const errors = {
   invalidQuantity: 'Wrong product ID or invalid quantity',
   notFound: 'Sale not found',
   invalidId: 'Wrong sale ID format',
+  insufficientStock: 'Such amount is not permitted to sell',
 };
 
 const quantityValidations = (req, res, next) => {
@@ -55,8 +56,25 @@ const existenceValidation = async (req, res, next) => {
   next();
 };
 
+const stockVerification = async (req, res, next) => {
+  req.body.forEach(async ({ productId, quantity }) => {
+    const isAvailable = await checkAvailableQuantity(productId, quantity);
+    if (!isAvailable) {
+      return res.status(NOT_FOUND).json({
+      err: {
+        code: 'stock_problem',
+        message: errors.insufficientStock,
+      },
+     });
+    }
+  });
+
+  next();   
+};
+
 module.exports = { 
   quantityValidations,
   idValidation,
   existenceValidation,
+  stockVerification,
 };
