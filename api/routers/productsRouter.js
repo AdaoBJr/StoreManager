@@ -9,6 +9,7 @@ const {
   create,
   getAll,
   getById,
+  update,
 } = require('../../controllers/productsController');
 
 router.post('/',
@@ -20,5 +21,10 @@ router.post('/',
 router.get('/', getAll);
 
 router.get('/:id', getById);
+
+router.put('/:id', 
+  validateNameLength,
+  validateQuantity,
+  update);
 
 module.exports = router;

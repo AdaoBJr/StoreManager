@@ -96,6 +96,19 @@ async function getById(req, res) {
   }
 }
 
+async function update(req, res) {
+  const { name, quantity } = req.body;
+  const { id } = req.params;
+
+  const product = await productService.update(id, name, quantity);
+
+  if (!product) {
+    return res.status(404).json({ message: 'Not Found' });
+  }
+
+  return res.status(200).json(product);
+}
+
 module.exports = {
   validateNameLength,
   validateDistinctName,
@@ -103,4 +116,5 @@ module.exports = {
   create,
   getAll,
   getById,
+  update,
 };
