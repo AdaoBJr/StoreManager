@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongodb');
 const connection = require('../models/mongoConnection');
 
-const producAlreadyExists = async (req, res, next) => {
+const productAlreadyExists = async (req, res, next) => {
   const db = await connection();
   const { name } = req.body;
   const productNameExists = await db.collection('products').findOne({ name });
@@ -68,7 +68,7 @@ const isValidProductId = async (req, res, next) => {
 };
 
 module.exports = {
-  producAlreadyExists,
+  productAlreadyExists,
   isValidProductName,
   isValidProductQuantity,
   isValidProductId,

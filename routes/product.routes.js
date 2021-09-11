@@ -3,9 +3,10 @@ const {
   createNewProduct,
   getAllProducts,
   getProductById,
+  updateProduct,
 } = require('../controllers/products.controller');
 const {
-  producAlreadyExists,
+  productAlreadyExists,
   isValidProductName,
   isValidProductQuantity,
   isValidProductId,
@@ -18,7 +19,7 @@ routes.get('/', (_req, res) => {
 });
 
 routes.post('/products',
-  producAlreadyExists,
+  productAlreadyExists,
   isValidProductName,
   isValidProductQuantity,
   createNewProduct);
@@ -29,5 +30,10 @@ getAllProducts);
 routes.get('/products/:id',
 isValidProductId,
 getProductById);
+
+routes.put('/products/:id',
+  isValidProductName,
+  isValidProductQuantity,
+  updateProduct);
 
 module.exports = routes;
