@@ -50,8 +50,8 @@ const getById = async (id) => {
   if (!ObjectId.isValid(id)) { 
     return { code: 'invalid_data', message: 'Wrong id format' }; 
   }
-  const { name, quantity } = await productModel.getById(id);
-  return { id, name, quantity };
+  const productId = await productModel.getById(id);
+  return productId;
 };
 
 module.exports = {
