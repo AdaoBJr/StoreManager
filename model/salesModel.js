@@ -21,15 +21,34 @@ const getSalesById = async (id) => {
     return sale;
 };
 
-const checkSalesId = async ({ id }) => {
+const checkifSalesIDExist = async ({ id }) => {
     const data = await connection().then((db) => 
       db.collection(salesCollection).findOne({ id }));
     return data;
+};
+
+const updateSales = async ({ id, itensSold }) => {
+    const updatedSale = await connection().then((db) => 
+    db.collection(salesCollection).updateOne(
+      { _id: ObjectId(id) },
+      { $set: { itensSold } },
+    ));
+    if (updatedSale) return { _id: id, itensSold };
+};
+
+const deleteSaleById = async (id) => {
+    const deletedSales = await connection().then((db) =>
+      db.collection(salesCollection).deleteOne({
+          _id: ObjectId(id),
+      }));
+    return deletedSales;
 };
 
 module.exports = {
     createSales,
     getAllSales,
     getSalesById,
-    checkSalesId,
+    checkifSalesIDExist,
+    updateSales,
+    deleteSaleById,
 };

@@ -1,9 +1,9 @@
 const { HTTP_NOT_FOUND_STATUS } = require('../httpResponde');
-const { checkSalesId } = require('../model/salesModel');
+const { checkifSalesIDExist } = require('../model/salesModel');
 
-const checkifSalesIDExist = async (req, res, next) => {
+const checkSalesID = async (req, res, next) => {
     const { id } = req.body;
-    const exist = await checkSalesId({ id });
+    const exist = await checkifSalesIDExist({ id });
 
     if (!exist) {
       return res.status(HTTP_NOT_FOUND_STATUS).send({
@@ -17,4 +17,4 @@ const checkifSalesIDExist = async (req, res, next) => {
     return next();
 };
 
-module.exports = checkifSalesIDExist;
+module.exports = checkSalesID;

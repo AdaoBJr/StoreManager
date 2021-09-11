@@ -21,8 +21,25 @@ const getSalesById = async (req, res) => {
     return res.status(HTTP_OK_STATUS).send(sale);
 };
 
+const updateSale = async (req, res) => {
+    const itensSold = req.body;
+    const { id } = req.params;
+    const updatedSale = await salesService.updateSale({ id, itensSold });
+
+    return res.status(HTTP_OK_STATUS).send(updatedSale);
+};
+
+const deleteSaleById = async (req, res) => {
+    const { id } = req.params;
+    const deletedSales = await salesService.deleteSalesById(id);
+    
+    return res.status(HTTP_OK_STATUS).send(deletedSales);
+};
+
 module.exports = {
     createSales,
     getAllSales,
     getSalesById,
+    updateSale,
+    deleteSaleById,
 };
