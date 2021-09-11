@@ -47,7 +47,7 @@ const update = async ({ id, name, quantity }) => {
   if (!ObjectId.isValid(id)) return null;
   const db = await mongoConnection.getConnection();
   await db.collection('products').updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
-  return { id, name, quantity };
+  return { _id: id, name, quantity };
 };
 
 module.exports = {
