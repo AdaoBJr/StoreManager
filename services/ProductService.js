@@ -26,14 +26,6 @@ const isValidQuantity = (quantity) => {
   return true;
 }; 
 
-// const getAll = async () => {
-  //   return await ProductModel.getAll();
-// };
-
-// const findById = async (id) => {
-//   return await ProductModel.findById(id);
-// };
-
 const create = async (name, quantity) => {
   const productNameValid = isValidName(name);
   const productQuantityValid = isValidQuantity(quantity);
@@ -54,11 +46,23 @@ const create = async (name, quantity) => {
   };
 };
 
+const findById = async (id) => {
+  const productById = await ProductModel.findById(id);
+
+  if (!productById) {
+    return {
+      code: 'invalid_data',
+      message: 'Wrong id format',
+    };
+  }
+  return productById;
+};
+
 // const update = async (id, name, quantity) => {
 //   return await ProductModel.update(id, name, quantity);
 // };
 
 module.exports = {
-  create,
-  // getAll,
+   create,
+   findById,
 }; 
