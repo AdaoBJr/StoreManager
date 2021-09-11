@@ -2,6 +2,11 @@ const rescue = require('express-rescue');
 const productsService = require('../services/productsService');
 
 // const findById = rescue(async (req, res, next) => { /* ... */ }
+const getAll = rescue(async (req, res) => {
+  const products = await productsService.getAll();
+
+  res.status(200).json(products);
+});
 
 const create = rescue(async (req, res, next) => {
   const validationArray = [
@@ -26,19 +31,7 @@ const create = rescue(async (req, res, next) => {
 });
 
 module.exports = {
-//   getAll,
+  getAll,
 //   findById,
-     create,
+  create,
 };
-
-// const validatedName = productsService.validateLenghtName(req, res, next);
-  
-// if (validatedName) return next(validatedName);
-
-// const validatedQuantityType = productsService.validateQuantityType(req, res, next);
-
-// if (validatedQuantityType) return next(validatedQuantityType);
-
-// const validatedQuantity = productsService.validateQuantity(req, res, next);
-
-// if (validatedQuantity) return next(validatedQuantity);

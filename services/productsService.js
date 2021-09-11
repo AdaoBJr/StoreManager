@@ -1,6 +1,6 @@
 const productsModel = require('../models/productsModel');
 
-// const getAll = async () => Author.getAll();
+const getAll = async () => productsModel.getAll();
 
 // const findById = async (id) => Author.findById(id);
 
@@ -63,6 +63,7 @@ const create = async (name, quantity) => {
 };
 
 module.exports = {
+  getAll,
   create,
   validateLenghtName,
   validateQuantityType,

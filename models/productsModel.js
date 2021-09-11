@@ -3,28 +3,21 @@ const connection = require('./connection');
 
 // Cria uma string com o nome completo do autor
 
-const getNewProduct = (productData) => {
-const { _id, name, quantity } = productData;
-
-return {
-  _id,
-  name,
-  quantity,
- };
-};
-
 // Busca todos os autores do banco.
 
 // const getAll = async () => connection()
-//     .then((db) => db.collection('authors').find().toArray())
-//     .then((authors) =>
-//       authors.map(({ _id, firstName, middleName, lastName }) =>
-//         getNewAuthor({
-//           id: _id,
-//           firstName,
-//           middleName,
-//           lastName,
-//         })));
+//     .then((db) => db.collection('products').find().toArray())
+//     .then((produts) =>
+//     produts.map(({ _id, name, quantity }) =>
+//         getNewProduct({
+//           _id,
+//           name,
+//           quantity,
+//           })));
+
+const getAll = async () => connection()
+    .then((db) => db.collection('products').find().toArray())
+    .then((products) => ({ products }));
 
 // /*
 // Busca um autor específico, a partir do seu ID
@@ -60,7 +53,7 @@ return {
 const create = async (name, quantity) =>
   connection()
     .then((db) => db.collection('products').insertOne({ name, quantity }))
-    .then((result) => getNewProduct({ _id: result.insertedId, name, quantity }));
+    .then((result) => ({ _id: result.insertedId, name, quantity }));
 
 const findByName = async (name) => {
   const product = await connection()
@@ -70,10 +63,11 @@ const findByName = async (name) => {
   if (!product) return null;
 
   // Caso contrário, retornamos o author encontrado
-  return getNewProduct(product);
+  return (product);
 };
 
 module.exports = {
+  getAll,
   create,
   findByName,
 };
