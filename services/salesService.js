@@ -69,6 +69,10 @@ const updateSale = async (id, sale) => {
 
   await validateQy(sale[0].quantity);
 
+  const product = await productsModel.getProductById(sale[0].productId);
+  product.quantity -= sale[0].quantity;
+  await productsModel.updateProduct(sale[0].productId, product);
+
   const itensSold = [];
   const { _id, itensSold: sold } = await salesModel.updateSale(id, sale);
   itensSold.push(sold);
@@ -87,6 +91,12 @@ const deleteSale = async (id) => {
     throw ERROR_SALE_ID_FORMAT;
   }
 
+  const { itensSold } = await salesModel.getSaleById(id);
+  console.log(itensSold);
+  const product = await productsModel.getProductById(itensSold[0].productId);
+  product.quantity += itensSold[0].quantity;
+  await productsModel.updateProduct(itensSold[0].productId, product);
+  
   const { deletedSale, checkDelete } = await salesModel.deleteSale(id);
   if (!checkDelete) {
     return {
