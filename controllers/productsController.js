@@ -1,6 +1,8 @@
 const { StatusCodes } = require('http-status-codes');
 const { getAll } = require('../models/productsModel');
-const { create, getById, update } = require('../services/productsService');
+const { create, getById, update, remove } = require('../services/productsService');
+
+const INTERNAL_SERVER_ERROR_MSG = 'Something went wrong :(';
 
 const createProduct = async (req, res) => {
   try {
@@ -10,7 +12,7 @@ const createProduct = async (req, res) => {
     return res.status(StatusCodes.CREATED).json(result);
   } catch (error) {
     console.log(error.message);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Something went wrong :(');
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(INTERNAL_SERVER_ERROR_MSG);
   }
 };
 
@@ -20,7 +22,7 @@ const getAllProducts = async (_req, res) => {
     return res.status(StatusCodes.OK).json({ products: result });
   } catch (error) {
     console.log(error.message);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Something went wrong :(');
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(INTERNAL_SERVER_ERROR_MSG);
   }
 };
 
@@ -32,7 +34,7 @@ const getProductById = async (req, res) => {
     return res.status(StatusCodes.OK).json(result);
   } catch (error) {
     console.log(error.message);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Something went wrong :(');
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(INTERNAL_SERVER_ERROR_MSG);
   }
 };
 
@@ -45,7 +47,19 @@ const updateProduct = async (req, res) => {
     return res.status(StatusCodes.OK).json(result);
   } catch (error) {
     console.log(error.message);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Something went wrong :(');
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(INTERNAL_SERVER_ERROR_MSG);
+  }
+};
+
+const removeProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await remove(id);
+   
+    return res.status(StatusCodes.OK).json(result);
+  } catch (error) {
+    console.log(error.message);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(INTERNAL_SERVER_ERROR_MSG);
   }
 };
 
@@ -54,4 +68,5 @@ module.exports = {
   getAllProducts,
   getProductById,
   updateProduct,
+  removeProduct,
 };

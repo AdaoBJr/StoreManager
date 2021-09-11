@@ -9,11 +9,11 @@ const errors = {
   invalidId: 'Wrong id format',
 };
 
-const MIN_LENGTH = 5;
+const MIN_NAME_LENGTH = 5;
 
 const nameValidation = (req, res, next) => {
   const { name } = req.body;
-  if (name.length <= MIN_LENGTH) {
+  if (name.length <= MIN_NAME_LENGTH) {
     return res.status(UNPROCESSABLE_ENTITY).json({
       err: {
         code: 'invalid_data',
@@ -46,7 +46,7 @@ const quantityValidation = (req, res, next) => {
   next();
 };
 
-const alreadyExists = async (req, res, next) => {
+const existenceValidation = async (req, res, next) => {
   const { name } = req.body;
   const result = await productExists(name);
   if (result) {
@@ -78,6 +78,6 @@ const idValidation = async (req, res, next) => {
 module.exports = { 
   nameValidation,
   quantityValidation,
-  alreadyExists,
+  existenceValidation,
   idValidation,
 };

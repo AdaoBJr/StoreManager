@@ -34,8 +34,14 @@ const updateProduct = async (id, name, quantity) => {
     { _id: ObjectId(id) }, { $set: { name, quantity } },
   );
 
-  console.log(product.message);
   return product;
+};
+
+const removeProduct = async (id) => {
+  const db = await connection();
+  const { value } = await db.collection('products').findOneAndDelete({ _id: ObjectId(id) });
+  
+  return value;
 };
 
 module.exports = {
@@ -45,5 +51,5 @@ module.exports = {
   isValidId,
   findById,
   updateProduct,
-
+  removeProduct,
 };

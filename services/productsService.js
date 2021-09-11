@@ -1,14 +1,15 @@
-const { createProduct, findById, updateProduct } = require('../models/productsModel');
+const {
+  createProduct,
+  findById,
+  updateProduct,
+  removeProduct,
+} = require('../models/productsModel');
 
-const create = async (name, quantity) => {
-  const createdProd = await createProduct(name, quantity);
-  return createdProd;
-};
+const create = async (name, quantity) => createProduct(name, quantity);
 
-const getById = async (id) => {
-  const result = findById(id);
-  return result;
-};
+const remove = async (id) => removeProduct(id);
+
+const getById = async (id) => findById(id);
 
 const update = async (id, name, quantity) => {
   await updateProduct(id, name, quantity);
@@ -19,4 +20,5 @@ module.exports = {
   create,
   getById,
   update,
+  remove,
 };

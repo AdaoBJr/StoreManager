@@ -4,13 +4,14 @@ const {
   getAllProducts,
   getProductById,
   updateProduct,
+  removeProduct,
 } = require('../controllers/productsController');
 const {
   nameValidation,
   quantityValidation,
-  alreadyExists,
+  existenceValidation,
   idValidation,
-} = require('../validations/productsValidations');
+} = require('../middlewares/productsValidations');
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.route('/')
   .post(
     nameValidation,
     quantityValidation,
-    alreadyExists,
+    existenceValidation,
     createProduct,
   )
   .get(getAllProducts);
@@ -32,6 +33,10 @@ router.route('/:id')
     nameValidation,
     quantityValidation,
     updateProduct,
+  )
+  .delete(
+    idValidation,
+    removeProduct,
   );
 
 module.exports = router;
