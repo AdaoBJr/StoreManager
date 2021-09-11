@@ -1,5 +1,27 @@
 const salesService = require('../services/salesService');
 
+async function validateQuantity(req, res, next) {
+  const sales = req.body;
+
+  if (!salesService.isValidQuantity(sales)) {
+    return res.status(422).json({
+      err: { 
+        code: 'invalid_data', 
+        message: 'Wrong product ID or invalid quantity', 
+       } });
+  }
+
+  next();
+}
+
+async function create(req, res) {
+  const sales = req.body;
+
+  const newSales = await salesService.create(sales);
+
+  res.status(200).json(newSales);
+}
+
 async function getAll(_req, res) {
   const sales = await salesService.getAll();
 
@@ -34,6 +56,8 @@ async function getById(req, res) {
 }
 
 module.exports = {
+  validateQuantity,
+  create,
   getAll,
   getById,
 };
