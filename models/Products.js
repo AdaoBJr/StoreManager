@@ -30,7 +30,7 @@ const update = async (id, updates) => {
   return findById(id);
 };
 
-const exclude = async (id) => {
+const excluse = async (id) => {
   if (!ObjectId.isValid(id)) return null;
   const db = await connection();
   const product = await findById(id);
@@ -72,7 +72,7 @@ module.exports = {
   getAll,
   findById,
   update,
-  exclude,
+  excluse,
   checkQuantity,
   updateQuantity,
   updateDelete,
