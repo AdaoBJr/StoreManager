@@ -62,6 +62,14 @@ const ERROR_SALE_ID_FORMAT = {
   },
 };
 
+const ERROR_LOW_STOCK = {
+  status: 404,
+  err: {
+    code: 'stock_problem',
+    message: 'Such amount is not permitted to sell',
+  },
+};
+
 module.exports = {
   ERROR_PROD_EXISTS,
   ERROR_NAME_LENGTH,
@@ -71,4 +79,5 @@ module.exports = {
   ERROR_PROD_ID_OR_QTY,
   ERROR_SALE_NOT_FOUND,
   ERROR_SALE_ID_FORMAT,
+  ERROR_LOW_STOCK,
 };

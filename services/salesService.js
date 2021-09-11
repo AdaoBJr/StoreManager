@@ -2,7 +2,9 @@ const { ObjectId } = require('mongodb');
 const productsModel = require('../models/productsModel');
 const salesModel = require('../models/salesModel');
 
-const { ERROR_PROD_ID_OR_QTY, ERROR_SALE_NOT_FOUND, ERROR_SALE_ID_FORMAT } = require('./msgErrors');
+const {
+  ERROR_PROD_ID_OR_QTY, ERROR_SALE_NOT_FOUND, ERROR_SALE_ID_FORMAT, ERROR_LOW_STOCK,
+} = require('./msgErrors');
 
 // VALIDAÇÕES -----------------------------------------------------------------------------------
 
@@ -23,12 +25,16 @@ const validateId = (id) => (ObjectId.isValid(id));
 const createSale = async (sale) => {
   const { productId, quantity } = sale[0];
 
+    // VALIDAÇÃO ID
     const validateID = await productsModel.getProductById(productId);
     if (!validateID) { throw ERROR_PROD_ID_OR_QTY; }
     await validateQy(quantity);
     
+    // UPDATE DA QUANTIDADE EM STOCK
     const product = await productsModel.getProductById(productId);
     product.quantity -= quantity;
+    if (product.quantity < 0) { throw ERROR_LOW_STOCK; }
+
     await productsModel.updateProduct(productId, product);
 
   const createdSale = await salesModel.createSale(sale);
@@ -69,8 +75,11 @@ const updateSale = async (id, sale) => {
 
   await validateQy(sale[0].quantity);
 
+  // UPDATE DA QUANTIDADE EM STOCK
   const product = await productsModel.getProductById(sale[0].productId);
   product.quantity -= sale[0].quantity;
+  if (product.quantity < 0) { throw ERROR_LOW_STOCK; }
+
   await productsModel.updateProduct(sale[0].productId, product);
 
   const itensSold = [];
@@ -92,7 +101,6 @@ const deleteSale = async (id) => {
   }
 
   const { itensSold } = await salesModel.getSaleById(id);
-  console.log(itensSold);
   const product = await productsModel.getProductById(itensSold[0].productId);
   product.quantity += itensSold[0].quantity;
   await productsModel.updateProduct(itensSold[0].productId, product);
