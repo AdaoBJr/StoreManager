@@ -3,17 +3,17 @@ const STATUS_CODE_ANAUTORAZED = 422;
 
 const errorMiddleProducts = (err, _req, res, _next) => {
   if (err.isError) {
-    return res.status(STATUS_CODE_ANAUTORAZED).json(
-      {
-        code: err.code,
-        message: err.message,
-      },
-    );
+    const errorBussines = {
+      code: err.code,
+      message: err.message,
+    };
+
+    return res.status(STATUS_CODE_ANAUTORAZED).json({ err: errorBussines });
   }
   
-  if (err) {
+  if (err.isJoi) {
     const newError = {
-      code: 'invalid_date',
+      code: 'invalid_data',
       message: err.details[0].message,
     };
 

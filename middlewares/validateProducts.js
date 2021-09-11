@@ -28,7 +28,7 @@ const validateProductInput = (req, _res, next) => {
     quantity: Joi.number().min(1).not().empty()
 .required(),
   }).validate(req.body);
-
+  
   if (error) return next(error);
 
   next();

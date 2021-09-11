@@ -10,10 +10,23 @@ const routerProducts = express.Router();
 const STATUS_CODE_OK = 200;
 const STATUS_CODE_CREATE = 201;
 
-routerProducts.get('/', async (_req, res) => {
-  const products = await getAll();
-  return res.status(STATUS_CODE_OK).json({ products });
-});
+routerProducts.post('/', validateProductInput, rescue(async (req, res, next) => {
+  const { name, quantity } = req.body;
+  
+  const product = await createService(name, quantity);
+
+  if (product.isError) {
+    return next(product);
+  }
+  
+  const newProduct = {
+    _id: product.insertedId,
+    name,
+    quantity,
+  };
+  
+  return res.status(STATUS_CODE_CREATE).json(newProduct);
+}));
 
 routerProducts.get('/:id', rescue(async (req, res, next) => {
   const { id } = req.params;
@@ -23,6 +36,11 @@ routerProducts.get('/:id', rescue(async (req, res, next) => {
   }
 
   return res.status(STATUS_CODE_OK).json({ products });
+}));
+
+routerProducts.get('/', rescue(async (_req, res) => {
+  const listProducts = await getAll();
+  return res.status(STATUS_CODE_OK).json({ products: listProducts });
 }));
 
 routerProducts.put('/:id', validateProductInput, rescue(async (req, res) => {
@@ -43,22 +61,6 @@ routerProducts.delete('/:id', rescue(async (req, res, next) => {
   return res.status(STATUS_CODE_OK).json(products);
 }));
 
-routerProducts.post('/', validateProductInput, rescue(async (req, res, next) => {
-  const { name, quantity } = req.body;
-  
-  const product = await createService(name, quantity);
-
-  if (product.isError) {
-    return next(product);
-  }
-  
-  const newProduct = {
-    _id: product.insertedId,
-    name,
-    quantity,
-  };
-  
-  return res.status(STATUS_CODE_CREATE).json(newProduct);
-}));
+// routerProducts.use(validateProductInput);
 
 module.exports = routerProducts;

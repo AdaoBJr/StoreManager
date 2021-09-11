@@ -5,7 +5,7 @@ const { errorBusiness } = require('../helpers/errors');
 const filterById = async (id) => {
   const products = await getById(id);
   if (!products) {
-    return errorBusiness('wrong id format');
+    return errorBusiness('Wrong id format');
   }
 
   return products;
