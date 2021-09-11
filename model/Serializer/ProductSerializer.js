@@ -12,8 +12,7 @@ class ProductSerializer {
   }
 
   All(productArr) {
-    const [first] = productArr;
-    this.Serialize(first);
+    this.Serialize(productArr);
     return { _id: this.id, name: this.name, quantity: this.quantity };
   }
 }
