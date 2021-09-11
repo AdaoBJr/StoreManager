@@ -12,7 +12,7 @@ app.use('/products', productsRouter);
 
 app.use('/sales', salesRouter);
 
-const { PORT } = process.env || 3000;
+const PORT = 3000;
 
 app.listen(PORT, () => console.log(`App Online on Port:${PORT}`));
 
