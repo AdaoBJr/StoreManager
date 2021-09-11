@@ -34,8 +34,24 @@ const getById = async ({ id }) => {
   return result;
 };
 
+const updateById = async ({ id, itensSold }) => {
+  const storeManager = await connection();
+  const sales = await storeManager.collection('sales');
+
+  const filterQuery = { _id: ObjectId(id) };
+  const updateQuery = { $set: { itensSold } };
+
+  await sales.findOneAndUpdate(filterQuery, updateQuery);
+
+  return {
+    _id: id,
+    itensSold,
+  };
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  updateById,
 };

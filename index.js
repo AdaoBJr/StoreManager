@@ -25,8 +25,10 @@ app.get('/sales/:id', salesControllers.getById);
 app.get('/sales', salesControllers.getAll);
 
 app.put('/products/:id', productsControllers.updateById);
+app.put('/sales/:id', salesControllers.updateById);
 
 app.delete('/products/:id', productsControllers.deleteById);
+// app.delete('/sales/:id', salesControllers.deleteById);
 
 app.listen(PORT, () => {
   console.log(`Ouvindo a porta ${PORT}`);

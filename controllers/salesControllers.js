@@ -36,8 +36,30 @@ const getById = async (req, res) => {
   res.status(200).json(result);
 };
 
+const updateById = async (req, res) => {
+  const { id } = req.params;
+  const itensSold = req.body;
+
+  const sales = await salesService.updateById({ id, itensSold });
+
+  if (sales === 'idNaoExiste') {
+    return res.status(422).json({ err: { code: CODE_INVALID_DATA, message: 'Wrong id format',
+    } });
+  }
+
+  if (sales.isJoi) {
+    return res.status(422)
+      .send({ err: { code: CODE_INVALID_DATA, message: 'Wrong product ID or invalid quantity' },
+      });
+  }
+
+  const result = await salesService.updateById({ id, itensSold });
+  res.status(200).json(result);
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  updateById,
 };

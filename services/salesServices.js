@@ -33,8 +33,21 @@ const getById = async ({ id }) => {
   return allSales;
 };
 
+const updateById = async ({ id, itensSold }) => {
+  const { error } = Joi.array().items(Joi.object({
+    productId: Joi.string().length(24).required(),
+    quantity: Joi.number().strict().min(1).required(),
+  })).validate(itensSold);
+
+  if (error) return error;
+
+  const updateSales = await salesModels.updateById({ id, itensSold });
+  return updateSales;
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  updateById,
 };
