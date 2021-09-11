@@ -50,6 +50,13 @@ const update = async ({ id, name, quantity }) => {
   return { _id: id, name, quantity };
 };
 
+const exclude = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+
+  const db = await mongoConnection.getConnection();
+  await db.collection('products').deleteOne({ _id: ObjectId(id) });
+};
+
 module.exports = {
   create,
   findByName,
@@ -57,4 +64,5 @@ module.exports = {
   getById,
   /* findById, */
   update,
+  exclude,
 };
