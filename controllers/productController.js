@@ -26,6 +26,43 @@ const createProduct = async (req, res) => {
   // }
 };
 
+const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, quantity } = req.body;
+    const result = await service.updateProduct({ id, name, quantity });
+
+    if (service.lengthOfName(name) === false) {
+      res.status(422).json(messages.productNameLength);
+    }
+
+    if (service.numberOfQuantity(quantity) === false) {
+      res.status(422).json(messages.productNumberQuantity);
+    }
+
+    if (service.typeOfQuantity(quantity) === false) {
+      res.status(422).json(messages.productTypeQuantity);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(messages.error);
+  }
+};
+
+const excludeProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const exclude = await service.excludeProduct(id);
+
+    if (exclude === null) return res.status(422).json(messages.wrongFormat);
+
+    return res.status(200).json(exclude);
+  } catch (error) {
+    return res.status(422).json(messages.wrongFormat);
+  }
+};
+
 const getProducts = async (_req, res) => {
   try {
     const products = await service.getAllProducts();
@@ -53,4 +90,6 @@ module.exports = {
   getProducts,
   getProductsById,
   createProduct,
+  updateProduct,
+  excludeProduct,
 };

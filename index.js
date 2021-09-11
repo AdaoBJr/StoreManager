@@ -18,4 +18,8 @@ app.get('/', (_request, response) => {
 
 app.post('/products', productController.createProduct);
 
+app.put('/products/:id', productController.updateProduct);
+
+app.delete('/products/:id', productController.excludeProduct);
+
 app.listen(port, () => console.log(`Listening on port ${port}!`));

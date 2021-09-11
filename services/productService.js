@@ -46,6 +46,26 @@ const createProduct = async ({ name, quantity }) => {
   return ProductsModel.create({ name, quantity });
 };
 
+const updateProduct = async ({ id, name, quantity }) => {
+  const lengthName = lengthOfName(name);
+  const numberQuantity = numberOfQuantity(quantity);
+  const typeQuantity = typeOfQuantity(quantity);
+
+  if (!lengthName) return false;
+  if (!numberQuantity) return false;
+  if (!typeQuantity) return false;
+
+  return ProductsModel.update({ id, name, quantity });
+};
+
+const excludeProduct = async (id) => {
+  const exclude = await ProductsModel.exclude(id);
+
+  if (!exclude) return null;
+
+  return exclude;
+};
+
 module.exports = {
   lengthOfName,
   typeOfQuantity,
@@ -53,4 +73,6 @@ module.exports = {
   getAllProducts,
   getById,
   createProduct,
+  updateProduct,
+  excludeProduct,
 };
