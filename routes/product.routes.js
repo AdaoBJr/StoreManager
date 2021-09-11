@@ -4,6 +4,7 @@ const {
   getAllProducts,
   getProductById,
   updateProduct,
+  deleteProduct,
 } = require('../controllers/products.controller');
 const {
   productAlreadyExists,
@@ -35,5 +36,9 @@ routes.put('/products/:id',
   isValidProductName,
   isValidProductQuantity,
   updateProduct);
+
+routes.delete('/products/:id',
+isValidProductId,
+deleteProduct);
 
 module.exports = routes;
