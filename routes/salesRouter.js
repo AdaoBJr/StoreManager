@@ -1,6 +1,6 @@
 const express = require('express');
 const salesController = require('../controller/salesController');
-const { checkNewSalesInput } = require('../middlewares');
+const { checkNewSalesInput, salesDontExistError } = require('../middlewares');
 const checkSalesID = require('../middlewares/checkSalesID');
 
 const router = express.Router();
@@ -13,6 +13,6 @@ router.get('/', salesController.getAllSales);
 
 router.put('/:id', checkNewSalesInput, salesController.updateSale);
 
-router.delete('/:id', salesController.deleteSaleById);
+router.delete('/:id', salesDontExistError, salesController.deleteSaleById);
 
 module.exports = router;
