@@ -2,8 +2,8 @@ const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
 const isExist = async ({ name }) => {
-  const productsCollection = await connection();
-  const products = await productsCollection.collection('products');
+  const storeManager = await connection();
+  const products = await storeManager.collection('products');
   const query = { name };
   
   const result = await products.findOne(query);
@@ -11,8 +11,8 @@ const isExist = async ({ name }) => {
 };
 
 const create = async ({ name, quantity }) => {
-  const productsCollection = await connection();
-  const products = await productsCollection.collection('products');
+  const storeManager = await connection();
+  const products = await storeManager.collection('products');
 
   const { insertedId: id } = await products.insertOne({ name, quantity });
 
@@ -24,8 +24,8 @@ const create = async ({ name, quantity }) => {
 };
 
 const getAll = async () => {
-  const productsCollection = await connection();
-  const products = await productsCollection.collection('products');
+  const storeManager = await connection();
+  const products = await storeManager.collection('products');
   
   const result = await products.find().toArray();
 
@@ -33,8 +33,8 @@ const getAll = async () => {
 };
 
 const getById = async ({ id }) => {
-  const productsCollection = await connection();
-  const products = await productsCollection.collection('products');
+  const storeManager = await connection();
+  const products = await storeManager.collection('products');
 
   const query = { _id: ObjectId(id) };
 
@@ -44,8 +44,8 @@ const getById = async ({ id }) => {
 };
 
 const updateById = async ({ id, name, quantity }) => {
-  const productsCollection = await connection();
-  const products = await productsCollection.collection('products');
+  const storeManager = await connection();
+  const products = await storeManager.collection('products');
 
   const filterQuery = { _id: ObjectId(id) };
   const updateQuery = { $set: { name, quantity } };
@@ -60,8 +60,8 @@ const updateById = async ({ id, name, quantity }) => {
 };
 
 const deleteById = async ({ id }) => {
-  const productsCollection = await connection();
-  const products = await productsCollection.collection('products');
+  const storeManager = await connection();
+  const products = await storeManager.collection('products');
 
   const query = { _id: new ObjectId(id) };
 
