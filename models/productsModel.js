@@ -4,10 +4,10 @@ const connection = require('./connection');
 // Cria uma string com o nome completo do autor
 
 const getNewProduct = (productData) => {
-const { id, name, quantity } = productData;
+const { _id, name, quantity } = productData;
 
 return {
-  id,
+  _id,
   name,
   quantity,
  };
@@ -60,15 +60,13 @@ return {
 const create = async (name, quantity) =>
   connection()
     .then((db) => db.collection('products').insertOne({ name, quantity }))
-    .then((result) => getNewProduct({ id: result.insertedId, name, quantity }));
+    .then((result) => getNewProduct({ _id: result.insertedId, name, quantity }));
 
-const findByName = async (name, quantity) => {
-  const query = { name, quantity };
-  // Executamos a consulta e retornamos o resultado
+const findByName = async (name) => {
   const product = await connection()
-    .then((db) => db.collection('products').findOne(query));
+    .then((db) => db.collection('products').findOne({ name }));
 
-  // Caso nenhum author seja encontrado, devolvemos null
+  // Caso nenhum product seja encontrado, devolvemos null
   if (!product) return null;
 
   // Caso contrário, retornamos o author encontrado
