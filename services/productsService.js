@@ -1,5 +1,9 @@
-const { isProductValid, alreadyExists } = require('../validations/productsValidations'); 
-const { createProduct } = require('../models/productsModel');
+const { createProduct, findById } = require('../models/productsModel');
+const {
+  isProductValid,
+  alreadyExists,
+  idValidation,
+} = require('../validations/productsValidations'); 
 
 const create = async (name, quantity) => {
   const validations = isProductValid(name, quantity);
@@ -12,6 +16,15 @@ const create = async (name, quantity) => {
   return createdProd;
 };
 
+const getById = async (id) => {
+  const validation = await idValidation(id);
+  if (validation.message) return validation;
+
+  const result = findById(id);
+  return result;
+};
+
 module.exports = { 
   create,
+  getById,
 };
