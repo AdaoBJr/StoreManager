@@ -7,16 +7,7 @@ const createProduct = async (req, res) => {
     const { name, quantity } = req.body;
     const result = await create(name, quantity);
     
-      if (result.message) {
-        return res.status(result.code)
-        .json({
-            err: {
-              code: 'invalid_data',
-              message: result.message,
-            },
-          });
-      }
-      return res.status(StatusCodes.CREATED).json(result);
+    return res.status(StatusCodes.CREATED).json(result);
   } catch (error) {
     console.log(error.message);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Something went wrong :(');
@@ -37,17 +28,8 @@ const getProductById = async (req, res) => {
   try {
     const { id } = req.params;
     const result = await getById(id);
-  
-      if (result.message) {
-        return res.status(result.code)
-        .json({
-            err: {
-              code: 'invalid_data',
-              message: result.message,
-            },
-          });
-      }
-      return res.status(StatusCodes.OK).json(result);
+     
+    return res.status(StatusCodes.OK).json(result);
   } catch (error) {
     console.log(error.message);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Something went wrong :(');
@@ -59,16 +41,8 @@ const updateProduct = async (req, res) => {
     const { id } = req.params;
     const { name, quantity } = req.body;
     const result = await update(id, name, quantity);
-    if (result.message) {
-      return res.status(result.code)
-      .json({
-        err: {
-          code: 'invalid_data',
-          message: result.message,
-        },
-      });
-    }
-      return res.status(StatusCodes.OK).json(result);
+   
+    return res.status(StatusCodes.OK).json(result);
   } catch (error) {
     console.log(error.message);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Something went wrong :(');

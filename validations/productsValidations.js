@@ -9,42 +9,75 @@ const errors = {
   invalidId: 'Wrong id format',
 };
 
-const checkNameLenght = (name) => name.length <= 5;
-const checkQuantity = (quant) => quant <= 0;
-const isNumber = (quant) => typeof quant !== 'number';
+const MIN_LENGTH = 5;
 
-const isProductValid = (name, quant) => {
-switch (true) {
-  case checkNameLenght(name): 
-    return { code: UNPROCESSABLE_ENTITY, message: errors.nameLengthInvalid };
-  case isNumber(quant):
-    return { code: UNPROCESSABLE_ENTITY, message: errors.isNotNumber };
-  case checkQuantity(quant):
-    return { code: UNPROCESSABLE_ENTITY, message: errors.quantLessThanOne };
-  default:
-    return {};
-}
+const nameValidation = (req, res, next) => {
+  const { name } = req.body;
+  if (name.length <= MIN_LENGTH) {
+    return res.status(UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: errors.nameLengthInvalid,
+      },
+    });
+  }
+  next();
 };
 
-const alreadyExists = async (name) => {
-  const res = await productExists(name);
-  if (res) {
-    return { code: UNPROCESSABLE_ENTITY, message: errors.alreadyExists };
+const quantityValidation = (req, res, next) => {
+  const { quantity } = req.body;
+  if (typeof quantity !== 'number') {
+    return res.status(UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: errors.isNotNumber,
+      },
+    });
   }
-  return {};
+
+  if (quantity <= 0) {
+    return res.status(UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: errors.quantLessThanOne,
+      },
+    });
+  }
+  next();
 };
 
-const idValidation = async (id) => {
-  const res = await isValidId(id);
-
-  if (!res) {
-    return { code: UNPROCESSABLE_ENTITY, message: errors.invalidId };
+const alreadyExists = async (req, res, next) => {
+  const { name } = req.body;
+  const result = await productExists(name);
+  if (result) {
+    return res.status(UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: errors.alreadyExists,
+      },
+    });
   }
-  return {};
+  next();
+};
+
+const idValidation = async (req, res, next) => {
+  const { id } = req.params;
+  const result = await isValidId(id);
+
+  if (!result) {
+    return res.status(UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: errors.invalidId,
+      },
+    });
+  }
+  next();
 };
 
 module.exports = { 
-  isProductValid,
+  nameValidation,
+  quantityValidation,
   alreadyExists,
   idValidation,
 };

@@ -5,15 +5,33 @@ const {
   getProductById,
   updateProduct,
 } = require('../controllers/productsController');
+const {
+  nameValidation,
+  quantityValidation,
+  alreadyExists,
+  idValidation,
+} = require('../validations/productsValidations');
 
 const router = express.Router();
 
 router.route('/')
-  .post(createProduct)
+  .post(
+    nameValidation,
+    quantityValidation,
+    alreadyExists,
+    createProduct,
+  )
   .get(getAllProducts);
 
 router.route('/:id')
-  .get(getProductById)
-  .put(updateProduct);
+  .get(
+    idValidation,
+    getProductById,
+  )
+  .put(
+    nameValidation,
+    quantityValidation,
+    updateProduct,
+  );
 
 module.exports = router;
