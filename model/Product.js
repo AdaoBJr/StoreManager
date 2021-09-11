@@ -50,6 +50,12 @@ class Product {
     const db = await this.db();
     await db.collection(this.table).updateOne(query, newValues);
   }
+
+  async Delete(id) {
+    const query = { _id: ObjectID(id) };
+    const db = await this.db();
+    await db.collection(this.table).deleteOne(query);
+  }
 }
 
 module.exports = Product;

@@ -47,6 +47,7 @@ class ProductService {
 
   async Update({ id, name, quantity }) {
     const foundProduct = await this.Product.FindById(id);
+
     if (!foundProduct) {
       return errorBuilder({
         status: codes.UNPROCESSABLE_ENTITY,
@@ -54,10 +55,25 @@ class ProductService {
         message: messages.INVALID_ID_FORMAT,
       });
     }
+
     const productToBeUpdated = { id, name, quantity };
     await this.Product.Update(productToBeUpdated);
     const newProduct = await this.Product.FindById(id);
     return { status: codes.OK, message: newProduct };
+  }
+
+  async Delete(id) {
+    const foundProduct = await this.Product.FindById(id);
+
+    if (!foundProduct) {
+      return errorBuilder({
+        status: codes.UNPROCESSABLE_ENTITY,
+        code: codes.INVALID_DATA,
+        message: messages.INVALID_ID_FORMAT,
+      });
+    }
+    await this.Product.Delete(id);
+    return { status: codes.OK, message: foundProduct };
   }
 }
 
