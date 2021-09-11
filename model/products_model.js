@@ -2,10 +2,10 @@
 const connection = require('./connection');
 
 const newProducts = async (name, quantity) => {
-        const db = await connection();
-    console.log('Dentro do model');
+    const db = await connection();
+
     const product = await db.collection('products').insertOne({ name, quantity });
-    console.log(product, 'Olá');
+    
     // const { insertedId } = JSON.parse(product);
 
     return product.ops[0];
