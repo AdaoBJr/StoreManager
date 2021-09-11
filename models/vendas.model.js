@@ -17,13 +17,20 @@ const listSales = async () => {
 
 const listById = async (id) => {
   const db = await connection();
-  const venda = await db.collection('sales').findOne(ObjectId(id));
+  if (!ObjectId.isValid(id)) return false;
 
+  const venda = await db.collection('sales').findOne(ObjectId(id));
   if (venda) {
     return { status: 200, venda };
   }
-  return {
-    status: 404, err: { code: 'not_found', message: 'Sale not found' } };
+  return { status: 404, err: { code: 'not_found', message: 'Sale not found' } };
+};
+
+const deleteSale = async ({ id }) => {
+  const db = await connection();
+  const venda = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+
+  return venda;
 };
 
 const updateSale = async ({ id, productId, quantity }) => {
@@ -48,4 +55,4 @@ const updateSale = async ({ id, productId, quantity }) => {
   return { _id: ObjectId(id), itensSold };
 };
 
-module.exports = { newSales, listSales, listById, updateSale };
+module.exports = { newSales, listSales, listById, updateSale, deleteSale };

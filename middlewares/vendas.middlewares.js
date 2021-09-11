@@ -1,3 +1,6 @@
+const { ObjectId } = require('mongodb');
+const { listById } = require('../models/vendas.model');
+
 const isValidQuantity = async (req, res, next) => {
   const retorno = req.body;
 
@@ -35,4 +38,27 @@ const isValidSale = async (req, res, next) => {
   next();
 };
 
-module.exports = { isValidQuantity, isValidSale, isValidQuantityUpdate };
+const getById = async (req, res, next) => {
+  const retorno = await listById(req.params.id);
+  if (retorno.err) return retorno;
+  next();
+};
+
+const isValidId = async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!ObjectId.isValid(id)) {
+    return res.status(422).json({
+      err: { code: 'invalid_data', message: 'Wrong sale ID format' } });
+  }
+
+  const existeSale = await listById(id);
+  if (!existeSale) {
+    return res.status(404).json({
+      err: { code: 'not_found', message: 'Sale not found' } });
+  }
+
+  next();
+};
+
+module.exports = { isValidQuantity, isValidSale, isValidQuantityUpdate, isValidId, getById };
