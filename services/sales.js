@@ -31,7 +31,9 @@ const createSales = async (sales) => {
 
 // increase ou decrease
 const editSale = async (id, newSales) => {
-  const editedSale = await SalesModels.editSale(id, newSales).then(() => getById(id));
+  console.log(newSales)
+  const editedSale = await SalesModels.editSale(id, newSales)
+  .then(() => getById(id));
   return editedSale;
 };
 
