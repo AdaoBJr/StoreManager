@@ -45,7 +45,16 @@ const create = async (name, quantity) => {
   return { id, name, quantity };
 };
 
+const getById = async (id) => {
+  const existingProdId = await productModel.findById(id);
+  if (existingProdId) { 
+    return { code: 'invalid_data', message: 'Wrong id format' }; 
+  }
+  const productID = await productModel.getById(id);
+  return productID;
+};
+
 module.exports = {
   create,
-  /* getAll */
+  getById,
 }; 

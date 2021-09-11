@@ -1,5 +1,6 @@
 const statusCode = require('http-status-codes');
 const productService = require('../service/productService');
+const productModel = require('../models/productsModel');
 
 const create = async (req, res) => {
 	const { name, quantity } = req.body;
@@ -16,15 +17,30 @@ const create = async (req, res) => {
 	return res.status(statusCode.CREATED).json({ _id: id, name, quantity });
 };
 
-/* const getAll = async (_req, res) => {
-	const movies = await MoviesService
-		.getAll();
+const getAll = async (_req, res) => {
+	try {
+		const product = await productModel.getAll();
+		return res.status(statusCode.OK).json(product);
+    } catch (error) {
+	return res.status(statusCode.UNPROCESSABLE_ENTITY).json(error);
+	}
+};
 
-	res.status(200)
-		.json(movies);
-}; */
+const getById = async (req, res) => {
+    const { id } = req.params;
+    const product = await productService.getById(id);
+
+	if (product.message) {
+		return res.status(statusCode.UNPROCESSABLE_ENTITY).json(
+			{ err: { code: product.code, message: product.message } },
+		);
+	}
+
+    return res.status(statusCode.OK).json(product);
+};
 
 module.exports = {
 	create,
-	/* getAll */
+	getAll,
+	getById,
 }; 

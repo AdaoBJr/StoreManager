@@ -8,6 +8,15 @@ const findByName = async (name) => {
   return productCollection;  
 };
 
+const findById = async (id) => {
+  const productsCollection = await mongoConnection.getConnection()
+  .then((db) => db.collection('products'));
+
+  const product = await productsCollection.findOne({ _id: id });
+
+  return product;
+};
+
 const create = async ({ name, quantity }) => {
   const productsCollection = await mongoConnection.getConnection()
     .then((db) => db.collection('products'));
@@ -22,10 +31,7 @@ const create = async ({ name, quantity }) => {
 
 const getAll = async () => {
   const db = await mongoConnection.getConnection();
-  const product = await db.collection('products')
-    .find()
-    .toArray();
-
+  const product = await db.collection('products').find().toArray();
   return product;
 };
 
@@ -42,4 +48,5 @@ module.exports = {
   findByName,
   getAll,
   getById,
+  findById,
 };
