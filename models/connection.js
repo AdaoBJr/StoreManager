@@ -8,23 +8,15 @@ const DB_NAME = 'StoreManager';
 // const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
 // const DB_NAME = 'StoreManager';
 
-let schema = null;
-
-async function getConnection() {
-  if (schema) return Promise.resolve(schema);
-  return MongoClient
+const connection = () => MongoClient
     .connect(MONGO_DB_URL, {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
+      useUnifiedTopology: true,        
     })
     .then((conn) => conn.db(DB_NAME))
-    .then((dbSchema) => {
-      schema = dbSchema;
-      return schema;
-    })
     .catch((err) => {
       console.error(err);
+      process.exit(1);
     });
-}
 
-module.exports = { getConnection };
+module.exports = connection;
