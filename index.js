@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const productsControllers = require('./controllers/productsControllers');
+const salesControllers = require('./controllers/salesControllers');
 
 const PORT = process.env.PORT || 3000;
 
@@ -15,6 +16,7 @@ app.get('/', (_request, response) => {
 });
 
 app.post('/products', productsControllers.create);
+app.post('/sales', salesControllers.create);
 
 app.get('/products/:id', productsControllers.getById);
 app.get('/products', productsControllers.getAll);
