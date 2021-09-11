@@ -5,7 +5,7 @@ const mongoDbUrl = 'mongodb://localhost:27017';
 const url = 'http://localhost:3000';
 const invalidId = 99999;
 
-describe.only('5 - Crie um endpoint para cadastrar vendas', () => {
+describe('5 - Crie um endpoint para cadastrar vendas', () => {
   let connection;
   let db;
 
@@ -265,6 +265,7 @@ describe('6 - Crie um endpoint para listar as vendas', () => {
       .get(`${url}/sales/`)
       .expect('status', 200)
       .then((responseAll) => {
+        console.log()
         const { body } = responseAll;
         const resultSalesAll = JSON.parse(body);
         const idSales = resultSalesAll.sales[0]._id;

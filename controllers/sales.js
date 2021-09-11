@@ -1,5 +1,7 @@
 const rescue = require('express-rescue');
 const Joi = require('joi');
+const { ObjectId } = require('mongodb');
+
 const { getById } = require('../models/products');
 const SalesServices = require('../services/sales');
 
@@ -44,14 +46,59 @@ const validateIdArray = async (req, res, next) => {
   next();
 };
 
+const validateId = async (req, res, next) => {
+  const { id } = req.params;
+  const schema = Joi.object({
+    id: Joi.string().required(),
+  }).validate(req.params);
+  if (schema.error || !ObjectId.isValid(id)) {
+    return res.status(httpStatus.notFound).json({
+      err: {
+        code: 'not_found',
+        message: 'Sale not found',
+      },
+    });
+  }
+  next();
+};
+
+// dealing with requests
+
 const createSales = rescue(async (req, res) => {
   const sales = req.body;
   const insertedSale = await SalesServices.createSales(sales);
   res.status(httpStatus.ok).json(insertedSale);
 });
 
+const getSaleById = rescue(async (req, res) => {
+  const { id } = req.params;
+  const sale = await SalesServices.getById(id);
+  if (!sale) {
+    return res.status(httpStatus.notFound).json({
+      err: {
+        code: 'not_found',
+        message: 'Sale not found',
+      },
+    });
+  }
+  const { _id, productId, quantity } = sale;
+  res.status(httpStatus.ok).json({
+    _id,
+    itensSold: [{ productId, quantity }],
+  });
+});
+
+const getAllSales = rescue(async (req, res) => {
+  const sales = await SalesServices.getAllSales();
+  console.log(sales[1]);
+  res.status(httpStatus.ok).json({ sales });
+});
+
 module.exports = {
   validateQuantityArray,
   validateIdArray,
+  validateId,
   createSales,
+  getSaleById,
+  getAllSales,
 };
