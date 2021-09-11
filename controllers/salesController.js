@@ -20,9 +20,18 @@ const getSales = async (req, res) => {
   return res.status(status).json(sales);
 };
 
+// REQUISITO 7
+const updateSale = async (req, res) => {
+  const { id } = req.params;
+  const sale = req.body;
+  const { status, updatedSale } = await salesService.updateSale(id, sale);
+  return res.status(status).json(updatedSale);
+};
+
 // -----------------------------------------------------------------------------------------------
 
 module.exports = {
   createSale,
   getSales,
+  updateSale,
 };

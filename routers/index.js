@@ -5,7 +5,7 @@ const {
   createProduct, getProducts, updateProduct, deleteProduct,
 } = require('../controllers/productsController');
 const {
-  createSale, getSales,
+  createSale, getSales, updateSale,
 } = require('../controllers/salesController');
 
 // PRODUCTS ROUTERS
@@ -23,6 +23,7 @@ const salesRouter = express.Router();
 salesRouter.get('/', rescue(getSales));
 salesRouter.get('/:id', rescue(getSales));
 salesRouter.post('/', rescue(createSale));
+salesRouter.put('/:id', rescue(updateSale));
 
 // rescue captura todos os erros e envia para o middlware de erros genéricos
 

@@ -28,7 +28,7 @@ const getSaleById = async (id) => {
 };
 
 const updateSale = async (id, sale) => {
-  const { productId, quantity } = sale;
+  const { productId, quantity } = sale[0];
   const db = await connection();
   await db.collection('sales').updateOne(
     { _id: ObjectId(id) },

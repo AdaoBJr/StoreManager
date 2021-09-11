@@ -61,9 +61,29 @@ const getSales = async (id) => {
   };
 };
 
+// REQUISITO 7
+const updateSale = async (id, sale) => {
+  if (!validateId(id) || !sale.length) {
+    throw ERROR_SALE_NOT_FOUND;
+  }
+
+  await validateQy(sale[0].quantity);
+
+  const itensSold = [];
+  const { _id, itensSold: sold } = await salesModel.updateSale(id, sale);
+  itensSold.push(sold);
+  const updatedSale = { _id, itensSold };
+  console.log(updatedSale);
+  return {
+    status: 200,
+    updatedSale,
+  };
+};
+
 // -----------------------------------------------------------------------------------------------
 
 module.exports = {
   createSale,
   getSales,
+  updateSale,
 };
