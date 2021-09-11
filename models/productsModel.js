@@ -43,10 +43,18 @@ const getById = async (id) => {
   return productId;
 };
 
+const update = async ({ id, name, quantity }) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await mongoConnection.getConnection();
+  await db.collection('products').updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
+  return { id, name, quantity };
+};
+
 module.exports = {
   create,
   findByName,
   getAll,
   getById,
   /* findById, */
+  update,
 };
