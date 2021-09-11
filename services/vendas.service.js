@@ -20,8 +20,8 @@ const update = async ({ id, productId, quantity }) => {
   return updateSales;
 };
 
-const removeSale = async ({ _id }) => {
-  const deleted = await deleteSale({ _id });
+const removeSale = async ({ id }) => {
+  const deleted = await deleteSale({ id });
   return deleted;
 };
 

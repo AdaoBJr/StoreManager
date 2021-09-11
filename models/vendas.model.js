@@ -17,19 +17,15 @@ const listSales = async () => {
 
 const listById = async (id) => {
   const db = await connection();
-  const venda = await db.collection('sales').findOne(ObjectId(id));
+  if (!ObjectId.isValid(id)) return false;
 
-  if (venda) {
-    return { status: 200, venda };
-  }
-  return {
-    status: 404, err: { code: 'not_found', message: 'Sale not found' } };
+  const venda = await db.collection('sales').findOne(ObjectId(id));
+  return { status: 200, venda };
 };
 
-const deleteSale = async ({ _id }) => {
+const deleteSale = async ({ id }) => {
   const db = await connection();
-  const venda = await listById(_id);
-  await db.collection('sales').deleteOne({ _id: ObjectId(_id) });
+  const venda = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
 
   return venda;
 };

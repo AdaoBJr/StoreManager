@@ -1,12 +1,12 @@
 const { Router } = require('express');
 const { createSales, listAll, saleById,
   updateSale, deleteSale } = require('../controllers/vendas.controller');
-const { isValidQuantity, isValidQuantityUpdate, isValidId,
-  isValidSale } = require('../middlewares/vendas.middlewares');
+const { isValidQuantity, isValidQuantityUpdate,
+  isValidId } = require('../middlewares/vendas.middlewares');
 
 const routes = new Router();
 
-routes.get('/sales/:id', isValidSale, saleById);
+routes.get('/sales/:id', saleById);
 
 routes.delete('/sales/:id', isValidId, deleteSale);
 

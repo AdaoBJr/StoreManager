@@ -1,4 +1,6 @@
+const { ObjectId } = require('mongodb');
 const { criar, getAll, getById, update, removeSale } = require('../services/vendas.service');
+const { listById } = require('../models/vendas.model');
 
 const createSales = async (req, res) => {
   const result = req.body;
@@ -13,22 +15,34 @@ const listAll = async (req, res) => {
 };
 
 const deleteSale = async (req, res) => {
-  const result = await removeSale({ _id: req.params.id });
-  if (result.err) {
-    const { err } = result;
-    return res.status(404).json({ err });
+  const { id } = req.params;
+  const { venda } = await listById(id);
+  const result = await removeSale({ id });
+
+  if (!ObjectId.isValid(id)) {
+    return res.status(422).json({ err: {
+      code: 'invalid_data', message: 'Wrong sale ID format' } });
   }
-  const { venda } = result;
-  return res.status(200).json(venda);
+
+  if (result.deletedCount === 0) {
+    return res.status(404).json({
+      err: { code: 'not_found', message: 'Sale not found' } });
+  }
+
+  console.log(result);
+  if (result.deletedCount > 0) {
+    return res.status(200).json(venda);
+  }
 };
 
 const saleById = async (req, res) => {
   const { id } = req.params;
   const sales = await getById(id);
-  if (sales.status === 200) {
-    return res.status(200).json(sales.venda);
+  if (sales === null) {
+    return res.status(404).json({
+      err: { code: 'not_found', message: 'Sale not found' } });
   }
-  return res.status(sales.status).json(sales.err);
+  return res.status(200).json(sales.venda);
 };
 
 const updateSale = async (req, res) => {
