@@ -29,10 +29,19 @@ const saleExists = async (id) => {
   return wasFound !== null;
 };
 
+const updateSale = async (id, sale) => {
+  const db = await connection();
+  await db.collection('sales').updateOne(
+    { _id: ObjectId(id) }, { $set: { itensSold: sale } },
+  );
+  return { _id: id, itensSold: sale };
+};
+
 module.exports = {
   includeSales,
   getAllSales,
   findById,
   saleExists,
   isValidId,
+  updateSale,
 };

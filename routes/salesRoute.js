@@ -1,6 +1,11 @@
 const express = require('express');
-const { addSales, getAllSales, getSaleById } = require('../controllers/salesController');
 const { quantityValidations, idValidation } = require('../middlewares/salesValidations');
+const {
+  addSales,
+  getAllSales,
+  getSaleById,
+  updateSale,
+} = require('../controllers/salesController');
 
 const router = express.Router();
 
@@ -15,6 +20,10 @@ router.route('/:id')
     .get(
       idValidation,
       getSaleById,
+    )
+    .put(
+      quantityValidations,
+      updateSale,
     );
 
 module.exports = router;
