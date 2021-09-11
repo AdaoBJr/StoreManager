@@ -1,84 +1,92 @@
-const rescue = require('express-rescue');
+const { StatusCodes } = require('http-status-codes');
+const salesService = require('../services/salesService');
 
-const {
-  createSalesService,
-  getSalesAllService,
-  getSaleByIdService,
-  updateSaleByIdService,
-  deleteSaleByIdService,
-} = require('../services/salesService');
+//* Cria Sales
+const createSales = async (req, res) => {
+  try {
+    const sales = req.body;
+    const result = await salesService.createSales(sales);
 
-const createSalesController = rescue(async (req, res) => {
-  const sales = req.body;
-  const result = await createSalesService(sales);
-
-  res.status(200).json(result);
-});
-
-const getSalesAllController = async (_req, res) => {
-  const result = await getSalesAllService();
-
-  res.status(200).json(result);
+    return res.status(StatusCodes.OK).json(result);
+  } catch (error) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong Product ID or invalid quantity',
+      },
+    });
+  }
 };
 
-const getSaleByIdController = rescue(async (req, res) => {
-  const saleId = req.params.id;
-  const result = await getSaleByIdService(saleId);
-
-  res.status(200).json(result);
-});
-
-const updateSaleByIdController = rescue(async (req, res) => {
-  const saleId = req.params.id;
-  const data = req.body;
-  const result = await updateSaleByIdService(saleId, data);
-
-  res.status(200).json(result);
-});
-
-const deleteSaleByIdController = rescue(async (req, res) => {
-  const saleId = req.params.id;
-  const result = await deleteSaleByIdService(saleId);
-
-  res.status(200).json(result);
-});
-
-const createErrorSales = (err, _req, _res, next) => {
-  if (err.message === 'not_found_sale') {
-    const newError = new Error();
-    newError.code = 'not_found';
-    newError.status = 404;
-    newError.message = 'Sale not found';
-    return next(newError);
+//* Retorna todas as sales
+const getAllSales = async (req, res) => {
+  try {
+    const sales = await salesService.getSales();
+    return res.status(StatusCodes.OK).json({ sales });
+  } catch (error) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: 'Ops, algo de errado :( ' });
   }
-
-  if (err.message === 'stock_problem') {
-    const newError = new Error();
-    newError.code = err.message;
-    newError.status = 404;
-    newError.message = 'Such amount is not permitted to sell';
-    return next(newError);
-  }
-
-  const newError = new Error();
-  newError.code = 'invalid_data';
-  newError.status = 422;
-  newError.message = err.message;
-  return next(newError);
-
-  next(newError);
 };
 
-const errorSales = (err, _req, res, _next) => {
-  res.status(`${err.status}`).json({ err: { code: err.code, message: err.message } });
+//* Retorna uma sale por ID
+const getSalesById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const sale = await salesService.getSalesById(id);
+    return res.status(StatusCodes.OK).json(sale);
+  } catch (error) {
+    return res.status(StatusCodes.NOT_FOUND).json({
+      err: {
+        code: 'not_found',
+        message: 'Sale not found',
+      },
+    });
+  }
+};
+
+//* Atualiza uma sale por ID
+const updateSale = async (req, res) => {
+  try {
+    const sale = req.body;
+    const { id } = req.params;
+
+    const result = await salesService.updateSale(sale, id);
+
+    return res.status(StatusCodes.OK).json(result);
+  } catch (error) {
+    return res
+      .status(StatusCodes.UNPROCESSABLE_ENTITY)
+      .json({ err: {
+        code: 'invalid_data',
+        message: 'Wrong product ID or invalid quantity',
+      },
+    });
+  }
+};
+
+//* Deleta uma sale por ID
+const deleteSale = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await salesService.deleteSale(id);
+
+    return res.status(StatusCodes.OK).json(result);
+  } catch (error) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong sale ID format',
+      },
+    });
+  }
 };
 
 module.exports = {
-  createSalesController,
-  getSalesAllController,
-  getSaleByIdController,
-  updateSaleByIdController,
-  deleteSaleByIdController,
-  createErrorSales,
-  errorSales,
+  getAllSales,
+  getSalesById,
+  createSales,
+  updateSale,
+  deleteSale,
 };

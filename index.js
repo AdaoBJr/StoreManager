@@ -1,27 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
-const {
-  createProductController,
-  getProductsAllController,
-  getProductByIdController,
-  updateProductByIdController,
-  deleteProductByIdController,
-  createErrorProducts,
-  errorProducts,
-} = require('./controllers/productsController');
-
-const {
-  createSalesController,
-  getSalesAllController,
-  getSaleByIdController,
-  updateSaleByIdController,
-  deleteSaleByIdController,
-  createErrorSales,
-  errorSales,
-} = require('./controllers/salesController');
-
-const { get } = require('frisby');
+const productsController = require('./controllers/productsController');
+const salesController = require('./controllers/salesController');
 
 const app = express();
 const PORT = 3000;
@@ -33,22 +13,23 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.post('/products', createProductController);
-app.get('/products/:id', getProductByIdController);
-app.get('/products', getProductsAllController);
-app.put('/products/:id', updateProductByIdController);
-app.delete('/products/:id', deleteProductByIdController);
+//* Rotas/Controllers de products!
+app.get('/products', productsController.getAllProducts);
+app.post('/products', productsController.createProduct);
+app.get('/products/:id', productsController.getProductById);
+app.put('/products/:id', productsController.updateProduct);
+app.delete('/products/:id', productsController.deleteProduct);
 
-app.use(createErrorProducts);
-app.use(errorProducts);
+//* Rotas/Controllers de sales!
+app.get('/sales/', salesController.getAllSales);
+app.post('/sales', salesController.createSales);
+app.get('/sales/:id', salesController.getSalesById);
+app.put('/sales/:id', salesController.updateSale);
+app.delete('/sales/:id', salesController.deleteSale);
 
-app.post('/sales', createSalesController);
-app.get('/sales/:id', getSaleByIdController);
-app.get('/sales', getSalesAllController);
-app.put('/sales/:id', updateSaleByIdController);
-app.delete('/sales/:id', deleteSaleByIdController);
+//* Middleware de erro genérico!
+app.use((err, _req, res, _next) => {
+  res.status(err.code).json({ err: err.err });
+});
 
-app.use(createErrorSales);
-app.use(errorSales);
-
-app.listen(PORT, () => console.log(`Servidor online na porta: ${PORT}`));
+app.listen(PORT, () => { console.log(`Api rodando na porta ${PORT}.`); });

@@ -1,66 +1,126 @@
-const rescue = require('express-rescue');
+const { StatusCodes } = require('http-status-codes');
+const productsService = require('../services/productsService');
 
-const {
-  createProductService,
-  getProductsAllService,
-  getProductByIdService,
-  updateProductByIdService,
-  deleteProductByIdService,
-} = require('../services/productsServices');
-
-const createProductController = rescue(async (req, res) => {
-  const product = req.body;
-  const result = await createProductService(product);
-
-  res.status(201).json(result);
-});
-
-const getProductsAllController = async (_req, res) => {
-  const result = await getProductsAllService();
-
-  res.status(200).json(result);
+const getAllProducts = async (req, res) => {
+  try {
+    const products = await productsService.getProducts();
+    return res.status(StatusCodes.OK).json({ products });
+  } catch (error) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: 'Ops, algo de errado :( ' });
+  }
 };
 
-const getProductByIdController = rescue(async (req, res) => {
-  const productId = req.params.id;
-  const result = await getProductByIdService(productId);
-
-  res.status(200).json(result);
-});
-
-const updateProductByIdController = rescue(async (req, res) => {
-  const productId = req.params.id;
-  const data = req.body;
-  const result = await updateProductByIdService(productId, data);
-
-  res.status(200).json(result);
-});
-
-const deleteProductByIdController = rescue(async (req, res) => {
-  const productId = req.params.id;
-  const result = await deleteProductByIdService(productId);
-
-  res.status(200).json(result);
-});
-
-const createErrorProducts = (err, _req, _res, next) => {
-  const newError = new Error();
-  newError.code = 'invalid_data';
-  newError.status = 422;
-  newError.message = err.message;
-  return next(newError);
+const getProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await productsService.getProducts(id);
+    return res.status(StatusCodes.OK).json(product);
+  } catch (error) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    });
+  }
 };
 
-const errorProducts = (err, _req, res, _next) => {
-  res.status(`${err.status}`).json({ err: { code: err.code, message: err.message } });
+const errorHandler = (res, err) => {
+  const code = 'invalid_data';
+  const msg = [
+    'Product already exists',
+    '"name" length must be at least 5 characters long',
+  ];
+  switch (err) {
+    case 'ALREADY_EXIST':
+      return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+        err: { code, message: msg[0] },
+      });
+    case 'INVALID_LENGTH':
+      return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+        err: { code, message: msg[1] },
+      });
+    default:
+      return {};
+  }
+};
+
+const errorHandler2 = (res, err) => {
+  const code = 'invalid_data';
+  const msg = [
+    '"quantity" must be larger than or equal to 1',
+    '"quantity" must be a number',
+  ];
+  switch (err) {
+    case 'INVALID_QUANTITY':
+      return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+        err: { code, message: msg[0] },
+      });
+    case 'MUST_BE_NUMBER':
+      return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+        err: { code, message: msg[1] },
+      });
+    default:
+      return {};
+  }
+};
+
+const createProduct = async (req, res) => {
+  try {
+    const { name, quantity } = req.body;
+    const result = await productsService.createProduct({ name, quantity });
+
+    errorHandler(res, result.err);
+    errorHandler2(res, result.err);
+
+    return res.status(StatusCodes.CREATED).json(result);
+  } catch (error) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: 'Ops, algo de errado :( ' });
+  }
+};
+
+const updateProduct = async (req, res) => {
+  try {
+    const { name, quantity } = req.body;
+    const { id } = req.params;
+
+    const result = await productsService.updateProduct({ id, name, quantity });
+
+    errorHandler(res, result.err);
+    errorHandler2(res, result.err);
+
+    return res.status(StatusCodes.OK).json(result);
+  } catch (error) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: 'Ops, algo de errado :( ' });
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await productsService.deleteProduct(id);
+
+    return res.status(StatusCodes.OK).json(result);
+  } catch (error) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    });
+  }
 };
 
 module.exports = {
-  createProductController,
-  getProductsAllController,
-  getProductByIdController,
-  updateProductByIdController,
-  deleteProductByIdController,
-  createErrorProducts,
-  errorProducts,
+  getAllProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
 };
