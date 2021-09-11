@@ -30,9 +30,29 @@ const createProduct = async ({ name, quantity }) => {
   return creatingProduct;
 };
 
+const verifyId = async (id) => {
+  const product = productsModel.getProductById(id);
+
+  if (!product) {
+    return null;
+  }
+
+  return product;
+};
+
+const getAllProducts = async () => {
+  const products = productsModel.getAll();
+  if (!products) {
+    return null;
+  }
+  return products;
+};
+
 module.export = {
   validationName,
   validationQuantity,
   verifyExistanceNameProduct,
   createProduct,
+  verifyId,
+  getAllProducts,
 };
