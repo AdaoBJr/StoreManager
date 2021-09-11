@@ -45,8 +45,38 @@ const createProducts = (req, res, next) => {
   next();
 };
 
+const validId = async (req, res) => {
+  const { id } = req.params;
+  const product = await productsService.verifyId(id);
+  if (!product) {
+    return res.status(422).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format', 
+      },
+    });
+  } 
+    return res.status(200).json(product);
+};
+
+const AllProducts = async (req, res) => {
+  const getAllProducts = await productsService.getAllProducts();
+
+  if (!getAllProducts) {
+    return res.status(422).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format', 
+      },
+    });
+  } 
+    return res.status(200).json(getAllProducts);
+};
+
 module.exports = {
   validName,
   validQuantity,
   createProducts,
+  validId,
+  AllProducts,
 };
