@@ -13,6 +13,22 @@ const httpStatus = {
 };
 
 // validations
+const validateIdOnDeletingSale = (req, res, next) => {
+  const { id } = req.params;
+  const schema = Joi.object({
+    id: Joi.string().required(),
+  }).validate(req.params);
+  if (schema.error || !ObjectId.isValid(id)) {
+    return res.status(httpStatus.invalidData).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong sale ID format',
+      },
+    });
+  }
+  next();
+};
+
 const validateQuantityArray = (req, res, next) => {
   const sales = req.body;
   const onlyQuantity = sales.map((sale) => sale.quantity || false);
@@ -100,6 +116,12 @@ const editSale = rescue(async (req, res) => {
   res.status(httpStatus.ok).json(editedSale);
 });
 
+const deleteSale = rescue(async (req, res) => {
+  const { id } = req.params;
+  const deletedSale = await SalesServices.deleteSale(id);
+  res.status(httpStatus.ok).json(deletedSale);
+});
+
 module.exports = {
   validateQuantityArray,
   validateIdArray,
@@ -108,4 +130,6 @@ module.exports = {
   getSaleById,
   getAllSales,
   editSale,
+  deleteSale,
+  validateIdOnDeletingSale,
 };
