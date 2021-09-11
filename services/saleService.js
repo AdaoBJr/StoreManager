@@ -21,8 +21,8 @@ return getSale;
 };
 
 const updateSale = async (id, sale) => {
-  const product = await model.update(id, sale);
-  return product;
+  const updatedSale = await model.update(id, sale);
+  return updatedSale;
 };
 
 module.exports = { create, validateQuantity, getSaleById, updateSale };

@@ -24,9 +24,9 @@ const update = async (id, sale) => {
   if (!ObjectId.isValid(id)) return null;
   const db = await connectionMongo();
   await db.collection('sales')
-      .updateOne({ _id: ObjectId(id) }, { $set: { sale } });
-
-  return { id, sale };
+      .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: sale } });
+  const updatedSale = await db.collection('sales').findOne({ _id: ObjectId(id) });
+  return updatedSale;
 };
 
 module.exports = { create, getAll, getById, update };
