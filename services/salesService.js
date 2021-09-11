@@ -31,6 +31,11 @@ const editSale = async (id, sale) => {
   return editedSale;
 };
 
+const deleteSale = async (id) => {
+  const deletedProduct = await salesModel.deleteSale(id);
+  return deletedProduct;
+};
+
 module.exports = {
   verifyQuantities,
   verifyQuantitiesString,
@@ -38,4 +43,5 @@ module.exports = {
   getAll,
   getById,
   editSale,
+  deleteSale,
 };

@@ -43,6 +43,14 @@ const editSale = (req, res) => {
   .then((result) => res.status(200).json(result));
 };
 
+const deleteSale = (req, res) => {
+  const { id } = req.params;
+  salesService.deleteSale(id)
+  .then((result) => res.status(200).json(result))
+  .catch(() => res.status(422).json({ err: { 
+    code: 'invalid_data', message: 'Wrong sale ID format' } }));
+};
+
 module.exports = {
   router,
   createSales,
@@ -50,4 +58,5 @@ module.exports = {
   getAll,
   getById,
   editSale,
+  deleteSale,
 };

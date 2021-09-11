@@ -23,9 +23,14 @@ const editSale = (id, itensSold) => {
   return { _id: id, itensSold };
 };
 
+const deleteSale = (id) => 
+  connection()
+  .then((db) => db.collection('sales').findOneAndDelete({ _id: ObjectId(id) }));
+
 module.exports = { 
   createSale,
   getAll,
   getById,
   editSale,
+  deleteSale,
 };
