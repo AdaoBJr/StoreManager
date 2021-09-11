@@ -1,5 +1,12 @@
 const connection = require('./connection');
 
+async function findProduct(product) {
+  const { name } = product;
+  const db = await connection();
+  const result = await db.collection('products').findOne({ name });
+  return result;
+}
+
 async function saveProduct({ name, quantity }) {
   const db = await connection();
   const result = await db.collection('products').insertOne({ name, quantity });
@@ -12,6 +19,7 @@ async function saveProduct({ name, quantity }) {
 
 module.exports = {
   saveProduct,
+  findProduct,
 };
 
 /*
