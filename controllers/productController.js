@@ -37,8 +37,13 @@ const getById = async (req, res) => {
 	return res.status(statusCode.OK).json(product);
 };
 
+const update = async (req, res) => {
+
+};
+
 module.exports = {
 	create,
 	getAll,
 	getById,
+	update,
 }; 
