@@ -19,6 +19,8 @@ app.post('/products', productsControllers.create);
 app.get('/products/:id', productsControllers.getById);
 app.get('/products', productsControllers.getAll);
 
+app.put('/products/:id', productsControllers.updateById);
+
 app.listen(PORT, () => {
   console.log(`Ouvindo a porta ${PORT}`);
 });

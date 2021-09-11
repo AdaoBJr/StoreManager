@@ -43,9 +43,26 @@ const getById = async ({ id }) => {
   return result;
 };
 
+const updateById = async ({ id, name, quantity }) => {
+  const productsCollection = await connection();
+  const products = productsCollection.collection('products');
+
+  const filterQuery = { _id: ObjectId(id) };
+  const updateQuery = { $set: { name, quantity } };
+
+  await products.findOneAndUpdate(filterQuery, updateQuery);
+
+  return {
+    id,
+    name,
+    quantity,
+  };
+};
+
 module.exports = {
   create,
   isExist,
   getAll,
   getById,
+  updateById,
 };
