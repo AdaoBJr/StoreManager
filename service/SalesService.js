@@ -51,7 +51,7 @@ class SalesService {
       if (ids.some((id) => id === null)) {
         return errorBuilder({
           status: codes.UNPROCESSABLE_ENTITY,
-          code: codes.UNPROCESSABLE_ENTITY,
+          code: codes.INVALID_DATA,
           message: messages.INVALID_PRODUCT_ID_QUANTITY,
         });
       }
@@ -59,6 +59,22 @@ class SalesService {
       const insertedElements = await this.Sales.InsertOne(itensSold);
 
       return ({ status: codes.OK, message: insertedElements });
+  }
+
+  async Delete(id) {
+    const foundSale = await this.Sales.FindById(id);
+
+    if (!foundSale) {
+      return errorBuilder({
+        status: codes.UNPROCESSABLE_ENTITY,
+        code: codes.INVALID_DATA,
+        message: messages.INVALID_SALE_ID_FORMAT,
+      });
+    }
+
+    await this.Sales.Delete(id);
+
+    return ({ status: codes.OK, message: foundSale });
   }
 
   async findProductsFromList(itensSold) {

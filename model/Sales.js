@@ -46,6 +46,12 @@ class Sales {
     const db = await this.db();
     await db.collection(this.table).updateOne(query, values);
   }
+
+  async Delete(id) {
+    const query = { _id: ObjectID(id) };
+    const db = await this.db();
+    await db.collection(this.table).deleteOne(query);
+  }
 }
 
 module.exports = Sales;

@@ -19,7 +19,7 @@ router.get('/:id', async (req, res) => {
   res.status(salesRes.status).json(salesRes.message);
 });
 
-router.delete(':/id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   const salesService = new SalesService();
   const salesRes = await salesService.Delete(id);
