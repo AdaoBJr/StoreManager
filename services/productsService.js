@@ -26,6 +26,14 @@ async function isValidDifferentName(name) {
   return true;
 }
 
+async function isValidId(id) {
+  const productId = await productsModel.getById(id);
+
+  if (!productId) return false;
+
+  return true;
+}
+
 async function create({ name, quantity }) {
   const product = await productsModel.create({ name, quantity });
 
@@ -50,13 +58,21 @@ async function update(id, name, quantity) {
   return product;
 }
 
+async function exclude(id) {
+  const product = await productsModel.exclude(id);
+
+  return product;
+}
+
 module.exports = {
   isValidName,
   isValidQuantity,
   isValidQuantityMin,
   isValidDifferentName,
+  isValidId,
   create,
   getAll,
   getById,
   update,
+  exclude,
 };

@@ -55,6 +55,27 @@ function validateQuantity(req, res, next) {
   next();
 }
 
+async function validateId(req, res, next) {
+  try {
+    const { id } = req.params;
+    const productId = await productService.getById(id);
+
+    if (!productId) {
+      return res.status(422).json({
+        err: { 
+         code: 'invalid_data', 
+          message: 'Wrong id format' } });
+    }
+     res.status(200).json(productId);
+  } catch (error) {
+    return res.status(422).json({
+      err: { 
+        code: 'invalid_data', 
+        message: 'Wrong id format' } });
+  }
+  next();
+}
+
 async function create(req, res) {
     const { name, quantity } = req.body;
 
@@ -109,12 +130,19 @@ async function update(req, res) {
   return res.status(200).json(product);
 }
 
+async function exclude(req, _res) {
+  const { id } = req.params;
+  await productService.exclude(id);
+}
+
 module.exports = {
   validateNameLength,
   validateDistinctName,
   validateQuantity,
+  validateId,
   create,
   getAll,
   getById,
   update,
+  exclude,
 };

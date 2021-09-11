@@ -5,11 +5,13 @@ const router = express.Router();
 const { 
   validateQuantity, 
   validateNameLength, 
-  validateDistinctName, 
+  validateDistinctName,
+  validateId,
   create,
   getAll,
   getById,
   update,
+  exclude,
 } = require('../../controllers/productsController');
 
 router.post('/',
@@ -26,5 +28,7 @@ router.put('/:id',
   validateNameLength,
   validateQuantity,
   update);
+
+router.delete('/:id', validateId, exclude);
 
 module.exports = router;
