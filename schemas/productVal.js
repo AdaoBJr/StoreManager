@@ -1,7 +1,6 @@
 const codes = require('./codes');
 const messages = require('./messages');
-
-const isLesserThan = (value, min) => value < min;
+const isLesserThan = require('./common');
 
 const nameValidation = (value) => {
   const MINIMUM = 5;  
