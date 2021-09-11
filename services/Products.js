@@ -41,13 +41,13 @@ const getProductById = async (id) => {
   const product = await Products.getProductById(id);
   if (product.message) return { message: product.message };
 
-  const validateIfProductExists = validations.validateIfProductExists(product);
-  if (validateIfProductExists.message) {
-    return {
-      code: validateIfProductExists.code,
-      message: validateIfProductExists.message,
-    };
-  }
+  // const validateIfProductExists = validations.validateIfProductExists(product);
+  // if (validateIfProductExists.message) {
+  //   return {
+  //     code: validateIfProductExists.code,
+  //     message: validateIfProductExists.message,
+  //   };
+  // }
 
   return product;
 };
@@ -73,9 +73,31 @@ const updateProduct = async (id, name, quantity) => {
   return updatedProduct;
 };
 
+const deleteProduct = async (id) => {
+  const validateIdMongo = validations.validateIdMongo(id);
+  if (validateIdMongo.message) {
+    return { code: validateIdMongo.code, message: validateIdMongo.message };
+  }
+
+  const product = await Products.getProductById(id);
+  if (product.message) return { message: product.message };
+
+  const deletedProductCount = await Products.deleteProduct(id);
+  const validateIfProductExists = validations.validateIfProductExists(deletedProductCount);
+  if (validateIfProductExists.message) {
+    return {
+      code: validateIfProductExists.code,
+      message: validateIfProductExists.message,
+    };
+  }
+
+  return product;
+};
+
 module.exports = {
   registerNewProduct,
   getAllProducts,
   getProductById,
   updateProduct,
+  deleteProduct,
 };

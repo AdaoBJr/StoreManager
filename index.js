@@ -19,6 +19,8 @@ app.post('/products', Products.registerNewProduct);
 
 app.put('/products/:id', Products.updateProduct);
 
+app.delete('/products/:id', Products.deleteProduct);
+
 app.use(errorMiddleware);
 
 const port = 3000;

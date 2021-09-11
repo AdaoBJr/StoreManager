@@ -48,7 +48,7 @@ const getProductById = async (id) => {
 const updateProduct = async (id, name, quantity) => {
   try {
     const updatedProduct = await connection()
-      .then((db) => db.collection('products').update({ _id: id }, { name, quantity }))
+      .then((db) => db.collection('products').update({ _id: ObjectId(id) }, { name, quantity }))
       .then(() => ({
           _id: id,
           name,
@@ -62,9 +62,23 @@ const updateProduct = async (id, name, quantity) => {
   }
 };
 
+const deleteProduct = async (id) => {
+  try {
+    const deletedProductCount = await connection()
+      .then((db) => db.collection('products').deleteOne({ _id: ObjectId(id) }))
+      .then(({ deletedCount }) => deletedCount);
+    return deletedProductCount;
+  } catch (error) {
+    return {
+      message: error,
+    };
+  }
+};
+
 module.exports = {
   registerNewProduct,
   getAllProducts,
   getProductById,
   updateProduct,
+  deleteProduct,
 };

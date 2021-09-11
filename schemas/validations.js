@@ -3,7 +3,7 @@ const { ObjectID } = require('mongodb');
 const Products = require('../models/Products');
 
 const INVALID_DATA = 'invalid_data';
-const NOTFOUND = 'notFound';
+// const NOTFOUND = 'notFound';
 
 const allProductsNames = async () => {
   const allProducts = await Products.getAllProducts();
@@ -14,6 +14,16 @@ const allProductsNames = async () => {
 
   return allNames;
 };
+
+// const allProductIds = async () => {
+//   const allProducts = await Products.getAllProducts();
+
+//   if (allProducts.message) return { message: allProducts.message };
+
+//   const allIds = allProducts.map(({ _id }) => _id);
+
+//   return allIds;
+// };
 
 const validateName = async (name) => {
   if (!name || name.length < 5) {
@@ -70,14 +80,14 @@ const validateIdMongo = (id) => {
   return true;
 };
 
-const validateIfProductExists = (product) => {
-  if (!product) {
+const validateIfProductExists = async (count) => {
+  if (!count) {
     return {
-      code: NOTFOUND,
-      message: 'Product not found',
+      code: INVALID_DATA,
+      message: 'Wrong id format',
     };
   }
-
+  
   return true;
 };
 
