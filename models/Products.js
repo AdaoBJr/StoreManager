@@ -45,8 +45,26 @@ const getProductById = async (id) => {
   }
 };
 
+const updateProduct = async (id, name, quantity) => {
+  try {
+    const updatedProduct = await connection()
+      .then((db) => db.collection('products').update({ _id: id }, { name, quantity }))
+      .then(() => ({
+          _id: id,
+          name,
+          quantity,
+        }));
+    return updatedProduct;
+  } catch (error) {
+    return {
+      message: error,
+    };
+  }
+};
+
 module.exports = {
   registerNewProduct,
   getAllProducts,
   getProductById,
+  updateProduct,
 };

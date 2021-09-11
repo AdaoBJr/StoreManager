@@ -17,6 +17,8 @@ app.get('/products/:id', Products.getProductById);
 
 app.post('/products', Products.registerNewProduct);
 
+app.put('/products/:id', Products.updateProduct);
+
 app.use(errorMiddleware);
 
 const port = 3000;

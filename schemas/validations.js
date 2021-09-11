@@ -23,6 +23,10 @@ const validateName = async (name) => {
     }; 
   }
 
+  return true;
+};
+
+const validateRepeatedProduct = async (name) => {
   const allNames = await allProductsNames();
   if (allNames.message) return { message: allNames.message };
 
@@ -79,6 +83,7 @@ const validateIfProductExists = (product) => {
 
 module.exports = {
   validateName,
+  validateRepeatedProduct,
   validateQuantity,
   validateIdMongo,
   validateIfProductExists,
