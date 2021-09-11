@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const productsRouter = require('./api/routers/productsRouter');
+const salesRouter = require('./api/routers/salesRouter');
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,5 +14,7 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/products', productsRouter);
+
+app.use('/sales', salesRouter);
 
 app.listen(PORT, () => console.log(`servidor on na porta: ${3000}`));
