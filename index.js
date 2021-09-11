@@ -10,3 +10,5 @@ app.get('/', (_request, response) => {
 if (process.env.CI === 'true') {
   console.log('Running in CI mode');
 }
+
+app.listen(process.env.PORT || 3000);
