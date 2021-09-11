@@ -14,14 +14,14 @@ const create = async (req, res) => {
   return res.status(code).json({ _id: id, name, quantity });
 };
 
-// const getAll = async (_req, res) => {
-//   const products = await ProductService.getAll();
+const getAll = async (_req, res) => {
+  const products = await ProductService.getAll();
 
-//   res.status(200)
-//     .json(products);
-// };
+  res.status(200)
+    .json(products);
+};
 
 module.exports = {
   create,
-  // getAll,
+  getAll,
 }; 

@@ -66,19 +66,19 @@ const create = async (name, quantity) => {
   };
 };
 
-// const getNewProduct = (productData) => {
-//   const { id, name, quantity } = productData;
+const getNewProduct = (productData) => {
+  const { id, name, quantity } = productData;
 
-//   return { id, name, quantity };
-// };
+  return { id, name, quantity };
+};
 
-// const getAll = async () => {
-//   const productsData = await ProductModel
-//     .getAll();
-//   return productsData.map(getNewProduct);
-// };
+const getAll = async () => {
+  const productsData = await ProductModel
+    .getAll();
+  return productsData.map(getNewProduct);
+};
 
 module.exports = {
   create,
-  // getAll,
+  getAll,
 };  
