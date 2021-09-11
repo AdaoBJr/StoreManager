@@ -22,4 +22,15 @@ const salesQuantityValidation = ({ quantity }) => {
   return {};
 };
 
-module.exports = salesQuantityValidation;
+const notEnoughItems = (stockitems, sales) => {
+  const stockMissingItems = stockitems.filter(({ _id, quantity }, i) => {
+    if (_id.toString() === sales[i].productId && sales[i].quantity > quantity) {
+      return 1;
+    }
+      return 0;
+  });
+  const hasStockProblem = stockMissingItems.length > 0;
+  return hasStockProblem;
+};
+
+module.exports = { salesQuantityValidation, notEnoughItems };

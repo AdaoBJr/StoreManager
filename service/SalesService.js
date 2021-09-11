@@ -38,10 +38,16 @@ class SalesService {
         message: messages.INVALID_ID_FORMAT,
       });
     }
-
-    await this.Sales.Update({ id, newValues });
+    
+    const updateRes = await this.Sales.Update({ id, newValues }, foundSale);
+    if (updateRes && updateRes.code) {
+      return errorBuilder({
+        status: codes.NOT_FOUND,
+        code: codes.STOCK_PROBLEM,
+        message: messages.INVALID_STOCK_QTY,
+      });
+    } 
     const newValuesSale = await this.Sales.FindById(id);
-
     return { status: codes.OK, message: newValuesSale };
   }
 
@@ -57,7 +63,13 @@ class SalesService {
       }
 
       const insertedElements = await this.Sales.InsertOne(itensSold);
-
+      if (insertedElements.code) {
+        return errorBuilder({
+          status: codes.NOT_FOUND,
+          code: codes.STOCK_PROBLEM,
+          message: messages.INVALID_STOCK_QTY,
+        });
+      } 
       return ({ status: codes.OK, message: insertedElements });
   }
 
@@ -72,7 +84,7 @@ class SalesService {
       });
     }
 
-    await this.Sales.Delete(id);
+    await this.Sales.Delete(id, foundSale);
 
     return ({ status: codes.OK, message: foundSale });
   }

@@ -5,4 +5,5 @@ module.exports = {
   OK: 200,
   INVALID_DATA: 'invalid_data',
   INVALID_NOT_FOUND: 'not_found',
+  STOCK_PROBLEM: 'stock_problem', 
 };

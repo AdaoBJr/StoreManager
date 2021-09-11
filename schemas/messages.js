@@ -7,4 +7,5 @@ module.exports = {
   INVALID_SALE_ID_FORMAT: 'Wrong sale ID format',
   INVALID_PRODUCT_ID_QUANTITY: 'Wrong product ID or invalid quantity',
   SALES_NOT_FOUND: 'Sale not found',
+  INVALID_STOCK_QTY: 'Such amount is not permitted to sell', 
 };
