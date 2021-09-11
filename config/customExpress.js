@@ -1,5 +1,5 @@
 const express = require('express');
-const productsRouter = require('../controller/products');
+const { productsRouter, salesRouter } = require('../controller');
 const { errorMiddleware } = require('../middleware/errorMiddleware');
 
 module.exports = () => {
@@ -9,6 +9,7 @@ module.exports = () => {
   app.use(express.urlencoded({ extended: true }));
 
   app.use('/products', productsRouter);
+  app.use('/sales', salesRouter);
 
   app.get('/', (_request, response) => {
     response.send();
