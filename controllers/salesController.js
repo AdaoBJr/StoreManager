@@ -1,5 +1,5 @@
 const { StatusCodes: { OK, INTERNAL_SERVER_ERROR } } = require('http-status-codes');
-const { include, getAll, getById, update } = require('../services/salesService');
+const { include, getAll, getById, update, remove } = require('../services/salesService');
 
 const INTERNAL_SERVER_ERROR_MSG = 'Something went wrong :(';
 
@@ -48,9 +48,22 @@ const updateSale = async (req, res) => {
   }
 };
 
+const removeSale = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await remove(id);
+   
+    return res.status(OK).json(result);
+  } catch (error) {
+    console.log(error.message);
+    return res.status(INTERNAL_SERVER_ERROR).send(INTERNAL_SERVER_ERROR_MSG);
+  }
+};
+
 module.exports = {
   addSales,
   getAllSales,
   getSaleById,
   updateSale,
+  removeSale,
 }; 

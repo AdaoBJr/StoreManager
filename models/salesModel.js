@@ -24,7 +24,7 @@ const isValidId = async (id) => ObjectId.isValid(id);
 
 const saleExists = async (id) => {
   const db = await connection();
-  const wasFound = await db.collection('sales').findOne({ _id: id });
+  const wasFound = await db.collection('sales').findOne({ _id: ObjectId(id) });
 
   return wasFound !== null;
 };
@@ -37,6 +37,13 @@ const updateSale = async (id, sale) => {
   return { _id: id, itensSold: sale };
 };
 
+const removeSale = async (id) => {
+  const db = await connection();
+  const { value } = await db.collection('sales').findOneAndDelete({ _id: ObjectId(id) });
+  
+  return value;
+};
+ 
 module.exports = {
   includeSales,
   getAllSales,
@@ -44,4 +51,5 @@ module.exports = {
   saleExists,
   isValidId,
   updateSale,
+  removeSale,
 };
