@@ -10,8 +10,8 @@ const newProduct = async ({ name, quantity }) => {
 
 const allProducts = async () => {
   const db = await connection();
-  const products = await db.collection('products').find().toArray();
-  return products;
+  const product = await db.collection('products').find().toArray();
+  return product;
 };
 
 const productById = async (id) => {
