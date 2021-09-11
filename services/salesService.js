@@ -2,7 +2,7 @@ const { ObjectId } = require('mongodb');
 const productsModel = require('../models/productsModel');
 const salesModel = require('../models/salesModel');
 
-const { ERROR_PROD_ID_OR_QTY, ERROR_SALE_NOT_FOUND } = require('./msgErrors');
+const { ERROR_PROD_ID_OR_QTY, ERROR_SALE_NOT_FOUND, ERROR_SALE_ID_FORMAT } = require('./msgErrors');
 
 // VALIDAÇÕES -----------------------------------------------------------------------------------
 
@@ -73,11 +73,27 @@ const updateSale = async (id, sale) => {
   const { _id, itensSold: sold } = await salesModel.updateSale(id, sale);
   itensSold.push(sold);
   const updatedSale = { _id, itensSold };
-  console.log(updatedSale);
   return {
     status: 200,
     updatedSale,
   };
+};
+
+// REQUISITO 8
+const deleteSale = async (id) => {
+  const saleExists = await salesModel.getSaleById(id);
+
+  if (!validateId(id) || !saleExists) {
+    throw ERROR_SALE_ID_FORMAT;
+  }
+
+  const { deletedSale, checkDelete } = await salesModel.deleteSale(id);
+  if (!checkDelete) {
+    return {
+      status: 200,
+      deletedSale,
+    };
+  }
 };
 
 // -----------------------------------------------------------------------------------------------
@@ -86,4 +102,5 @@ module.exports = {
   createSale,
   getSales,
   updateSale,
+  deleteSale,
 };
