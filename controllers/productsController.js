@@ -22,9 +22,22 @@ const findById = async (req, res) => {
 
   return res.status(200).json(product);
 };
+// --------------------------------------------
+// ------------------------------------- aqui 
+// --------------------------------------------
+const update = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  
+  await ProductsService
+   .update({ id, name, quantity });
+
+  return res.status(200).json({ id, name, quantity });
+};
 
 module.exports = {
   create,
   getAll,
   findById,
+  update,
 };
