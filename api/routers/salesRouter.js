@@ -7,6 +7,7 @@ const {
   create,
   getAll,
   getById,
+  update,
 } = require('../../controllers/salesController');
 
 router.post('/', 
@@ -16,5 +17,9 @@ router.post('/',
 router.get('/', getAll);
 
 router.get('/:id', getById);
+
+router.put('/:id', 
+  validateQuantity,
+  update);
 
 module.exports = router;

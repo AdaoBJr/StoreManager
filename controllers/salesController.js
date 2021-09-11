@@ -55,9 +55,22 @@ async function getById(req, res) {
   }
 }
 
+async function update(req, res) {
+  const itensSold = req.body;
+  const { id } = req.params;
+
+  const updateSale = await salesService.update(id, itensSold);
+  if (!updateSale) {
+    return res.status(404).json({ message: 'Not Found' });
+  }
+
+  return res.status(200).json(updateSale);
+}
+
 module.exports = {
   validateQuantity,
   create,
   getAll,
   getById,
+  update,
 };

@@ -24,8 +24,19 @@ async function getById(id) {
   return sale;
 }
 
+async function update(id, itensSold) {
+  if (!ObjectId.isValid(id)) return null;
+
+  const db = await connection();
+  await db.collection('sales')
+    .updateOne({ _id: ObjectId(id) }, { $set: { itensSold } });
+
+  return { _id: id, itensSold };
+}
+
 module.exports = {
   create,
   getById,
   getAll,
+  update,
 };
