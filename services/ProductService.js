@@ -12,28 +12,28 @@ const quantityIsValid = (quantity) => {
   return true;
 };
 
-const nameInvalid = {
+const nameInvalidErr = {
   err: { 
     message: '"name" length must be at least 5 characters long',
     code: 'invalid_data',
   },
 };
 
-const quantNotNumber = {
+const quantNotNumberErr = {
   err: { 
     message: '"quantity" must be a number',
     code: 'invalid_data',
   },
 };
 
-const quantInvalid = {
+const quantInvalidErr = {
   err: { 
     message: '"quantity" must be larger than or equal to 1',
     code: 'invalid_data',
   },
 };
 
-const nameNotUnique = {
+const nameNotUniqueErr = {
   err: { 
     message: 'Product already exists',
     code: 'invalid_data',
@@ -66,21 +66,21 @@ const create = async (name, quantity) => {
   const productQuantValid = quantityIsValid(quantity);  
 
   if (!productNameValid) {
-    return nameInvalid;
+    return nameInvalidErr;
   }
 
   if (typeof quantity !== 'number') {
-    return quantNotNumber;
+    return quantNotNumberErr;
   }
 
   if (!productQuantValid) {
-    return quantInvalid;
+    return quantInvalidErr;
   }
 
   const isNotUnique = await ProductModel.findName(name);
 
   if (isNotUnique) {
-    return nameNotUnique;
+    return nameNotUniqueErr;
   }
 
   const productCreated = await ProductModel.create(name, quantity);
@@ -88,8 +88,30 @@ const create = async (name, quantity) => {
   return productCreated;
 };
 
+const update = async (id, name, quantity) => {
+  const productNameValid = nameIsValid(name);
+  const productQuantValid = quantityIsValid(quantity);
+
+  if (!productNameValid) {
+    return nameInvalidErr;
+  }
+
+  if (typeof quantity !== 'number') {
+    return quantNotNumberErr;
+  }
+
+  if (!productQuantValid) {
+    return quantInvalidErr;
+  }
+
+  const updateProcuct = await ProductModel.update(id, name, quantity);
+
+  return updateProcuct;
+};
+
 module.exports = {
   getAll,
   findById,
   create,
+  update,
 };

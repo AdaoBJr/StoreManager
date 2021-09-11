@@ -18,6 +18,8 @@ app.get('/products/:id', ProductController.findProductById);
 
 app.post('/products', ProductController.createProduct);
 
+app.put('/products/:id', ProductController.updateProduct);
+
 app.listen(PORT, () => {
   console.log(`Ouvindo na porta ${PORT}`);
 });
