@@ -9,6 +9,13 @@ class Sales {
     this.serializer = new SalesSerializer();
   }
 
+  async GetAll() {
+   const db = await this.db();
+   const salesList = await db.collection(this.table).find().toArray();
+
+   return salesList.map((sale) => this.serializer.All(sale));
+  }
+
   async InsertOne(sales) {
     const query = { itensSold: sales };
      const db = await this.db();

@@ -5,4 +5,5 @@ module.exports = {
   INVALID_QUANTITY_TYPE: '"quantity" must be a number',
   INVALID_ID_FORMAT: 'Wrong id format',
   INVALID_PRODUCT_ID_QUANTITY: 'Wrong product ID or invalid quantity',
+  SALES_NOT_FOUND: 'Sale not found',
 };

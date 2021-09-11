@@ -10,16 +10,9 @@ class SalesService {
     this.Sales = new Sales();
   }
 
-  async findProductsFromList(itensSold) {
-    const products = [];
-
-    itensSold.forEach(async ({ productId }) => {
-      const foundProduct = this.Product.FindById(productId);
-      products.push(foundProduct);
-    });
-
-    const resolvedProducts = await Promise.all(products).then((res) => res);
-    return resolvedProducts;
+  async GetAll() {
+    const list = await this.Sales.GetAll();
+    return { status: codes.OK, message: { sales: list } };
   }
 
   async InsertOne(itensSold) {
@@ -32,10 +25,22 @@ class SalesService {
           message: messages.INVALID_PRODUCT_ID_QUANTITY,
         });
       }
-      
+
       const insertedElements = await this.Sales.InsertOne(itensSold);
 
       return ({ status: codes.OK, message: insertedElements });
+  }
+
+  async findProductsFromList(itensSold) {
+    const products = [];
+
+    itensSold.forEach(async ({ productId }) => {
+      const foundProduct = this.Product.FindById(productId);
+      products.push(foundProduct);
+    });
+
+    const resolvedProducts = await Promise.all(products).then((res) => res);
+    return resolvedProducts;
   }
 }
 
