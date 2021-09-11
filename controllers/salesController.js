@@ -51,6 +51,13 @@ const deleteSale = (req, res) => {
     code: 'invalid_data', message: 'Wrong sale ID format' } }));
 };
 
+const stockUpdate = (req, _res, next) => {
+  // const { id } = req.params;
+  const stockAlterarion = req.body;
+  stockAlterarion.map((item) => salesService.stockUpdate(item));
+  next();
+};
+
 module.exports = {
   router,
   createSales,
@@ -59,4 +66,5 @@ module.exports = {
   getById,
   editSale,
   deleteSale,
+  stockUpdate,
 };

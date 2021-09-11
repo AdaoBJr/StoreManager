@@ -36,6 +36,11 @@ const deleteSale = async (id) => {
   return deletedProduct;
 };
 
+const stockUpdate = async ({ productId, quantity }) => {
+  const updatedStock = await salesModel.updateStock(productId, (quantity * (-1)));
+  return updatedStock;
+};
+
 module.exports = {
   verifyQuantities,
   verifyQuantitiesString,
@@ -44,4 +49,5 @@ module.exports = {
   getById,
   editSale,
   deleteSale,
+  stockUpdate,
 };

@@ -37,6 +37,10 @@ const deleteProduct = (id) => {
   .then((db) => db.collection('products').deleteOne({ _id: ObjectId(id) }));
 };
 
+const stockUpdate = (id, quantity) => 
+  connection()
+  .then((db) => db.collection('products').updateOne({ _id: ObjectId(id) }, { $inc: { quantity } }));
+
 module.exports = { 
   findProductByName,
   createProduct,
@@ -44,4 +48,5 @@ module.exports = {
   getById,
   editProduct,
   deleteProduct,
+  stockUpdate,
 };

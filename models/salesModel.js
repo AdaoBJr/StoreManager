@@ -27,10 +27,15 @@ const deleteSale = (id) =>
   connection()
   .then((db) => db.collection('sales').findOneAndDelete({ _id: ObjectId(id) }));
 
+  const stockUpdate = (id, quantity) => 
+  connection()
+  .then((db) => db.collection('products').updateOne({ _id: ObjectId(id) }, { $inc: { quantity } }));
+
 module.exports = { 
   createSale,
   getAll,
   getById,
   editSale,
   deleteSale,
+  stockUpdate,
 };
