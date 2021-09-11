@@ -29,12 +29,9 @@ const emptyQuantity = {
 
 const isValidName = (name) => {
   if (!name) return nameRequired;
-
-  if (name.length < 5) {
- return shortName;
-}
+  if (name.length < 5) return shortName;
   return true;
-  };
+};
 
 const isValidQuantity = (quantity) => {
   if (quantity < 1) {
@@ -52,8 +49,8 @@ const isValidQuantity = (quantity) => {
 const create = async (name, quantity) => {
   const isProductNameValid = isValidName(name);
   const isQuantityValid = isValidQuantity(quantity);
-  if (!isProductNameValid) return isProductNameValid;
-  if (!isQuantityValid) return isQuantityValid;
+  if (isProductNameValid !== true) return isProductNameValid;
+  if (isQuantityValid !== true) return isQuantityValid;
 
   const searchProduct = await ProductModel.findByName(name);
   if (searchProduct) return { code: 'invalid_data', message: 'Product already exists' };
@@ -69,6 +66,19 @@ const create = async (name, quantity) => {
   };
 };
 
+// const getNewProduct = (productData) => {
+//   const { id, name, quantity } = productData;
+
+//   return { id, name, quantity };
+// };
+
+// const getAll = async () => {
+//   const productsData = await ProductModel
+//     .getAll();
+//   return productsData.map(getNewProduct);
+// };
+
 module.exports = {
   create,
+  // getAll,
 };  

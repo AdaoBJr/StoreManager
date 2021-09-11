@@ -7,6 +7,8 @@ const app = express();
 app.use(bodyParser.json());
 const PORT = process.env.PORT || 3000;
 
+// app.get('/products', ProductController.getAll);
+
 app.post('/products', ProductController.create);
 
 // não remova esse endpoint, e para o avaliador funcionar
