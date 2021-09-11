@@ -19,11 +19,11 @@ const isValidQuantityProduct = (quantity) => {
   if (quantity <= requiredQuantitySize) {
     return { err: {
       code: 'invalid_data',
-      message: '"quantity" length must be larger than or equal to 1' },
+      message: '"quantity" must be larger than or equal to 1' },
     }; 
   }
 
-  if (typeof Number(quantity) !== 'number') {
+  if (typeof quantity !== 'number') {
     return { err: {
       code: 'invalid_data',
       message: '"quantity" must be a number' },
@@ -41,9 +41,17 @@ const createProduct = async (name, quantity) => {
   if (isValidQuantity.err) return isValidQuantity;
 
   const resultModel = await productModels.createProduct(name, quantity);
+  // console.log(resultModel);
+  
   return resultModel;
 };
 
+// const getAll = async () => {
+//   const resultModel = await productModels.getAll;
+//   return resultModel;
+// };
+
 module.exports = {
   createProduct,
+  // getAll,
 };
