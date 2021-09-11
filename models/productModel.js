@@ -20,4 +20,22 @@ const getById = async (id) => {
   return product;
 };
 
-module.exports = { create, getAll, getById };
+const update = async (id, name, quantity) => {
+  if (!ObjectId.isValid(id)) return null;
+
+  const db = await connectionMongo();
+  await db.collection('products')
+      .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
+
+  return { id, name, quantity };
+};
+
+const remove = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await connectionMongo();
+  const product = await db.collection('products').findOne({ _id: ObjectId(id) });
+  await db.collection('products').deleteOne({ _id: ObjectId(id) });
+  return product;
+};
+
+module.exports = { create, getAll, getById, update, remove };

@@ -1,10 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { validName,
+const { validShortName,
+  validExistName,
   validQuantity,
   create,
   getAll,
-  getById } = require('./controllers/productController');
+  getById,
+  update,
+  remove } = require('./controllers/productController');
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,4 +25,8 @@ app.get('/products', getAll);
 
 app.get('/products/:id', getById);
 
-app.post('/products', validName, validQuantity, create);
+app.post('/products', validShortName, validExistName, validQuantity, create);
+
+app.put('/products/:id', validShortName, validQuantity, update);
+
+app.delete('/products/:id', remove);

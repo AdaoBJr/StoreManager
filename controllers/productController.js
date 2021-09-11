@@ -5,7 +5,7 @@ const CREATED = 201;
 const UNPROCESSABLE = 422;
 const HTTP_OK_STATUS = 200;
 
-const validName = async (req, res, next) => {
+const validShortName = async (req, res, next) => {
   const { name } = req.body;
   const checkName = await service.validateName(name);
   switch (checkName) {
@@ -14,6 +14,16 @@ const validName = async (req, res, next) => {
           code: 'invalid_data',
           message: '"name" length must be at least 5 characters long',
         } });
+    default:
+      break;
+  }
+  next();
+};
+
+const validExistName = async (req, res, next) => {
+  const { name } = req.body;
+  const checkName = await service.validateName(name);
+  switch (checkName) {
     case 'product exist': return res.status(UNPROCESSABLE)
         .json({ err: {
           code: 'invalid_data',
@@ -73,4 +83,34 @@ const getById = async (req, res) => {
   res.status(HTTP_OK_STATUS).json(product);
 };
 
-module.exports = { create, validName, validQuantity, getAll, getById };
+const update = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  const product = await service.update(id, name, quantity);
+  res.status(HTTP_OK_STATUS).json(product);
+};
+
+const remove = async (req, res) => {
+  const { id } = req.params;
+  const product = await service.getById(id);
+  switch (product) {
+    case 'bad id': return res.status(UNPROCESSABLE)
+        .json({ err: {
+          code: 'invalid_data',
+          message: 'Wrong id format',
+        } });
+        default:
+          await model.remove(id);
+        break;
+      }
+  res.status(HTTP_OK_STATUS).json(product);
+};
+
+module.exports = { create,
+  validShortName,
+  validExistName,
+  validQuantity,
+  getAll,
+  getById,
+  update,
+  remove };
