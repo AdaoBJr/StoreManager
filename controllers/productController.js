@@ -21,11 +21,36 @@ const createProduct = async (req, res) => {
     }
 
     return res.status(201).json(result);
-  // } catch (error) {
-  //   return res.status(500).json({ message: 'Ops, an error occurred with your request' });
+  // } catch (err) {
+  //   return res.status(500).json(messages.error);
   // }
 };
 
+const getProducts = async (_req, res) => {
+  try {
+    const products = await service.getAllProducts();
+
+    return res.status(200).json(products);
+  } catch (err) {
+    return res.status(500).json(messages.error);
+  }
+};
+
+const getProductsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await service.getById(id);
+
+    if (product === null) return res.status(422).json(messages.wrongFormat);
+
+    return res.status(200).json(product);
+  } catch (error) {
+    return res.status(422).json(messages.wrongFormat);
+  }
+};
+
 module.exports = {
+  getProducts,
+  getProductsById,
   createProduct,
 };

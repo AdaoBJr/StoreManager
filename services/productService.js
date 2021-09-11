@@ -18,6 +18,20 @@ const typeOfQuantity = (quantity) => {
   return true;
 };
 
+const getAllProducts = async () => {
+  const products = await ProductsModel.getAll();
+
+  return products;
+};
+
+const getById = async (id) => {
+  const product = await ProductsModel.getById(id);
+
+  if (!product) return null;
+
+  return product;
+};
+
 const createProduct = async ({ name, quantity }) => {
   const productExists = await ProductsModel.productExists(name);
   const lengthName = lengthOfName(name);
@@ -36,5 +50,7 @@ module.exports = {
   lengthOfName,
   typeOfQuantity,
   numberOfQuantity,
+  getAllProducts,
+  getById,
   createProduct,
 };
