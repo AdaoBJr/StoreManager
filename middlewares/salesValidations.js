@@ -1,7 +1,9 @@
-const { StatusCodes: { UNPROCESSABLE_ENTITY } } = require('http-status-codes');
+const { StatusCodes: { UNPROCESSABLE_ENTITY, NOT_FOUND } } = require('http-status-codes');
+const { isValidId } = require('../models/salesModel');
 
 const errors = {
   invalidQuantity: 'Wrong product ID or invalid quantity',
+  notFound: 'Sale not found',
 };
 
 const quantityValidations = (req, res, next) => {
@@ -18,6 +20,22 @@ const quantityValidations = (req, res, next) => {
   next();
 };
 
+const idValidation = async (req, res, next) => {
+  const { id } = req.params;
+  const result = await isValidId(id);
+
+  if (!result) {
+    return res.status(NOT_FOUND).json({
+      err: {
+        code: 'not_found',
+        message: errors.notFound,
+      },
+    });
+  }
+  next();
+};
+
 module.exports = { 
   quantityValidations,
+  idValidation,
 };
