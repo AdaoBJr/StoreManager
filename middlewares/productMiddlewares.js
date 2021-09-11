@@ -46,4 +46,15 @@ const validQuantity = async (req, res, next) => {
   next();
 };
 
-module.exports = { productValid, validName, validQuantity, productExist };
+const validateProduct = async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!id || id.length !== 24) {
+    return res.status(422).json({
+      err: { code: 'invalid_data', message: 'Wrong id format' } });
+  }
+
+  next();
+};
+
+module.exports = { productValid, validName, validQuantity, productExist, validateProduct };
