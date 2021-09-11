@@ -1,7 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { create, getAll, findById, update } = require('./controllers/productsController');
+const { 
+  create, 
+  getAll, 
+  findById, 
+  update, 
+  deleteProd,
+} = require('./controllers/productsController');
+
 const { validateProducts, isValidId } = require('./middlewares/productsMiddleware');
 
 const app = express();
@@ -16,6 +23,8 @@ app.get('/products/:id', isValidId, findById);
 app.post('/products', validateProducts, create);
 
 app.put('/products/:id', isValidId, validateProducts, update);
+
+app.delete('/products/:id', isValidId, deleteProd);
 
 app.listen(PORT, () => {
   console.log(`listening port ${PORT}...`);
