@@ -5,7 +5,7 @@ const productModel = require('../models/productsModel');
 const create = async (req, res) => {
 	const { name, quantity } = req.body;
 
-	const product = await productService.create(name, quantity);
+	const product = await productService.create({ name, quantity });
 	const { id } = product;
 	
 	if (product.message) {
@@ -27,16 +27,19 @@ const getAll = async (_req, res) => {
 };
 
 const getById = async (req, res) => {
-    const { id } = req.params;
-    const product = await productService.getById(id);
-
-	if (product.message) {
-		return res.status(statusCode.UNPROCESSABLE_ENTITY).json(
-			{ err: { code: product.code, message: product.message } },
-		);
+	try {
+		const { id } = req.params;
+		const product = await productService.getById(id);
+		return res.status(statusCode.OK).json(product);
+	} catch (_error) {
+		const { id } = req.params;
+		const product = await productService.getById(id);
+		if (product.message) {
+			return res.status(statusCode.UNPROCESSABLE_ENTITY).json(
+				{ err: { code: product.code, message: product.message } },
+			);
+		}
 	}
-
-    return res.status(statusCode.OK).json(product);
 };
 
 module.exports = {

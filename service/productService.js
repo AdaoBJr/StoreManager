@@ -26,7 +26,7 @@ const isValidQuantityNotNumber = (quantity) => {
   return true;
 };
 
-const create = async (name, quantity) => {
+const create = async ({ name, quantity }) => {
   const isProductNameValid = isValidName(name);
   const isProductQuantityValidZero = isValidQuantityZero(quantity);
   const isProductQuantityNotNumber = isValidQuantityNotNumber(quantity);
@@ -41,7 +41,7 @@ const create = async (name, quantity) => {
     return { code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' };
   }
   if (existingProduct) { return { code: 'invalid_data', message: 'Product already exists' }; }
-  const { id } = await productModel.create(name, quantity);
+  const { id } = await productModel.create({ name, quantity });
   return { id, name, quantity };
 };
 
@@ -50,8 +50,8 @@ const getById = async (id) => {
   if (existingProdId) { 
     return { code: 'invalid_data', message: 'Wrong id format' }; 
   }
-  const productID = await productModel.getById(id);
-  return productID;
+  const { name, quantity } = await productModel.getById(id);
+  return { id, name, quantity };
 };
 
 module.exports = {

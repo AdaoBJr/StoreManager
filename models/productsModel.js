@@ -9,10 +9,11 @@ const findByName = async (name) => {
 };
 
 const findById = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
   const productsCollection = await mongoConnection.getConnection()
   .then((db) => db.collection('products'));
 
-  const product = await productsCollection.findOne({ _id: id });
+  const product = await productsCollection.findOne({ _id: ObjectId(id) });
 
   return product;
 };
@@ -37,9 +38,8 @@ const getAll = async () => {
 
 const getById = async (id) => {
   if (!ObjectId.isValid(id)) return null;
-
   const db = await mongoConnection.getConnection();
-  const productId = await db.collection('people').findOne(ObjectId(id));
+  const productId = await db.collection('people').findOne({ _id: ObjectId(id) });
   return productId;
 };
 
