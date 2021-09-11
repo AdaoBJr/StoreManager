@@ -1,4 +1,4 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
 // Cria uma string com o nome completo do autor
@@ -19,24 +19,22 @@ const getAll = async () => connection()
     .then((db) => db.collection('products').find().toArray())
     .then((products) => ({ products }));
 
-// /*
-// Busca um autor específico, a partir do seu ID
-// @param {String} id ID do autor a ser recuperado
-// */
-// const findById = async (id) => {
-//   if (!ObjectId.isValid(id)) {
-//     return null;
-//   }
+/*
+Busca um autor específico, a partir do seu ID
+@param {String} id ID do autor a ser recuperado
+*/
+const getById = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
 
-//   const authorData = await connection()
-//     .then((db) => db.collection('authors').findOne(new ObjectId(id)));
+  const productData = await connection()
+    .then((db) => db.collection('products').findOne(new ObjectId(id)));
 
-//   if (!authorData) return null;
+  if (!productData) return null;
 
-//   const { firstName, middleName, lastName } = authorData;
-
-//   return getNewAuthor({ id, firstName, middleName, lastName });
-// };
+  return productData;
+};
 
 // const isNonEmptyString = (value) => {
 //   if (!value) return false;
@@ -68,6 +66,7 @@ const findByName = async (name) => {
 
 module.exports = {
   getAll,
+  getById,
   create,
   findByName,
 };

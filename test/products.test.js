@@ -5,7 +5,7 @@ const mongoDbUrl = 'mongodb://localhost:27017';
 const url = 'http://localhost:3000';
 const invalidId = 99999;
 
-describe.only('1 - Crie um endpoint para o cadastro de produtos', () => {
+describe('1 - Crie um endpoint para o cadastro de produtos', () => {
   let connection;
   let db;
 
@@ -169,7 +169,7 @@ describe('2 - Crie um endpoint para listar os produtos', () => {
     await connection.close();
   });
 
-  it.only('Será validado que todos produtos estão sendo retornados', async () => {
+  it('Será validado que todos produtos estão sendo retornados', async () => {
     await frisby
       .get(`${url}/products`)
       .expect('status', 200)

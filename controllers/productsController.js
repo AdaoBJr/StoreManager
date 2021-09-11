@@ -1,7 +1,21 @@
 const rescue = require('express-rescue');
 const productsService = require('../services/productsService');
 
-// const findById = rescue(async (req, res, next) => { /* ... */ }
+const getById = rescue(async (req, res, next) => {
+  // Extraímos o id da request
+  const { id } = req.params;
+
+  // Pedimos para o service buscar o autor
+  const product = await productsService.getById(id);
+
+  // Caso o service retorne um erro, interrompemos o processamento
+  // e inicializamos o fluxo de erro
+  if (product.error) return next(product);
+
+  // Caso não haja nenhum erro, retornamos o product encontrado
+  res.status(200).json(product);
+});
+
 const getAll = rescue(async (req, res) => {
   const products = await productsService.getAll();
 
@@ -32,6 +46,6 @@ const create = rescue(async (req, res, next) => {
 
 module.exports = {
   getAll,
-//   findById,
+  getById,
   create,
 };

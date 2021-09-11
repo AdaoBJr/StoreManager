@@ -2,7 +2,24 @@ const productsModel = require('../models/productsModel');
 
 const getAll = async () => productsModel.getAll();
 
-// const findById = async (id) => Author.findById(id);
+const getById = async (id) => {
+  // Solicitamos que o model realize a busca no banco
+  const product = await productsModel.getById(id);
+
+  // Caso nenhum autor seja encontrado, retornamos um objeto de erro.
+  if (!product) {
+    return {
+      number: 422,
+      error: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    };
+  }
+
+  // Caso haja um autor com o ID informado, retornamos esse autor
+  return product;
+};
 
 const validateLenghtName = (req, _res, _next) => {
   const { name } = req.body;
@@ -64,6 +81,7 @@ const create = async (name, quantity) => {
 
 module.exports = {
   getAll,
+  getById,
   create,
   validateLenghtName,
   validateQuantityType,
