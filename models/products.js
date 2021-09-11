@@ -51,6 +51,34 @@ const editProduct = async (id, name, quantity) => {
   });
 };
 
+const decreaseProductQuantity = async (id, decreasedQuantity) => {
+  const db = await connection();
+  await db.collection('products').updateOne(
+    {
+      _id: ObjectId(id),
+    },
+    {
+      $inc: {
+        quantity: (decreasedQuantity * -1),
+      },
+    },
+  );
+};
+
+const increaseProductQuantity = async (id, increasedQuantity) => {
+  const db = await connection();
+  await db.collection('products').updateOne(
+    {
+      _id: ObjectId(id),
+    },
+    {
+      $inc: {
+        quantity: increasedQuantity,
+      },
+    },
+  );
+};
+
 module.exports = {
   getAll,
   getById,
@@ -58,4 +86,6 @@ module.exports = {
   createProduct,
   deleteById,
   editProduct,
+  decreaseProductQuantity,
+  increaseProductQuantity,
 };
