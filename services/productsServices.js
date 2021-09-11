@@ -30,7 +30,7 @@ const getAll = async () => {
 };
 
 const getById = async ({ id }) => {
-  const idIsValid = await ObjectId.isValid(id);
+  const idIsValid = ObjectId.isValid(id);
 
   if (!idIsValid) return 'idNaoExiste';
 
@@ -39,7 +39,7 @@ const getById = async ({ id }) => {
 };
 
 const updateById = async ({ id, name, quantity }) => {
-  const idIsValid = await ObjectId.isValid(id);
+  const idIsValid = ObjectId.isValid(id);
 
   if (!idIsValid) return 'idNaoExiste';
 
@@ -54,9 +54,19 @@ const updateById = async ({ id, name, quantity }) => {
   return updateProduct;
 };
 
+const deleteById = async ({ id }) => {
+  const idIsValid = ObjectId.isValid(id);
+
+  if (!idIsValid) return 'idNaoExiste';
+
+  const deleteProduct = await productsModels.deleteById({ id });
+  return deleteProduct;
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   updateById,
+  deleteById,
 };

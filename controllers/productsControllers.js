@@ -65,9 +65,24 @@ const updateById = async (req, res) => {
   res.status(200).json(result);
 };
 
+const deleteById = async (req, res) => {
+  const { id } = req.params;
+
+  const products = await productsService.deleteById({ id });
+
+  if (products === 'idNaoExiste') {
+    return res.status(422).json({ err: { code: CODE_INVALID_DATA, message: 'Wrong id format',
+    } });
+  }
+
+  const result = await productsService.deleteById({ id });
+  res.status(200).json(result);
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   updateById,
+  deleteById,
 };

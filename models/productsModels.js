@@ -12,7 +12,7 @@ const isExist = async ({ name }) => {
 
 const create = async ({ name, quantity }) => {
   const productsCollection = await connection();
-  const products = productsCollection.collection('products');
+  const products = await productsCollection.collection('products');
 
   const { insertedId: id } = await products.insertOne({ name, quantity });
 
@@ -45,7 +45,7 @@ const getById = async ({ id }) => {
 
 const updateById = async ({ id, name, quantity }) => {
   const productsCollection = await connection();
-  const products = productsCollection.collection('products');
+  const products = await productsCollection.collection('products');
 
   const filterQuery = { _id: ObjectId(id) };
   const updateQuery = { $set: { name, quantity } };
@@ -59,10 +59,22 @@ const updateById = async ({ id, name, quantity }) => {
   };
 };
 
+const deleteById = async ({ id }) => {
+  const productsCollection = await connection();
+  const products = await productsCollection.collection('products');
+
+  const query = { _id: new ObjectId(id) };
+
+  const result = await products.findOneAndDelete(query);
+
+  return result;
+};
+
 module.exports = {
   create,
   isExist,
   getAll,
   getById,
   updateById,
+  deleteById,
 };
