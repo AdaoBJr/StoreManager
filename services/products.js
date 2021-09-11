@@ -21,7 +21,14 @@ const createProduct = async (name, quantity) => {
 };
 
 const deleteById = async (id) => {
-  await ModelProducts.deleteById(id);
+  const deletedProduct = await ModelProducts.getById(id)
+    .then(() => ModelProducts.deleteById(id));
+  return deletedProduct;
+};
+
+const editProduct = async (id, name, quantity) => {
+  const editedProduct = await ModelProducts.editProduct(id, name, quantity).then(() => getById(id));
+    return editedProduct;
 };
 
 module.exports = {
@@ -30,4 +37,5 @@ module.exports = {
   getByName,
   createProduct,
   deleteById,
+  editProduct,
 };

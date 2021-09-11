@@ -3,13 +3,23 @@ const {
   validateId,
   getById,
   validateName,
+  validateUniqueName,
   validatePostQuantity,
   createProduct,
   getAll,
   deleteById,
+  editProduct,
 } = require('../controllers/products');
 
 const route = express.Router();
+
+route.put(
+  '/:id',
+  validateId,
+  validateName,
+  validatePostQuantity,
+  editProduct,
+);
 
 route.delete(
   '/:id',
@@ -26,6 +36,7 @@ route.get(
 route.post(
   '/',
   validateName,
+  validateUniqueName,
   validatePostQuantity,
   createProduct,
 );

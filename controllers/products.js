@@ -32,6 +32,19 @@ const checkUniqueName = async (name) => {
   return product;
 };
 
+const validateUniqueName = async (req, res, next) => {
+  const { name } = req.body;
+  const isUnique = await checkUniqueName(name);
+  
+  if (isUnique) {
+    return res
+      .status(httpStatus.invalidData)
+      .json({ err: { code: 'invalid_data', message: 'Product already exists' } });
+  }
+
+  next();
+};
+
 const validateName = rescue(async (req, res, next) => {
   const schema = Joi.object({
     name: Joi.string().min(5).required(),
@@ -42,15 +55,6 @@ const validateName = rescue(async (req, res, next) => {
     return res.status(httpStatus.invalidData).json({ err: { code: 'invalid_data', message } });
   }
   
-  const { name } = req.body;
-  const isUnique = await checkUniqueName(name);
-
-  if (isUnique) {
-    return res
-      .status(httpStatus.invalidData)
-      .json({ err: { code: 'invalid_data', message: 'Product already exists' } });
-  }
-
   next();
 });
 
@@ -96,9 +100,15 @@ const createProduct = rescue(async (req, res) => {
 
 const deleteById = rescue(async (req, res) => {
   const { id } = req.params;
-  const deltedProduct = await ServicesProducts.getById(id)
-    .then(() => ServicesProducts.deleteById(id));
-  res.status(200).json(deltedProduct);
+  const deletedProduct = await ServicesProducts.deleteById(id);
+  res.status(httpStatus.ok).json(deletedProduct);
+});
+
+const editProduct = rescue(async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  const editedProduct = await ServicesProducts.editProduct(id, name, quantity);
+  res.status(httpStatus.ok).json(editedProduct);
 });
 
 module.exports = {
@@ -106,7 +116,9 @@ module.exports = {
   getById,
   createProduct,
   deleteById,
+  editProduct,
   validateName,
+  validateUniqueName,
   validateId,
   validatePostQuantity,
 };
