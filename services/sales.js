@@ -18,8 +18,14 @@ const getAllSales = async () => {
   return sales;
 };
 
+const editSale = async (id, newSales) => {
+  const editedSale = await SalesModels.editSale(id, newSales).then(() => getById(id));
+  return editedSale;
+};
+
 module.exports = {
   createSales,
   getById,
   getAllSales,
+  editSale,
 };

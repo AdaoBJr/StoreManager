@@ -90,8 +90,14 @@ const getSaleById = rescue(async (req, res) => {
 
 const getAllSales = rescue(async (req, res) => {
   const sales = await SalesServices.getAllSales();
-  console.log(sales[1]);
   res.status(httpStatus.ok).json({ sales });
+});
+
+const editSale = rescue(async (req, res) => {
+  const { id } = req.params;
+  const newSales = req.body;
+  const editedSale = await SalesServices.editSale(id, newSales);
+  res.status(httpStatus.ok).json(editedSale);
 });
 
 module.exports = {
@@ -101,4 +107,5 @@ module.exports = {
   createSales,
   getSaleById,
   getAllSales,
+  editSale,
 };
