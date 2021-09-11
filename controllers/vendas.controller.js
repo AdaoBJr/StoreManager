@@ -18,8 +18,8 @@ const deleteSale = async (req, res) => {
     const { err } = result;
     return res.status(404).json({ err });
   }
-
-  return res.status(200).json(result);
+  const { venda } = result;
+  return res.status(200).json(venda);
 };
 
 const saleById = async (req, res) => {

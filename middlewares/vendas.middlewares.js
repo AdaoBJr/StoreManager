@@ -51,6 +51,13 @@ const isValidId = async (req, res, next) => {
       err: { code: 'invalid_data', message: 'Wrong sale ID format' } });
   }
 
+  const existeSale = await listById(id);
+
+  if (!existeSale) {
+    return res.status(404).json({
+      err: { code: 'not_found', message: 'Sale not found' } });
+  }
+
   next();
 };
 
