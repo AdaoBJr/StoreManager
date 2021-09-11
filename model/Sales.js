@@ -32,9 +32,19 @@ class Sales {
 
   async InsertOne(sales) {
     const query = { itensSold: sales };
-     const db = await this.db();
+
+    const db = await this.db();
     const { ops: insertedSales } = await db.collection(this.table).insertOne(query);
+
     return this.serializer.All(insertedSales[0]);
+  }
+
+  async Update({ id, newValues }) {
+    const query = ({ _id: ObjectID(id) });
+    const values = ({ $set: { itensSold: newValues } });
+
+    const db = await this.db();
+    await db.collection(this.table).updateOne(query, values);
   }
 }
 

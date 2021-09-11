@@ -28,6 +28,23 @@ class SalesService {
     return { status: codes.OK, message: foundSale };
   }
 
+  async Update({ id, newValues }) {
+    const foundSale = await this.Sales.FindById(id);
+
+    if (!foundSale) {
+      return errorBuilder({
+        status: codes.UNPROCESSABLE_ENTITY,
+        code: codes.INVALID_DATA,
+        message: messages.INVALID_ID_FORMAT,
+      });
+    }
+
+    await this.Sales.Update({ id, newValues });
+    const newValuesSale = await this.Sales.FindById(id);
+
+    return { status: codes.OK, message: newValuesSale };
+  }
+
   async InsertOne(itensSold) {
       const ids = await this.findProductsFromList(itensSold);  
 
