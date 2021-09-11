@@ -20,6 +20,8 @@ app.post('/products', ProductController.createProduct);
 
 app.put('/products/:id', ProductController.updateProduct);
 
+app.delete('/products/:id', ProductController.excludeProduct);
+
 app.listen(PORT, () => {
   console.log(`Ouvindo na porta ${PORT}`);
 });
