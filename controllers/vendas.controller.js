@@ -37,12 +37,16 @@ const deleteSale = async (req, res) => {
 
 const saleById = async (req, res) => {
   const { id } = req.params;
-  const sales = await getById(id);
-  if (sales === null) {
+  if (!ObjectId.isValid(id)) {
     return res.status(404).json({
       err: { code: 'not_found', message: 'Sale not found' } });
   }
-  return res.status(200).json(sales.venda);
+  const sales = await getById(id);
+  if (sales.status === 404) {
+    const { err } = sales;
+    return res.status(sales.status).json({ err });
+  }
+  return res.status(sales.status).json(sales.venda);
 };
 
 const updateSale = async (req, res) => {

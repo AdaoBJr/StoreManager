@@ -20,7 +20,10 @@ const listById = async (id) => {
   if (!ObjectId.isValid(id)) return false;
 
   const venda = await db.collection('sales').findOne(ObjectId(id));
-  return { status: 200, venda };
+  if (venda) {
+    return { status: 200, venda };
+  }
+  return { status: 404, err: { code: 'not_found', message: 'Sale not found' } };
 };
 
 const deleteSale = async ({ id }) => {
