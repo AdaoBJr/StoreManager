@@ -10,7 +10,10 @@ const { validShortName,
   remove } = require('./controllers/productController');
 
 const { createSale,
-  validQuantityOnSale } = require('./controllers/saleController');
+  validQuantityOnSale,
+  getAllSales,
+  getSaleById,
+  updateSale } = require('./controllers/saleController');
 
 const app = express();
 app.use(bodyParser.json());
@@ -35,3 +38,9 @@ app.put('/products/:id', validShortName, validQuantity, update);
 app.delete('/products/:id', remove);
 
 app.post('/sales', validQuantityOnSale, createSale);
+
+app.get('/sales', getAllSales);
+
+app.get('/sales/:id', getSaleById);
+
+app.put('/sales/:id', validQuantityOnSale, updateSale);

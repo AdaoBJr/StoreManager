@@ -1,16 +1,5 @@
 const model = require('../models/saleModel');
 
-const saless = [
-  {
-      productId: 'd3d32d32d',
-      quantity: '400',
-  },
-  {
-    productId: 'd3d32d32d',
-    quantity: '400',
-},
-];
-
 const validateQuantity = (sale) => {
   const mapcheck = sale.map((item) => {
     if (item.quantity <= 0) return false;
@@ -20,11 +9,20 @@ const validateQuantity = (sale) => {
   const found = mapcheck.every((e) => e === true);
     return found;
 };
-console.log(validateQuantity(saless));
 
 const create = async (sale) => {
   const createSale = await model.create(sale);
   return createSale;
 };
 
-module.exports = { create, validateQuantity };
+const getSaleById = async (sale) => {
+const getSale = await model.getById(sale);
+return getSale;
+};
+
+const updateSale = async (id, sale) => {
+  const product = await model.update(id, sale);
+  return product;
+};
+
+module.exports = { create, validateQuantity, getSaleById, updateSale };

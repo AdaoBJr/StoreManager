@@ -22,7 +22,6 @@ const getById = async (id) => {
 
 const update = async (id, name, quantity) => {
   if (!ObjectId.isValid(id)) return null;
-
   const db = await connectionMongo();
   await db.collection('products')
       .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
