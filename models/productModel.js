@@ -1,22 +1,23 @@
 const { ObjectId } = require('mongodb');
 const mongoConnection = require('./connection');
 
-const getNewproduct = (authorData) => {
+const getNewproduct = async (authorData) => {
     const { _id, name, quantity } = authorData;
-    return {
-      _id,
-      name,
-      quantity,
-    };
-    };
 
-    const findById = async (id) => {
-        if (!ObjectId.isValid(id)) return null;
-        const db = await mongoConnection();
-        const response = await db.collection('products').findOne(ObjectId(id));
-         const { quantity, name } = response;
-         return getNewproduct({ quantity, id, name });
-      };
+    return {
+        _id,
+        name, 
+        quantity,
+    };
+};
+
+const findById = async (id) => {
+    if (!ObjectId.isValid(id)) return null;
+    const db = await mongoConnection();
+    const response = await db.collection('products').findOne(ObjectId(id));
+        const { quantity, name } = response;
+        return getNewproduct({ quantity, id, name });
+};
 
 const findByName = async (name) => {
     const db = await mongoConnection();
@@ -29,8 +30,8 @@ const findByName = async (name) => {
 const getAll = async () => {
     const db = await mongoConnection();
     const response = await db.collection('products').find().toArray();
-     if (!response) return null;
-     return response.map(({ _id, name, quantity }) => getNewproduct({ quantity, _id, name }));
+    if (!response) return null;
+    return response;
 };
 
 const create = async (name, quantity) => mongoConnection()

@@ -5,7 +5,7 @@ const mongoDbUrl = 'mongodb://localhost:27017';
 const url = 'http://localhost:3000';
 const invalidId = 99999;
 
-describe.only('1 - Crie um endpoint para o cadastro de produtos', () => {
+describe('1 - Crie um endpoint para o cadastro de produtos', () => {
   let connection;
   let db;
 
@@ -177,6 +177,7 @@ describe('2 - Crie um endpoint para listar os produtos', () => {
       .then((res) => {
         let { body } = res;
         body = JSON.parse(body);
+
         const firstProductName = body.products[0].name;
         const firstQuantityProduct = body.products[0].quantity;
         const secondProductName = body.products[1].name;

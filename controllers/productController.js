@@ -17,7 +17,6 @@ const create = async (req, res, next) => {
     
     const product = await productSevice
     .create(name, quantity);
-    console.log(product);
     if (product.err) return res.status(422).json(product);
     
     return res.status(201).json(product);
@@ -26,16 +25,18 @@ const create = async (req, res, next) => {
 const getAll = async (req, res) => {
     const product = await productSevice.getAll();
     console.log(product);
+    if (product.err) return res.status(422).json(product);
   
-    return res.status(200).json(product);
+    return res.status(200).json({ products: product });
   };
 
-  const findById = async (req, res, next) => {
+  const findById = async (req, res) => {
     const { id } = req.params;
   
     const product = await productSevice.findById(id);
+    if (product.err) return res.status(422).json(product);
   
-    if (product.error) return next(product.error);
+    // if (product.error) return next(product.error);
   
     res.status(200).json(product);
   };
