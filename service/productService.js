@@ -47,7 +47,6 @@ const create = async ({ name, quantity }) => {
 };
 
 const getById = async (id) => {
-  // const existingProdId = await productModel.findById(id);
   if (!ObjectId.isValid(id)) { 
     return { code: 'invalid_data', message: 'Wrong id format' }; 
   }

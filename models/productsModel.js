@@ -8,7 +8,7 @@ const findByName = async (name) => {
   return productCollection;  
 };
 
-const findById = async (id) => {
+/* const findById = async (id) => {
   if (!ObjectId.isValid(id)) return null;
   const productsCollection = await mongoConnection.getConnection()
   .then((db) => db.collection('products'));
@@ -17,7 +17,7 @@ const findById = async (id) => {
 
   return product;
 };
-
+ */
 const create = async ({ name, quantity }) => {
   const productsCollection = await mongoConnection.getConnection()
     .then((db) => db.collection('products'));
@@ -48,5 +48,5 @@ module.exports = {
   findByName,
   getAll,
   getById,
-  findById,
+  /* findById, */
 };
