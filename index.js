@@ -19,6 +19,7 @@ app.get('/', (_request, response) => {
 app.post('/products', productsController.create);
 app.get('/products', productsController.findAll);
 app.get('/products/:id', productsController.findById);
+app.put('/products/:id', productsController.updateById);
 
 // error
 app.use(errorMiddleware);
