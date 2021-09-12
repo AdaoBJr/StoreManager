@@ -32,4 +32,12 @@ const create = async (name, quantity) => {
     return productModel.create(name, quantity);
   };
 
-module.exports = { create, getAll, findById };
+  const updateProduct = async (id, name, quantity) => {
+    const existingProduct = await findById(id);
+    // console.log(existingProduct, 'euaqi');
+    if (existingProduct.err) return existingProduct;
+
+    return productModel.updateProduct(id, name, quantity);
+  };
+
+module.exports = { create, getAll, findById, updateProduct };

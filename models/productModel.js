@@ -16,7 +16,10 @@ const findById = async (id) => {
     const db = await mongoConnection();
     const response = await db.collection('products').findOne(ObjectId(id));
         const { quantity, name } = response;
-        return getNewproduct({ quantity, id, name });
+
+        const data = getNewproduct({ quantity, id, name });
+        console.log(data);
+        return data;
 };
 
 const findByName = async (name) => {
@@ -38,9 +41,25 @@ const create = async (name, quantity) => mongoConnection()
 .then((db) => db.collection('products').insertOne({ name, quantity }))
 .then((result) => getNewproduct({ _id: result.insertedId, name, quantity }));
 
+const updateProduct = async (id, name, quantity) => {
+    const db = await mongoConnection();
+    const response = await db.collection('products').updateOne({
+        _id: id, 
+    }, {
+        $set: {
+        name, 
+        quantity,
+        },
+    });
+
+    // console.log(response, name, quantity, id, 'resposta');
+    return response;
+};
+
 module.exports = {
   create,
   findByName,
   getAll,
   findById,
+  updateProduct,
 };

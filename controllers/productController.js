@@ -41,8 +41,31 @@ const getAll = async (req, res) => {
     res.status(200).json(product);
   };
 
+  const updateProduct = async (req, res, next) => {
+    const { id } = req.params;
+    const { error } = Joi.object({
+      name: Joi.string().not().empty()
+      .min(5)
+      .required(),
+      quantity: Joi.number().integer().not().empty()
+.min(1)
+      .required(),
+    })
+      .validate(req.body);
+    if (error) return next(error);
+    
+  const { name, quantity } = req.body;
+  
+  const product = await productSevice
+  .updateProduct(id, name, quantity);
+  if (product.err) return res.status(422).json(product);
+  
+  return res.status(200).json(product); 
+};
+
 module.exports = {
   create,
   getAll,
   findById,
+  updateProduct,
 };
