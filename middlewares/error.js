@@ -9,5 +9,5 @@ module.exports = (err, _req, res, _next) => {
     const { code, message, statusCode } = err;
     return res.status(statusCode).json({ err: { code, message } });
   } 
-    return res.status(500).json({ message: 'Matrix Error!' });
+    return res.status(500).json({ code: 'Internal_Server_Error', message: err.message });
 };
