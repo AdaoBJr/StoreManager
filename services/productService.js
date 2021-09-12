@@ -8,15 +8,15 @@ const addValidation = async (name, quantity) => {
     const existName = await productModel.exist(name);
     
     if (existName !== null) {
-        return 'Product already';
+        return 'Product already exists';
     }
 
     if (quantity <= 0) {
-        return '"quatinty" must be larger than or equal to 1';
+        return '"quatity" must be larger than or equal to 1';
     }
 
     if (typeof (quantity) === 'string') {
-        return '"quatinty" must be a number';
+        return '"quatity" must be a number';
     }
     const create = await productModel.add(name, quantity);
     return create;
