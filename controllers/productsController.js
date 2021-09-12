@@ -1,5 +1,6 @@
 const rescue = require('express-rescue');
 const Joi = require('joi');
+const CustomError = require('../helpers/CustomError');
 const productsServer = require('../services/productsService');
 
 const create = rescue(async (req, res, next) => {
@@ -24,6 +25,26 @@ const findAll = rescue(async (req, res, _next) => {
   res.status(200).json({ products });
 });
 
-module.exports = {
-  create, findAll,
-};
+const findById = rescue(async (req, res) => {
+  const { id } = req.params;
+
+  const { error } = Joi.object({ 
+    id: Joi
+      .string()
+      .hex()
+      .length(24)
+      .not()
+      .empty()
+      .required(),
+  }).validate(req.params);
+
+  if (error) {
+    throw new CustomError('invalid_data', 'Wrong id format', 422);
+  } 
+
+  const product = await productsServer.findById({ id });
+
+  res.status(200).json({ ...product });
+});
+
+module.exports = { create, findAll, findById };
