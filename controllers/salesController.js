@@ -14,6 +14,47 @@ async function validateQuantity(req, res, next) {
   next();
 }
 
+async function validateId(req, res, next) {
+  const { id } = req.params;
+  const saleId = await salesService.isValidId(id);
+
+  if (!saleId) {
+    return res.status(422).json({
+      err: { 
+        code: 'invalid_data', 
+        message: 'Wrong sale ID format' } });
+  }
+
+  if (saleId === null) {
+    return res.status(404).json({
+      err: { 
+        code: 'not_found', 
+        message: 'Sale not found', 
+      } });
+  }
+
+  res.status(200).json(saleId);
+
+  next();
+}
+
+function updateInventory(req, res, next) {
+  const sales = req.body;
+
+  sales.forEach((sale) => {
+    if (!salesService.updateInventory(sale)) {
+      return res.status(404).json({
+        err: { 
+          code: 'stock_problem', 
+          message: 'Such amount is not permitted to sell', 
+        } });
+      }
+      salesService.updateInventory(sale);
+    });
+
+  next();
+}
+
 async function create(req, res) {
   const sales = req.body;
 
@@ -33,26 +74,18 @@ async function getAll(_req, res) {
 }
 
 async function getById(req, res) {
-  try {
-    const { id } = req.params;
-    const sale = await salesService.getById(id);
-  
-    if (sale === null) {
-      return res.status(404).json({
-        err: { 
-          code: 'not_found', 
-          message: 'Sale not found', 
-        } });
-    }
+  const { id } = req.params;
+  const sale = await salesService.getById(id);
 
-    return res.status(200).json(sale);
-  } catch (error) {
+  if (sale === null) {
     return res.status(404).json({
       err: { 
         code: 'not_found', 
         message: 'Sale not found', 
       } });
   }
+
+  return res.status(200).json(sale);
 }
 
 async function update(req, res) {
@@ -67,10 +100,18 @@ async function update(req, res) {
   return res.status(200).json(updateSale);
 }
 
+async function exclude(req, _res) {
+  const { id } = req.params;
+  await salesService.exclude(id);
+}
+
 module.exports = {
   validateQuantity,
+  updateInventory,
+  validateId,
   create,
   getAll,
   getById,
   update,
+  exclude,
 };

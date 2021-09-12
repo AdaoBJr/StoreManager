@@ -9,6 +9,14 @@ function isValidQuantity(sales) {
   return true;
 }
 
+async function isValidId(id) {
+  const saleId = await salesModel.getById(id);
+
+  if (!saleId) return false;
+
+  return saleId;
+}
+
 async function create(sales) {
   const sale = await salesModel.create(sales);
 
@@ -33,10 +41,31 @@ async function update(id, itensSold) {
   return updateSale;
 }
 
+async function exclude(id) {
+  const sale = await salesModel.exclude(id);
+
+  return sale;
+}
+
+async function updateInventory({ id, quantity }) {
+  const updateProduct = await salesModel.updateInventory(id, -quantity);
+
+  updateProduct.forEach((product) => {
+    if (product.quantity < 0 || product.quantity < quantity) {
+      return false;
+    }
+  });
+
+  return updateProduct;
+}
+
 module.exports = {
   isValidQuantity,
+  isValidId,
   create,
   getAll,
   getById,
   update,
+  exclude,
+  updateInventory,
 };

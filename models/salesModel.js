@@ -18,7 +18,7 @@ async function getAll() {
 async function getById(id) {
   if (!ObjectId.isValid(id)) return null;
 
-  const db = connection();
+  const db = await connection();
   const sale = await db.collection('sales').findOne(ObjectId(id));
 
   return sale;
@@ -34,9 +34,26 @@ async function update(id, itensSold) {
   return { _id: id, itensSold };
 }
 
+async function exclude(id) {
+  if (!ObjectId.isValid(id)) return null;
+
+  const db = await connection();
+  await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+}
+
+async function updateInventory(id, quantity) {
+  if (!ObjectId.isValid) return null;
+
+  const db = await connection();
+  await db.collection('products')
+    .updateOne({ _id: ObjectId(id) }, { $inc: { quantity } });
+}
+
 module.exports = {
   create,
   getById,
   getAll,
   update,
+  exclude,
+  updateInventory,
 };
