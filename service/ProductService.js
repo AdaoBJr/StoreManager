@@ -1,16 +1,14 @@
-const { errorBuilder } = require('../middleware/errorMiddleware');
-const Product = require('../model/Product');
-const codes = require('../schemas/codes');
-const messages = require('../schemas/messages');
-
 class ProductService {
-  constructor() {
-    this.Product = new Product();
+  constructor(Product, errorBuilder, codes, messages) {
+    this.Product = Product;
+    this.errorBuilder = errorBuilder;
+    this.codes = codes;
+    this.messages = messages;
   }
 
   async FindAll() {
     const productList = await this.Product.FindAll();
-    return { status: codes.OK, message: { products: productList } };
+    return { status: this.codes.OK, message: { products: productList } };
   }
 
   async FindBy(value, id = false) {
@@ -20,60 +18,59 @@ class ProductService {
     } else {
       product = await this.Product.FindByName(value);
     }
-
     if (!product) {
-      return errorBuilder({
-        status: codes.UNPROCESSABLE_ENTITY,
-        code: codes.INVALID_DATA,
-        message: messages.INVALID_ID_FORMAT,
+      return this.errorBuilder({
+        status: this.codes.UNPROCESSABLE_ENTITY,
+        code: this.codes.INVALID_DATA,
+        message: this.messages.INVALID_ID_FORMAT,
       });
     }
-    return { status: codes.OK, message: product };
+    return { status: this.codes.OK, message: product };
   }
 
   async InsertOne({ name, quantity }) {
     const product = { name, quantity };
     const foundElement = await this.Product.FindByName(name);
     if (foundElement) {
-      return errorBuilder({
-        status: codes.UNPROCESSABLE_ENTITY,
-        code: codes.INVALID_DATA, 
-        message: messages.INVALID_NAME_ALREADY_EXISTS,   
+      return this.errorBuilder({
+        status: this.codes.UNPROCESSABLE_ENTITY,
+        code: this.codes.INVALID_DATA, 
+        message: this.messages.INVALID_NAME_ALREADY_EXISTS,   
       });
     }
       const modelRes = await this.Product.InsertOne(product);
-      return { status: codes.CREATED, message: modelRes };
+      return { status: this.codes.CREATED, message: modelRes };
   }
 
   async Update({ id, name, quantity }) {
     const foundProduct = await this.Product.FindById(id);
 
     if (!foundProduct) {
-      return errorBuilder({
-        status: codes.UNPROCESSABLE_ENTITY,
-        code: codes.INVALID_DATA,
-        message: messages.INVALID_ID_FORMAT,
+      return this.errorBuilder({
+        status: this.codes.UNPROCESSABLE_ENTITY,
+        code: this.codes.INVALID_DATA,
+        message: this.messages.INVALID_ID_FORMAT,
       });
     }
 
     const productToBeUpdated = { id, name, quantity };
     await this.Product.Update(productToBeUpdated);
     const newProduct = await this.Product.FindById(id);
-    return { status: codes.OK, message: newProduct };
+    return { status: this.codes.OK, message: newProduct };
   }
 
   async Delete(id) {
     const foundProduct = await this.Product.FindById(id);
 
     if (!foundProduct) {
-      return errorBuilder({
-        status: codes.UNPROCESSABLE_ENTITY,
-        code: codes.INVALID_DATA,
-        message: messages.INVALID_ID_FORMAT,
+      return this.errorBuilder({
+        status: this.codes.UNPROCESSABLE_ENTITY,
+        code: this.codes.INVALID_DATA,
+        message: this.messages.INVALID_ID_FORMAT,
       });
     }
     await this.Product.Delete(id);
-    return { status: codes.OK, message: foundProduct };
+    return { status: this.codes.OK, message: foundProduct };
   }
 }
 

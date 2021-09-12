@@ -1,25 +1,20 @@
-const { ObjectID } = require('mongodb');   
-const connection = require('../infraestructure/database/connection');
-const ProductSerializer = require('./Serializer/ProductSerializer');
-
 class Product {
-  constructor() {
+  constructor(connection, serializer, objectID) {
     this.db = connection;
-    this.serializer = new ProductSerializer();
+    this.serializer = serializer;
     this.table = 'products';
+    this.ObjectID = objectID;
   }
 
   async FindAll() {
-    const db = await this.db();
-    const allList = await db.collection(this.table).find().toArray();
+    const allList = await this.db.collection(this.table).find().toArray();
     return allList.map((product) => this.serializer.All(product));
   }
 
   async FindById(id) {
     try {
-      const query = { _id: ObjectID(id) };
-      const db = await this.db();
-      const foundProduct = await db.collection(this.table).findOne(query);
+      const query = { _id: this.ObjectID(id) };
+      const foundProduct = await this.db.collection(this.table).findOne(query);
       if (!foundProduct) return null;
       return this.serializer.All(foundProduct);
     } catch (err) {
@@ -29,8 +24,8 @@ class Product {
 
   async FindByName(name) {
       const query = { name };
-      const db = await this.db();
-      const foundProduct = await db.collection(this.table).findOne(query);
+
+      const foundProduct = await this.db.collection(this.table).findOne(query);
       if (foundProduct) {
         return this.serializer.All(foundProduct);
       }
@@ -39,22 +34,21 @@ class Product {
 
   async InsertOne({ name, quantity }) {
     const product = { name, quantity };
-    const db = await this.db();
-    const result = await db.collection(this.table).insertOne(product);
+    const result = await this.db.collection(this.table).insertOne(product);
     return this.serializer.All(result.ops[0]);
   }
 
   async Update({ id, name, quantity }) {
-    const query = { _id: ObjectID(id) };
+    const query = { _id: this.ObjectID(id) };
     const newValues = { $set: { name, quantity } };
-    const db = await this.db();
-    await db.collection(this.table).updateOne(query, newValues);
+
+    await this.db.collection(this.table).updateOne(query, newValues);
   }
 
   async Delete(id) {
-    const query = { _id: ObjectID(id) };
-    const db = await this.db();
-    await db.collection(this.table).deleteOne(query);
+    const query = { _id: this.ObjectID(id) };
+
+    await this.db.collection(this.table).deleteOne(query);
   }
 }
 

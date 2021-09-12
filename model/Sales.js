@@ -1,16 +1,13 @@
-const { ObjectID } = require('mongodb');   
-const connection = require('../infraestructure/database/connection');
 const { notEnoughItems } = require('../schemas/salesVal');
 const { updateFromPreviousValues, updateValuesFromDelete } = require('./helper/salesHelper');
-const Product = require('./Product');
-const SalesSerializer = require('./Serializer/SalesSerializer');
 
 class Sales {
-  constructor() {
+  constructor(connection, product, serializer, objectId) {
     this.db = connection;
     this.table = 'sales';
-    this.Products = new Product();
-    this.serializer = new SalesSerializer();
+    this.Products = product;
+    this.serializer = serializer;
+    this.objectId = objectId;
   }
 
   async updateStock(sales) {
@@ -30,17 +27,15 @@ class Sales {
   }
 
   async GetAll() {
-   const db = await this.db();
-   const salesList = await db.collection(this.table).find().toArray();
+   const salesList = await this.db.collection(this.table).find().toArray();
 
    return salesList.map((sale) => this.serializer.All(sale));
   }
 
   async FindById(id) {
     try {
-      const query = { _id: ObjectID(id) };
-      const db = await this.db();
-      const foundSale = await db.collection(this.table).findOne(query);
+      const query = { _id: this.objectId(id) };
+      const foundSale = await this.db.collection(this.table).findOne(query);
   
       if (!foundSale) return null;
   
@@ -56,8 +51,7 @@ class Sales {
 
       await this.updateStock(sales);
   
-      const db = await this.db();
-      const { ops: insertedSales } = await db.collection(this.table).insertOne(query);
+      const { ops: insertedSales } = await this.db.collection(this.table).insertOne(query);
   
       return this.serializer.All(insertedSales[0]);
     } catch (e) {
@@ -67,13 +61,12 @@ class Sales {
 
   async Update({ id, newValues }, foundSale) {
     try {
-      const query = ({ _id: ObjectID(id) });
+      const query = ({ _id: this.objectId(id) });
       const values = ({ $set: { itensSold: newValues } });
       const updateValues = updateFromPreviousValues(newValues, foundSale);
       await this.updateStock(updateValues);
   
-      const db = await this.db();
-      await db.collection(this.table).updateOne(query, values);
+      await this.db.collection(this.table).updateOne(query, values);
     } catch (e) {
       return { code: e.message };
     }
@@ -81,12 +74,11 @@ class Sales {
 
   async Delete(id, sales) {
     try {
-      const query = { _id: ObjectID(id) };
+      const query = { _id: this.objectId(id) };
       const newValues = updateValuesFromDelete(sales);
       await this.updateStock(newValues);
       
-      const db = await this.db();
-      await db.collection(this.table).deleteOne(query);
+      await this.db.collection(this.table).deleteOne(query);
     } catch (e) {
       return { code: e.message };
     }

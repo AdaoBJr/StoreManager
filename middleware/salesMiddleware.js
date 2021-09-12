@@ -1,4 +1,4 @@
-const { salesQuantityValidation } = require('../schemas/salesVal');
+const { salesQuantityValidation } = require('../schemas');
 const { errorBuilder } = require('./errorMiddleware');
 
 const salesValidation = (req, _res, next) => {

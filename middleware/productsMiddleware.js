@@ -1,4 +1,4 @@
-const { nameValidation, quantityValidation } = require('../schemas/productVal');
+const { nameValidation, quantityValidation } = require('../schemas');
 const { errorBuilder } = require('./errorMiddleware');
 
 const validateName = (req, _res, next) => {
