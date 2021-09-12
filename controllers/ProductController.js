@@ -51,17 +51,23 @@ const updateProduct = async (req, res) => {
   res.status(StatusCodes.OK).json({ _id: id, name, quantity });
 };
 
-// Router.put('/:id', async (req, res) => {
-//   const { id } = req.params;
-//   const { name, quantity } = req.body;
-  
-//   await ProductService.update(id, name, quantity);
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
 
-//   res.status(StatusCodes.NO_CONTENT).end();
+  const { code, message } = await ProductService.deleteProduct(id);
+
+  if (message) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
+    .json({ err: { code, message } });
+  }
+
+  res.status(StatusCodes.OK).json({ _id: id });
+};
 
 module.exports = { 
   create,
   getAll,
   findById,
   updateProduct,
+  deleteProduct,
  };
