@@ -1,4 +1,4 @@
-const { create, findByName } = require('../4models/product_model');
+const { create, findByName, getAll, findByID } = require('../4models/product_model');
 
 const validaName = (name) => (name.length < 6);
 const validaQuantity = (quantity) => (quantity <= 0);
@@ -29,6 +29,14 @@ const createproducts = async (name, quantity) => {
   }
 };
 
+const showProductsService = async (id) => {
+  if (id) {
+    return findByID(id);
+  }
+  return { products: await getAll() };
+};
+
 module.exports = {
   createproducts,
+  showProductsService,
 };
