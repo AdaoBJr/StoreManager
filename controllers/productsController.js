@@ -3,7 +3,7 @@ const Joi = require('joi');
 const CustomError = require('../helpers/CustomError');
 const productsServer = require('../services/productsService');
 
-const create = rescue(async (req, res, next) => {
+const create = rescue(async (req, res) => {
   const { name, quantity } = req.body;
 
   const { error } = Joi.object({
@@ -12,7 +12,9 @@ const create = rescue(async (req, res, next) => {
     quantity: Joi.number().min(1).not().empty(),
   }).validate(req.body);
 
-  if (error) return next(error);
+  if (error) {
+    throw new CustomError('invalid_data', error.details[0].message, 422);
+  }
 
   const response = await productsServer.create({ name, quantity });
 
