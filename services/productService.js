@@ -12,11 +12,11 @@ const addValidation = async (name, quantity) => {
     }
 
     if (quantity <= 0) {
-        return '"quatity" must be larger than or equal to 1';
+        return '"quantity" must be larger than or equal to 1';
     }
 
     if (typeof (quantity) === 'string') {
-        return '"quatity" must be a number';
+        return '"quantity" must be a number';
     }
     const create = await productModel.add(name, quantity);
     return create;
