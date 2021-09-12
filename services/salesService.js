@@ -1,16 +1,13 @@
-const { createSales, update, findById, excluse } = require('../models/salesModel');
+const { createSales, update, findById, excluse, getAll } = require('../models/salesModel');
 const { updateDelete } = require('../models/productModel');
 
-const { errorBusiness } = require('../helpers/errors');
+const { errorBusiness, notFound } = require('../helpers/errors');
 
-// const filterById = async (id) => {
-//   const products = await getById(id);
-//   if (!products) {
-//     return errorBusiness('Wrong id format');
-//   }
-
-//   return products;
-// };
+const getById = async (id) => {
+  const sale = await findById(id);
+  if (!sale) return notFound('Sale not found'); 
+  return sale;
+};
 
 const createServiceSales = async (sales) => {
   const response = await createSales(sales);
@@ -27,8 +24,9 @@ const excludeService = async (id) => {
 
 module.exports = {
   createServiceSales,
-//   getAll,
+  getAll,
 //   filterById,
+  getById,
   update,
   excludeService,
 };

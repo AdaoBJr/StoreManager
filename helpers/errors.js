@@ -8,4 +8,5 @@ module.exports = {
   errorInternal: (message) => error('invalid_data', message),
   errorBusiness: (message) => error('invalid_data', message),
   errorNotFound: (message) => error('not_found', message),
+  notFound: (message) => error('not_found', message),
 };

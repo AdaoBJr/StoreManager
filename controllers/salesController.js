@@ -2,7 +2,8 @@ const express = require('express');
 const rescue = require('express-rescue');
 const validateSales = require('../middlewares/validateSales');
 
-const { createServiceSales, update, excludeService } = require('../services/salesService');
+const { createServiceSales,
+  update, excludeService, getAll, getById } = require('../services/salesService');
 // const { validateProductInput } = require('../middlewares/validateProducts');
 
 const routerSales = express.Router();
@@ -21,20 +22,22 @@ routerSales.post('/', validateSales, rescue(async (req, res, _next) => {
   return res.status(200).json(newSales);
 }));
 
-// routerSales.get('/:id', rescue(async (req, res, next) => {
-//   const { id } = req.params;
-//   const products = await filterById(id);
-//   if (products.isError) {
-//     return next(products);
-//   }
-
-//   return res.status(STATUS_CODE_OK).json({ products });
-// }));
-
-// routerSales.get('/', rescue(async (_req, res) => {
-//   const products = await getAll();
-//   return res.status(STATUS_CODE_OK).json({ products });
-// }));
+routerSales.get(
+  '/:id',
+  rescue(async (req, res, next) => {
+    const { id } = req.params;
+    const sale = await getById(id);
+    if (sale.isError) return next(sale);
+    return res.status(200).json(sale);
+  }),
+);
+routerSales.get(
+  '/',
+  rescue(async (_req, res) => {
+    const saleList = await getAll();
+    res.status(200).json({ sales: saleList });
+  }),
+);
 
 routerSales.put(
   '/:id', validateSales,
@@ -45,7 +48,7 @@ routerSales.put(
   }),
 );
 
-routerSales.delete('/:id', validateSales,
+routerSales.delete('/:id',
   rescue(async (req, res, next) => {
     const { id } = req.params;
     const sale = await excludeService(id);

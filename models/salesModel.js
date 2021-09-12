@@ -3,12 +3,10 @@ const conexao = require('./conection');
 
 // const { getAll } = require('./productModel');
 
-// const getAll = async () => {
-//   const conect = await conexao();
-//   const db = await conect.collection('products').find().toArray();
-//   // console.log(db);
-//   return db;
-// };
+const getAll = async () => {
+  const db = await conexao();
+  return db.collection('sales').find().toArray();
+};
 
 // const getById = async (id) => {
 //   if (!ObjectId.isValid(id)) return null;
@@ -60,7 +58,7 @@ const excluse = async (id) => {
 module.exports = {
   createSales,
   // getByName,
-  // getAll,
+  getAll,
   // getById,
   update,
   excluse,
