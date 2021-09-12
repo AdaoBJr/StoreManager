@@ -66,6 +66,21 @@ const allValidator = (name, quantity) => {
   return false;
 };
 
+const nameQtValidator = (name, quantity) => {
+  const invalidName = nameValidator(name);
+  const invalidQt = quantityValidator(quantity);
+
+  if (invalidName) {
+    return invalidName;
+  }
+  if (invalidQt) {
+    return invalidQt;
+  }
+
+  return false;
+};
+
 module.exports = {
  allValidator,
+ nameQtValidator,
 };

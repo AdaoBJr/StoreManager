@@ -2,6 +2,7 @@ const {
   servCreateProduct,
   servListProducts,
   servListByID,
+  servUpdater,
  } = require('../services/productService');
 
 const contCreateProduct = async (req, res) => {
@@ -11,6 +12,17 @@ const contCreateProduct = async (req, res) => {
       return res.status(result.code).json({ ...result });
     }
  return res.status(result.code).json(result.prod);
+};
+
+const contUpdater = async (req, res) => {
+  const { name, quantity } = req.body;
+  const { id } = req.params;
+
+  const result = await servUpdater(id, name, quantity);
+  if (result.err) {
+    return res.status(result.code).json({ ...result });
+  }
+return res.status(result.code).json(result.prod);
 };
 
 const contListProducts = async (req, res) => {
@@ -31,4 +43,5 @@ module.exports = {
   contCreateProduct,
   contListProducts,
   contListByID,
+  contUpdater,
 };

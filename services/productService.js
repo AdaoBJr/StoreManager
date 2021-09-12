@@ -2,8 +2,9 @@ const {
   modelCreateProduct,
   modelListProducts,
   modelListById,
+  modelUpdater,
 } = require('../models/productModel');
-const { allValidator } = require('../middleware/product');
+const { allValidator, nameQtValidator } = require('../middleware/product');
 
 const servCreateProduct = async (name, quantity) => {
   const invalidator = await allValidator(name, quantity);
@@ -11,6 +12,14 @@ const servCreateProduct = async (name, quantity) => {
     return invalidator;
   }
   return modelCreateProduct(name, quantity);
+};
+
+const servUpdater = async (id, name, quantity) => {
+  const invalidator = await nameQtValidator(name, quantity);
+  if (invalidator) {
+    return invalidator;
+  }
+  return modelUpdater(id, name, quantity);
 };
 
 const servListByID = async (id) => { 
@@ -28,4 +37,5 @@ module.exports = {
   servCreateProduct,
   servListProducts,
   servListByID,
+  servUpdater,
 };
