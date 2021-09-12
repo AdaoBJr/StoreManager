@@ -33,6 +33,8 @@ app.get('/sales', SalesController.getAll);
 
 app.get('/sales/:id', SalesController.getById);
 
+app.put('/sales/:id', SalesController.update);
+
 app.use(errorMiddleware);
 
 app.listen(PORT, () => {

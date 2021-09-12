@@ -62,7 +62,6 @@ const getById = rescue(async (req, res, _next) => {
     });
   }
   const response = await SalesService.getById(id);
-  console.log(response);
   if (!response) {
     return res.status(404).json({
       err: {
@@ -74,8 +73,28 @@ const getById = rescue(async (req, res, _next) => {
   return res.status(200).json(response);
 });
 
+const update = rescue(async (req, res, _next) => {
+  const { id } = req.params;
+  const sale = req.body;
+  const validation = await verifySalesArray(sale);
+  const verify = validation.every(isTrue);
+  if (!verify) {
+    return res.status(422).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong product ID or invalid quantity',
+      },
+    });
+  }
+  await SalesService.update(id, sale);
+
+  const newSale = await SalesService.getById(id);
+  return res.status(200).json(newSale);
+});
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };
