@@ -2,7 +2,7 @@ const express = require('express');
 const rescue = require('express-rescue');
 const validateSales = require('../middlewares/validateSales');
 
-const { createServiceSales, update } = require('../services/salesService');
+const { createServiceSales, update, excludeService } = require('../services/salesService');
 // const { validateProductInput } = require('../middlewares/validateProducts');
 
 const routerSales = express.Router();
@@ -42,17 +42,12 @@ routerSales.put('/:id', validateSales, rescue(async (req, res) => {
   return res.status(200).json(result);
 }));
 
-// routerSales.delete('/:id', rescue(async (req, res, next) => {
-//   const { id } = req.params;
-//   const products = await excludeService(id);
-
-//   if (products.isError) {
-//     return next(products);
-//   }
-
-//   return res.status(STATUS_CODE_OK).json(products);
-// }));
-
-// routerSales.use(validateProductInput);
+routerSales.delete('/:id',
+  rescue(async (req, res, next) => {
+    const { id } = req.params;
+    const sale = await excludeService(id);
+    if (sale.isError) return next(sale);
+    return res.status(200).json(sale);
+  }));
 
 module.exports = routerSales;

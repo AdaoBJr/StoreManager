@@ -23,6 +23,12 @@ const conexao = require('./conection');
 //   return db;
 // };
 
+const findById = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await conexao();
+  return db.collection('sales').findOne(ObjectId(id));
+};
+
 const createSales = async (sales) => {
   const conect = await conexao();
 
@@ -43,25 +49,19 @@ const update = async (id, newSales) => {
   return db;
 };
 
-// const exclude = async (id) => {
-//   if (!ObjectId.isValid(id)) return null;
-
-//   const product = await getById(id);
-
-//   if (!product) return null;
-
-//   const conect = await conexao();
-//   await conect.collection('products')
-//     .deleteOne({ _id: ObjectId(id) });
-  
-//   return product;
-// };
-
+const excluse = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await conexao();
+  const sales = await findById(id);
+  await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+  return sales;
+};
 module.exports = {
   createSales,
   // getByName,
   // getAll,
   // getById,
   update,
-  // exclude,
+  excluse,
+  findById,
 };
