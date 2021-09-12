@@ -31,7 +31,7 @@ const remove = async ({ id }) => {
   const product = await productsModel.findById({ id });
 
   if (!product) {
-    return false;
+    return { message: 'product not memoved' };
   }
   
   productsModel.remove({ id });
