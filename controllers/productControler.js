@@ -1,5 +1,6 @@
 const express = require('express');
 const rescue = require('express-rescue');
+// dd
 
 const { createService,
   getAll, filterById, update, excludeService } = require('../services/productService');
@@ -39,8 +40,8 @@ routerProducts.get('/:id', rescue(async (req, res, next) => {
 }));
 
 routerProducts.get('/', rescue(async (_req, res) => {
-  const listProducts = await getAll();
-  return res.status(STATUS_CODE_OK).json({ products: listProducts });
+  const products = await getAll();
+  return res.status(STATUS_CODE_OK).json({ products });
 }));
 
 routerProducts.put('/:id', validateProductInput, rescue(async (req, res) => {

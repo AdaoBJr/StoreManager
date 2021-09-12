@@ -48,6 +48,19 @@ const exclude = async (id) => {
   return product;
 };
 
+const checkSales = async ({ productId, quantity }) => {
+  const conect = await conexao();
+  
+  const result = await conect.collection('products').findOne(
+    {
+      _id: ObjectId(productId),
+      quantity: { $gte: +quantity },
+    },
+  );
+  // console.log(result);
+  return result;
+};
+
 module.exports = {
   create,
   getByName,
@@ -55,4 +68,5 @@ module.exports = {
   getById,
   update,
   exclude,
+  checkSales,
 };

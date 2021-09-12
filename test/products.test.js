@@ -223,6 +223,7 @@ describe('2 - Crie um endpoint para listar os produtos', () => {
       .expect('status', 200)
       .then((secondResponse) => {
         const { json } = secondResponse;
+        console.log(json)
         const productName = json.name;
         const quantityProduct = json.quantity;
         expect(productName).toEqual('Armadura do Homem de Ferro');

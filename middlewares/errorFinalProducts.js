@@ -2,6 +2,7 @@ const STATUS_CODE_ANAUTORAZED = 422;
 // const STATUS_CODE_NOT_FOUND = 404;
 
 const errorMiddleProducts = (err, _req, res, _next) => {
+  console.log(err);
   if (err.isError) {
     const errorBussines = {
       code: err.code,
