@@ -62,7 +62,6 @@ const deleteById = async (id) => {
     const deleted = await productsCollection.deleteOne(
       { _id: new ObjectID(id) },
     );
-    console.log(deleted);
     return deleted;
   } catch (err) {
     return err;

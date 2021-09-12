@@ -92,8 +92,26 @@ const update = rescue(async (req, res, _next) => {
   return res.status(200).json(newSale);
 });
 
+const deleteById = rescue(async (req, res, _next) => {
+  const { id } = req.params;
+  if (!ObjectID.isValid(id)) {
+    return res.status(422).json({ err: { code: 'invalid_data', message: 'Wrong sale ID format' },
+    });
+  }
+  const verifyExistence = await SalesService.getById(id);
+
+  if (!verifyExistence) {
+    return res.status(422).json({
+      err: { code: 'invalid_data', message: 'Wrong sale ID format' },
+    });
+  }
+  await SalesService.deleteById(id);
+  return res.status(200).json(verifyExistence);
+});
+
 module.exports = {
   create,
+  deleteById,
   getAll,
   getById,
   update,
