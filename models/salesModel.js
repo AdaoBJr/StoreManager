@@ -8,19 +8,6 @@ const getAll = async () => {
   return db.collection('sales').find().toArray();
 };
 
-// const getById = async (id) => {
-//   if (!ObjectId.isValid(id)) return null;
-//   const conect = await conexao();
-//   const db = await conect.collection('products').findOne(ObjectId(id));
-//   return db;
-// };
-
-// const getByName = async (name) => {
-//   const conect = await conexao();
-//   const db = await conect.collection('products').findOne({ name });
-//   return db;
-// };
-
 const findById = async (id) => {
   if (!ObjectId.isValid(id)) return null;
   const db = await conexao();

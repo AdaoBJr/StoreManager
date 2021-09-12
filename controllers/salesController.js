@@ -11,8 +11,10 @@ const routerSales = express.Router();
 // const STATUS_CODE_OK = 200;
 // const STATUS_CODE_CREATE = 201;
 
-routerSales.post('/', validateSales, rescue(async (req, res, _next) => {
+routerSales.post('/', validateSales, rescue(async (req, res, next) => {
   const response = await createServiceSales(req.body);
+
+  if (response.isError) return next(response);
 
   const newSales = {
     _id: response.insertedId,
