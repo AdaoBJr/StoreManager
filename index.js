@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const ProductController = require('./controllers/productController');
+const SalesController = require('./controllers/saleController');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.post('/products/', ProductController.create);
 app.put('/products/:id', ProductController.update);
 app.delete('/products/:id', ProductController.exclude);
 
+app.post('/sales/', SalesController.create);
 app.listen(PORT, () => {
   console.log(`Ouvindo a porta ${PORT}`);
 }); 
