@@ -25,7 +25,6 @@ const modelListById = async (id) => {
 
   const db = await connection();
   const products = await db.collection('products').findOne(ObjectId(id));
-  console.log(products, 'id');
   return { code: 200, prod: products };
 };
 
@@ -35,9 +34,17 @@ const modelListProducts = async () => {
   return { code: 200, prod: { products } };
 };
 
+const modelEraser = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await connection();
+  const products = await db.collection('products').deleteOne({ _id: new ObjectId(id) });
+  return { code: 200, prod: products };
+};
+
 module.exports = {
   modelCreateProduct,
   modelListProducts,
   modelListById,
   modelUpdater,
+  modelEraser,
 };

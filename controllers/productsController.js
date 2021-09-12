@@ -3,6 +3,7 @@ const {
   servListProducts,
   servListByID,
   servUpdater,
+  servEraser,
  } = require('../services/productService');
 
 const contCreateProduct = async (req, res) => {
@@ -12,6 +13,15 @@ const contCreateProduct = async (req, res) => {
       return res.status(result.code).json({ ...result });
     }
  return res.status(result.code).json(result.prod);
+};
+
+const contEraser = async (req, res) => {
+  const { id } = req.params;
+  const result = await servEraser(id);
+  if (result.err) {
+    return res.status(result.code).json({ ...result });
+  }
+  return res.status(result.code).json(result.prod);
 };
 
 const contUpdater = async (req, res) => {
@@ -44,4 +54,5 @@ module.exports = {
   contListProducts,
   contListByID,
   contUpdater,
+  contEraser,
 };

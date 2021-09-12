@@ -3,6 +3,7 @@ const {
   modelListProducts,
   modelListById,
   modelUpdater,
+  modelEraser,
 } = require('../models/productModel');
 const { allValidator, nameQtValidator } = require('../middleware/product');
 
@@ -12,6 +13,12 @@ const servCreateProduct = async (name, quantity) => {
     return invalidator;
   }
   return modelCreateProduct(name, quantity);
+};
+
+const servEraser = async (id) => {
+  const result = await modelEraser(id);
+  if (!result) return { err: { code: 'invalid_data', message: 'Wrong id format' }, code: 422 };
+  return result;
 };
 
 const servUpdater = async (id, name, quantity) => {
@@ -38,4 +45,5 @@ module.exports = {
   servListProducts,
   servListByID,
   servUpdater,
+  servEraser,
 };
