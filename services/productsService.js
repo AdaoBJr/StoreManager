@@ -22,7 +22,12 @@ const findById = async ({ id }) => {
   return products;
 };
 
-module.exports = { create, findAll, findById };
+const updateById = async ({ id, name, quantity }) => {
+  const response = await productsModel.updateById({ id, name, quantity });
+  return response;
+};
+
+module.exports = { create, findAll, findById, updateById };
 
 // peguei a dica de como criar erro personalizando desse canal:
 // https://www.youtube.com/watch?v=qHfZxpRqxYw
