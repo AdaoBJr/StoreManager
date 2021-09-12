@@ -50,6 +50,7 @@ const exclude = async (id) => {
 
   return excludeProduct;
 };
+
 module.exports = {
   getAll,
   findById,

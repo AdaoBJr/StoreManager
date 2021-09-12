@@ -1,5 +1,15 @@
 const SalesModel = require('../models/SalesModel');
 
+const isQuantValid = (arr) => {
+  const arrValid = arr.map(({ quantity }) => {
+    if (typeof quantity !== 'number' || quantity <= 0) return false;
+
+    return true;
+  });
+
+  return arrValid;
+};
+
 const quantInvalidErr = {
   err: { 
     message: 'Wrong product ID or invalid quantity',
@@ -11,6 +21,13 @@ const idNotExistsErr = {
   err: { 
     message: 'Sale not found',
     code: 'not_found',
+  },
+};
+
+const wrongIdErr = {
+  err: { 
+    message: 'Wrong sale ID format',
+    code: 'invalid_data',
   },
 };
 
@@ -29,13 +46,7 @@ const findById = async (id) => {
 };
 
 const create = async (arr) => {
-  // const { itensSold } = salesCreated;
-
-  const salesQuantValid = arr.map(({ quantity }) => {
-    if (typeof quantity !== 'number' || quantity <= 0) return false;
-
-    return true;
-  });
+  const salesQuantValid = isQuantValid(arr);
 
   const filterSalesValid = salesQuantValid.filter((sales) => sales === false);
 
@@ -48,8 +59,32 @@ const create = async (arr) => {
   return salesCreated;
 };
 
+const update = async (id, arr) => {
+  const salesQuantValid = isQuantValid(arr);
+
+  const filterSalesValid = salesQuantValid.filter((sales) => sales === false);
+
+  if (filterSalesValid.length > 0) {
+    return quantInvalidErr;
+  }
+
+  const updateSales = await SalesModel.update(id, arr);
+
+  return updateSales;
+};
+
+const exclude = async (id) => {
+  const deletedSales = await SalesModel.exclude(id);
+
+  if (!deletedSales) return wrongIdErr;
+
+  return deletedSales;
+};
+
 module.exports = {
   getAll,
   findById,
   create,
+  update,
+  exclude,
 };
