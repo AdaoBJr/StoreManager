@@ -18,6 +18,12 @@ const create = rescue(async (req, res, next) => {
   res.status(201).json(response);
 });
 
+const findAll = rescue(async (req, res, _next) => {
+  const products = await productsServer.findAll();
+
+  res.status(200).json({ products });
+});
+
 module.exports = {
-  create,
+  create, findAll,
 };

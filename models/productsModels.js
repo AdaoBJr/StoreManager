@@ -23,4 +23,13 @@ const findName = async ({ name }) => {
   return product;
 };
 
-module.exports = { create, findName };
+const findAll = async () => {
+  const productsColletion = await mongoConnection.getConnection()
+    .then((db) => db.collection('products'));
+
+  const products = await productsColletion.find().toArray();
+  
+  return products;
+};
+
+module.exports = { create, findName, findAll };

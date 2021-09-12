@@ -11,7 +11,13 @@ const create = async ({ name, quantity }) => {
   return response;
 };
 
-module.exports = { create };
+const findAll = async () => {
+  const products = await productsModel.findAll();
+
+  return products;
+};
+
+module.exports = { create, findAll };
 
 // peguei a dica de como criar erro personalizando desse canal:
 // https://www.youtube.com/watch?v=qHfZxpRqxYw

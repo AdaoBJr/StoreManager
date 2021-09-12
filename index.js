@@ -17,6 +17,7 @@ app.get('/', (_request, response) => {
 
 // rotas
 app.post('/products', productsController.create);
+app.get('/products', productsController.findAll);
 
 // error
 app.use(errorMiddleware);
