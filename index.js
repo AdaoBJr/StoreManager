@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const middlewareErro = require('./middleware/middlewareErro');
 
 const products = require('./routers/ProductsRouter');
 const sales = require('./routers/SalesRouter');
@@ -17,11 +16,14 @@ app.use('/products', products);
 
 app.use('/sales', sales);
 
-app.use(middlewareErro);
-
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.send();
+});
+
+app.use((err, _req, res, _next) => {
+  const { status, result } = err;
+  res.status(status).json(result);
 });
 
 app.listen(PORT, () => console.log(`Oline porta ${PORT}`));

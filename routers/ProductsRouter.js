@@ -1,9 +1,10 @@
 const express = require('express');
+const rescue = require('express-rescue');
+
 const ProductsController = require('../controllers/ProductsController');
-const { validNameQuantity } = require('../middleware/ValidProducts');
 
 const ProductsRouter = express.Router();
 
-ProductsRouter.post('/', validNameQuantity, ProductsController.createProduct);
+ProductsRouter.post('/', rescue(ProductsController.createProduct));
 
 module.exports = ProductsRouter;

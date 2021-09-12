@@ -1,31 +1,53 @@
-const joi = require('joi');
+const ProductsModel = require('../models/ProductsModel');
 
-const validNameQuantity = (req, _res, next) => {
-  const { error } = joi.object({
-    name: joi.string().min(5).required(),
-    quantity: joi.number().integer().min(1).required(),
-  }).validate(req.body);
-
-  if (error) return next(error);
-
-  next();
+const validName = (name) => {
+   const num = 5;
+   if (name.length < num) {
+     throw {
+       status: 422,
+       result: {
+         err: {
+           code: 'invalid_data',
+           message: '"name" length must be at least 5 characters long',
+        },
+      },
+    }();
+  }
 };
 
-const validId = (req, res, next) => {
-  const { id } = req.params;
-  const regex = /[0-9A-Fa-f]{6}/g;
-
-  if (!regex.test(id)) {
-    return next({
-      code: 'invalid_data',
-      message: 'Wrong id format',
-    });
+const validNameExists = async (name) => {
+  const product = await ProductsModel.findByName(name);
+  if (product) {
+    throw {
+      status: 422,
+      result: {
+        err: {
+          code: 'invalid_data',
+          message: 'Product already exists',
+        },
+      },
+    }();
   }
+};
 
-  next();
+const validQuantity = (quantity) => {
+  const num = 1;
+  if (parseInt(quantity, 10) < num || (!quantity)) {
+   throw {
+    status: 422,
+    result: {
+      err: {
+        code: 'invalid_data',
+        message: '"quantity" must be larger than or equal to 1',
+      },
+    },
+   }();
+  }
 };
 
 module.exports = {
-  validNameQuantity,
-  validId,
+  validName,
+  validNameExists,
+  validQuantity,
+
 };
