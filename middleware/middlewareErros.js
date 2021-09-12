@@ -16,3 +16,4 @@ module.exports = (err, req, res, _next) => {
     },
   });
 };
+// A ideia do código estruturado desta forma foi do colega Henrique Clementino.
