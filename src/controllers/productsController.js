@@ -1,23 +1,34 @@
 const productsService = require('../services/productsService');
-const { dictionary } = require('../../middlewares');
+const { dictionary } = require('../services/productsService');
 
-const registerProduct = async (req, res, next) => {
+const addProduct = async (req, res, next) => {
   const { name, quantity } = req.body;
   const { created } = dictionary().status;
 
-  const newProduct = await productsService.registerProduct(name, quantity);
+  const newProduct = await productsService.addProduct(name, quantity);
 
   if (newProduct.err) return next(newProduct.err);
 
   res.status(created).json(newProduct);
 };
 
-const listAllProducts = async (_req, res) => {
+const getAllProducts = async (_req, res) => {
   const { ok } = dictionary().status;
 
-  const allProducts = await productsService.listAllProducts();
+  const allProducts = await productsService.getAllProducts();
 
   res.status(ok).json(allProducts);
 };
 
-module.exports = { registerProduct, listAllProducts };
+const getProductById = async (req, res, next) => {
+  const { id } = req.params;
+  const { ok } = dictionary().status;
+
+  const product = await productsService.getProductById(id);
+
+  if (product.err) return next(product.err);
+
+  res.status(ok).json(product);
+};
+
+module.exports = { addProduct, getAllProducts, getProductById };

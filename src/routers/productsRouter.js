@@ -1,14 +1,13 @@
 const { Router } = require('express');
 
-const { validateNameLength, validateQuantityType, validateQuantityAmount,
-} = require('../../middlewares');
-
-const { registerProduct, listAllProducts } = require('../controllers/productsController');
+const productsController = require('../controllers/productsController');
 
 const router = Router();
 
-router.get('/', listAllProducts);
+router.get('/', productsController.getAllProducts);
 
-router.post('/', validateNameLength, validateQuantityType, validateQuantityAmount, registerProduct);
+router.get('/:id', productsController.getProductById);
+
+router.post('/', productsController.addProduct);
 
 module.exports = router;
