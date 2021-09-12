@@ -4,6 +4,17 @@ const connection = require('./connection');
 const create = async (sold) => {
   const storeManager = await connection();
   const sales = await storeManager.collection('sales');
+  const products = await storeManager.collection('products');
+
+  sold.forEach(async ({ quantity, productId }) => {
+    const menosQuantity = -quantity;
+    const filterQuery = { _id: ObjectId(productId) };
+    const updateQuery = { $inc: { quantity: menosQuantity } };
+
+    await products.findOneAndUpdate(filterQuery, updateQuery);
+  });
+
+  // const result = productsModels.updateById
 
   const query = { itensSold: sold };
 
@@ -52,6 +63,17 @@ const updateById = async ({ id, itensSold }) => {
 const deleteById = async ({ id }) => {
   const storeManager = await connection();
   const sales = await storeManager.collection('sales');
+  const products = await storeManager.collection('products');
+
+  const items = await getById({ id });
+  if (items !== null) {
+    items.itensSold.forEach(async ({ quantity, productId }) => {
+      const filterQuery = { _id: ObjectId(productId) };
+      const updateQuery = { $inc: { quantity } };
+  
+      await products.findOneAndUpdate(filterQuery, updateQuery);
+    });
+  }
 
   const query = { _id: new ObjectId(id) };
 
