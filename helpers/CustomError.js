@@ -1,4 +1,4 @@
-class InternarServerError extends Error {
+class CustomError extends Error {
   constructor(code, msg, statusCode) {
     super(code, msg, statusCode);
     this.code = code;
@@ -7,4 +7,4 @@ class InternarServerError extends Error {
   }
 }
 
-module.exports = InternarServerError;
+module.exports = CustomError;
