@@ -15,7 +15,13 @@ const verifyExistanceNameProduct = async (name) => {
 };
 
 const validationQuantity = (quantity) => {
-  if (typeof (quantity) !== 'number' || quantity < 0) return false;
+  if (quantity <= 0) return false;
+
+  return true;
+};
+
+const validationTypeQuantity = (quantity) => {
+  if (typeof (quantity) !== 'number') return false;
 
   return true;
 };
@@ -55,4 +61,5 @@ module.export = {
   createProduct,
   verifyId,
   getAllProducts,
+  validationTypeQuantity,
 };

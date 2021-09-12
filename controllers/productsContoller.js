@@ -15,11 +15,26 @@ const validName = (req, res, next) => {
   next();
 };
 
+const createProducts = (req, res, next) => {
+  const { name, quantity } = req.body;
+  const result = productsService.createProduct({ name, quantity });
+
+  if (!result) {
+    return res.status(422).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Product already exists',
+      },
+    });
+  }
+  next();
+};
+
 const validQuantity = (req, res, next) => {
   const { quantity } = req.body;
-  const validateQauntity = productsService.validationQuantity(quantity);
+  const validateQuantity = productsService.validationQuantity(quantity);
 
-  if (!validateQauntity) {
+  if (!validateQuantity) {
     return res.status(422).json({
       err: { 
         code: 'invalid_data',
@@ -30,15 +45,15 @@ const validQuantity = (req, res, next) => {
   next();
 };
 
-const createProducts = (req, res, next) => {
-  const { name, quantity } = req.body;
-  const result = productsService.createProduct({ name, quantity });
+const validTypeQuantity = (req, res, next) => {
+  const { quantity } = req.body;
+  const validateQuantity = productsService.validationTypeQuantity(quantity);
 
-  if (!result) {
+  if (!validateQuantity) {
     return res.status(422).json({
-      err: {
+      err: { 
         code: 'invalid_data',
-        message: 'Product already exists',
+        message: '"quantity" must be a number',
       },
     });
   }
@@ -79,4 +94,5 @@ module.exports = {
   createProducts,
   validId,
   AllProducts,
+  validTypeQuantity,
 };
