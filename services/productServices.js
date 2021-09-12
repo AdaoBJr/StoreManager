@@ -30,11 +30,25 @@ const deleteById = async (id) => {
   return deleted;
 };
 
+const subtractProductsQuantity = async (entry) => {
+  const { productId, quantity } = entry;
+  const result = ProductsModel.subtractProductsQuantity(productId, quantity);
+  return result;
+};
+
+const addProductsQuantity = async (entry) => {
+  const { productId, quantity } = entry;
+  const result = ProductsModel.addProductsQuantity(productId, quantity);
+  return result;
+};
+
 module.exports = {
+  addProductsQuantity,
   create,
   deleteById,
   findByName,
   getAll,
   getById,
+  subtractProductsQuantity,
   updateById,
 };

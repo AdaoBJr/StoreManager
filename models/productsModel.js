@@ -68,11 +68,45 @@ const deleteById = async (id) => {
   }
 };
 
+const subtractProductsQuantity = async (id, quantity) => {
+  const productsCollection = await connection()
+    .then((db) => db.collection('products'));
+  const oldValue = await productsCollection.findOne(new ObjectID(id));
+  console.log(oldValue);
+  const response = await productsCollection.updateOne(
+    { _id: new ObjectID(id) },
+    { $set: { quantity: (oldValue.quantity - quantity) } },
+  );
+  const newValue = await productsCollection.findOne(new ObjectID(id));
+  console.log(newValue);
+  if (response) return newValue.quantity;
+  return false;
+};
+
+const addProductsQuantity = async (id, quantity) => {
+  const productsCollection = await connection()
+    .then((db) => db.collection('products'));
+
+  try {
+    const oldValue = await productsCollection.findOne(new ObjectID(id));
+    const response = await productsCollection.updateOne(
+      { _id: new ObjectID(id) },
+      { $set: { quantity: oldValue.quantity + quantity } },
+    );
+    if (response) return true;
+    return false;
+  } catch (err) {
+    return err;
+  }
+};
+
 module.exports = {
+  addProductsQuantity,
   create,
   deleteById,
   findByName,
   getAll,
   getById,
+  subtractProductsQuantity,
   updateById,
 };
