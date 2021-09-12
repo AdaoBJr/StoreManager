@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const ProductsModel = require('./models/ProductsModel');
+const ProductsController = require('./controllers/ProductsController');
 
 const app = express();
 
@@ -16,17 +16,7 @@ app.get('/', (_request, response) => {
 // ------------------------------------------------------------------
 // Requisito 1
 
-app.post('/products', async (req, res) => {
-  const { name, quantity } = req.body; // Incluir middleware de validação antes da rota
-
-  const newProduct = await ProductsModel.postProducts(name, quantity);
-
-  if (!newProduct) {
-    res.status(400).json({ message: res.message }); 
-  }
-
-  res.status(201).json(newProduct);
-});
+app.post('/products', ProductsController.postProducts); // Incluir middleware de validação antes da rota
 
 app.listen(PORT, () => {
   console.log(`Ouvindo na porta ${PORT}`);
