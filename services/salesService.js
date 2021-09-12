@@ -14,7 +14,7 @@ async function isValidId(id) {
 
   if (!saleId) return false;
 
-  return saleId;
+  return true;
 }
 
 async function create(sales) {
