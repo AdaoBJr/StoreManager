@@ -1,4 +1,4 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const conexao = require('./conection');
 
 // const { getAll } = require('./productModel');
@@ -35,13 +35,13 @@ const createSales = async (sales) => {
   return db;
 };
 
-// const update = async (id, name, quantity) => {
-//   if (!ObjectId.isValid(id)) return null;
-//   const conect = await conexao();
-//   const db = await conect.collection('products')
-//     .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
-//   return db;
-// };
+const update = async (id, newSales) => {
+  if (!ObjectId.isValid(id)) return null;
+  const conect = await conexao();
+  const db = await conect.collection('sales')
+    .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: newSales } });
+  return db;
+};
 
 // const exclude = async (id) => {
 //   if (!ObjectId.isValid(id)) return null;
@@ -62,6 +62,6 @@ module.exports = {
   // getByName,
   // getAll,
   // getById,
-  // update,
+  update,
   // exclude,
 };

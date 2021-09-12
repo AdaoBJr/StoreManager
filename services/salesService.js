@@ -1,4 +1,4 @@
-const { createSales } = require('../models/salesModel');
+const { createSales, update } = require('../models/salesModel');
 // const { checkSales } = require('../models/productModel');
 
 // const { errorBusiness } = require('../helpers/errors');
@@ -27,6 +27,6 @@ module.exports = {
   createServiceSales,
 //   getAll,
 //   filterById,
-//   update,
+  update,
 //   excludeService,
 };
