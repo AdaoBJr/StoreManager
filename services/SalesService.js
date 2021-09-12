@@ -7,12 +7,31 @@ const quantInvalidErr = {
   },
 };
 
+const idNotExistsErr = {
+  err: { 
+    message: 'Sale not found',
+    code: 'not_found',
+  },
+};
+
+const getAll = async () => {
+  const getAllSales = await SalesModel.getAll();
+
+  return getAllSales;
+};
+
+const findById = async (id) => {
+  const getSalesId = await SalesModel.findById(id);
+
+  if (!getSalesId) return idNotExistsErr;
+
+  return getSalesId;
+};
+
 const create = async (arr) => {
-  const salesCreated = await SalesModel.create(arr);
+  // const { itensSold } = salesCreated;
 
-  const { itensSold } = salesCreated;
-
-  const salesQuantValid = itensSold.map(({ quantity }) => {
+  const salesQuantValid = arr.map(({ quantity }) => {
     if (typeof quantity !== 'number' || quantity <= 0) return false;
 
     return true;
@@ -24,9 +43,13 @@ const create = async (arr) => {
     return quantInvalidErr;
   }
 
+  const salesCreated = await SalesModel.create(arr);
+
   return salesCreated;
 };
 
 module.exports = {
+  getAll,
+  findById,
   create,
 };

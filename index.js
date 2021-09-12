@@ -13,6 +13,7 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
+// rotas dos products
 app.get('/products', ProductController.getAllProducts);
 
 app.get('/products/:id', ProductController.findProductById);
@@ -22,6 +23,11 @@ app.post('/products', ProductController.createProduct);
 app.put('/products/:id', ProductController.updateProduct);
 
 app.delete('/products/:id', ProductController.excludeProduct);
+
+// rotas dos sales
+app.get('/sales', SalesController.getAllSales);
+
+app.get('/sales/:id', SalesController.findSalesById);
 
 app.post('/sales', SalesController.createSales);
 
