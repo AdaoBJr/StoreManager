@@ -3,6 +3,9 @@ const productsConnection = require('./productsConnection');
 
 const registerProduct = async (name, quantity) => productsConnection()
   .then((db) => db.collection('products').insertOne({ name, quantity }))
-  .then((result) => ({ id: result.insertedId, name, quantity }));
+  .then((result) => ({ _id: result.insertedId, name, quantity }));
 
-module.exports = { registerProduct };
+const checkName = async (name) => productsConnection()
+  .then((db) => db.collection('products').find({ name }).toArray());
+
+module.exports = { registerProduct, checkName };
