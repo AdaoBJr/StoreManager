@@ -12,7 +12,7 @@ const addValidation = async (name, quantity) => {
     }
 
     if (quantity <= 0) {
-        return '"quatinty" must be larger than or equal';
+        return '"quatinty" must be larger than or equal to 1';
     }
 
     if (typeof (quantity) === 'string') {
