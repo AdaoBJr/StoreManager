@@ -96,7 +96,9 @@ const createProduct = async (req, res) => {
 const editProduct = async (req, res) => {
     const { id } = req.params;
     const { name, quantity } = req.body;
-    const response = await controller.edit(name, quantity, id);
+    await controller.edit(name, quantity, id);
+    const response = await controller.findById(id);
+    console.log(response);
     return res.status(200).json(response);
 };
 

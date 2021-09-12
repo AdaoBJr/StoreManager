@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const connect = require('./connect');
 
 const createOne = async (name, quantity) => connect()
@@ -19,7 +20,7 @@ const findAll = async () => connect()
 
 const editOne = async (name, quantity, id) => connect()
             .then((db) => db.collection('products')
-            .updateOne({ _id: id }, { $set: { _id: id, name, quantity } }, { upsert: true }))
+            .updateOne({ _id: new ObjectId(id) }, { $set: { name, quantity } }, { upsert: true }))
             .then((out) => (out));
 
 module.exports = {
