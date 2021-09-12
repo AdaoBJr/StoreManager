@@ -54,7 +54,12 @@ const update = async (req, res) => {
 const exclude = async (req, res) => {
 	const { id } = req.params;
 	const excluded = await productService.exclude(id);
-	return res.status(statusCode.NO_CONTENT).json(excluded);
+	if (excluded.message) {
+		return res.status(statusCode.UNPROCESSABLE_ENTITY).json(
+			{ err: { code: excluded.code, message: excluded.message } },
+		);
+	}
+	return res.status(statusCode.OK).json(excluded.excludedId);
 };
 
 module.exports = {
