@@ -20,6 +20,7 @@ app.post('/products', productsController.create);
 app.get('/products', productsController.findAll);
 app.get('/products/:id', productsController.findById);
 app.put('/products/:id', productsController.updateById);
+app.delete('/products/:id', productsController.remove);
 
 // error
 app.use(errorMiddleware);
