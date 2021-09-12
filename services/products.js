@@ -10,4 +10,6 @@ const create = async (good) => {
 
 module.exports = {
   create,
+  getAllProducts: product.getAllProducts,
+  getProductById: product.getProductById,
 };
