@@ -8,7 +8,7 @@ const { verifyName,
         findAll,
         findById,
         idValidate,
-        editProduct
+        editProduct,
         } = require('../services/products');
 
 const products = express.Router();
