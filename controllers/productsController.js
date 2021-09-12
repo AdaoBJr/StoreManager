@@ -24,7 +24,6 @@ const getProductById = async (req, res) => {
   try {
     const { id } = req.params;
     const product = await model.getProductById(id);
-    console.log(product);
 
     return res.status(StatusCodes.OK).json(product);
   } catch (error) {
@@ -36,8 +35,44 @@ const getProductById = async (req, res) => {
     });
   }
 };
+
+const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, quantity } = req.body;
+    const product = await model.updateProduct(id, name, quantity);
+
+    return res.status(StatusCodes.OK).json(product);
+  } catch (error) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    });
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await model.deleteProduct(id);
+
+    return res.status(StatusCodes.OK).json(product);
+  } catch (error) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    });
+  }
+};
+
 module.exports = {
   registerProduct,
   getProducts,
   getProductById,
+  updateProduct,
+  deleteProduct,
 };

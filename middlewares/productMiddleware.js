@@ -1,29 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const model = require('../models/productsModel');
 
-const validateName = async (name) => {
-  if (name.length < 5) {
-    return {
-      err: {
-        code: 'invalid_data',
-        message: '"name" length must be at least 5 characters long',
-      },
-    };
-  }
-
-  const product = await model.findProduct(name);
-  if (product) {
-    return {
-      err: {
-        code: 'invalid_data',
-        message: 'Product already exists',
-      },
-    };
-  }
-
-  return null;
-};
-
 const validateQuantity = async (quantity) => {
   if (quantity < 1) {
     return {
@@ -46,11 +23,37 @@ const validateQuantity = async (quantity) => {
   return null;
 };
 
-const checkName = async (req, res, next) => {
+const checkNameLength = async (req, res, next) => {
   const { name } = req.body;
-  const result = await validateName(name);
 
-  if (result) return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(result);
+  if (name.length < 5) {
+    const result = {
+      err: {
+        code: 'invalid_data',
+        message: '"name" length must be at least 5 characters long',
+      },
+    };
+
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(result);
+  }
+
+  next();
+};
+
+const checkProductExist = async (req, res, next) => {
+  const { name } = req.body;
+
+  const product = await model.findProduct(name);
+  if (product) {
+    const result = {
+      err: {
+        code: 'invalid_data',
+        message: 'Product already exists',
+      },
+    };
+
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(result);
+  }
 
   next();
 };
@@ -65,6 +68,7 @@ const checkQuantity = async (req, res, next) => {
 };
 
 module.exports = {
-  checkName,
+  checkNameLength,
+  checkProductExist,
   checkQuantity,
 };
