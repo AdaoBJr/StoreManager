@@ -37,6 +37,20 @@ const findById = async (req, res) => {
   res.status(StatusCodes.OK).json({ _id: id, name, quantity });
 };
 
+const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+
+  const { code, message } = await ProductService.updateProduct(id, name, quantity);
+
+  if (message) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
+    .json({ err: { code, message } });
+  }
+
+  res.status(StatusCodes.OK).json({ _id: id, name, quantity });
+};
+
 // Router.put('/:id', async (req, res) => {
 //   const { id } = req.params;
 //   const { name, quantity } = req.body;
@@ -49,4 +63,5 @@ module.exports = {
   create,
   getAll,
   findById,
+  updateProduct,
  };

@@ -58,11 +58,28 @@ const findById = async (id) => {
   return productById;
 };
 
-// const update = async (id, name, quantity) => {
-//   return await ProductModel.update(id, name, quantity);
-// };
+const updateProduct = async (id, name, quantity) => {
+  const productById = await ProductModel.updateProduct(id, name, quantity);
+  if (!productById) {
+    return {
+      code: 'invalid_data',
+      message: 'Wrong id format',
+    };
+  }
+  const productNameValid = isValidName(name);
+  const productQuantityValid = isValidQuantity(quantity);
+  if (productNameValid !== true) return productNameValid;
+  if (productQuantityValid !== true) return productQuantityValid;
+
+  const product = await ProductModel.updateProduct(id, name, quantity);
+
+  return {
+    product,
+  };
+};
 
 module.exports = {
    create,
    findById,
+   updateProduct,
 }; 
