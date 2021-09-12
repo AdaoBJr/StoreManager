@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const mongoConnection = require('./connection');
 
 const create = async ({ name, quantity }) => {
@@ -32,8 +33,22 @@ const getAll = async () => {
   return products;
 };
 
+const findById = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  // https://mongodb.github.io/node-mongodb-native/api-bson-generated/objectid.html
+  
+  const db = await mongoConnection.getConnection();
+  const products = await db.collection('products')
+    .findOne({ _id: ObjectId(id) });
+
+  if (!products) return null;
+
+  return products;
+};
+
 module.exports = {
   create,
   findByName,
   getAll,
+  findById,
 };

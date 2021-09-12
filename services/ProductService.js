@@ -27,6 +27,16 @@ const emptyQuantity = {
   message: '"quantity" is required',
 };
 
+const invalidId = {
+  code: 'invalid_data',
+  message: 'Wrong id format',
+};
+
+// const cannotFindProducts = {
+//   code: 422,
+//   message: 'It was not possible to return the products',
+// };
+
 const isValidName = (name) => {
   if (!name) return nameRequired;
   if (name.length < 5) return shortName;
@@ -66,19 +76,29 @@ const create = async (name, quantity) => {
   };
 };
 
-const getNewProduct = (productData) => {
-  const { id, name, quantity } = productData;
+// const getNewProduct = (productData) => {
+//   const { id, name, quantity } = productData;
 
-  return { id, name, quantity };
-};
+//   return { id, name, quantity };
+// };
 
-const getAll = async () => {
-  const productsData = await ProductModel
-    .getAll();
-  return productsData.map(getNewProduct);
+// const getAll = async () => {
+//   const productsData = await ProductModel
+//     .getAll();
+//   if (!productsData) return cannotFindProducts;
+//   return productsData.map(getNewProduct);
+// };
+
+const findById = async (id) => {
+  const productData = await ProductModel
+    .findById(id);
+  if (!productData) return invalidId;
+  
+  return productData;
 };
 
 module.exports = {
   create,
-  getAll,
+  // getAll,
+  findById,
 };  
