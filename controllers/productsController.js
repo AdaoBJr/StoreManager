@@ -68,13 +68,13 @@ const updateById = rescue(async (req, res) => {
   res.status(200).json(response);
 });
 
-const remove = async (req, res) => {
+const remove = rescue(async (req, res) => {
   isValiId(req.params);
 
   const { id } = req.params;
   const response = await productsServer.remove({ id });
 
   res.status(200).json(response);
-};
+});
 
 module.exports = { create, findAll, findById, updateById, remove };

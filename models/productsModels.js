@@ -61,4 +61,16 @@ const updateById = async ({ id, name, quantity }) => {
   return { id, message: 'product not update' };
 };
 
-module.exports = { create, findName, findAll, findById, updateById };
+const remove = async ({ id }) => {
+  const productCollections = await getConnectionWithProductsCollection();
+
+  const { result } = await productCollections.deleteOne({ _id: ObjectId(id) });
+
+  if (result.n > 0) {
+    return true;
+  }
+
+  return false;
+};
+
+module.exports = { create, findName, findAll, findById, updateById, remove };
