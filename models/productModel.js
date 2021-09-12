@@ -9,7 +9,14 @@ const modelCreateProduct = async (name, quantity) => {
 
 const modelUpdater = async (id, name, quantity) => {
   const db = await connection();
-  const products = await db.collection('products').updateOne({ _id: new ObjectId(id) }, { $set: { name, quantity } });
+  const products = await db.collection('products').updateOne({
+     _id: new ObjectId(id),
+    },
+     {
+       $set: {
+              name,
+              quantity,
+              } });
   return { code: 200, prod: { _id: products.insertedId, name, quantity } };
 };
 
