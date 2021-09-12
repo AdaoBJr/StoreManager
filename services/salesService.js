@@ -5,6 +5,22 @@ const create = async ({ itensSold }) => {
   return { id };
 };
 
+const getAll = async () => {
+  const { sales } = await SalesModel
+  .getAll();
+
+return { sales };
+};
+
+const findById = async ({ id }) => {
+  const { sale } = await SalesModel
+  .findById({ id });
+
+  return { sale };
+};
+
 module.exports = {
   create,
+  getAll,
+  findById,
 };

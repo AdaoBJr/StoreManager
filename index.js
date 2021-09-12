@@ -9,10 +9,10 @@ const {
   deleteProd,
 } = require('./controllers/productsController');
 
-const { createSale } = require('./controllers/salesController');
+const { createSale, getAllSales, findByIdSale } = require('./controllers/salesController');
 
 const { validateProducts, isValidId } = require('./middlewares/productsMiddleware');
-const { verifyQuantity } = require('./middlewares/salesMiddleware');
+const { verifyQuantity, existsSale } = require('./middlewares/salesMiddleware');
 
 const app = express();
 const PORT = 3000;
@@ -26,6 +26,8 @@ app.post('/products', validateProducts, createProd);
 app.put('/products/:id', isValidId, validateProducts, updateProd);
 app.delete('/products/:id', isValidId, deleteProd);
 
+app.get('/sales', getAllSales);
+app.get('/sales/:id', existsSale, findByIdSale);
 app.post('/sales', verifyQuantity, createSale);
 
 app.listen(PORT, () => {
