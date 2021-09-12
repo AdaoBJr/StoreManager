@@ -14,9 +14,13 @@ app.get('/', (_req, res) => {
   res.send();
 });
 
-app.post('/products', ProductController.create);
 app.get('/products', ProductController.findAll);
+
+app.post('/products', ProductController.create);
+
 app.get('/products/:id', ProductController.findById);
+
+app.put('/products/:id', ProductController.update);
 
 app.use(errorMiddleware);
 

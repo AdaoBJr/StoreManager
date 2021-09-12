@@ -15,6 +15,8 @@ const create = async (name, quantity) => {
   return ProductModel.create(name, quantity);
 };
 
+const update = (id, name, quantity) => ProductModel.update(id, name, quantity);
+
 const findAll = () => ProductModel.findAll();
 
 const findById = async (id) => {
@@ -27,8 +29,8 @@ const findById = async (id) => {
       },
     };
   }
-  
+
   return product;
 };
 
-module.exports = { create, findAll, findById };
+module.exports = { create, update, findAll, findById };

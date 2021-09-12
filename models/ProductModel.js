@@ -12,15 +12,6 @@ const findByName = async (name) => {
   return productFound;
 };
 
-const create = async (name, quantity) => {
-  const db = await connection();
-  const productAdd = await db
-    .collection('products')
-    .insertOne({ name, quantity });
-
-  return productAdd.ops[0];
-};
-
 const findAll = async () => {
   const db = await connection();
   const products = await db.collection('products').find().toArray();
@@ -31,9 +22,31 @@ const findAll = async () => {
 const findById = async (id) => {
   if (!ObjectId.isValid(id)) return false;
   const db = await connection();
-  const products = await db.collection('products').findOne(ObjectId(id));
+  const product = await db.collection('products').findOne(ObjectId(id));
 
-  return products;
+  return product;
 };
 
-module.exports = { findByName, create, findAll, findById };
+const update = async (id, name, quantity) => {
+  const db = await connection();
+  await db
+    .collection('products')
+    .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
+
+  const productUpdated = await findById(id);
+
+  if (!productUpdated) return false;
+
+  return productUpdated;
+};
+
+const create = async (name, quantity) => {
+  const db = await connection();
+  const productAdd = await db
+    .collection('products')
+    .insertOne({ name, quantity });
+
+  return productAdd.ops[0];
+};
+
+module.exports = { findByName, update, create, findAll, findById };
