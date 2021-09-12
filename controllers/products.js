@@ -12,6 +12,8 @@ router.get(
   '/',
   async (req, res) => {
     const insertion = await products.getAllProducts();
+    console.log('insertion', insertion);
+    if (!insertion) console.log('ok');
     res.status(200).json(insertion);
   },
 );
@@ -21,7 +23,6 @@ router.get(
   isValidId,
   async (req, res) => {
     const { id } = req.params;
-    console.log(id);
     const insertion = await products.getProductById(id);
     res.status(200).json(insertion);
   },
@@ -33,7 +34,6 @@ router.post(
   checkProduct,
   isValidQuantity,
   async (req, res) => {
-    console.log('controller');
     const { name, quantity } = req.body;
     const insertion = await products.create({ name, quantity });
     res.status(201).json(insertion.ops[0]);
