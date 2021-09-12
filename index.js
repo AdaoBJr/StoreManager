@@ -5,7 +5,11 @@ const productController = require('./controllers/productController');
 const app = express();
 app.use(bodyParser.json());
 
-app.get('/product', productController.getAllProducts);
+// READ
+app.get('/products', productController.getAllProducts);
+
+// READ ID
+app.get('/products/:id', productController.getIdProduct);
 
 // ADD
 app.post('/products', productController.createProduct);

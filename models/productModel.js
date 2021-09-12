@@ -1,4 +1,6 @@
+const { ObjectId } = require('mongodb');
 const connectionDB = require('./connection');
+
 /* 
 FOLLOWING CRUD
     |__ CREATE
@@ -22,6 +24,13 @@ const getAll = async () => {
     return products;
 };
 
+// READ
+const getId = async (id) => {
+    const db = await connectionDB.connect();
+    const product = await db.collection('products').findOne({ _id: ObjectId(id) });
+    return product;
+};
+
 // CREATE
 const add = async (name, quantity) => {
     const db = await connectionDB.connect();
@@ -35,4 +44,4 @@ const update = async () => {};
 // DELETE
 const exclude = async () => {};
 
-module.exports = { exist, getAll, add, update, exclude };
+module.exports = { exist, getId, getAll, add, update, exclude };
