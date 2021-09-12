@@ -15,6 +15,22 @@ const isValidNewProduct = (body) => {
   }
 };
 
+const isValiId = (params) => {
+  const { error } = Joi.object({ 
+    id: Joi
+      .string()
+      .hex()
+      .length(24)
+      .not()
+      .empty()
+      .required(),
+  }).validate(params);
+
+  if (error) {
+    throw new CustomError('invalid_data', 'Wrong id format', 422);
+  } 
+};
+
 const create = rescue(async (req, res) => {
   isValidNewProduct(req.body);
   
@@ -31,29 +47,18 @@ const findAll = rescue(async (req, res, _next) => {
 });
 
 const findById = rescue(async (req, res) => {
+  isValiId(req.params);
+
   const { id } = req.params;
-
-  const { error } = Joi.object({ 
-    id: Joi
-      .string()
-      .hex()
-      .length(24)
-      .not()
-      .empty()
-      .required(),
-  }).validate(req.params);
-
-  if (error) {
-    throw new CustomError('invalid_data', 'Wrong id format', 422);
-  } 
 
   const product = await productsServer.findById({ id });
 
   res.status(200).json({ ...product });
 });
 
-const updateById = async (req, res) => {
+const updateById = rescue(async (req, res) => {
   isValidNewProduct(req.body);
+  isValiId(req.params);
   
   const { name, quantity } = req.body;
   const { id } = req.params;
@@ -61,6 +66,6 @@ const updateById = async (req, res) => {
   const response = await productsServer.updateById({ id, name, quantity });
 
   res.status(200).json(response);
-};
+});
 
 module.exports = { create, findAll, findById, updateById };
