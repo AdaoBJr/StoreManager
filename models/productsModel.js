@@ -23,7 +23,7 @@ const findByName = async ({ name }) => {
 
 const findById = async ({ id }) => {
   const productsCollection = await mongoConnect.getConnection()
-    .then((db) => db.collection('products'));      
+    .then((db) => db.collection('products'));    
 
   const product = await productsCollection
     .findOne(new ObjectId(id));

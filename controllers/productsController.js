@@ -1,6 +1,6 @@
 const ProductsService = require('../services/productsService');
 
-const create = async (req, res) => {
+const createProd = async (req, res) => {
   const { name, quantity } = req.body;
 
   const { id: _id } = await ProductsService.create({ name, quantity });
@@ -8,13 +8,13 @@ const create = async (req, res) => {
   return res.status(201).json({ _id, name, quantity });
 };
 
-const getAll = async (req, res) => {
+const getAllProds = async (req, res) => {
   const { products } = await ProductsService.getAll();
   
   return res.status(200).json({ products });
 };
 
-const findById = async (req, res) => {
+const findByIdProds = async (req, res) => {
   const { id } = req.params;
   
   const { product } = await ProductsService
@@ -23,7 +23,7 @@ const findById = async (req, res) => {
   return res.status(200).json(product);
 };
 
-const update = async (req, res) => {
+const updateProd = async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
   
@@ -43,9 +43,9 @@ const deleteProd = async (req, res) => {
 };
 
 module.exports = {
-  create,
-  getAll,
-  findById,
-  update,
+  createProd,
+  getAllProds,
+  findByIdProds,
+  updateProd,
   deleteProd,
 };
