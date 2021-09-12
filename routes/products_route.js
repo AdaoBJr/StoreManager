@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { createProduct, getAllProducts, getProductById,
+const { createProduct, getAllProducts, getProductById, updateProduct,
 } = require('../controllers/product_controller');
 const { 
     NameValidation, ExistingProduct, QuantityValidation, IdValidation,
@@ -15,4 +15,6 @@ routes.get('/', (_request, response) => {
 routes.post('/products', NameValidation, ExistingProduct, QuantityValidation, createProduct);
 routes.get('/products', getAllProducts);
 routes.get('/products/:id', IdValidation, getProductById);
+routes.put('/products/:id', NameValidation, QuantityValidation, updateProduct);
+
 module.exports = routes; 

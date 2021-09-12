@@ -25,8 +25,17 @@ const listById = async (id) => {
     return product;
 };
 
+const updateById = async (id, name, quantity) => {
+    const db = await connection();
+    const product = await db.collection('products')
+    .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
+
+    return product;
+};
+
 module.exports = {
     newProducts,
     listAllProducts,
     listById,
+    updateById, 
 };
