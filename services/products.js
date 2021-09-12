@@ -63,7 +63,6 @@ const findAll = async (_req, res) => {
     const out = {
         products: response,
     };
-    console.log(out);
     res.status(200).json(out);
 };
 
@@ -90,7 +89,7 @@ const findById = async (req, res) => {
 const createProduct = async (req, res) => {
     const { name, quantity } = req.body;
     const response = await controller.create(name, quantity);
-    return res.status(201).json(response);
+    return res.status(201).json(response[0]);
 };
 
 const editProduct = async (req, res) => {
@@ -98,8 +97,14 @@ const editProduct = async (req, res) => {
     const { name, quantity } = req.body;
     await controller.edit(name, quantity, id);
     const response = await controller.findById(id);
-    console.log(response);
     return res.status(200).json(response);
+};
+
+const deleteProduct = async (req, res) => {
+    const { id } = req.params;
+    const response = await controller.findById(id);
+    await controller.deleteOne(id);
+    res.status(200).json(response);
 };
 
 module.exports = {
@@ -112,4 +117,5 @@ module.exports = {
     idValidate,
     findById,
     editProduct,
+    deleteProduct,
  };

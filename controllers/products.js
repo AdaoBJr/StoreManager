@@ -3,7 +3,7 @@ const models = require('../models/products');
 
 const exists = async (name) => {
     const have = await models.findByName(name);
-    if (have) return true;
+    if (have.length > 0) return true;
     return false;
 };
 
@@ -20,4 +20,6 @@ const edit = async (name, quantity, id) => {
 
 const findAll = () => models.findAll();
 
-module.exports = { create, edit, exists, findById, findAll };
+const deleteOne = (id) => models.deleteOne(id);
+
+module.exports = { create, edit, exists, findById, findAll, deleteOne };

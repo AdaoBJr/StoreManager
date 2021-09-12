@@ -9,6 +9,7 @@ const { verifyName,
         findById,
         idValidate,
         editProduct,
+        deleteProduct,
         } = require('../services/products');
 
 const products = express.Router();
@@ -36,6 +37,10 @@ products.route('/:id')
             verifyNumber,
             verifyQnt,
             editProduct,
+        )
+        .delete(
+            idValidate,
+            deleteProduct,
         );
 
 module.exports = products;
