@@ -7,4 +7,7 @@ const registerProduct = async (name, quantity) => productsConnection()
 const checkName = async (name) => productsConnection()
   .then((db) => db.collection('products').find({ name }).toArray());
 
-module.exports = { registerProduct, checkName };
+const listAllProducts = async () => productsConnection()
+  .then((db) => db.collection('products').find().toArray());
+
+module.exports = { registerProduct, checkName, listAllProducts };

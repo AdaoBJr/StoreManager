@@ -2,8 +2,7 @@ const express = require('express');
 
 const productsRouter = require('./src/routers/productsRouter');
 
-const { validateNameLength, validateQuantityType, validateQuantityAmount, errorMiddleware,
-} = require('./middlewares');
+const { errorMiddleware } = require('./middlewares');
 
 const app = express();
 
@@ -16,8 +15,7 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.use('/products',
-validateNameLength, validateQuantityType, validateQuantityAmount, productsRouter);
+app.use('/products', productsRouter);
 
 app.use(errorMiddleware);
 

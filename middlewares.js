@@ -6,9 +6,10 @@ const dictionary = () => ({
     alreadyExists: 'Product already exists',
   },
   status: {
+    ok: 200,
+    created: 201,
     unprocessableEntity: 422,
     internalServerError: 500,
-    created: 201,
   },
   code: {
     invalidData: 'invalid_data',

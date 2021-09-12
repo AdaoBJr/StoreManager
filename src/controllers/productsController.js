@@ -12,4 +12,12 @@ const registerProduct = async (req, res, next) => {
   res.status(created).json(newProduct);
 };
 
-module.exports = { registerProduct };
+const listAllProducts = async (_req, res) => {
+  const { ok } = dictionary().status;
+
+  const allProducts = await productsService.listAllProducts();
+
+  res.status(ok).json(allProducts);
+};
+
+module.exports = { registerProduct, listAllProducts };
