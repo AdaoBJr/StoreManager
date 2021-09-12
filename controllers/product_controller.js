@@ -1,4 +1,4 @@
-const { create, getAll, getById, update } = require('../services/pruduct_services');
+const { create, getAll, getById, update, remove } = require('../services/pruduct_services');
 
 // Cadatrar produtos
 const createProduct = async (req, res) => {
@@ -31,9 +31,17 @@ const updateProduct = async (req, res) => {
     return res.status(200).json({ id, name, quantity });
 };
 
+const removeById = async (req, res) => {
+    const { id } = req.params;
+    
+    const product = await remove(id);
+    return res.status(200).json(product);
+};
+
 module.exports = {
     createProduct,
     getAllProducts,
     getProductById,
     updateProduct,
+    removeById,
 };

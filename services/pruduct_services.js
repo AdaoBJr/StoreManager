@@ -1,4 +1,5 @@
-const { newProducts, listAllProducts, listById, updateById } = require('../model/products_model');
+const { newProducts, listAllProducts,
+    listById, updateById, deleteById } = require('../model/products_model');
 
 const create = async (name, quantity) => {
     const newProduct = await newProducts(name, quantity);
@@ -16,10 +17,14 @@ const getById = async (id) => {
 };
 
 const update = async (id, name, quantity) => {
-    console.log(id, name, quantity, 'service');
     const updateProduct = await updateById(id, name, quantity);
-    console.log(id, name, quantity, 'service2');
+   
     return updateProduct;
+};
+
+const remove = async (id) => {
+    const product = await deleteById(id);
+    return product;
 };
 
 module.exports = {
@@ -28,4 +33,5 @@ module.exports = {
     getById,
     updateById,
     update,
+    remove,
 };
