@@ -1,11 +1,17 @@
 const { ObjectId } = require('mongodb');
 const mongoConnection = require('./connection');
 
-const create = async ({ name, quantity }) => {
-  const productsCollection = await mongoConnection.getConnection()
-    .then((db) => db.collection('products'));
+const getConnectionWithProductsCollection = async () => {
+  const connectionWithProductCollections = await mongoConnection.getConnection()
+  .then((db) => db.collection('products'));
 
-  const { insertedId: _id } = await productsCollection
+  return connectionWithProductCollections;
+};
+
+const create = async ({ name, quantity }) => {
+  const productCollections = await getConnectionWithProductsCollection();
+
+  const { insertedId: _id } = await productCollections
     .insertOne({ name, quantity });
 
   return {
@@ -16,30 +22,43 @@ const create = async ({ name, quantity }) => {
 };
 
 const findName = async ({ name }) => {
-  const productsCollections = await mongoConnection.getConnection()
-    .then((db) => db.collection('products'));
+ const productCollections = await getConnectionWithProductsCollection();
 
-  const product = await productsCollections.findOne({ name });
+  const product = await productCollections.findOne({ name });
 
   return product;
 };
 
 const findAll = async () => {
-  const productsColletion = await mongoConnection.getConnection()
-    .then((db) => db.collection('products'));
+  const productCollections = await getConnectionWithProductsCollection();
 
-  const products = await productsColletion.find().toArray();
+  const products = await productCollections.find().toArray();
 
   return products;
 };
 
 const findById = async ({ id }) => {
-  const productsCollections = await mongoConnection.getConnection()
-    .then((db) => db.collection('products'));
+  const productCollections = await getConnectionWithProductsCollection();
 
-  const product = await productsCollections.findOne(new ObjectId(id));
+  const product = await productCollections.findOne(new ObjectId(id));
 
   return product;
 };
 
-module.exports = { create, findName, findAll, findById };
+const updateById = async ({ id, name, quantity }) => {
+  const productCollections = await getConnectionWithProductsCollection();
+
+  const { result } = await productCollections.updateOne(
+    { _id: ObjectId(id) },
+    { $set: { name, quantity } },
+    { upsert: false },
+  );
+
+  if (result.nModified > 0) {
+    return { _id: id, name, quantity };
+  }
+
+  return { id, message: 'product not update' };
+};
+
+module.exports = { create, findName, findAll, findById, updateById };
