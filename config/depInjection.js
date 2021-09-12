@@ -1,5 +1,5 @@
 const { ObjectID } = require('mongodb');
-const connection = require('../infraestructure/database/connection');
+const { connection } = require('../infraestructure/database/connection');
 const { errorBuilder } = require('../middleware');
 const { Product, ProductSerializer, Sales, SalesSerializer } = require('../model');
 const { codes, messages } = require('../schemas');

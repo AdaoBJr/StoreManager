@@ -13,12 +13,18 @@ const DB_NAME = 'StoreManager';
 
 let db = null;
 
-const connection = () =>
-  (db
-    ? Promise.resolve(db)
-    : MongoClient.connect(MONGO_DB_URL, OPTIONS).then((conn) => {
-        db = conn.db(DB_NAME);
-        return db;
-      }));
+async function connection() {
+  if (db) return Promise.resolve(db);
+  return MongoClient
+    .connect(MONGO_DB_URL, OPTIONS)
+    .then((conn) => conn.db(DB_NAME))
+    .then((dbSchema) => {
+      db = dbSchema;
+      return db;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+}
 
-module.exports = connection;
+module.exports = { connection };
