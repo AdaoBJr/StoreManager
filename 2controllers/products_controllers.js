@@ -4,6 +4,7 @@ const STATUS_OK = 201;
 const createproduct = async (req, res) => {
   const { name, quantity } = req.body;
   const answer = await createproducts(name, quantity);
+  if (answer.err) { return res.status(422).json(answer); }
   return res.status(STATUS_OK).json(answer);
 };
 

@@ -10,7 +10,7 @@ const getAll = async () => connection()
       .then((db) => db.collection('products').find().toArray());
 
 const findByName = async (name) => connection()
-.then((db) => db.collection('products').findOne({ name })) || false;
+.then((db) => db.collection('products').findOne({ name }));
 
 module.exports = {
   create,
