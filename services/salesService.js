@@ -1,5 +1,5 @@
 const { createSales, update, findById, excluse } = require('../models/salesModel');
-// const { checkSales } = require('../models/productModel');
+const { updateDelete } = require('../models/productModel');
 
 const { errorBusiness } = require('../helpers/errors');
 
@@ -21,7 +21,7 @@ const excludeService = async (id) => {
   const sale = await findById(id);
   const saleResult = await excluse(id);
   if (!sale || !saleResult) return errorBusiness('Wrong sale ID format');
-  // sale.itensSold.forEach((products) => Product.updateDelete(products));
+  sale.itensSold.forEach((products) => updateDelete(products));
   return saleResult;
 };
 

@@ -36,13 +36,16 @@ routerSales.post('/', validateSales, rescue(async (req, res, _next) => {
 //   return res.status(STATUS_CODE_OK).json({ products });
 // }));
 
-routerSales.put('/:id', validateSales, rescue(async (req, res) => {
-  const { id } = req.params;
-  const result = await update(id, req.body);
-  return res.status(200).json(result);
-}));
+routerSales.put(
+  '/:id', validateSales,
+  rescue(async (req, res) => {
+    const { id } = req.params;
+    const salesList = await update(id, req.body);
+    return res.status(200).json(salesList);
+  }),
+);
 
-routerSales.delete('/:id',
+routerSales.delete('/:id', validateSales,
   rescue(async (req, res, next) => {
     const { id } = req.params;
     const sale = await excludeService(id);

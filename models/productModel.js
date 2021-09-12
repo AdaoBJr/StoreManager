@@ -61,6 +61,13 @@ const checkSales = async ({ productId, quantity }) => {
   return result;
 };
 
+const updateDelete = async ({ productId, quantity: quantUpdate }) => {
+  const db = await conexao();
+  return db
+    .collection('products')
+    .updateOne({ _id: ObjectId(productId) }, { $inc: { quantity: quantUpdate } });
+};
+
 module.exports = {
   create,
   getByName,
@@ -69,4 +76,5 @@ module.exports = {
   update,
   exclude,
   checkSales,
+  updateDelete,
 };

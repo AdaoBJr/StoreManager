@@ -41,12 +41,13 @@ const createSales = async (sales) => {
   return db;
 };
 
-const update = async (id, newSales) => {
+const update = async (id, updates) => {
   if (!ObjectId.isValid(id)) return null;
-  const conect = await conexao();
-  const db = await conect.collection('sales')
-    .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: newSales } });
-  return db;
+  const db = await conexao();
+  await db
+    .collection('sales')
+    .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: updates } });
+  return findById(id);
 };
 
 const excluse = async (id) => {
