@@ -49,7 +49,6 @@ const nameValidator = (name) => {
   };
 
 const allValidator = (name, quantity) => {
-  console.log(name);
   const invalidName = nameValidator(name);
   const invalidQt = quantityValidator(quantity);
   const invalidProd = productValidator(name);
