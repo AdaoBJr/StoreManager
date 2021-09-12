@@ -55,11 +55,11 @@ const excludeProduct = async (req, res) => {
     const { id } = req.params;
     const exclude = await service.excludeProduct(id);
 
-    if (exclude === null) return res.status(422).json(messages.wrongFormat);
+    if (exclude === null) return res.status(422).json(messages.productWrongFormat);
 
     return res.status(200).json(exclude);
   } catch (error) {
-    return res.status(422).json(messages.wrongFormat);
+    return res.status(422).json(messages.productWrongFormat);
   }
 };
 
@@ -78,11 +78,11 @@ const getProductsById = async (req, res) => {
     const { id } = req.params;
     const product = await service.getById(id);
 
-    if (product === null) return res.status(422).json(messages.wrongFormat);
+    if (product === null) return res.status(422).json(messages.productWrongFormat);
 
     return res.status(200).json(product);
   } catch (error) {
-    return res.status(422).json(messages.wrongFormat);
+    return res.status(422).json(messages.productWrongFormat);
   }
 };
 

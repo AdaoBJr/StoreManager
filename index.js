@@ -4,6 +4,7 @@ const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
 const productController = require('./controllers/productController');
+const saleController = require('./controllers/saleController');
 
 app.use(bodyParser.json());
 
@@ -21,5 +22,7 @@ app.post('/products', productController.createProduct);
 app.put('/products/:id', productController.updateProduct);
 
 app.delete('/products/:id', productController.excludeProduct);
+
+app.post('/sales', saleController.createSale);
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
