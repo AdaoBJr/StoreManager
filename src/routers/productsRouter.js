@@ -1,8 +1,9 @@
 const { Router } = require('express');
-const productsController = require('../controllers/productsController');
+
+const { registerProduct } = require('../controllers/productsController');
 
 const router = Router();
 
-router.post('/', productsController.registerProduct);
+router.post('/', registerProduct);
 
 module.exports = router;

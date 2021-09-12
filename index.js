@@ -1,10 +1,12 @@
 const express = require('express');
-const validationMiddlewares = require('./src/Middlewares/validationMiddlewares');
+
 const productsRouter = require('./src/routers/productsRouter');
-const errorMiddleware = require('./src/Middlewares/errorMiddleware');
-// const salesRouter = require('./src/routers/salesRouter');
+
+const { validateNameLength, validateQuantityType, validateQuantityAmount, errorMiddleware,
+} = require('./middlewares');
 
 const app = express();
+
 const PORT = 3000;
 
 app.use(express.json());
@@ -15,12 +17,7 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/products',
-validationMiddlewares.validateNameLength,
-validationMiddlewares.validateQuantityType,
-validationMiddlewares.validateQuantityQuantity,
-productsRouter);
-
-// app.use('/sales', salesRouter);
+validateNameLength, validateQuantityType, validateQuantityAmount, productsRouter);
 
 app.use(errorMiddleware);
 

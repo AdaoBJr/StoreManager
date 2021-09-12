@@ -1,4 +1,3 @@
-// const { ObjectId } = require('mongodb');
 const productsConnection = require('./productsConnection');
 
 const registerProduct = async (name, quantity) => productsConnection()
