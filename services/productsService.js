@@ -17,9 +17,15 @@ const findId = async (id) => {
 
 const update = async (id, product) => products.update(id, product);
 
+const deleteProduct = async (id) => {
+  const product = await products.deteteProduct(id);
+  return product;
+};
+
 module.exports = {
   createProduct,
   getAll,
   findId,
   update,
+  deleteProduct,
 };
