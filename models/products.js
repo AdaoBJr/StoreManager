@@ -24,9 +24,14 @@ const createProduct = async (product) => {
 
 const updateProduct = async (id, name, quantity) => {
   const db = await connection();
-  console.log('model');
   return db.collection('products').updateOne({ _id: ObjectId(id) },
   { $set: { name, quantity } });
+};
+
+const deleteProduct = async (id) => {
+  const db = await connection();
+  console.log('model');
+  return db.collection('products').deleteOne({ _id: ObjectId(id) });
 };
 
 module.exports = {
@@ -35,4 +40,5 @@ module.exports = {
   findProduct,
   getProductById,
   updateProduct,
+  deleteProduct,
 };

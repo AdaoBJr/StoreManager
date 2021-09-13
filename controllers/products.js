@@ -39,6 +39,18 @@ router.put(
   },
 );
 
+router.delete(
+  '/:id',
+  isValidId,
+  async (req, res) => {
+    console.log('controller');
+    const { id } = req.params;
+    const { name, quantity } = req.body;
+    await products.deleteProductById(id);
+    res.status(200).json({ id, name, quantity });
+  },
+);
+
 router.post(
   '/',
   isValidName,
