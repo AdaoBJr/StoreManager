@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { create, getAll, getById, update } = require('./controllers/productsController');
+const { create, getAll, getById, update, delProduct } = require('./controllers/productsController');
 
 const app = express();
 
@@ -18,7 +18,8 @@ app.listen(PORT, () => {
 
 app.route('/products/:id')
   .get(getById)
-  .put(update);
+  .put(update)
+  .delete(delProduct);
 
 app.route('/products')
   .post(create)

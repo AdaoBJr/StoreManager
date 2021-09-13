@@ -50,10 +50,17 @@ const findId = async (id) => {
   return product;
 };
 
+const deleteProduct = async (id) => {
+  const product = await findId(id);
+  await productsModel.deleteById(id);
+  return product;
+};
+
 module.exports = {
   createProduct,
   isValid,
   findAllProducts,
   findId,
   updateProduct,
+  deleteProduct,
 };
