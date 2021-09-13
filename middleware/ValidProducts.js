@@ -4,7 +4,7 @@ const validName = (req, _res, next) => {
   const { name } = req.body;
   console.log(name);
    const num = 5;
-   const men = 'name length must be at least 5 characters long';
+   const men = '"name" length must be at least 5 characters long';
    if (!name || name.length < num) {
      const err = new Error(men);
      err.status = 422;
