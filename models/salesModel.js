@@ -48,10 +48,12 @@ const add = async (salesArray) => {
 };
 
 // UPDATE
-const update = async (id, name, quantity) => {
+const update = async (id, salesArray) => {
+    // console.log(id, salesArray);
     const db = await connectionDB.connect();
-    await db.collection('products').updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
-    return { _id: id, name, quantity };
+    const itensSold = salesArray;
+    await db.collection('sales').updateOne({ _id: ObjectId(id) }, { $set: { itensSold } });
+    return { _id: id, itensSold };
 };
 
 // DELETE

@@ -26,14 +26,17 @@ const addValidation = async (salesArray) => {
         return anwaser;
 };
 
-// const updateValidation = async (id, name, quantity) => {
-//     const anwaser = await validNameQuant(name, quantity);
-//     if (anwaser === null) {
-//         const update = await productModel.update(id, name, quantity);
-//         return update;
-//     }
-//     return anwaser;
-// };
+const updateValidation = async (id, salesArray) => {
+    console.log(salesArray);
+    const salesObject = salesArray[0];
+
+    const anwaser = await validQuant(salesObject.quantity);
+    if (anwaser === null) {
+        const update = await salesModel.update(id, salesArray);
+        return update;
+    }
+    return anwaser;
+};
 
 // const deleteValidation = async (id) => {
 //     const existId = await productModel.existId(id);
@@ -45,4 +48,4 @@ const addValidation = async (salesArray) => {
 //     return update;
 // }; 
 
-module.exports = { addValidation };
+module.exports = { addValidation, updateValidation };

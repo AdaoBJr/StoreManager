@@ -12,4 +12,7 @@ router.get('/', salesController.getAllSales);
 // READ ID
 router.get('/:id', salesController.getIdSale);
 
+// UPDATE
+router.put('/:id', salesController.updateSale);
+
 module.exports = router;
