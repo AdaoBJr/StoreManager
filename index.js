@@ -8,6 +8,8 @@ const app = express();
 app.use(bodyParser.json());
 
 app.post('/products', ProductsController.createProduct);
+app.get('/products', ProductsController.getAllProducts);
+app.get('/products/:id', ProductsController.getProductById);
 
 app.get('/', (_request, response) => {
   response.send();
