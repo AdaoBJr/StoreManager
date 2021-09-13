@@ -15,7 +15,7 @@ const getIdSale = async (req, res) => {
         return res.status(status.OK).json(sale);
     } catch (error) {
         const msg = 'Sale not found';
-        return res.status(status.UNPROCESSABLE_ENTITY).json(errorGeneral.error(msg));
+        return res.status(status.NOT_FOUND).json(errorGeneral.error(msg));
     }
 };
 
