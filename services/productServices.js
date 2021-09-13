@@ -60,8 +60,6 @@ const getAll = async () => {
 };
 
 const getProductById = async (id) => {
-  // const id = Number(idString);
-
   const idValid = isValidID(id);
   if (idValid.err) return idValid;
 
@@ -69,8 +67,22 @@ const getProductById = async (id) => {
   return oneProduct;
 };
 
+const updateProduct = async (id, name, quantity) => {
+  const isValidName = isValidNameProduct(name);
+  const isValidQuantity = isValidQuantityProduct(quantity);
+  const isValidId = isValidID(quantity);
+
+  if (isValidName.err) return isValidName;
+  if (isValidQuantity.err) return isValidQuantity;
+  if (isValidId.err) return isValidId;
+
+  const productAdd = await productModels.update(id, name, quantity, 'products');
+  return productAdd;
+};
+
 module.exports = {
   createProduct,
   getAll,
   getProductById,
+  updateProduct,
 };
