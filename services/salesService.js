@@ -48,7 +48,7 @@ const deleteValidation = async (id) => {
     }
     const { itensSold } = await salesModel.getId(id);
     const object = itensSold[0];
-    await productModel.updateWithSale(object.productId, object.quantity);
+    await productModel.updateWithSaleAdd(object.productId, object.quantity);
     const deleteOne = await salesModel.exclude(id);
     return deleteOne;
 }; 
