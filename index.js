@@ -23,6 +23,10 @@ app.put('/products/:id', productController.updateProduct);
 
 app.delete('/products/:id', productController.excludeProduct);
 
+app.get('/sales/:id', saleController.getSalesById);
+
+app.get('/sales', saleController.getSales);
+
 app.post('/sales', saleController.createSale);
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
