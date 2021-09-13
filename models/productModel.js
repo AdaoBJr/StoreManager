@@ -55,10 +55,10 @@ const update = async (id, name, quantity) => {
 // DELETE
 const exclude = async (id) => {
     const db = await connectionDB.connect();
-    const productFound = await db.collection('products').findOne({ _id: ObjectId(id) });
+    const product = await db.collection('products').findOne({ _id: ObjectId(id) });
     await db.collection('products').deleteOne({ _id: ObjectId(id) });
 
-    return productFound;
+    return product;
 };
 
 module.exports = { existName, existId, getId, getAll, add, update, exclude };
