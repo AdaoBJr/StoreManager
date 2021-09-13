@@ -9,6 +9,7 @@ const ProductsRouter = express.Router();
 ProductsRouter.post('/', validName, validQuantity,
  validNameExists, ProductsController.createProduct);
 
+ProductsRouter.get('/:id', ProductsController.getProductsById);
 ProductsRouter.get('/', ProductsController.getProductsAll);
 
 module.exports = ProductsRouter;
