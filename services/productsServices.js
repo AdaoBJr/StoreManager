@@ -53,7 +53,7 @@ const getProductById = async (id) => {
   return product;
 };
 
-const createProduct = async ({ name, quantity }) => {
+const createProduct = async (name, quantity) => {
   if (!isValidLengthName(name)) return ERR_LENGTH_NAME;
   if (!verifyQuantity(quantity)) return ERR_QUANTITY;
   if (!verifyType(quantity)) return ERR_TYPE_QUANTITY;
@@ -61,7 +61,7 @@ const createProduct = async ({ name, quantity }) => {
   const productName = await isNameExists(name);
   if (!productName) return ERR_NAME_EXISTS;
 
-  const newProduct = await ProductModel.create({ name, quantity });  
+  const newProduct = await ProductModel.create(name, quantity);  
   return newProduct;
 };
 

@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongodb');
 const mongoConnection = require('./mongoConnection');
 
-const create = async ({ name, quantity }) => {  
+const create = async (name, quantity) => {  
   const db = await mongoConnection();
   const newProduct = await db.collection('products').insertOne({ name, quantity });
   const { insertedId } = JSON.parse(newProduct);
@@ -51,9 +51,11 @@ const exclude = async (id) => {
   if (!ObjectId.isValid(id)) return null;
   
   const db = await mongoConnection();
-  const deletedProduct = await db.collection('products').deleteOne({ _id: ObjectId(id) });
+
+  const result = await db.collection('products').findOne({ _id: ObjectId(id) });
+  await db.collection('products').deleteOne({ _id: ObjectId(id) });
   
-  return deletedProduct;
+  return result;
 };
 
 const findByName = async (name) => {  
