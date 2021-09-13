@@ -102,7 +102,11 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     const { id } = req.params;
-
+    if (id.length < 24) {
+        return res.status(422).json({
+            err: { code: 'invalid_data', message: 'Wrong id format' },
+        });
+    }
     try {
         const result = await productsService.deleteProduct(id);
         const { name, quantity } = result;
