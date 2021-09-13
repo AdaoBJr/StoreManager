@@ -1,15 +1,22 @@
-const Products = require('../models/Products');
+const { productExists, newProduct, getAllProducts } = require('../models/Products');
 
 const createProduct = async (name, quantity) => {
-  const product = await Products.productExists(name);
+  const product = await productExists(name);
 
   if (product) return true;
 
-  const newProduct = await Products.newProduct(name, quantity);
+  const newestProduct = await newProduct(name, quantity);
 
-  return newProduct;
+  return newestProduct;
+};
+
+const receiveProductsList = async () => {
+  const productList = await getAllProducts();
+  
+  return productList;
 };
 
 module.exports = {
   createProduct,
+  receiveProductsList,
 };

@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const Product = require('./Controllers/Products');
+const { addProduct, listAllProducts } = require('./Controllers/Products');
 
 const { validateName, validateQuantity } = require('./middlwares');
 
@@ -15,6 +15,8 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.post('/products', validateName, validateQuantity, Product.addProduct);
+app.get('/products', listAllProducts);
+
+app.post('/products', validateName, validateQuantity, addProduct);
 
 app.listen(PORT, () => console.log(`Online na porta ${PORT}`));
