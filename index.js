@@ -7,6 +7,7 @@ const middleware = require('./middleware/middlewareErros');
 app.use(express.json());
 app.use(bodyParser.json());
 const { product } = require('./routes/productsRouter');
+const { sale } = require('./routes/salesRouter');
 
 const port = 3000;
 
@@ -17,5 +18,6 @@ app.get('/', (_request, response) => {
 
 app.use(middleware);
 app.use('/products', product);
+app.use('/sales', sale);
 
 app.listen(port, () => console.log('Its working'));
