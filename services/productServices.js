@@ -2,7 +2,7 @@ const productModel = require('../models/products');
 
 // Validando nome!
 const HTTP_ERR_FALSE = 422;
-const HTTP_OK_STATUS = 201;
+// const HTTP_OK_STATUS = 201;
 
 const erroMensage = (message) => ({
     err: {
