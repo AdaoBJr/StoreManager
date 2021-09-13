@@ -8,3 +8,4 @@ const cadastrarServ = async (itens) => {
 };
 
 module.exports = { cadastrarServ };
+// https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/some

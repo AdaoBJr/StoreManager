@@ -16,4 +16,16 @@ const getOne = async (id) => {
   return finded;
 };
 
-module.exports = { getAll, getOne };
+const getAllSales = async () => {
+  const db = await mongoConnection.getConnection();
+  const finded = await db.collection('sales').find().toArray();
+  return finded;
+};
+
+const getOneSale = async (id) => {
+  const db = await mongoConnection.getConnection();
+  const finded = await db.collection('sales').findOne(ObjectID(id));
+  return finded;
+};
+
+module.exports = { getAll, getOne, getAllSales, getOneSale };
