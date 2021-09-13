@@ -6,6 +6,7 @@ const errors = {
   qntValue: '"quantity" must be larger than or equal to 1',
   productExists: 'Product already exists',
   wrongId: 'Wrong id format',
+  wrongIdOrQnt: 'Wrong product ID or invalid quantity',
 };
 
 const errMsg = (message) => ({ err: { code: 'invalid_data', message } });
@@ -41,10 +42,19 @@ const validId = async (req, res, next) => {
   next();
 };
 
+const validSale = async (req, res, next) => {
+const checkQnt = req.body.every(({ quantity }) => typeof quantity !== 'number' || quantity <= 0); // ajuda do leandro reis
+const checkprodId = req.body.every(async ({ productId }) => 
+  productsModel.getProductById(productId));
+if (checkQnt || !checkprodId) return res.status(422).json(errMsg(errors.wrongIdOrQnt));
+next();
+};
+
 module.exports = {
   validNameLength,
   validQntType,
   validQntValue,
   productExists,
   validId,
+  validSale,
 };

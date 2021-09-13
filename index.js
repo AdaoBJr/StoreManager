@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const productsRouter = require('./routers/productsRouter'); 
+const productsRouter = require('./routers/productsRouter');
+const salesRouter = require('./routers/salesRouter');
 
 const app = express();
 app.use(bodyParser.json());
@@ -11,6 +12,7 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/products', productsRouter);
+app.use('/sales', salesRouter);
 
 const PORT = process.env.PORT || 3000;
 
