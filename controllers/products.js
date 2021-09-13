@@ -9,22 +9,20 @@ const products = require('../services/products');
 const router = express.Router();
 
 router.get(
-  '/',
-  async (req, res) => {
-    const insertion = await products.getAllProducts();
-    console.log('insertion', insertion);
-    if (!insertion) console.log('ok');
-    res.status(200).json(insertion);
-  },
-);
-
-router.get(
   '/:id',
   isValidId,
   async (req, res) => {
     const { id } = req.params;
     const insertion = await products.getProductById(id);
     res.status(200).json(insertion);
+  },
+);
+
+router.get(
+  '/',
+  async (req, res) => {
+    const insertion = await products.getProduct();
+    res.status(200).json({ products: insertion });
   },
 );
 
