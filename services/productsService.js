@@ -1,4 +1,3 @@
-const { ObjectId } = require('mongodb');
 const productsModel = require('../models/productsModel');
 
 const isValid = async (name, quantity) => {
