@@ -27,11 +27,32 @@ const createProduct = async (name, quantity) => {
 };
 
 const getProductById = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
   const db = await mongoConnection.getConnection();
   const findById = await db.collection('products')
   .findOne({ _id: ObjectId(id) });
-  // console.log(findById);
   return findById;
+};
+
+const updateProductById = async (id, name, quantity) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await mongoConnection.getConnection();
+  await db.collection('products')
+  .updateOne({ _id: ObjectId(id) }, 
+  { $set: { name, quantity } });
+  return {
+    _id: id,
+    name, 
+    quantity,
+  }; 
+};
+
+const deleteProductById = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await mongoConnection.getConnection();
+  const deleteId = await db.collection('products')
+  .findOneAndDelete({ _id: ObjectId(id) });
+  return deleteId.value;
 };
 
 module.exports = { 
@@ -39,4 +60,6 @@ module.exports = {
   createProduct,
   findByName,
   getProductById,
+  updateProductById,
+  deleteProductById,
  };

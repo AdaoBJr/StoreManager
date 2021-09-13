@@ -1,4 +1,4 @@
-const { ObjectId } = require('mongodb');
+// const { ObjectId } = require('mongodb');
 const ProductsModels = require('../models/productsModels');
 
 const productsValidationName = (name) => {
@@ -16,7 +16,6 @@ const productsValidationName = (name) => {
 const productsAlreadyExists = async (name) => {
   const findByName = await ProductsModels.findByName(name);
   if (findByName) {
-    console.log();
  return ({
    err: {
     code: 'invalid_data',
@@ -57,7 +56,6 @@ const createProduct = async (name, quantity) => {
   const y = await productsAlreadyExists(name);
   if (y) return y;
   const z = verifyQuantityNumber(quantity);
-  console.log(z);
   if (z) return z;
   const w = verifyQuantity(quantity);
   if (w) return w;
@@ -75,16 +73,40 @@ const getAllProducts = async () => {
 };
 
 const getProductById = async (id) => {
-  const productId = await ProductsModels.getProductById(id);  
-  if (!productId || (!ObjectId.isValid(id))) {
+  const productId = await ProductsModels.getProductById(id); 
+  if (!productId) {
     return {
       err: {
         code: 'invalid_data',
-        message: '"Wrong id format',
+        message: 'Wrong id format',
       },
   }; 
    }
    return productId;
+};
+
+const updateProductById = async (id, name, quantity) => {
+  const x = productsValidationName(name);
+  if (x) return x;
+  const z = verifyQuantityNumber(quantity);
+  if (z) return z;
+  const w = verifyQuantity(quantity);
+  if (w) return w;
+  const objUpdate = await ProductsModels.updateProductById(id, name, quantity);
+  return objUpdate;
+};
+
+const deleteProductById = async (id) => {
+  const deleteId = await ProductsModels.deleteProductById(id);
+  if (!deleteId) {
+    return {
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+  }; 
+   }
+ return deleteId;
 };
 
 module.exports = { 
@@ -95,4 +117,6 @@ module.exports = {
   verifyQuantity,
   getAllProducts,
   getProductById,
+  updateProductById,
+  deleteProductById,
 };

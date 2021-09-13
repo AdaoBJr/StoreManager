@@ -8,6 +8,10 @@ const PORT = 3000;
 
 app.get('/products/:id', ProductController.getProductById);
 
+app.put('/products/:id', ProductController.updateProductById);
+
+app.delete('/products/:id', ProductController.deleteProductById);
+
 app.get('/products', ProductController.getAllProducts);
 
 app.post('/products', ProductController.createProduct);
