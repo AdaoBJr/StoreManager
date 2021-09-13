@@ -20,10 +20,35 @@ const getProducts = async (_req, res) => {
 
 const getProductById = async (req, res) => {
   const { id } = req.params;
-  const product = await productsModel.getProductById(id);
+  const product = await productsService.getProductById(id);
   if (product.err) {
     return res.status(422).json(product);
   }
+  res.status(200).json(product);
+};
+
+const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  const product = await productsService.getProductById(id);
+  if (product.err) {
+    return res.status(422).json(product);
+  }
+  const updatedProduct = await productsService.updateProduct({ id, name, quantity });
+  if (updatedProduct.err) {
+    console.log(updatedProduct);
+    return res.status(422).json(updatedProduct);
+  }
+  res.status(200).json(updatedProduct);
+};
+
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  const product = await productsService.getProductById(id);
+  if (product.err) {
+    return res.status(422).json(product);
+  }
+  await productsModel.deleteProduct(id);
   res.status(200).json(product);
 };
 
@@ -31,4 +56,6 @@ module.exports = {
   registerNewProduct,
   getProducts,
   getProductById,
+  updateProduct,
+  deleteProduct,
 };

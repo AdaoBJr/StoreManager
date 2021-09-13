@@ -17,6 +17,14 @@ const validateName = (name) => {
 };
 
 const validateQuantity = (quantity) => {
+  if (typeof quantity === 'string') {
+    return { 
+      err: { 
+        code: 'invalid_data',
+        message: '"quantity" must be a number',
+      },
+    };
+  }
   if (quantity < 1) {
     return { 
       err: { 
@@ -28,32 +36,58 @@ const validateQuantity = (quantity) => {
   return false;
 };
 
-const isNumber = (quantity) => {
-  console.log(typeof quantity === 'string');
-  if (typeof quantity === 'string') {
+const isProductUnique = async (newProduct) => {
+  const dataCheck = await productsModels.getProductByName(newProduct);
+  if (dataCheck.length > 0) {
     return { 
       err: { 
         code: 'invalid_data',
-        message: '"quantity" must be a number',
+        message: 'Product already exists',
       },
-    };
+    }; 
   }
   return false;
 };
 
-const registerNewProduct = (newProduct) => {
-  const { name, quantity } = newProduct;
-  const quantityNotNumber = isNumber(quantity);
+const validateProduct = async (product) => {
+  const { name, quantity } = product;
   const nameNotValid = validateName(name);
   const quantityNotValid = validateQuantity(quantity);
-
     if (nameNotValid) return nameNotValid;
-    if (quantityNotNumber) return quantityNotNumber;
     if (quantityNotValid) return quantityNotValid;
+    return false;
+};
 
+const registerNewProduct = async (newProduct) => {
+  const isNotValid = await validateProduct(newProduct);
+  const productNotUnique = await isProductUnique(newProduct);
+
+  if (isNotValid) return isNotValid;
+  if (productNotUnique) return productNotUnique;
   return productsModels.registerNewProduct(newProduct);
+};
+
+const getProductById = async (id) => {
+ const product = await productsModels.getProductById(id);
+ if (!product) {
+  return { 
+    err: { 
+      code: 'invalid_data',
+      message: 'Wrong id format',
+    },
+  }; 
+}
+return product;
+};
+
+const updateProduct = async (product) => {
+  const isNotValid = await validateProduct(product);
+  if (isNotValid) return isNotValid;
+  return productsModels.updateProduct(product);
 };
 
 module.exports = {
   registerNewProduct,
+  getProductById,
+  updateProduct,
 };
