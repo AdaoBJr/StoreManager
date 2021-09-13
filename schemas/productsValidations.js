@@ -3,7 +3,7 @@ const { ObjectID } = require('mongodb');
 const Products = require('../models/Products');
 
 const INVALID_DATA = 'invalid_data';
-// const NOTFOUND = 'notFound';
+// const NOTFOUND = 'not_found';
 
 const allProductsNames = async () => {
   const allProducts = await Products.getAllProducts();

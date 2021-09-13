@@ -19,7 +19,7 @@ module.exports = (err, req, res, _next) => {
   let status = 500;
 
   switch (err.code) {
-    case 'notFound':
+    case 'not_found':
       status = 404;
       break;
     case 'invalid_data':

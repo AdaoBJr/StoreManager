@@ -1,9 +1,10 @@
-// const { ObjectID } = require('mongodb');
+const { ObjectID } = require('mongodb');
 
 const Products = require('../models/Products');
-// const Sales = require('../models/Sales');
+const Sales = require('../models/Sales');
 
 const INVALID_DATA = 'invalid_data';
+const NOTFOUND = 'not_found';
 
 const validateProductIdOfSales = async (sales) => {
   const allProducts = await Products.getAllProducts();
@@ -46,7 +47,37 @@ const validateQuantity = (sales) => {
   return true;
 };
 
+const validateIdMongo = (id) => {
+  if (!ObjectID.isValid(id)) {
+    return {
+      code: NOTFOUND,
+      message: 'Sale not found',
+    };
+  }
+
+  return true;
+};
+
+const validateIfSaleExists = async (id) => {
+  const allSales = await Sales.getAllSales();
+  if (allSales.message) return { message: allSales.message };
+
+  const allIds = allSales.map(({ _id }) => _id);
+
+  const saleExists = allIds.some((idOfSales) => idOfSales === id);
+  if (!saleExists) {
+    return {
+      code: NOTFOUND,
+      message: 'Sale not found',
+    };
+  }
+
+  return true;
+};
+
 module.exports = {
   validateProductIdOfSales,
   validateQuantity,
+  validateIdMongo,
+  validateIfSaleExists,
 };

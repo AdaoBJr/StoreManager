@@ -25,6 +25,40 @@ const registerNewSales = async (sales) => {
   return addedSales;
 };
 
+const getAllSales = async () => {
+  const allSales = await Sales.getAllSales();
+  if (allSales.message) return { message: allSales.message };
+
+  return {
+    sales: allSales,
+  };
+};
+
+const getSaleById = async (id) => {
+  const validateIdMongo = validations.validateIdMongo(id);
+  if (validateIdMongo.message) {
+    return {
+      code: validateIdMongo.code,
+      message: validateIdMongo.message,
+    };
+  }
+
+  const validateIfSaleExists = validations.validateIfSaleExists(id);
+  if (validateIfSaleExists.message) {
+    return {
+      code: validateIfSaleExists.code,
+      message: validateIfSaleExists.message,
+    };
+  }
+  
+  const sale = await Sales.getSaleById(id);
+  if (sale.message) return { message: sale.message };
+
+  return sale;
+};
+
 module.exports = {
   registerNewSales,
+  getAllSales,
+  getSaleById,
 };

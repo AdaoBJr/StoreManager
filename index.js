@@ -19,6 +19,8 @@ app.post('/products', Products.registerNewProduct);
 app.put('/products/:id', Products.updateProduct);
 app.delete('/products/:id', Products.deleteProduct);
 
+app.get('/sales', Sales.getAllSales);
+app.get('/sales/:id', Sales.getSaleById);
 app.post('/sales', Sales.registerNewSales);
 
 app.use(errorMiddleware);
