@@ -1,3 +1,4 @@
+const CustomError = require('../helpers/CustomError');
 const salesModel = require('../models/salesModel');
 
 const create = async (itensSold) => {
@@ -23,4 +24,15 @@ const updateById = async ({ saleId, itensSold }) => {
   return response;
 };
 
-module.exports = { create, findAll, findById, updateById };
+const remove = async ({ id }) => {
+  const sale = await salesModel.findById({ id });
+  
+  if (!sale) {
+    throw new CustomError('not_found', 'Sale not found', 404);
+  }
+
+  await salesModel.remove({ id });
+  return sale;
+};
+
+module.exports = { create, findAll, findById, updateById, remove };

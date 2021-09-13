@@ -58,4 +58,14 @@ const updateById = async ({ saleId, itensSold }) => {
   return { _id: saleId, itensSold };
 };
 
-module.exports = { create, findAll, findById, updateById };
+const remove = async ({ id }) => {
+  const salesCollection = await getConnectionWithSalesCollection();
+  const { result } = await salesCollection.removeOne({ _id: ObjectId(id) });
+
+  if (result.n > 0) {
+    return true;
+  } 
+    return false;
+};
+
+module.exports = { create, findAll, findById, updateById, remove };

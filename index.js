@@ -30,7 +30,8 @@ app.route('/sales')
   .get(salesController.findAll);
 app.route('/sales/:id')
   .get(salesController.findById)
-  .put(salesController.updateById);
+  .put(salesController.updateById)
+  .delete(salesController.remove);
 
 // error
 app.use(errorMiddleware);

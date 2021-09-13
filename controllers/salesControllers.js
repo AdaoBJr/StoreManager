@@ -22,7 +22,7 @@ const isValidNewSales = (sales) => {
   }
 };
 
-/* const isValiId = (params) => {
+const isValiId = (params) => {
   const { error } = Joi.object({ 
     id: Joi
       .string()
@@ -34,9 +34,9 @@ const isValidNewSales = (sales) => {
   }).validate(params);
 
   if (error) {
-    throw new CustomError('invalid_data', 'Wrong id format', 422);
+    throw new CustomError('invalid_data', 'Wrong sale ID format', 422);
   } 
-}; */
+};
 
 const create = rescue(async (req, res) => {
   const { body } = req;
@@ -60,10 +60,10 @@ const findById = rescue(async (req, res) => {
   const { id } = req.params;
   const sale = await salesService.findById({ id });
 
-  // if (!sale) {
-  //   throw new CustomError('not_found', 'Sale not found', 404);
-  // }
-  
+  if (!sale) {
+    throw new CustomError('not_found', 'Sale not found', 404);
+  }
+
   res.status(200).json(sale);
 });
 
@@ -80,7 +80,16 @@ const updateById = rescue(async (req, res) => {
   res.status(200).json(response);
 });
 
-module.exports = { create, findAll, findById, updateById };
+const remove = rescue(async (req, res) => {
+  isValiId(req.params);
+  
+  const { id } = req.params;
+  const sale = await salesService.remove({ id });
+
+  res.status(200).json(sale);
+});
+
+module.exports = { create, findAll, findById, updateById, remove };
 
 // validação tirado deste forum:
 // https://stackoverflow.com/questions/42656549/joi-validation-of-array
