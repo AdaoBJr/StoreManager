@@ -5,12 +5,14 @@ const {
   getAllSales,
   getSaleById,
   updateSaleById,
+  deleteSaleById,
 } = require('../controllers/salesController');
 
 const {
   validQntSale,
   validProductId,
-  saleExists, 
+  saleExists,
+  validSaleId,
 } = require('../middlewares/validations');
 
 const router = express.Router();
@@ -32,6 +34,11 @@ router.route('/:id')
   validQntSale,
   validProductId,
   updateSaleById,
+)
+.delete(
+  validSaleId,
+  saleExists,
+  deleteSaleById,
 );
 
 module.exports = router;

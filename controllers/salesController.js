@@ -14,7 +14,7 @@ return res.status(200).json(allSales);
 const getSaleById = async (req, res) => {
   const { id } = req.params;
   const sale = await salesService.getSaleById(id);
-  return res.status(200).json(sale);
+  return res.status(200).json({ sale });
 };
 
 const updateSaleById = async (req, res) => {
@@ -24,9 +24,16 @@ const updateSaleById = async (req, res) => {
   return res.status(200).json(sale);
 };
 
+const deleteSaleById = async (req, res) => {
+  const { id } = req.params;
+  const sale = await salesService.deleteSaleById(id);
+  return res.status(200).json(sale);
+};
+
 module.exports = {
   createSale,
   getAllSales,
   getSaleById,
   updateSaleById,
+  deleteSaleById,
 };

@@ -9,6 +9,7 @@ const errors = {
   wrongId: 'Wrong id format',
   wrongIdOrQnt: 'Wrong product ID or invalid quantity',
   saleNotFound: 'Sale not found',
+  wrongSaleIdFormat: 'Wrong sale ID format',
 };
 
 const invData = (message) => ({ err: { code: 'invalid_data', message } });
@@ -73,6 +74,12 @@ const saleExists = async (req, res, next) => {
   next();
 };
 
+const validSaleId = async (req, res, next) => {
+  const { id } = req.params;
+  if (id.length !== 24) return res.status(422).json(invData(errors.wrongSaleIdFormat));
+  next();
+};
+
 module.exports = {
   validNameLength,
   validQntType,
@@ -82,4 +89,5 @@ module.exports = {
   validQntSale,
   validProductId,
   saleExists,
+  validSaleId,
 };

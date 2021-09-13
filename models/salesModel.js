@@ -17,15 +17,21 @@ const getAllSales = async () => {
 const getSaleById = async (id) => {
   const db = await mongoConnection();
   const sale = await db.collection('sales').findOne(ObjectId(id));
-  return { sale };
+  return sale;
 };
 
 const updateSaleById = async (id, arr) => {
   const db = await mongoConnection();
-  console.log(arr);
   await db.collection('sales')
   .updateOne(({ _id: ObjectId(id) }), { $set: { itensSold: arr } });
   return { itensSold: arr, _id: id };
+};
+
+const deleteSaleById = async (id) => {
+  const db = await mongoConnection();
+  const deletedSale = await db.collection('sales')
+  .findOneAndDelete({ _id: ObjectId(id) });
+  return deletedSale;
 };
 
 module.exports = {
@@ -33,4 +39,5 @@ module.exports = {
   getAllSales,
   getSaleById,
   updateSaleById,
+  deleteSaleById,
 };
