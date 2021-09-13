@@ -1,4 +1,17 @@
-// não remova esse endpoint, e para o avaliador funcionar
+const express = require('express');
+const Products = require('./controllers/Products');
+
+const app = express();
+app.use(express.json());
+
+const PORT = 3000;
+
 app.get('/', (_request, response) => {
   response.send();
 });
+
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+
+app.get('/products', Products.getProducts);
+
+app.post('/products', Products.validateProduct, Products.createProduct);
