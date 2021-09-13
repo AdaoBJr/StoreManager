@@ -69,7 +69,7 @@ const getProductById = async (id) => {
 const updateProduct = async (id, name, quantity) => {
   const isValidName = isValidNameProduct(name);
   const isValidQuantity = isValidQuantityProduct(quantity);
-  const isValidId = isValidID(quantity);
+  const isValidId = isValidID(id);
 
   if (isValidName.err) return isValidName;
   if (isValidQuantity.err) return isValidQuantity;
@@ -80,8 +80,10 @@ const updateProduct = async (id, name, quantity) => {
 };
 
 const exclude = async (id) => {
-  const excludedProduct = productModels.exclude(id, 'products');
-  if (!excludedProduct) return { err: {} };
+  const isValidId = isValidID(id);
+  if (isValidId.err) return isValidId;
+  const excludedProduct = await productModels.exclude(id, 'products');
+  if (!excludedProduct) return { err: { code: 'invalid_data', message: 'Wrong id format' } };
   return excludedProduct;
 };
 
