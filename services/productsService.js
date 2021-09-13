@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const productsModel = require('../models/productsModel');
 
 const validationName = (name) => {
@@ -32,13 +33,11 @@ const createProduct = async ({ name, quantity }) => {
 };
 
 const verifyId = async (id) => {
-  const product = await productsModel.getProductById(id);
-
-  if (!product) {
+  if (!ObjectId.isValid(id)) {
     return false;
   }
-
-  return product;
+  const products = await productsModel.getProductById(id);
+  return products;
 };
 
 const getAllProducts = async () => {

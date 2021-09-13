@@ -21,15 +21,14 @@ const createProductModel = async ({ name, quantity }) => {
 const getAll = async () => {
   const db = await connection();
   const getAllProducts = await db.collection(COLLECTION).find().toArray();
-  console.log('cheguei no model');
+
   return getAllProducts;
 };
 
 const getProductById = async (id) => {
   const db = await connection();
-  const product = await db.collection(COLLECTION).findOne(ObjectId.isValid(id));
+  const product = await db.collection(COLLECTION).findOne(ObjectId(id));
 
-  if (!product) return false;
   return product;
 };
 

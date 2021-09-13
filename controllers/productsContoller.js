@@ -67,12 +67,13 @@ const createProduct = async (req, res) => {
     const { name, quantity } = req.body;
     const result = await productsService.createProduct({ name, quantity });
 
-    return res.status(ok).json(result);
+    return res.status(201).json(result);
 };
 
 const validId = async (req, res) => {
   const { id } = req.params;
   const product = await productsService.verifyId(id);
+  console.log(product, 'controller');
   if (!product) {
     return res.status(unprocessableEntity).json({
       err: {
@@ -80,7 +81,7 @@ const validId = async (req, res) => {
         message: 'Wrong id format',
       },
     });
-  } 
+  }
   return res.status(ok).json(product);
 };
 
