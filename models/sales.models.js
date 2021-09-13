@@ -15,7 +15,8 @@ const getAll = async () => {
 
 const getSaleById = async (id) => {
   const db = await connection();
-  return db.collection('sales').findOne(ObjectId(id));
+  const sale = await db.collection('sales').findOne(ObjectId(id));
+  return sale;
 };
 
 const update = async (id, updates) => {
@@ -34,4 +35,17 @@ const removeSale = async (id) => {
   return deletedCount;
 };
 
-module.exports = { create, getAll, getSaleById, update, removeSale };
+const updateProductsQuantity = async (id, quantity, operation) => {
+  const db = await connection();
+  const product = await db.collection('products').findOne({ _id: ObjectId(id) });
+  if (product) {
+    if (operation === 'sale') product.quantity -= quantity;
+    if (operation === 'update/delete') product.quantity += quantity;
+    await db.collection('products')
+      .updateOne({ _id: ObjectId(id) }, { $set: product });
+  }
+
+  return product;
+};
+
+module.exports = { create, getAll, getSaleById, update, removeSale, updateProductsQuantity };

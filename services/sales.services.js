@@ -5,6 +5,9 @@ const create = async (sales) => {
   const isValid = Validation.isQuantityValid(sales);
   if (isValid.err) return isValid;
   const newSale = await Sale.create(sales);
+  sales.forEach((sale) => {
+    Sale.updateProductsQuantity(sale.productId, sale.quantity, 'sale');
+  });
   return { code: 200, newSale };
 };
 
@@ -16,7 +19,6 @@ const getAll = async () => {
 const getSaleById = async (id) => {
   const idValid = Validation.isIdValid(id);
   if (idValid.err) return idValid;
-  console.log('aaaa');
   const sale = await Sale.getSaleById(id);
 
   if (!sale) {
@@ -36,6 +38,8 @@ const update = async (id, updates) => {
   const isValid = Validation.isIdValid(id);
   if (isValid.err) return isValid;
   const updatedSale = await Sale.update(id, updates);
+  Sale.updateProductsQuantity(updates[0].productId, updates[0].quantity, 'update/delete');
+
   return { code: 200, updatedSale };
 };
 
@@ -51,6 +55,8 @@ const removeSale = async (id) => {
   }
   const sale = await Sale.getSaleById(id);
   await Sale.removeSale(id);
+  Sale.updateProductsQuantity(sale.itensSold[0].productId, sale.itensSold[0].quantity, 'update/delete');
+
   return { code: 200, sale };
 };
 
