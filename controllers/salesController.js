@@ -6,7 +6,6 @@ const contCreate = async (req, res) => {
   if (result.err) {
     return res.status(result.code).json({ ...result });
   }
-  console.log(result.err);
 return res.status(result.code).json(result.itensSold);
 };
 
