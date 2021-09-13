@@ -1,15 +1,21 @@
-const mongodb = require('mongodb').MongoClient;
+const { MongoClient } = require('mongodb');
 
-const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
-const DB_NAME = 'StoreManager';
-
-module.exports = () =>
-  mongodb.connect(MONGO_DB_URL, {
+const OPTIONS = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-  })
-    .then((connection) => connection.db(DB_NAME))
-    .catch((err) => {
-      console.error(err);
-      process.exit(1);
-    });
+};
+
+const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
+// const MONGO_DB_URL = 'mongodb://127.0.0.1:27017';
+
+let db = null;
+
+const connection = () => (db
+    ? Promise.resolve(db)
+    : MongoClient.connect(MONGO_DB_URL, OPTIONS)
+    .then((conn) => {
+    db = conn.db('StoreManager');
+    return db;
+    }));
+
+module.exports = connection;

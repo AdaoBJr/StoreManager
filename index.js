@@ -22,8 +22,9 @@ app.get('/', (_request, response) => {
 });
 
 app.use((err, _req, res, _next) => {
-  const { status, result } = err;
-  res.status(status).json(result);
+  const { status } = err;
+  return res.status(status)
+  .json({ err: { code: err.code, message: err.message } });
 });
 
 app.listen(PORT, () => console.log(`Oline porta ${PORT}`));
