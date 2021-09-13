@@ -1,4 +1,11 @@
-const { create, findByName, getAll, findByID, update } = require('../4models/product_model');
+const {
+  create,
+  findByName,
+  getAll,
+  findByID,
+  update,
+  deleteItem,
+} = require('../4models/product_model');
 
 const validaName = (name) => (name.length < 6);
 const validaQuantity = (quantity) => (quantity <= 0);
@@ -49,8 +56,11 @@ const updateProductsService = async (id, name, quantity) => {
   }
 };
 
+const deleteProductsService = async (id) => deleteItem(id);
+
 module.exports = {
   createproducts,
   showProductsService,
   updateProductsService,
+  deleteProductsService,
 };

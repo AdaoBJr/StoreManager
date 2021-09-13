@@ -29,10 +29,19 @@ const update = async (id, name, quantity) => {
     .then((DB) => DB.collection('products').findOne(new ObjectId(id)));
 };
 
+const deleteItem = async (id) => {
+  if (!ObjectId.isValid(id)) { return 422; }
+  const item = connection().then((DB) => DB.collection('products').findOne(new ObjectId(id)));
+  connection().then((DB) => DB.collection('products')
+    .deleteOne({ _id: ObjectId(id) })); 
+  return item;
+};
+
 module.exports = {
   create,
   getAll,
   findByName,
   findByID,
   update,
+  deleteItem,
 };
