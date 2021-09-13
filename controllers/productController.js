@@ -1,4 +1,4 @@
-const { create, getAll, getById, update } = require('../services/productService');
+const { create, getAll, getById, update, remove } = require('../services/productService');
 
 const createProduct = async (req, res) => {
   const { name, quantity } = req.body;
@@ -29,4 +29,16 @@ const updatedSucessfully = async (req, res) => {
   return res.status(200).json({ id, name, quantity });
 };
 
-module.exports = { createProduct, allProducts, getProductById, updatedSucessfully };
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+
+  const deletado = await remove({ id });
+
+  if (deletado) {
+    return res.status(200).json(deletado);
+  }
+  return res.status(422).json({
+    err: { code: 'invalid_data', message: 'Wrong id format' } });
+};
+
+module.exports = { createProduct, allProducts, getProductById, updatedSucessfully, deleteProduct };

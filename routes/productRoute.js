@@ -3,7 +3,7 @@ const { Router } = require('express');
 const { productValid, validName,
   validQuantity, validateProduct } = require('../middlewares/productMiddlewares');
 const { createProduct, allProducts,
-  getProductById, updatedSucessfully } = require('../controllers/productController');
+  getProductById, updatedSucessfully, deleteProduct } = require('../controllers/productController');
 
 const routes = new Router();
 
@@ -23,5 +23,7 @@ routes.get('/products', allProducts);
 routes.get('/products/:id', validateProduct, getProductById);
 
 routes.put('/products/:id', validName, validQuantity, updatedSucessfully);
+
+routes.delete('/products/:id', deleteProduct);
 
 module.exports = routes;
