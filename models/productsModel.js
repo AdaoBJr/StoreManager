@@ -1,5 +1,9 @@
 const connection = require('./connection');
 
+const findByName = async (name) => 
+  connection()
+    .then((db) => db.collection('products').findOne({ name }));
+
 const createProduct = async (name, quantity) => 
   connection()
     .then((db) => db.collection('products').insertOne({
@@ -9,4 +13,5 @@ const createProduct = async (name, quantity) =>
 
 module.exports = {
   createProduct,
+  findByName,
 };
