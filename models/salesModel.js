@@ -40,4 +40,22 @@ const findById = async ({ id }) => {
   }
 };
 
-module.exports = { create, findAll, findById };
+const updateById = async ({ saleId, itensSold }) => {
+  const salesCollection = await getConnectionWithSalesCollection();
+
+   const { result } = await salesCollection.updateOne(
+    {
+      _id: new ObjectId(saleId), 
+      'itensSold.productId': itensSold[0].productId,
+    },
+    {
+      $set: { 'itensSold.$.quantity': itensSold[0].quantity },
+    },
+  );
+
+  if (result.nModified < 1) return null;
+
+  return { _id: saleId, itensSold };
+};
+
+module.exports = { create, findAll, findById, updateById };

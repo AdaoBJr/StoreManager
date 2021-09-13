@@ -17,4 +17,10 @@ const findById = async ({ id }) => {
   return sale;
 };
 
-module.exports = { create, findAll, findById };
+const updateById = async ({ saleId, itensSold }) => {
+  const response = await salesModel.updateById({ saleId, itensSold });
+  
+  return response;
+};
+
+module.exports = { create, findAll, findById, updateById };

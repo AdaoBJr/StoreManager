@@ -67,7 +67,20 @@ const findById = rescue(async (req, res) => {
   res.status(200).json(sale);
 });
 
-module.exports = { create, findAll, findById };
+const updateById = rescue(async (req, res) => {
+  isValidNewSales(req.body);
+
+  const { id } = req.params;
+  const { body } = req;
+
+  const response = await salesService.updateById({ saleId: id, itensSold: body });
+
+  if (!response) throw new CustomError('not_update', 'product not update', 500);
+
+  res.status(200).json(response);
+});
+
+module.exports = { create, findAll, findById, updateById };
 
 // validação tirado deste forum:
 // https://stackoverflow.com/questions/42656549/joi-validation-of-array
