@@ -22,8 +22,19 @@ const getSalesById = async (req, res) => {
   res.status(200).json(sales);
 };
 
+const updateSale = async (req, res) => {
+  const { id } = req.params;
+  const update = req.body;
+  const sales = await salesService.updateSale({ id, update });
+  if (sales.err) {
+    return res.status(422).json(sales);
+  }
+  res.status(200).json(sales);
+};
+
 module.exports = {
   registerNewSale,
   getSales,
   getSalesById,
+  updateSale,
 };

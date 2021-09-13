@@ -21,7 +21,7 @@ const registerNewSale = async (sales) => {
   return salesModel.registerNewSale(sales);
 };
 
-const getSalesById = async (id) => {
+const validateId = (id) => {
   if (!ObjectId.isValid(id)) {
     return {
       err: { 
@@ -30,19 +30,42 @@ const getSalesById = async (id) => {
       },
     };
   }
+  return false;
+};
+
+const getSalesById = async (id) => {
+  // const idNotValid = validateId(id);
+  // if (idNotValid) return idNotValid;
   const getSales = await salesModel.getSalesById(id);
   if (!getSales) {
     return {
       err: { 
-        code: 'not_found',
-        message: 'Sale not found',
+        code: 'invalid_data',
+        message: 'Wrong product ID or invalid quantity',
       },
     };
   }
   return getSales;
 };
 
+const updateSale = ({ id, update }) => {
+  const idNotValid = validateId(id);
+  if (idNotValid) return idNotValid;
+  const validateQuantity = update
+    .find(({ quantity }) => typeof quantity !== 'number' || quantity < 1);
+  if (validateQuantity) {
+    return {
+      err: { 
+        code: 'invalid_data',
+        message: 'Wrong product ID or invalid quantity',
+      },
+    };
+  }
+  return salesModel.updateSale({ id, update });
+};
+
 module.exports = {
   registerNewSale,
   getSalesById,
+  updateSale,
 };

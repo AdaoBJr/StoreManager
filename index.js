@@ -34,3 +34,5 @@ app.post('/sales', salesController.registerNewSale);
 app.get('/sales', salesController.getSales);
 
 app.get('/sales/:id', salesController.getSalesById);
+
+app.put('/sales/:id', salesController.updateSale);
