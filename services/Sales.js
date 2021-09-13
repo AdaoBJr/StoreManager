@@ -26,8 +26,8 @@ const validateDeletion = (sale) => {
   }
 };
 
-const verifyStock = (quantity) => {
-  if (!quantity) {
+const verifyStock = (stock) => {
+  if (!stock) {
     const error = new Error();
     error.statusCode = 'stockProblem';
     throw error;
