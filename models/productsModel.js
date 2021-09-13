@@ -23,8 +23,16 @@ const findById = async (id) => {
   const comparisonId = new mongo.ObjectId(id);
   const productData = await connection().then((db) => 
     db.collection(COLLECTION_NAME).findOne({ _id: comparisonId }));
-    console.log(id, productData);
   return productData;
+};
+
+const updateById = async (id, name, quantity) => {
+  const comparisonId = new mongo.ObjectId(id);
+  await connection().then((db) => 
+    db.collection(COLLECTION_NAME).updateOne({ _id: comparisonId }, { $set: { name, quantity } }));
+  const updatedProduct = await connection().then((db) => 
+  db.collection(COLLECTION_NAME).findOne({ _id: comparisonId }));
+  return updatedProduct;
 };
 
 module.exports = {
@@ -32,4 +40,5 @@ module.exports = {
   findByName,
   findAllProducts,
   findById,
+  updateById,
 };

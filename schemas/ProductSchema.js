@@ -31,12 +31,12 @@ const validateNameAndQty = async (name, quantity) => {
   switch (true) {
     case lengthIsLesserThan(name, 5): 
       return { status, err: { code, message: errors.nameShort } };
-    case await productExists(name): 
-      return { status, err: { code, message: errors.nameExists } };
-    case isLesserThanOrEqualTo0(quantity): 
+      case isLesserThanOrEqualTo0(quantity): 
       return { status, err: { code, message: errors.quantityLesserThanOne } };
-    case isString(quantity): 
+      case isString(quantity): 
       return { status, err: { code, message: errors.quantityNotANumber } };
+      case await productExists(name): 
+        return { status, err: { code, message: errors.nameExists } };
     default: return {};
   }
 };

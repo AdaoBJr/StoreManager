@@ -8,6 +8,7 @@ app.use(bodyParser.json());
 app.post('/products', products.insertNewProduct);
 app.get('/products', products.getAllProducts);
 app.get('/products/:id', products.getProductById);
+app.put('/products/:id', products.updateProductById);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {

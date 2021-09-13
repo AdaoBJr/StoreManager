@@ -21,8 +21,18 @@ const getProductById = async (id) => {
   if (productWanted) return productWanted;
 };
 
+const updateProductById = async (id, name, quantity) => {
+  const nameAndQtyValidation = await productSchema.validateNameAndQty(name, quantity);
+  if (nameAndQtyValidation.err) return nameAndQtyValidation;
+  const idValidation = await productSchema.validateId(id);
+  if (idValidation.err) return idValidation;
+  const updatedProduct = await model.updateById(id, name, quantity);
+  return updatedProduct;
+};
+
 module.exports = {
   insertNewProduct,
   getAllProducts,
   getProductById,
+  updateProductById,
 };
