@@ -45,17 +45,18 @@ const editSale = (req, res) => {
 
 const deleteSale = (req, res) => {
   const { id } = req.params;
+  console.log('cheguei no controller com id', id);
   salesService.deleteSale(id)
-  .then((result) => res.status(200).json(result))
+  .then((result) => {
+    console.log('o retorno para o controller foi', result);
+    if (result === null || result === undefined) {
+      return res.status(422).json({ err: { 
+        code: 'invalid_data', message: 'Wrong sale ID format' } });
+    }
+    res.status(200).json(result);
+})
   .catch(() => res.status(422).json({ err: { 
     code: 'invalid_data', message: 'Wrong sale ID format' } }));
-};
-
-const stockUpdate = (req, _res, next) => {
-  // const { id } = req.params;
-  const stockAlterarion = req.body;
-  stockAlterarion.map((item) => salesService.stockUpdate(item));
-  next();
 };
 
 module.exports = {
@@ -66,5 +67,4 @@ module.exports = {
   getById,
   editSale,
   deleteSale,
-  stockUpdate,
 };

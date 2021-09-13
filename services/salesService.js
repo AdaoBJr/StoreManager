@@ -32,13 +32,10 @@ const editSale = async (id, sale) => {
 };
 
 const deleteSale = async (id) => {
+  console.log('cheguei no service com id', id);
   const deletedProduct = await salesModel.deleteSale(id);
+  console.log('o retorno para o service foi', deletedProduct);
   return deletedProduct;
-};
-
-const stockUpdate = async ({ productId, quantity }) => {
-  const updatedStock = await salesModel.updateStock(productId, (quantity * (-1)));
-  return updatedStock;
 };
 
 module.exports = {
@@ -49,5 +46,4 @@ module.exports = {
   getById,
   editSale,
   deleteSale,
-  stockUpdate,
 };
