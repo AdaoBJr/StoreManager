@@ -14,18 +14,23 @@ const isValidQuantity = (quantity) => {
   return true;
 }; 
 
-const createSales = async (productId, quantity) => {
+const createSale = async (productId, quantity) => {
   const isValid = isValidQuantity(quantity);
   if (isValid !== true) return isValid;
 
-  const sale = await SaleModel.createSale({
+  const { id } = await SaleModel.createSale({
     productId,
     quantity,
   });
 
-  return sale;
+  return {
+    code: 201,
+    id,
+    productId,
+    quantity,
+  };
 };
 
 module.exports = {
-  createSales,
+  createSale,
 };
