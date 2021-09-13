@@ -3,7 +3,7 @@ const productsModel = require('../models/productsModel');
 const validName = (name) => {
     if (name.length < 5 || typeof (name) !== 'string') return false;
 
-  return true;
+    return true;
 };
 
 const validQuantity = (quantity) => {
@@ -24,8 +24,8 @@ const getAllProducts = async () => {
 };
 
 const getProductsById = async (id) => {
-  //  console.log(id);
-    const product = productsModel.getById(id);
+    //  console.log(id);
+    const product = await productsModel.getById(id);
     if (!product) {
         return null;
     }
@@ -34,8 +34,8 @@ const getProductsById = async (id) => {
 const createProduct = async ({ name, quantity }) => {
     const productExists = await productsModel.productsExists(name);
     if (productExists) {
-         return false; 
-}
+        return false;
+    }
     const response = await productsModel.create({ name, quantity });
     return response;
 };
@@ -45,17 +45,26 @@ const updateProduct = async ({ id, name, quantity }) => {
     // console.log(productExists);
     if (productExists) {
         const response = await productsModel.update({ id, name, quantity });
-         return response;
+        return response;
     }
     return false;
 };
+const deleteProduct = async (id) => {
+    const productDeletado = await productsModel.getById(id);
+    const product = await productsModel.deleteProduct(id);
 
-module.exports = { 
+    if (product) {
+        return productDeletado;
+    }
+    return false;
+};
+module.exports = {
     createProduct,
-     getAllProducts, 
-     validName, 
-     validQuantity, 
-     validTypeQuantity,
-     getProductsById,
-     updateProduct,
-     };
+    getAllProducts,
+    validName,
+    validQuantity,
+    validTypeQuantity,
+    getProductsById,
+    updateProduct,
+    deleteProduct,
+};

@@ -4,15 +4,15 @@ const connection = require('./connection');
 const getAll = async () => {
     const db = await connection();
     const get = await db.collection('products').find().toArray();
-    
+
     return get;
 };
 
 const getById = async (id) => {
-    console.log(id);
+    // console.log(id);
     const db = await connection();
     const get = await db.collection('products').findOne({ _id: ObjectId(id) });
-   console.log(get);
+    //  console.log(get);
     return get;
 };
 
@@ -32,22 +32,27 @@ const create = async ({ name, quantity }) => {
 
 const update = async ({ id, name, quantity }) => {
     const testeID = ObjectId.isValid(id);
-    console.log(testeID);
+    // console.log(testeID);
     if (!testeID) {
         return null;
     }
     const db = await connection();
     const product = await db.collection('products').updateOne(
         { _id: ObjectId(id) }, { $set: { name, quantity } },
-);
+    );
     return product;
 };
 
-// const exclude = async (id) => {
-//     if (!ObjectId.isValid(id)) return null;
-//     const db = await connection();
+const deleteProduct = async (id) => {
+    if (!ObjectId.isValid(id)) {
+        return null;
+    }
 
-//     return await db.collection('songs').deleteOne({ _id: ObjectId(id) });
-// }
+    const db = await connection();
+    const deleteP = await db.collection('products').deleteOne({ _id: ObjectId(id) });
+    if (deleteP.deletedCount === 1) return true;
 
-module.exports = { getAll, create, productsExists, getById, update };
+    return false;
+};
+
+module.exports = { getAll, create, productsExists, getById, update, deleteProduct };
