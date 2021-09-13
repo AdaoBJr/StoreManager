@@ -16,8 +16,7 @@ const findById = async (id) => {
     const response = await db.collection('products').findOne(ObjectId(id));
         const { quantity, name } = response;
 
-        const data = getNewproduct({ id, quantity, name });
-        return data;
+        return getNewproduct(id, name, quantity);
 };
 
 const findByName = async (name) => {
@@ -25,7 +24,7 @@ const findByName = async (name) => {
       const response = await db.collection('products').findOne({ name });
        if (!response) return null;
        const { quantity, id } = response;   
-       return getNewproduct({ id, quantity, name });
+       return getNewproduct(id, name, quantity);
 };
 
 const getAll = async () => {
@@ -38,11 +37,9 @@ const getAll = async () => {
 const create = async (name, quantity) => mongoConnection()
 .then((db) => db.collection('products').insertOne({ name, quantity }))
 .then((result) => getNewproduct(result.insertedId, name, quantity));
-// console.log(result)
-// getNewproduct({ _id: result.insertedId, name, quantity })
+
 const updateProduct = async (id, name, quantity) => {
     const db = await mongoConnection();
-    // console.log(id, typeof id);
     await db.collection('products').updateOne({
         _id: ObjectId(id), 
     }, {
@@ -52,9 +49,7 @@ const updateProduct = async (id, name, quantity) => {
         },
     });
 
-    // console.log(response, name, quantity, id, 'resposta');
-    // return response;
-   return getNewproduct({ id, quantity, name });
+   return getNewproduct(id, name, quantity);
 };
 
 module.exports = {
