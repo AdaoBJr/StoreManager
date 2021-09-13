@@ -30,9 +30,17 @@ const getProductById = async (id) => {
   return product;
 };
 
+const updateProductById = async (id, name, quantity) => {
+  const db = await mongoConnection();
+  await db.collection('products')
+  .updateOne(({ _id: ObjectId(id) }), { $set: { name, quantity } });
+  return getProductById(id);
+};
+
 module.exports = {
   findByName,
   createProduct,
   getAllProducts,
   getProductById,
+  updateProductById,
 };

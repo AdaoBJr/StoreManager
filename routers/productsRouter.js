@@ -4,6 +4,7 @@ const {
   createProduct,
   getAllProducts,
   getProductById,
+  updateProductById,
 } = require('../controllers/productsController');
 
 const {
@@ -29,6 +30,12 @@ router.route('/:id')
 .get(
   validId,
   getProductById,
-  );
+  )
+.put(
+  validNameLength,
+  validQntValue,
+  validQntType,
+  updateProductById,
+);
 
 module.exports = router;
