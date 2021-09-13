@@ -11,7 +11,7 @@ const createProduct = async (req, res) => {
   if (responseObj.err) {
     return res.status(422).json(responseObj);
   }
-  
+
   return res.status(201).json({ _id: id, name: responseObj.name, quantity: responseObj.quantity });
 };
 
@@ -26,7 +26,6 @@ const getAll = async (_req, res) => {
 const getProductById = async (req, res) => {
   const { id } = req.params;
   const oneProduct = await productService.getProductById(id);
-
   if (oneProduct.err) return res.status(422).json(oneProduct);
   res.status(200).json(oneProduct);
 };
