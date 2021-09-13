@@ -11,12 +11,12 @@ const createProduct = rescue(async (req, res, next) => {
   }).validate(req.body);
 
   if (joiError) return next(joiError);
-
+  
   const newProduct = await productsService.createProduct(name, quantity);
 
   if (newProduct.error) return next(newProduct.error);
 
-  return res.status(201).json(newProduct);
+  return res.status(201).json(newProduct); // Status 201 - Created
 });
 
 module.exports = {
