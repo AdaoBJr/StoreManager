@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const productsController = require('./controllers/productsController');
 const errorMiddleware = require('./middlewares/error');
+const salesController = require('./controllers/salesControllers');
 
 // declarações
 const app = express();
@@ -24,6 +25,9 @@ app.route('/products/:id')
   .put(productsController.updateById)
   .delete(productsController.remove);
 
+app.route('/sales')
+  .post(salesController.create);
+  
 // error
 app.use(errorMiddleware);
 
