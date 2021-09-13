@@ -53,6 +53,7 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
+  const { name, quantity } = req.body;
 
   const { code, message } = await ProductService.deleteProduct(id);
 
@@ -61,7 +62,7 @@ const deleteProduct = async (req, res) => {
     .json({ err: { code, message } });
   }
 
-  res.status(StatusCodes.OK).json({ _id: id });
+  res.status(StatusCodes.OK).json({ _id: id, name, quantity });
 };
 
 module.exports = { 
