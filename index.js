@@ -7,6 +7,7 @@ const productUpdateController = require('./controllers/productUpdateController')
 const productDeleteController = require('./controllers/productDeleteController');
 const saleController = require('./controllers/saleController');
 const saleGetController = require('./controllers/saleGetController');
+const saleUpdateController = require('./controllers/saleUpdateController');
 
 const app = express();
 app.use(bodyParser.json());
@@ -23,6 +24,7 @@ app.delete('/products/:id', productDeleteController.exclude);
 app.post('/sales', saleController.cadastrar);
 app.get('/sales', saleGetController.getAllSale)
   .get('/sales/:id', saleGetController.getOneSal);
+app.put('/sales/:id', saleUpdateController.updateSale);
 
 app.listen(3000, () => {
   console.log('Ouvindo a porta 3000');
