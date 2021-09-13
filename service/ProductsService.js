@@ -4,7 +4,7 @@ const createProduct = async (name, quantity) => {
   const isHaveName = await ProductsModel.findByName(name);
   if (isHaveName) {
     return { err: {
-      code: 'invalid_data',
+      code: 'INVALID_DATA',
       message: 'Product already exists',
     } };
   }
