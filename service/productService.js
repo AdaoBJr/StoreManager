@@ -34,10 +34,13 @@ const create = async (name, quantity) => {
 
   const updateProduct = async (id, name, quantity) => {
     const existingProduct = await findById(id);
-    // console.log(existingProduct, 'euaqi');
     if (existingProduct.err) return existingProduct;
 
-    return productModel.updateProduct(id, name, quantity);
+     return productModel.updateProduct(id, name, quantity);
   };
-
-module.exports = { create, getAll, findById, updateProduct };
+const removeProduct = async (id) => {
+  const existingProduct = await findById(id);
+  if (existingProduct.err) return existingProduct;
+   return productModel.removeProduct(id);
+};
+module.exports = { create, getAll, findById, updateProduct, removeProduct };

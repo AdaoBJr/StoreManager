@@ -36,8 +36,6 @@ const getAll = async (req, res) => {
     const product = await productSevice.findById(id);
     if (product.err) return res.status(422).json(product);
   
-    // if (product.error) return next(product.error);
-  
     res.status(200).json(product);
   };
 
@@ -58,9 +56,19 @@ const getAll = async (req, res) => {
   
   const product = await productSevice
   .updateProduct(id, name, quantity);
-  if (product.err) return res.status(422).json(product);
+  // if (product.err) return res.status(422).json(product);
+  if (!product) return res.status(422).json(product);
   
   return res.status(200).json(product); 
+};
+
+const removeProduct = async (req, res) => {
+  const { id } = req.params;
+
+  const product = await productSevice
+  .removeProduct(id);
+  if (product.err) return res.status(422).json(product);
+  return res.status(200).json(product);
 };
 
 module.exports = {
@@ -68,4 +76,5 @@ module.exports = {
   getAll,
   findById,
   updateProduct,
+  removeProduct,
 };

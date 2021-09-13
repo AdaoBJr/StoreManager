@@ -1,15 +1,13 @@
 const { ObjectId } = require('mongodb');
 const mongoConnection = require('./connection');
 
-const getNewproduct = async (id, name, quantity) => {
-    console.log(id, name, quantity);
-    return {
+const getNewproduct = async (id, name, quantity) => 
+    // console.log(id, name, quantity, 'aqio');
+     ({
         _id: id,
         name, 
         quantity,
-    };
-};
-
+    });
 const findById = async (id) => {
     if (!ObjectId.isValid(id)) return null;
     const db = await mongoConnection();
@@ -30,7 +28,6 @@ const findByName = async (name) => {
 const getAll = async () => {
     const db = await mongoConnection();
     const response = await db.collection('products').find().toArray();
-    if (!response) return null;
     return response; 
 };
 
@@ -52,10 +49,18 @@ const updateProduct = async (id, name, quantity) => {
    return getNewproduct(id, name, quantity);
 };
 
+const removeProduct = async (id) => {
+    const existingProduct = await findById(id);
+    const db = await mongoConnection();
+     await db.collection('products').deleteOne({ _id: ObjectId(id) });
+    return existingProduct;
+};
+
 module.exports = {
   create,
   findByName,
   getAll,
   findById,
   updateProduct,
+  removeProduct,
 };
