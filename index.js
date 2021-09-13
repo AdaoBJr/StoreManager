@@ -12,3 +12,5 @@ app.post('/products', productsController.createProduct);
 app.get('/', (_request, response) => {
   response.send();
 });
+
+app.listen(3000, () => console.log('Ouvindo a porta 3000'));
