@@ -20,8 +20,13 @@ const findById = async ({ id }) => {
 };
 
 const update = async ({ id, itensSold }) => {
-  await SalesModel
-  .update({ id, itensSold });
+  await SalesModel.update({ id, itensSold });
+};
+
+const deleteSale = async ({ id }) => {
+  const { sale } = await SalesModel.deleteSale({ id });
+
+  return { sale };
 };
 
 module.exports = {
@@ -29,4 +34,5 @@ module.exports = {
   getAll,
   findById,
   update,
+  deleteSale,
 };

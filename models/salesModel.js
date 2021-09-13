@@ -39,21 +39,22 @@ const update = async ({ id, itensSold }) => {
     .updateOne({ _id: new ObjectId(id) }, { $set: { itensSold } });
 };
 
-// const deleteProd = async ({ id }) => {
-//   const productsCollection = await mongoConnect.getConnection()
-//     .then((db) => db.collection('products'));
+const deleteSale = async ({ id }) => {
+  const salesCollection = await mongoConnect.getConnection()
+    .then((db) => db.collection('sales'));
 
-//   const { product } = await findById({ id });
+  const { sale } = await findById({ id });
 
-//   await productsCollection
-//     .deleteOne({ _id: new ObjectId(id) });
+  await salesCollection
+    .deleteOne({ _id: new ObjectId(id) });
 
-//   return { product };
-// };
+  return { sale };
+};
 
 module.exports = {
   create,
   getAll,
   findById,
   update,
+  deleteSale,
 };

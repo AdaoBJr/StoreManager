@@ -14,10 +14,11 @@ const {
   getAllSales, 
   findByIdSale, 
   updateSale,
+  deleteSale,
 } = require('./controllers/salesController');
 
 const { validateProducts, isValidId } = require('./middlewares/productsMiddleware');
-const { verifyQuantity, existsSale } = require('./middlewares/salesMiddleware');
+const { verifyQuantity, existsSale, isCorrectId } = require('./middlewares/salesMiddleware');
 
 const app = express();
 const PORT = 3000;
@@ -35,6 +36,7 @@ app.get('/sales', getAllSales);
 app.get('/sales/:id', existsSale, findByIdSale);
 app.post('/sales', verifyQuantity, createSale);
 app.put('/sales/:id', verifyQuantity, updateSale);
+app.delete('/sales/:id', isCorrectId, deleteSale);
 
 app.listen(PORT, () => {
   console.log(`listening port ${PORT}...`);

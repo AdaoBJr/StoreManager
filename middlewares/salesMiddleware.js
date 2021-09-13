@@ -38,9 +38,24 @@ const existsSale = async (req, res, next) => {
   if (!sale) return res.status(404).json(JsonErrorNotFound);
   
   next();
-}; 
+};
+
+const JsonErrorIdWrong = {
+  err: {
+    code: 'invalid_data',
+    message: 'Wrong sale ID format',
+  },
+};
+
+const isCorrectId = async (req, res, next) => {
+  const { id } = req.params;
+  if (!ObjectId.isValid(id)) return res.status(422).json(JsonErrorIdWrong);
+
+  next();
+};
 
 module.exports = {
   verifyQuantity,
   existsSale,
+  isCorrectId,
 };
