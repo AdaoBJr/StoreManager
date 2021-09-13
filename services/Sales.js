@@ -18,6 +18,14 @@ const isValidSale = (sale) => {
   }
 };
 
+const validateDeletion = (sale) => {
+  if (!sale) {
+    const error = new Error();
+    error.statusCode = 'unprocessable';
+    throw error;
+  }
+};
+
 const getAll = () => model.getAll();
 
 const getById = async (id) => {
@@ -38,9 +46,16 @@ const updateSale = async (id, sale) => {
   return result;
 };
 
+const deleteSale = async (id) => {
+  const result = await model.deleteSale(id);
+  validateDeletion(result);
+  return result;
+};
+
 module.exports = {
   getAll,
   getById,
   newSale,
   updateSale,
+  deleteSale,
 };

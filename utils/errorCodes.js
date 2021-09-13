@@ -40,4 +40,10 @@ module.exports = {
     message: 'Sale not found',
     status: 404,
   },
+
+  unprocessable: {
+    code: 'invalid_data',
+    message: 'Wrong sale ID format',
+    status: 422,
+  },
 };

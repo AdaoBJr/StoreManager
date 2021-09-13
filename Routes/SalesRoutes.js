@@ -1,5 +1,4 @@
 const rescue = require('express-rescue');
-
 const controller = require('../controllers/Sales');
 
 const salesRoutes = (app) => {
@@ -8,7 +7,8 @@ const salesRoutes = (app) => {
     .post(rescue(controller.newSale));
   app.route('/sales/:id')
     .get(rescue(controller.getById))
-    .put(rescue(controller.updateSale));
+    .put(rescue(controller.updateSale))
+    .delete(rescue(controller.deleteSale));
 };
 
 module.exports = salesRoutes;
