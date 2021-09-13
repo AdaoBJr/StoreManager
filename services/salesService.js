@@ -46,8 +46,11 @@ const deleteValidation = async (id) => {
     if (existId === null) {
         return 'Wrong sale ID format';
     }
-    const update = await salesModel.exclude(id);
-    return update;
+    const { itensSold } = await salesModel.getId(id);
+    const object = itensSold[0];
+    await productModel.updateWithSale(object.productId, object.quantity);
+    const deleteOne = await salesModel.exclude(id);
+    return deleteOne;
 }; 
 
 module.exports = { addValidation, updateValidation, deleteValidation };

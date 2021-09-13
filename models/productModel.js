@@ -57,7 +57,12 @@ const updateWithSale = async (id, quantity) => {
     // console.log('aqui1');
     const db = await connectionDB.connect();
     const productOne = await db.collection('products').findOne({ _id: ObjectId(id) });
-    const newQuantity = productOne.quantity - quantity;
+    let newQuantity = 0;
+    if (productOne.quantity > quantity) {
+        newQuantity = productOne.quantity - quantity;
+    } else {
+        newQuantity = productOne.quantity + quantity;
+    }
     // console.log(newQuantity);
     const atua = await db.collection('products').updateOne(
         { _id: ObjectId(id) }, { $set: { name: productOne.name, quantity: newQuantity } },
