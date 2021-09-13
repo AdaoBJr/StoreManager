@@ -55,7 +55,8 @@ const removeSale = async (id) => {
   }
   const sale = await Sale.getSaleById(id);
   await Sale.removeSale(id);
-  Sale.updateProductsQuantity(sale.itensSold[0].productId, sale.itensSold[0].quantity, 'update/delete');
+  Sale.updateProductsQuantity(sale.itensSold[0]
+    .productId, sale.itensSold[0].quantity, 'update/delete');
 
   return { code: 200, sale };
 };
