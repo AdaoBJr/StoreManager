@@ -22,7 +22,7 @@ const createSale = async (productId, quantity) => {
     productId,
     quantity,
   });
-
+    
   return {
     code: 200,
     id,

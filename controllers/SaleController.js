@@ -5,18 +5,17 @@ const SaleService = require('../services/SaleService');
 // const SaleModel = require('../models/SaleModel');
 
 const createSale = async (req, res) => {
-  const { productId, quantity } = req.body;
+  const [{ productId, quantity }] = req.body;
   const { id, code, message } = await SaleService.createSale(productId, quantity);
 
   if (message) {
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ err: { code, message } });
   }
-
+  
   res.status(code).json({ _id: id, 
-    itensSold: {
-      productId,
-      quantity,
-    } });
+    itensSold: 
+      [...req.body],
+     });
 };
 
 module.exports = {
