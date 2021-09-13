@@ -3,12 +3,12 @@ const SaleModel = require('../models/SaleModel');
 const isValidQuantity = (quantity) => {
   if (quantity <= 0) {
     return {
-      code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' };
+      code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
 }
   if (!quantity) return { code: 'invalid_data', message: '"quantity" is required' };
 
   if (typeof quantity !== 'number') {
-     return { code: 'invalid_data', message: '"quantity" must be a number' }; 
+     return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
 }
 
   return true;
