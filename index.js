@@ -12,6 +12,11 @@ const {
   create,
 } = require('./models/products');
 
+const {
+  getAllProducts,
+  getProductsId,
+} = require('./models/getAllProducts');
+
 app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000;
@@ -26,3 +31,9 @@ app.get('/', (_request, response) => {
 });
 
 app.post('/products', [validateName, validateQuantity, create]);
+
+app.get('/products', [getAllProducts]);
+
+app.get('/products/:id', [getProductsId]);
+
+app.put('/products/:id', [validateName, validateQuantity]);
