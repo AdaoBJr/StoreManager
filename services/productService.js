@@ -35,10 +35,10 @@ const create = async (obj) => {
 };
 
 const getById = async (id) => {
-  const data = await productModel.getById(id);
-  if (!data || data.length < 1) {
+  if (id.length !== 24) {
     return { err: { message: 'Wrong id format', code: 'invalid_data' } };
   }
+  const data = await productModel.getById(id);
   return data;
 };
 
