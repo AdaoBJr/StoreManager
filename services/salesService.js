@@ -8,6 +8,7 @@ const registerNewSale = async (sales) => {
       if (!ObjectId.isValid(productId)) return true;
       const checkData = productsRegistered.products
       .find(({ _id }) => _id.toString() === productId);
+      console.log(quantity);
       return checkData === undefined || typeof quantity !== 'number' || quantity < 1;
     });
     if (validateSales) {

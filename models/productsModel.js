@@ -42,6 +42,16 @@ const deleteProduct = async (id) => {
   .deleteOne({ _id: ObjectId(id) }));
 };
 
+const subtractProducts = (products) => (
+  products.map(({ productId, quantity }) => mongodb.getConnection()
+    .then((db) => db.collection('products')
+    .updateOne({ _id: ObjectId(productId) }, { $inc: { quantity: quantity * -1 } }))));
+
+const addProducts = (products) => (
+products.map(({ productId, quantity }) => mongodb.getConnection()
+  .then((db) => db.collection('products')
+  .updateOne({ _id: ObjectId(productId) }, { $inc: { quantity } }))));
+
 module.exports = {
   getProductByName,
   registerNewProduct,
@@ -49,4 +59,6 @@ module.exports = {
   getProductById,
   updateProduct,
   deleteProduct,
+  subtractProducts,
+  addProducts,
 };
