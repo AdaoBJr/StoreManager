@@ -1,9 +1,9 @@
 const salesModel = require('../models/salesModel');
 
 const create = async (itensSold) => {
-  const id = await salesModel.create(itensSold);
+  const response = await salesModel.create(itensSold);
 
-  return id;
+  return response;
 };
 
 module.exports = { create };
