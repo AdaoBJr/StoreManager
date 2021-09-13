@@ -12,9 +12,7 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.get('/products', productsRouter);
-
-app.use('/products', productsRouter);
+app.use(productsRouter);
 
 app.listen(3000, () => {
   console.log('Online');
