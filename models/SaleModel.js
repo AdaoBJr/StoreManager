@@ -19,10 +19,12 @@ const createSale = async ({ productId, quantity }) => {
   };
 
   const getAllSale = async () => {
-    const salesCollection = await Connection.getConnection()
-      .then((db) => db.collection('sales'));
-   
-    const sales = await salesCollection.find({}).toArray();
+    const db = await Connection.getConnection();
+    const sales = await db.collection('sales')
+      .find()
+      .toArray();
+      
+    console.log(sales);
     return sales;
   };
     
