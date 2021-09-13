@@ -6,10 +6,10 @@ const validationName = (name) => {
   return true;
 };
 
-const verifyExistanceNameProduct = async (name) => {
-  const products = await productsModel.findProductByName(name);
+const verifyExistanceProduct = async (name) => {
+  const product = await productsModel.findProductByName(name);
 
-  if (products) return true;
+  if (product) return true;
 
   return false;
 };
@@ -27,39 +27,34 @@ const validationTypeQuantity = (quantity) => {
 };
 
 const createProduct = async ({ name, quantity }) => {
-  const productExists = await productsModel.findProductByName({ name });
-  if (productExists) {
-    return false;
-  }
-
   const creatingProduct = await productsModel.createProductModel({ name, quantity });
   return creatingProduct;
 };
 
-const verifyId = async (id) => {
-  const product = productsModel.getProductById(id);
+// const verifyId = async (id) => {
+//   const product = productsModel.getProductById(id);
 
-  if (!product) {
-    return null;
-  }
+//   if (!product) {
+//     return null;
+//   }
 
-  return product;
-};
+//   return product;
+// };
 
-const getAllProducts = async () => {
-  const products = productsModel.getAll();
-  if (!products) {
-    return null;
-  }
-  return products;
-};
+// const getAllProducts = async () => {
+//   const products = productsModel.getAll();
+//   if (!products) {
+//     return null;
+//   }
+//   return products;
+// };
 
-module.export = {
+module.exports = {
   validationName,
+  verifyExistanceProduct,
   validationQuantity,
-  verifyExistanceNameProduct,
-  createProduct,
-  verifyId,
-  getAllProducts,
   validationTypeQuantity,
+  createProduct,
+  // verifyId,
+  // getAllProducts,
 };

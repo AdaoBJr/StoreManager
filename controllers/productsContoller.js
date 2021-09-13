@@ -1,11 +1,14 @@
 const productsService = require('../services/productsService');
 
+const unprocessableEntity = 422;
+const created = 201;
+
 const validName = (req, res, next) => {
   const { name } = req.body;
   const validateName = productsService.validationName(name);
 
   if (!validateName) {
-    return res.status(422).json({
+    return res.status(unprocessableEntity).json({
       err: {
         code: 'invalid_data',
         message: '"name" length must be at least 5 characters long',
@@ -15,12 +18,12 @@ const validName = (req, res, next) => {
   next();
 };
 
-const createProducts = (req, res, next) => {
-  const { name, quantity } = req.body;
-  const result = productsService.createProduct({ name, quantity });
+const velidExistenceProduct = async (req, res, next) => {
+  const { name } = req.body;
+  const product = await productsService.verifyExistanceProduct(name);
 
-  if (!result) {
-    return res.status(422).json({
+  if (product) {
+    return res.status(unprocessableEntity).json({
       err: {
         code: 'invalid_data',
         message: 'Product already exists',
@@ -35,7 +38,7 @@ const validQuantity = (req, res, next) => {
   const validateQuantity = productsService.validationQuantity(quantity);
 
   if (!validateQuantity) {
-    return res.status(422).json({
+    return res.status(unprocessableEntity).json({
       err: { 
         code: 'invalid_data',
         message: '"quantity" must be larger than or equal to 1',
@@ -50,7 +53,7 @@ const validTypeQuantity = (req, res, next) => {
   const validateQuantity = productsService.validationTypeQuantity(quantity);
 
   if (!validateQuantity) {
-    return res.status(422).json({
+    return res.status(unprocessableEntity).json({
       err: { 
         code: 'invalid_data',
         message: '"quantity" must be a number',
@@ -60,39 +63,47 @@ const validTypeQuantity = (req, res, next) => {
   next();
 };
 
-const validId = async (req, res) => {
-  const { id } = req.params;
-  const product = await productsService.verifyId(id);
-  if (!product) {
-    return res.status(422).json({
-      err: {
-        code: 'invalid_data',
-        message: 'Wrong id format', 
-      },
-    });
-  } 
-    return res.status(200).json(product);
+const createProduct = async (req, res) => {
+    const { name, quantity } = req.body;
+    const result = await productsService.createProduct({ name, quantity });
+
+    return res.status(created).json(result);
 };
 
-const AllProducts = async (req, res) => {
-  const getAllProducts = await productsService.getAllProducts();
+// const validId = async (req, res) => {
+//   const { id } = req.params;
+//   const product = await productsService.verifyId(id);
+//   if (!product) {
+//     return res.status(unprocessableEntity).json({
+//       err: {
+//         code: 'invalid_data',
+//         message: 'Wrong id format', 
+//       },
+//     });
+//   } 
+//     return res.status(200).json(product);
+// };
 
-  if (!getAllProducts) {
-    return res.status(422).json({
-      err: {
-        code: 'invalid_data',
-        message: 'Wrong id format', 
-      },
-    });
-  } 
-    return res.status(200).json(getAllProducts);
-};
+// const AllProducts = async (req, res) => {
+//   const getAllProducts = await productsService.getAllProduct();
+
+//   if (!getAllProducts) {
+//     return res.status(unprocessableEntity).json({
+//       err: {
+//         code: 'invalid_data',
+//         message: 'Wrong id format', 
+//       },
+//     });
+//   } 
+//     return res.status(200).json(getAllProducts);
+// };
 
 module.exports = {
   validName,
+  velidExistenceProduct,
   validQuantity,
-  createProducts,
-  validId,
-  AllProducts,
   validTypeQuantity,
+  createProduct,
+  // validId,
+  // AllProducts,
 };
