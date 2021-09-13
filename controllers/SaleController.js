@@ -12,7 +12,11 @@ const createSale = async (req, res) => {
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ err: { code, message } });
   }
 
-  return res.status(StatusCodes.OK).json({ _id: id, productId, quantity });
+  res.status(code).json({ _id: id, 
+    itensSold: {
+      productId,
+      quantity,
+    } });
 };
 
 module.exports = {

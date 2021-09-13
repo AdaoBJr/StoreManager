@@ -6,7 +6,7 @@ const createSale = async ({ productId, quantity }) => {
     .then((db) => db.collection('sales'));
     
     const { insertedId: id } = await salesCollection
-    .insertOne({ productId, quantity });
+    .insertMany([{ productId, quantity }]);
     
     return {
       id,

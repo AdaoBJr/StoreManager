@@ -5,7 +5,7 @@ const isValidQuantity = (quantity) => {
     return {
       code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
 }
-  if (!quantity) return { code: 'invalid_data', message: '"quantity" is required' };
+  if (!quantity) return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
 
   if (typeof quantity !== 'number') {
      return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
@@ -24,7 +24,7 @@ const createSale = async (productId, quantity) => {
   });
 
   return {
-    code: 201,
+    code: 200,
     id,
     productId,
     quantity,
