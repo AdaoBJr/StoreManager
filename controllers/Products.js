@@ -7,7 +7,7 @@ const getAllProducts = async (_req, res) => {
 };
 
 const findProductById = async (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
 
   const product = await Products.findProductById(id);
 
@@ -16,21 +16,10 @@ const findProductById = async (req, res) => {
   res.status(200).json(product);
 };
 
-const getProducts = async (req, res) => {
-  const { id } = req.query;
-
-  if (id) {
-    findProductById(req, res);
-  } else {
-    getAllProducts(req, res);
-  }
-};
-
 const validateProduct = async (req, res, next) => {
   const { name, quantity } = req.body;
 
   const validations = await Products.validate({ name, quantity });
-  console.log(validations);
 
   if (validations.err) {
     return res.status(422).json(validations);
@@ -48,7 +37,8 @@ const createProduct = async (req, res) => {
 };
 
 module.exports = {
-  getProducts,
+  getAllProducts,
+  findProductById,
   validateProduct,
   createProduct,
 };

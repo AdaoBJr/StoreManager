@@ -2,7 +2,6 @@ const { ObjectId } = require('mongodb');
 const Products = require('../models/Products');
 
 const invalidData = 'invalid_data';
-
 const errors = {
   productAlreadyExists: {
     err: {
@@ -44,6 +43,7 @@ const getAllProducts = async () => {
 
 const findProductById = async (id) => {
   if (!ObjectId.isValid(id)) return errors.invalidId;
+  console.log(ObjectId.isValid(id));
 
   const productFound = await Products.findProductById(id);
 
@@ -52,10 +52,8 @@ const findProductById = async (id) => {
 
 const checkProductWithSameName = async (name) => {
   const products = await getAllProducts();
-  console.log(products);
 
   const productExists = products.some((product) => product.name === name);
-  console.log(productExists);
 
   if (productExists) return true;
 };
