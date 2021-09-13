@@ -19,8 +19,17 @@ const create = rescue(async (request, response) => {
   return response.status(StatusCodes.CREATED).json(newProduct);
 });
 
+const update = rescue(async (request, response) => {
+  const { id } = request.params;
+  const { name, quantity } = request.body;
+  console.log(request.body);
+  const product = await service.update(id, { name, quantity });
+  response.status(StatusCodes.OK).json(product);
+});
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };
