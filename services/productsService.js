@@ -10,7 +10,7 @@ const validQuantityService = (quantity) => {
   if (quantity <= 0) return false;
   return true;
 };
-
+ 
 const validQuantityNumberService = (quantity) => {
 if (typeof (quantity) !== 'number') return true;
 return false;
