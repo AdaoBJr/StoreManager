@@ -10,8 +10,8 @@ const OPTIONS = {
 // const DB_NAME = 'StoreManager';
 
 // remoto
-const MONGOME = _DB_URL = 'mongodb://mongodb:27017/StoreManager';
-const DB_NA'StoreManager';
+const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
+const DB_NAME = 'StoreManager';
 
 let DB = null;
 
