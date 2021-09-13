@@ -4,20 +4,10 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.json());
 
-// READ
-app.get('/products', productController.getAllProducts);
+// Products CRUD
+const productRouter = require('./routers/productRouter');
 
-// READ ID
-app.get('/products/:id', productController.getIdProduct);
-
-// ADD
-app.post('/products', productController.createProduct);
-
-// UPDATE
-app.put('/products/:id', productController.updateProduct);
-
-// DELETE
-app.delete('/products/:id', productController.deleteProduct);
+app.use('/products', productRouter);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
