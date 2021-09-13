@@ -10,13 +10,6 @@ FOLLOWING CRUD
 
 */
 
-// EXIST NAME
-const existName = async (name) => {
-    const db = await connectionDB.connect();
-    const product = await db.collection('products').findOne({ name });
-    return product;
-};
-
 // EXIST ID
 const existId = async (id) => {
     if (!ObjectId.isValid(id)) { return null; }
@@ -59,10 +52,10 @@ const update = async (id, salesArray) => {
 // DELETE
 const exclude = async (id) => {
     const db = await connectionDB.connect();
-    const product = await db.collection('products').findOne({ _id: ObjectId(id) });
-    await db.collection('products').deleteOne({ _id: ObjectId(id) });
+    const sale = await db.collection('sales').findOne({ _id: ObjectId(id) });
+    await db.collection('sales').deleteOne({ _id: ObjectId(id) });
 
-    return product;
+    return sale;
 };
 
-module.exports = { existName, existId, getId, getAll, add, update, exclude };
+module.exports = { existId, getId, getAll, add, update, exclude };

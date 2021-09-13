@@ -40,14 +40,14 @@ const updateSale = async (req, res) => {
         return res.status(status.OK).json(createMSG);
 };
 
-// const deleteProduct = async (req, res) => {
-//     const { id } = req.params;
-//     const createMSG = await productService.deleteValidation(id);
+const deleteSale = async (req, res) => {
+    const { id } = req.params;
+    const createMSG = await salesService.deleteValidation(id);
 
-//     if (typeof (createMSG) === 'string') {
-//         return res.status(status.UNPROCESSABLE_ENTITY).json(errorGeneral.error(createMSG));
-//     } 
-//         return res.status(status.OK).json(createMSG);
-// };
+    if (typeof (createMSG) === 'string') {
+        return res.status(status.UNPROCESSABLE_ENTITY).json(errorGeneral.error(createMSG));
+    } 
+        return res.status(status.OK).json(createMSG);
+};
 
-module.exports = { createSales, getIdSale, getAllSales, updateSale };
+module.exports = { createSales, getIdSale, getAllSales, updateSale, deleteSale };

@@ -38,14 +38,14 @@ const updateValidation = async (id, salesArray) => {
     return anwaser;
 };
 
-// const deleteValidation = async (id) => {
-//     const existId = await productModel.existId(id);
+const deleteValidation = async (id) => {
+    const existId = await salesModel.existId(id);
 
-//     if (existId === null) {
-//         return 'Wrong id format';
-//     }
-//     const update = await productModel.exclude(id);
-//     return update;
-// }; 
+    if (existId === null) {
+        return 'Wrong sale ID format';
+    }
+    const update = await salesModel.exclude(id);
+    return update;
+}; 
 
-module.exports = { addValidation, updateValidation };
+module.exports = { addValidation, updateValidation, deleteValidation };
