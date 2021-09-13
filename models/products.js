@@ -36,10 +36,22 @@ const update = async (id, product) => {
   return findId(id);
 };
 
+const deteteProduct = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+  const responseConnection = await connection();
+  const product = await findId(id);
+  responseConnection
+    .collection('products').deleteOne({ _id: ObjectId(id) });
+  return product;
+};
+
 module.exports = {
   getAll,
   create,
   findName,
   findId,
   update,
+  deteteProduct,
 };
