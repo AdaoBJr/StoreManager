@@ -36,7 +36,7 @@ const getAll = async () => {
 const findById = async (id) => {
   if (!ObjectId.isValid(id)) return null;
   // https://mongodb.github.io/node-mongodb-native/api-bson-generated/objectid.html
-  
+
   const db = await mongoConnection.getConnection();
   const products = await db.collection('products')
     .findOne({ _id: ObjectId(id) });
@@ -46,8 +46,23 @@ const findById = async (id) => {
   return products;
 };
 
+const update = async (id, name, quantity) => {
+  const productsCollection = await mongoConnection.getConnection()
+    .then((db) => db.collection('products'));
+
+    await productsCollection
+      .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
+
+    return {
+      _id: id,
+      name,
+      quantity,
+    };
+  };
+
 module.exports = {
   create,
+  update,
   findByName,
   getAll,
   findById,

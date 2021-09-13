@@ -56,6 +56,15 @@ const isValidQuantity = (quantity) => {
   return true;
 }; 
 
+const update = async (id, name, quantity) => {
+  const isProductNameValid = isValidName(name);
+  const isQuantityValid = isValidQuantity(quantity);
+  if (isProductNameValid !== true) return isProductNameValid;
+  if (isQuantityValid !== true) return isQuantityValid;
+  const resultModel = await ProductModel.update(id, name, quantity);
+  return resultModel;
+};
+
 const create = async (name, quantity) => {
   const isProductNameValid = isValidName(name);
   const isQuantityValid = isValidQuantity(quantity);
@@ -101,4 +110,5 @@ module.exports = {
   create,
   // getAll,
   findById,
+  update,
 };  
