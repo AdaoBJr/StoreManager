@@ -29,9 +29,6 @@ const create = async (productId, quantity) => {
       return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
     }
     const { id } = await salesModel.create({ productId, quantity });
-
-    console.log(id, 'service2');
- 
     return { id, productId, quantity };
 };
 

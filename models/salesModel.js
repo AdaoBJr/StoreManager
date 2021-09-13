@@ -9,7 +9,6 @@ const create = async ({ productId, quantity }) => {
   const { insertedId: id } = await productsCollection.insertOne(
     { itensSold: [{ productId: productID, quantity }] },
 );
-  console.log(id, 'model');
   return { id, productId, quantity };
 };
   
