@@ -19,11 +19,6 @@ const findByName = async (name) => {
 const getAllProducts = async () => {
   const findAllProduct = await connection().then((db) =>
     db.collection('products').find().toArray()).catch((err) => console.log(err));
-  // const result = await findAllProduct.map(({ _id, name, quantity }) => ({
-  //   id: _id,
-  //   name,
-  //   quantity,
-  // }));
   return findAllProduct;
 };
 
@@ -42,12 +37,25 @@ const deleteProduct = async (id) => {
   if (!ObjectId.isValid(id)) {
     return null;
   }
-  console.log(id);
 
 const deleteData = await connection().then((db) =>
   db.collection('products').deleteOne({ _id: ObjectId(id) }));
   if (!deleteData) return null;
   return deleteData;
+};
+
+const updateProduct = async (id, name, quantity) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+  const updateData = await connection().then((db) =>
+    db.collection('products').updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } }));
+  if (!updateData) return null;
+  return {
+    _id: id,
+    name,
+    quantity,
+  };
 };
 
 module.exports = {
@@ -56,4 +64,5 @@ module.exports = {
   getAllProducts,
   getProductById,
   deleteProduct,
+  updateProduct,
 };
