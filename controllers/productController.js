@@ -1,3 +1,5 @@
+const Joi = require('joi');
+
 const productService = require('../services/productServices');
 
 const createProduct = async (req, res) => {
@@ -13,13 +15,24 @@ const createProduct = async (req, res) => {
   return res.status(201).json({ _id: id, name: responseObj.name, quantity: responseObj.quantity });
 };
 
-// const getAll = async (_req, res) => {
-//   const a = await productService.getAll;
-//   console.log(a);
-//   return res.status(200).json(a);
-// };
+const getAll = async (_req, res) => {
+  const allProducts = await productService.getAll();
+  return res.status(200).json(allProducts);
+  // if (allProducts.message) {
+  //   return res.status(Boom.notFound.statusCode).json(Boom.notFound(allProducts.message));
+  // }
+};
+
+const getProductById = async (req, res) => {
+  const { id } = req.params;
+  const oneProduct = await productService.getProductById(id);
+
+  if (oneProduct.err) return res.status(422).json(oneProduct);
+  res.status(200).json(oneProduct);
+};
 
 module.exports = {
   createProduct,
-  // getAll,
+  getAll,
+  getProductById,
 };
