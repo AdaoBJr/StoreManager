@@ -28,7 +28,7 @@ const getProductsById = async (id) => {
   const db = await connection();
   const result = await db.collection('products')
   .findOne(ObjectId(id));
-  return { result };
+  return result;
 };
 
   module.exports = {
