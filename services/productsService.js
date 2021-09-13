@@ -30,9 +30,17 @@ const updateProductById = async (id, name, quantity) => {
   return updatedProduct;
 };
 
+const deleteProductById = async (id) => {
+  const validation = await productSchema.validateId(id);
+  if (validation.err) return validation;
+  const productData = await model.deleteById(id);
+  return productData;
+};
+
 module.exports = {
   insertNewProduct,
   getAllProducts,
   getProductById,
   updateProductById,
+  deleteProductById,
 };

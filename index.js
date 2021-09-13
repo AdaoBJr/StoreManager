@@ -9,6 +9,7 @@ app.post('/products', products.insertNewProduct);
 app.get('/products', products.getAllProducts);
 app.get('/products/:id', products.getProductById);
 app.put('/products/:id', products.updateProductById);
+app.delete('/products/:id', products.deleteProductById);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {

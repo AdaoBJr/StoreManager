@@ -35,10 +35,19 @@ const updateById = async (id, name, quantity) => {
   return updatedProduct;
 };
 
+const deleteById = async (id) => {
+  const comparisonId = new mongo.ObjectId(id);
+  const productData = await connection().then((db) => 
+    db.collection(COLLECTION_NAME).findOne({ _id: comparisonId }));
+  await connection().then((db) => db.collection(COLLECTION_NAME).deleteOne({ _id: comparisonId }));
+  return productData;
+};
+
 module.exports = {
   insertNewProduct,
   findByName,
   findAllProducts,
   findById,
   updateById,
+  deleteById,
 };
