@@ -9,6 +9,5 @@ module.exports = (err, req, res, _next) => {
   // const status = statusByErrorCode[err.code] || 500;
 
   // Por último, retornamos o status e a mensagem de erro para o client
-  console.log(err);
   res.status(err.number).json({ err: err.error });
 };

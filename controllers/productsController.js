@@ -23,16 +23,6 @@ const getAll = rescue(async (req, res) => {
 });
 
 const create = rescue(async (req, res, next) => {
-  const validationArray = [
-    'validateLenghtName',
-    'validateQuantityType',
-    'validateQuantity',
-  ];
-  validationArray.forEach((validation) => {
-    const validator = productsService[validation](req, res, next);
-    if (validator) return next(validator);
-  });
-
   const { name, quantity } = req.body;
   
   const newProduct = await productsService.create(name, quantity);

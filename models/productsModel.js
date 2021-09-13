@@ -60,7 +60,7 @@ const findByName = async (name) => {
   // Caso nenhum product seja encontrado, devolvemos null
   if (!product) return null;
 
-  // Caso contrário, retornamos o author encontrado
+  // Caso contrário, retornamos o produto encontrado
   return (product);
 };
 
