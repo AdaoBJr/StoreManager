@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { create, getAll, getById, update, delProduct } = require('./controllers/productsController');
+const { createSale } = require('./controllers/salesController');
 
 const app = express();
 
@@ -24,3 +25,6 @@ app.route('/products/:id')
 app.route('/products')
   .post(create)
   .get(getAll);
+
+app.route('/sales')
+  .post(createSale);
