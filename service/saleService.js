@@ -2,7 +2,7 @@
 const salesModel = require('../models/salesModel');
 
 const isValidQuantityZero = (quantity) => {
-    const moreZero = quantity >= 0;    
+    const moreZero = quantity > 0;    
     if (!moreZero) {
       return false;
     }
@@ -19,9 +19,9 @@ const isValidQuantityNotNumber = (quantity) => {
 
 const create = async (productId, quantity) => {
     const isProductQuantityValidZero = isValidQuantityZero(quantity);
-    console.log(isProductQuantityValidZero, 'service');
+    // console.log(isProductQuantityValidZero, 'service');
     const isProductQuantityNotNumber = isValidQuantityNotNumber(quantity);
-    console.log(isProductQuantityNotNumber, 'service');
+    // console.log(isProductQuantityNotNumber, 'service');
     if (!isProductQuantityNotNumber) {
       return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
     }
@@ -29,7 +29,8 @@ const create = async (productId, quantity) => {
       return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
     }
     const { id } = await salesModel.create({ productId, quantity });
-    console.log(quantity, 'quantidade');
+
+    console.log(id, 'service2');
  
     return { id, productId, quantity };
 };

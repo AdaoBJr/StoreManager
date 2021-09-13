@@ -6,11 +6,11 @@ const create = async ({ productId, quantity }) => {
     .then((db) => db.collection('sales'));
 
   const productID = await productModel.getById(productId);
-  const { insertedId: id } = await productsCollection.insertMany([
-    { productId: productID, quantity }]);
-
-  // console.log(productID, 'controller');
-  return { _id: id, productId, quantity };
+  const { insertedId: id } = await productsCollection.insertOne(
+    { itensSold: [{ productId: productID, quantity }] },
+);
+  console.log(id, 'model');
+  return { id, productId, quantity };
 };
   
 module.exports = {
