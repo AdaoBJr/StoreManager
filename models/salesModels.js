@@ -1,8 +1,19 @@
-const { ObjectId } = require('mongodb');
+// const { ObjectId } = require('mongodb');
 const mongoConnection = require('./connection');
-// func
+
+const createSale = async (body) => {
+  const db = await mongoConnection.connection();
+  const { insertedId: id } = await db.collection('sales')
+    .insertOne({ itensSold: [...body] });
+
+  return {
+    _id: id,
+    itensSold: [...body],
+  };
+};
+
 module.exports = {
-  // createProduct,
+  createSale,
   // findByName,
   // getAll,
   // getById,

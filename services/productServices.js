@@ -1,42 +1,13 @@
 const { ObjectId } = require('mongodb');
 const productModels = require('../models/productModels');
-
-const isValidNameProduct = (name) => {
-  const requiredNameSize = 5;
-
-  if (name.length < requiredNameSize) {
-    return { err: {
-      code: 'invalid_data',
-      message: '"name" length must be at least 5 characters long' },
-    }; 
-  }
-  return true; 
-};
-
-const isValidQuantityProduct = (quantity) => {
-  const requiredQuantitySize = 0; 
-  if (quantity <= requiredQuantitySize) {
-    return { err: {
-      code: 'invalid_data',
-      message: '"quantity" must be larger than or equal to 1' } }; 
-  }
-
-  if (typeof quantity !== 'number') {
-    return { err: { code: 'invalid_data', message: '"quantity" must be a number' } };
-  }
-  return true;
-};
-
-const isValidID = (id) => {
-  if (!ObjectId.isValid(id)) {
-    return { err: { code: 'invalid_data', message: 'Wrong id format' } };
-  }
-  return true;
-};
+const {
+  isValidNameProduct,
+  isValidQuant,
+  isValidID } = require('../middlewares/validations');
 
 const createProduct = async (name, quantity) => {
   const isValidName = isValidNameProduct(name);
-  const isValidQuantity = isValidQuantityProduct(quantity);
+  const isValidQuantity = isValidQuant(quantity);
 
 // valida inputs
   if (isValidName.err) return isValidName;
@@ -68,7 +39,7 @@ const getProductById = async (id) => {
 
 const updateProduct = async (id, name, quantity) => {
   const isValidName = isValidNameProduct(name);
-  const isValidQuantity = isValidQuantityProduct(quantity);
+  const isValidQuantity = isValidQuant(quantity);
   const isValidId = isValidID(id);
 
   if (isValidName.err) return isValidName;
