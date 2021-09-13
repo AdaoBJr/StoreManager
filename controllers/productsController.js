@@ -36,8 +36,9 @@ const create = rescue(async (req, res, next) => {
 
 const update = rescue(async (req, res, next) => {
   const { id } = req.params;
+  const { name, quantity } = req.body;
   
-  const updatedProduct = await productsService.update(id);
+  const updatedProduct = await productsService.update(id, name, quantity);
   // Caso haja erro na criação do autor, iniciamos o fluxo de erro
   if (updatedProduct.error) return next(updatedProduct);
 

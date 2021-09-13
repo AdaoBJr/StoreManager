@@ -25,16 +25,34 @@ const getById = async (id) => {
 const create = async (name, quantity) => {
   // Buscamos um produto com o mesmo nome que desejamos criar
   const existingProduct = await productsModel.findByName(name, quantity);
+
+  const isExist = validations.productExists(existingProduct);
+
+  if (isExist) return isExist;
   
-  const isvalid = validations.isValidated({ name, quantity, existingProduct });
+  const isvalid = validations.isValidated({ name, quantity });
 
   if (isvalid) return isvalid;
 
   return productsModel.create(name, quantity);
 };
 
+const update = async (id, name, quantity) => {
+  // Buscamos um produto com o mesmo nome que desejamos criar
+  const getProduct = await getById(id);
+
+  if (getProduct.error) return getProduct;
+  
+  const isvalid = validations.isValidated({ name, quantity });
+
+  if (isvalid) return isvalid;
+
+  return productsModel.update(id, name, quantity);
+};
+
 module.exports = {
   getAll,
   getById,
   create,
+  update,
 };

@@ -36,22 +36,20 @@ const getById = async (id) => {
   return productData;
 };
 
-// const isNonEmptyString = (value) => {
-//   if (!value) return false;
+const create = async (name, quantity) => {
+  const db = await connection();
+  const product = await db.collection('products')
+    .insertOne({ name, quantity });
+    return { _id: product.insertedId, name, quantity };
+};
 
-//   return typeof value === 'string';
-// };
+const update = async (_id, name, quantity) => {
+  const db = await connection();
+  await db.collection('products')
+    .updateOne({ _id: new ObjectId(_id) }, { $set: { name, quantity } });
 
-// const isValid = (firstName, middleName, lastName) => {
-//   if (middleName && typeof middleName !== 'string') return false;
-
-//   return isNonEmptyString(firstName) && isNonEmptyString(lastName);
-// };
-
-const create = async (name, quantity) =>
-  connection()
-    .then((db) => db.collection('products').insertOne({ name, quantity }))
-    .then((result) => ({ _id: result.insertedId, name, quantity }));
+      return { _id, name, quantity }; 
+};
 
 const findByName = async (name) => {
   const product = await connection()
@@ -69,4 +67,5 @@ module.exports = {
   getById,
   create,
   findByName,
+  update,
 };
