@@ -23,13 +23,13 @@ const isValidNewSales = (sales) => {
 };
 
 const create = rescue(async (req, res) => {
-  const itensSold = req.body;
-
-  isValidNewSales(req.body);
-
+  const { body } = req;
+  isValidNewSales(body);
+  
+  const itensSold = body;
   const id = await salesService.create(itensSold);
 
-  res.status(201).json({ _id: id, itensSold });
+  res.status(200).json({ _id: id, itensSold });
 });
 
 module.exports = { create };
