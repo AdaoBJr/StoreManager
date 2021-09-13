@@ -6,7 +6,7 @@ const { ObjectId } = require('mongodb');
 const { MongoClient } = require('mongodb');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
-const mongoConnection = require('../../connection/connection');
+const mongoConnection = require('../../models/connection');
 const ProductModel = require('../../models/ProductModels');
 const SaleModel = require('../../models/SaleModel');
 
