@@ -26,6 +26,19 @@ router.get(
   },
 );
 
+router.put(
+  '/:id',
+  isValidName,
+  isValidQuantity,
+  async (req, res) => {
+    console.log('controller');
+    const { id } = req.params;
+    const { name, quantity } = req.body;
+    await products.updateById(id, name, quantity);
+    res.status(200).json({ id, name, quantity });
+  },
+);
+
 router.post(
   '/',
   isValidName,

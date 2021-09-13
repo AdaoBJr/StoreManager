@@ -8,9 +8,14 @@ const create = async (good) => {
 };
 
 const getProduct = async () => product.getAllProducts();
+const updateById = async (id, name, quantity) => {
+  console.log('service');
+ return product.updateProduct(id, name, quantity);
+};
 
 module.exports = {
   create,
   getProduct,
   getProductById: product.getProductById,
+  updateById,
 };
