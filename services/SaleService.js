@@ -1,4 +1,5 @@
 const SaleModal = require('../models/SaleModel');
+const ProductModel = require('../models/ProductModels');
 
 const ERR_QUANTITY = {
   err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
@@ -24,14 +25,18 @@ function isValidQuantity(quantity) {
 
 async function insert(salesInfo) {
   const isNotValid = salesInfo.find(({ quantity }) => (!isValidQuantity(quantity)));
-
   if (isNotValid) return ERR_QUANTITY;
 
-  const insertProduct = await SaleModal.create(salesInfo);
+  const { name, quantity } = await ProductModel.findById(salesInfo[0].productId);
+  if (quantity >= salesInfo[0].quantity) {
+    const newQuantity = quantity - salesInfo[0].quantity;
+    await ProductModel.update(salesInfo[0].productId, { name, quantity: newQuantity });
 
-  if (!insertProduct) return ERR_STOCK;
+    const insertProduct = await SaleModal.create(salesInfo);
+    return insertProduct;
+  }
 
-  return insertProduct;
+  return ERR_STOCK;
 }
 
 async function getAllProduct() {
@@ -57,8 +62,12 @@ async function updateProduct(id, salesInfo) {
 }
 
 async function deleteProduct(id) {
-  const product = await SaleModal.findById(id);
-  if (!product) return ERR_ID;
+  const findSale = await SaleModal.findById(id);
+  if (!findSale) return ERR_ID;
+
+  const { _id, name, quantity } = await ProductModel.findById(findSale.itensSold[0].productId);
+  const newQuantity = quantity + findSale.itensSold[0].quantity;
+  await ProductModel.update(_id, { name, quantity: newQuantity });
 
   const exludeProduct = await SaleModal.exclude(id);
 

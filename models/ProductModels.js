@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb');
-const mongoConnection = require('./connection');
+const mongoConnection = require('../connection/connection');
 
 async function getAll() {
   const db = await mongoConnection.connection();
