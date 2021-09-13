@@ -6,37 +6,16 @@ const {
   updateProduct,
   removeProduct,
 } = require('../controllers/productsController');
-const {
-  nameValidation,
-  quantityValidation,
-  existenceValidation,
-  idValidation,
-} = require('../middlewares/productsValidations');
 
 const router = express.Router();
 
 router.route('/')
-  .post(
-    nameValidation,
-    quantityValidation,
-    existenceValidation,
-    createProduct,
-  )
+  .post(createProduct)
   .get(getAllProducts);
 
 router.route('/:id')
-  .get(
-    idValidation,
-    getProductById,
-  )
-  .put(
-    nameValidation,
-    quantityValidation,
-    updateProduct,
-  )
-  .delete(
-    idValidation,
-    removeProduct,
-  );
+  .get(getProductById)
+  .put(updateProduct)
+  .delete(removeProduct);
 
 module.exports = router;

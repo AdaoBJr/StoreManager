@@ -1,4 +1,9 @@
-const { StatusCodes: { OK, CREATED, INTERNAL_SERVER_ERROR } } = require('http-status-codes');
+const { StatusCodes: {
+  OK,
+  CREATED,
+  INTERNAL_SERVER_ERROR,
+  UNPROCESSABLE_ENTITY,
+ } } = require('http-status-codes');
 const { getAll } = require('../models/productsModel');
 const { create, getById, update, remove } = require('../services/productsService');
 
@@ -9,6 +14,8 @@ const createProduct = async (req, res) => {
     const { name, quantity } = req.body;
     const result = await create(name, quantity);
     
+    if (result.err) return res.status(UNPROCESSABLE_ENTITY).json(result);
+
     return res.status(CREATED).json(result);
   } catch (error) {
     console.log(error.message);
@@ -19,6 +26,7 @@ const createProduct = async (req, res) => {
 const getAllProducts = async (_req, res) => {
   try {
     const result = await getAll();
+    
     return res.status(OK).json({ products: result });
   } catch (error) {
     console.log(error.message);
@@ -30,6 +38,8 @@ const getProductById = async (req, res) => {
   try {
     const { id } = req.params;
     const result = await getById(id);
+
+    if (result.err) return res.status(UNPROCESSABLE_ENTITY).json(result);
      
     return res.status(OK).json(result);
   } catch (error) {
@@ -44,6 +54,8 @@ const updateProduct = async (req, res) => {
     const { name, quantity } = req.body;
     const result = await update(id, name, quantity);
    
+    if (result.err) return res.status(UNPROCESSABLE_ENTITY).json(result);
+
     return res.status(OK).json(result);
   } catch (error) {
     console.log(error.message);
@@ -56,6 +68,8 @@ const removeProduct = async (req, res) => {
     const { id } = req.params;
     const result = await remove(id);
    
+    if (result.err) return res.status(UNPROCESSABLE_ENTITY).json(result);
+
     return res.status(OK).json(result);
   } catch (error) {
     console.log(error.message);

@@ -1,4 +1,3 @@
-const { StatusCodes: { UNPROCESSABLE_ENTITY } } = require('http-status-codes');
 const { productExists, isValidId } = require('../models/productsModel');
 
 const errors = {
@@ -11,23 +10,21 @@ const errors = {
 
 const MIN_NAME_LENGTH = 5;
 
-const nameValidation = (req, res, next) => {
-  const { name } = req.body;
+const nameValidation = (name) => {
   if (name.length <= MIN_NAME_LENGTH) {
-    return res.status(UNPROCESSABLE_ENTITY).json({
+    return ({
       err: {
         code: 'invalid_data',
         message: errors.nameLengthInvalid,
       },
     });
   }
-  next();
+  return {};
 };
 
-const quantityValidation = (req, res, next) => {
-  const { quantity } = req.body;
+const quantityValidation = (quantity) => {
   if (typeof quantity !== 'number') {
-    return res.status(UNPROCESSABLE_ENTITY).json({
+    return ({
       err: {
         code: 'invalid_data',
         message: errors.isNotNumber,
@@ -36,43 +33,41 @@ const quantityValidation = (req, res, next) => {
   }
 
   if (quantity <= 0) {
-    return res.status(UNPROCESSABLE_ENTITY).json({
+    return ({
       err: {
         code: 'invalid_data',
         message: errors.quantLessThanOne,
       },
     });
   }
-  next();
+  return {};
 };
 
-const existenceValidation = async (req, res, next) => {
-  const { name } = req.body;
+const existenceValidation = async (name) => {
   const result = await productExists(name);
   if (result) {
-    return res.status(UNPROCESSABLE_ENTITY).json({
+    return ({
       err: {
         code: 'invalid_data',
         message: errors.alreadyExists,
       },
     });
   }
-  next();
+  return {};
 };
 
-const idValidation = async (req, res, next) => {
-  const { id } = req.params;
+const idValidation = async (id) => {
   const result = await isValidId(id);
 
   if (!result) {
-    return res.status(UNPROCESSABLE_ENTITY).json({
+    return ({
       err: {
         code: 'invalid_data',
         message: errors.invalidId,
       },
     });
   }
-  next();
+  return {};
 };
 
 module.exports = { 

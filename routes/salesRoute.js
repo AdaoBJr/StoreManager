@@ -4,7 +4,7 @@ const {
   existenceValidation,
   idValidation,
   stockVerification,
- } = require('../middlewares/salesValidations');
+ } = require('../validations/salesValidations');
 const {
   addSales,
   getAllSales,
