@@ -12,4 +12,6 @@ ProductsRouter.post('/', validName, validQuantity,
 ProductsRouter.get('/:id', ProductsController.getProductsById);
 ProductsRouter.get('/', ProductsController.getProductsAll);
 
+ProductsRouter.put('/:id', validName, validQuantity, ProductsController.putProductsAll);
+
 module.exports = ProductsRouter;
