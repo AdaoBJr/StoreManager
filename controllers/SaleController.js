@@ -1,12 +1,10 @@
 const StatusCodes = require('http-status-codes');
 const SaleService = require('../services/SaleService');
-
-/* SaleModel pode ser necessário */
-// const SaleModel = require('../models/SaleModel');
+const SaleModel = require('../models/SaleModel');
 
 const createSale = async (req, res) => {
-  const [{ productId, quantity }] = req.body;
-  const { id, code, message } = await SaleService.createSale(productId, quantity);
+  const { body } = req;
+  const { id, code, message } = await SaleService.createSale(body);
 
   if (message) {
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ err: { code, message } });
@@ -18,6 +16,19 @@ const createSale = async (req, res) => {
      });
 };
 
+const getAllSales = async (req, res) => {
+  const { id, quantity } = req.body;
+
+  const { code, message, sales } = await SaleModel.getAllSales();
+
+  if (message) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ err: { code, message } });
+  }
+
+  res.status(200).json({ sales });
+};
+
 module.exports = {
   createSale,
+  getAllSales,
 };

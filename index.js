@@ -14,7 +14,7 @@ app.get('/products', ProductController.getAllProducts);
 app.put('/products/:id', ProductController.updateProduct);
 app.delete('/products/:id', ProductController.deleteProduct);
 app.post('/sales', SaleController.createSale);
-// app.get('/sales', SaleController.getAllSales);
+app.get('/sales', SaleController.getAllSales);
 // app.get('/sales/:id', SaleController.getAllSales);
 
 // não remova esse endpoint, e para o avaliador funcionar

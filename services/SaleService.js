@@ -14,14 +14,15 @@ const isValidQuantity = (quantity) => {
   return true;
 }; 
 
-const createSale = async (productId, quantity) => {
-  const isValid = isValidQuantity(quantity);
-  if (isValid !== true) return isValid;
-
-  const { id } = await SaleModel.createSale({
-    productId,
-    quantity,
-  });
+const createSale = async (body) => {
+  body.map((sale) => {
+    const { productId, quantity } = sale;
+    const isValid = isValidQuantity(quantity);
+    if (isValid !== true) return isValid;
+    return isValid;
+    });
+  
+  const { id } = await SaleModel.createSale(body);
     
   return {
     code: 200,
