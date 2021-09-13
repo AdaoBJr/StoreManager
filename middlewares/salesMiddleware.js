@@ -1,19 +1,36 @@
 const salesSchema = require('../schemas/salesSchema');
 
-const validateSaleData = async (req, res, next) => {
-  const itensSold = req.body;
+const checkSale = (itensSold, method) => {
+  const validations = [];
   const i = 0;
   for (let index = i; index < itensSold.length; index += 1) {
-    const validation = await salesSchema.validateSale(itensSold[index]);
-    if (validation) {
-      return res.status(validation.response).json({ err: validation.err });
-    }
-    const quantityValidation = await salesSchema
-      .checkProductInventory(itensSold[index], req.method);
-    if (quantityValidation) {
-      return res.status(quantityValidation.response).json({ err: quantityValidation.err });
+    if (method) {
+      validations.push(salesSchema.checkProductInventory(itensSold[index], method));
+    } else {
+      validations.push(salesSchema.validateSale(itensSold[index]));
     }
   }
+  return validations;
+};
+
+const validateSaleData = async (req, res, next) => {
+  const itensSold = req.body;
+  const saleValidations = checkSale(itensSold);
+  const quantityValidations = checkSale(itensSold, req.method);
+  let foundIssue = {};
+
+  await Promise.all(saleValidations).then((results) => {
+    results.forEach((saleValidate) => {
+      foundIssue = saleValidate || {};
+    });
+  });
+  if (foundIssue.response) return res.status(foundIssue.response).json({ err: foundIssue.err });
+  await Promise.all(quantityValidations).then((results) => {
+    results.forEach((qtValidate) => {
+      foundIssue = qtValidate || {};
+    });
+  });
+  if (foundIssue.response) return res.status(foundIssue.response).json({ err: foundIssue.err });
   next();
 };
 

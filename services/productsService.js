@@ -1,8 +1,8 @@
 const products = require('../models/products');
 
-const findById = async (id) => {
-  const product = await products.findById(id);
-  return product;
+const findById = async (productId) => {
+  const { _id: id, name, quantity } = await products.findById(productId);
+  return { id, name, quantity };
 };
 
 const getAll = async () => {

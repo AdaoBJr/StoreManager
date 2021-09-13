@@ -40,8 +40,9 @@ const validateItemSoldQuantity = async (item, operation, saleQuantityDiference) 
   default:
     break;
   }
+
   await productsServices.updateProduct(
-    itemInventory._id, itemInventory.name, itemInventory.quantity,
+    itemInventory.id, itemInventory.name, itemInventory.quantity,
   );
 };
 
@@ -55,16 +56,18 @@ const createSale = async (itensSold) => {
 
 const updateSale = async (saleId, itemSold) => {
   const { itensSold } = await findById(saleId);
-  itensSold.forEach((item) => {
+  const itensSoldUpdated = [];
+  itensSold.forEach((item, index) => {
+    itensSoldUpdated[index] = item;
     if (item.productId === itemSold.productId) {
       const saleQuantityDiference = itemSold.quantity - item.quantity;
       validateItemSoldQuantity(
         item, operations.UPDATE_SALE, saleQuantityDiference,
       );
-      item.quantity = itemSold.quantity;
+      itensSoldUpdated[index].quantity = itemSold.quantity;
     }
   });
-  const { modifiedCount } = await sales.update(saleId, itensSold);
+  const { modifiedCount } = await sales.update(saleId, itensSoldUpdated);
   if (modifiedCount) {
     return { _id: saleId, itensSold };
   }
