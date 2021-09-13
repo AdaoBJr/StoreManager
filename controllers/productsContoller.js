@@ -99,6 +99,14 @@ const AllProducts = async (req, res) => {
   return res.status(ok).json({ products: getAllProducts });
 };
 
+const editProduct = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  await productsService.verifyUpdateProduct(id, name, quantity);
+
+  return res.status(200).json({ id, name, quantity });
+};
+
 module.exports = {
   validName,
   velidExistenceProduct,
@@ -107,4 +115,5 @@ module.exports = {
   createProduct,
   validId,
   AllProducts,
+  editProduct,
 };

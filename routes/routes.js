@@ -4,8 +4,16 @@ const productsController = require('../controllers/productsContoller');
 
 const router = Router();
 
+router.put('/products/:id',
+productsController.validName,
+productsController.validQuantity,
+productsController.validTypeQuantity,
+productsController.editProduct);
+
 router.get('/products/:id', productsController.validId);
+
 router.get('/products', productsController.AllProducts);
+
 router.post('/products',
 productsController.validName,
 productsController.velidExistenceProduct,

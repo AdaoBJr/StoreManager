@@ -49,6 +49,11 @@ const getAllProducts = async () => {
   return products;
 };
 
+const verifyUpdateProduct = async (id, name, quantity) => {
+  const updateProduct = await productsModel.updateProduct(id, name, quantity);
+  return updateProduct;
+};
+
 module.exports = {
   validationName,
   verifyExistanceProduct,
@@ -57,4 +62,5 @@ module.exports = {
   createProduct,
   verifyId,
   getAllProducts,
+  verifyUpdateProduct,
 };
