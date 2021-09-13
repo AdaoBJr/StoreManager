@@ -1,7 +1,7 @@
 const productsService = require('../services/productsService');
 
 const unprocessableEntity = 422;
-const created = 201;
+const ok = 200;
 
 const validName = (req, res, next) => {
   const { name } = req.body;
@@ -67,36 +67,36 @@ const createProduct = async (req, res) => {
     const { name, quantity } = req.body;
     const result = await productsService.createProduct({ name, quantity });
 
-    return res.status(created).json(result);
+    return res.status(ok).json(result);
 };
 
-// const validId = async (req, res) => {
-//   const { id } = req.params;
-//   const product = await productsService.verifyId(id);
-//   if (!product) {
-//     return res.status(unprocessableEntity).json({
-//       err: {
-//         code: 'invalid_data',
-//         message: 'Wrong id format', 
-//       },
-//     });
-//   } 
-//     return res.status(200).json(product);
-// };
+const validId = async (req, res) => {
+  const { id } = req.params;
+  const product = await productsService.verifyId(id);
+  if (!product) {
+    return res.status(unprocessableEntity).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    });
+  } 
+  return res.status(ok).json(product);
+};
 
-// const AllProducts = async (req, res) => {
-//   const getAllProducts = await productsService.getAllProduct();
+const AllProducts = async (req, res) => {
+  const getAllProducts = await productsService.getAllProducts();
 
-//   if (!getAllProducts) {
-//     return res.status(unprocessableEntity).json({
-//       err: {
-//         code: 'invalid_data',
-//         message: 'Wrong id format', 
-//       },
-//     });
-//   } 
-//     return res.status(200).json(getAllProducts);
-// };
+  if (!getAllProducts) {
+    return res.status(unprocessableEntity).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format', 
+      },
+    });
+  } 
+  return res.status(ok).json({ products: getAllProducts });
+};
 
 module.exports = {
   validName,
@@ -104,6 +104,6 @@ module.exports = {
   validQuantity,
   validTypeQuantity,
   createProduct,
-  // validId,
-  // AllProducts,
+  validId,
+  AllProducts,
 };

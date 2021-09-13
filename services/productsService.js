@@ -31,23 +31,24 @@ const createProduct = async ({ name, quantity }) => {
   return creatingProduct;
 };
 
-// const verifyId = async (id) => {
-//   const product = productsModel.getProductById(id);
+const verifyId = async (id) => {
+  const product = await productsModel.getProductById(id);
 
-//   if (!product) {
-//     return null;
-//   }
+  if (!product) {
+    return false;
+  }
 
-//   return product;
-// };
+  return product;
+};
 
-// const getAllProducts = async () => {
-//   const products = productsModel.getAll();
-//   if (!products) {
-//     return null;
-//   }
-//   return products;
-// };
+const getAllProducts = async () => {
+  const products = await productsModel.getAll();
+  console.log(products, 'cheguei no service');
+  if (!products) {
+    return null;
+  }
+  return products;
+};
 
 module.exports = {
   validationName,
@@ -55,6 +56,6 @@ module.exports = {
   validationQuantity,
   validationTypeQuantity,
   createProduct,
-  // verifyId,
-  // getAllProducts,
+  verifyId,
+  getAllProducts,
 };

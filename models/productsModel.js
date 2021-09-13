@@ -1,40 +1,41 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 
 const connection = require('./mongoConnetion');
 
-const TABLE = 'products';
+const COLLECTION = 'products';
 
 const findProductByName = async (name) => {
   const db = await connection();
-  const product = await db.collection(TABLE).findOne({ name });
-  
+  const product = await db.collection(COLLECTION).findOne({ name });
+
   return product;
 };
 
 const createProductModel = async ({ name, quantity }) => {
   const db = await connection();
-  const createResult = await db.collection(TABLE).insertOne({ name, quantity });
+  const createResult = await db.collection(COLLECTION).insertOne({ name, quantity });
 
   return { _id: createResult.insertedId, name, quantity };
 };
 
-// const getAll = async () => {
-//   const db = await connection();
-//   const getAllProducts = await db.collection('products').find().toArray();
-//   return getAllProducts;
-// };
+const getAll = async () => {
+  const db = await connection();
+  const getAllProducts = await db.collection(COLLECTION).find().toArray();
+  console.log('cheguei no model');
+  return getAllProducts;
+};
 
-// const getProductById = async (id) => {
-//   const db = await connection();
-//   const product = await db.collection('products').findOne(ObjectId(id));
+const getProductById = async (id) => {
+  const db = await connection();
+  const product = await db.collection(COLLECTION).findOne(ObjectId.isValid(id));
 
-//   if (!product) return null;
-//   return product;
-// };
+  if (!product) return false;
+  return product;
+};
 
 module.exports = {
   findProductByName,
   createProductModel,
-  // getAll,
-  // getProductById,
+  getAll,
+  getProductById,
 };
