@@ -1,11 +1,27 @@
 const SaleModel = require('../models/SaleModel');
 const ProductModel = require('../models/ProductModel');
 
+const findAll = () => SaleModel.findAll();
+
+const findById = async (id) => {
+  const product = await ProductModel.findById(id);
+  if (!product) {
+    return {
+      err: {
+        code: 'not_found',
+        message: 'Sale not found',
+      },
+    };
+  }
+
+  return product;
+};
+
 const create = async (sale) => {
   const checkProducts = sale.map(({ productId, quantity }) => {
     const product = ProductModel.findById(productId);
 
-    if (!product || quantity <= 0 || !Number.isInteger(quantity)) return false; 
+    if (!product || quantity <= 0 || !Number.isInteger(quantity)) return false;
 
     return true;
   });
@@ -22,4 +38,4 @@ const create = async (sale) => {
   return SaleModel.create(sale);
 };
 
-module.exports = { create };
+module.exports = { create, findAll, findById };

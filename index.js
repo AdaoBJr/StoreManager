@@ -26,11 +26,11 @@ app.put('/products/:id', ProductController.update);
 
 app.delete('/products/:id', ProductController.exclude);
 
+app.get('/sales', SaleController.findAll);
+
+app.get('/sales/:id', SaleController.findById);
+
 app.post('/sales', SaleController.create);
-// app.post('/sales', async (req, res) => {
-//   const result = await SaleModel.create(req.body);
-//   res.status(200).json(result);
-// });
 
 app.use(errorMiddleware);
 
