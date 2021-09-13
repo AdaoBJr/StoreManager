@@ -14,7 +14,11 @@ const insertNewSale = (itensSold) =>
   connection().then((db) => db.collection(COLLECTION_NAME).insertOne({ itensSold }))
     .then((result) => ({ _id: result.insertedId, itensSold }));
 
+const getAllSales = async () => 
+   connection().then((db) => db.collection(COLLECTION_NAME).find().toArray());
+
 module.exports = {
   insertNewSale,
   findProductById,
+  getAllSales,
 };

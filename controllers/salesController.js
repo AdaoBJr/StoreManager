@@ -10,6 +10,13 @@ const insertNewSale = async (req, res) => {
   res.status(200).json(result);
 };
 
+const getAllSales = async (_req, res) => {
+  const result = await service.getAllSales();
+  console.log(result);
+  res.status(200).json({ sales: result });
+};
+
 module.exports = {
   insertNewSale,
+  getAllSales,
 };

@@ -8,6 +8,9 @@ const insertNewSale = async (itensSold) => {
   return result;
 };
 
+const getAllSales = () => model.getAllSales();
+
 module.exports = {
   insertNewSale,
+  getAllSales,
 };
