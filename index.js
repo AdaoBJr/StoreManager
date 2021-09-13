@@ -41,7 +41,12 @@ isValidQuantity,
 qauntityIsNumber,
 productsController.updateByIdController);
 
-app.use((err, req, res, next) => res.status(500).send(`Algo deu errado! Mensagem: ${err.message}`));
+app.delete('/products/:id', 
+ifProductIdNotExists,
+productsController.deleteByidController);
+
+app.use((err, req, res, _next) => 
+res.status(500).send(`Algo deu errado! Mensagem: ${err.message}`));
 
 app.listen(PORT, () => {
    console.log('Rodando na porta 3000');

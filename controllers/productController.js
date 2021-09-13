@@ -30,9 +30,16 @@ const updateByIdController = async (req, res) => {
     return res.status(HTTP_OK_DUZENTOS).send({ id, name, quantity });
 };
 
+const deleteByidController = async (req, res) => {
+    const { id } = req.params;
+    await productModel.deletebyId(id);
+    return res.status(HTTP_OK_DUZENTOS).json();
+};
+
 module.exports = {
     createNewProduct,
     getAll,
     getById,
     updateByIdController,
+    deleteByidController,
 };
