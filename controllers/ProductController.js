@@ -46,6 +46,16 @@ const update = rescue(async (req, res, next) => {
   return res.status(200).json(productUpdated);
 });
 
+const exclude = rescue(async (req, res, next) => {
+  const { id } = req.params;
+
+  const productExcluded = await ProductService.exclude(id);
+
+  if (productExcluded.err) return next(productExcluded.err);
+
+  return res.status(200).json(productExcluded);
+});
+
 const findAll = rescue(async (_req, res, _next) => {
   const products = await ProductService.findAll();
 
@@ -62,4 +72,4 @@ const findById = rescue(async (req, res, next) => {
   res.status(200).json(product);
 });
 
-module.exports = { create, update, findAll, findById };
+module.exports = { create, update, exclude, findAll, findById };

@@ -22,6 +22,8 @@ app.get('/products/:id', ProductController.findById);
 
 app.put('/products/:id', ProductController.update);
 
+app.delete('/products/:id', ProductController.exclude);
+
 app.use(errorMiddleware);
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));

@@ -1,5 +1,21 @@
 const ProductModel = require('../models/ProductModel');
 
+const findAll = () => ProductModel.findAll();
+
+const findById = async (id) => {
+  const product = await ProductModel.findById(id);
+  if (!product) {
+    return {
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    };
+  }
+
+  return product;
+};
+
 const create = async (name, quantity) => {
   const existingProduct = await ProductModel.findByName(name);
 
@@ -17,10 +33,9 @@ const create = async (name, quantity) => {
 
 const update = (id, name, quantity) => ProductModel.update(id, name, quantity);
 
-const findAll = () => ProductModel.findAll();
-
-const findById = async (id) => {
+const exclude = async (id) => {
   const product = await ProductModel.findById(id);
+
   if (!product) {
     return {
       err: {
@@ -30,7 +45,7 @@ const findById = async (id) => {
     };
   }
 
-  return product;
+  return ProductModel.exclude(id);
 };
 
-module.exports = { create, update, findAll, findById };
+module.exports = { create, update, exclude, findAll, findById };

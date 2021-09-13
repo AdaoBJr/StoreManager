@@ -49,4 +49,14 @@ const create = async (name, quantity) => {
   return productAdd.ops[0];
 };
 
-module.exports = { findByName, update, create, findAll, findById };
+const exclude = async (id) => {
+  const productExcluded = await findById(id);
+  if (!productExcluded) return false;
+  const db = await connection();
+
+  await db.collection('products').deleteOne({ _id: ObjectId(id) });
+
+  return productExcluded;
+};
+
+module.exports = { findByName, update, create, exclude, findAll, findById };
