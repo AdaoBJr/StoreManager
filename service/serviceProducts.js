@@ -1,20 +1,16 @@
 const ModelProducts = require('../model/modelProducts');
 
-const isValid = (name, quantity) => {
-  if (name.length < 5 || typeof name !== 'string') return false;
-  if (quantity <= 0 || typeof quantity !== 'number') return false;
+const { isValid } = require('../schemas/schemasValidate');
 
-  return true;
-};
+const getAll = async () => ModelProducts.getAll();
 
 const create = async ({ name, quantity }) => {
   const productValid = await isValid(name, quantity);
-
-  if (!productValid) return false;
+  if (productValid.err) return productValid;
 
   const product = await ModelProducts.create({ name, quantity });
-
+  
   return product;
 };
 
-module.exports = { create };
+module.exports = { create, getAll };

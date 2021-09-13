@@ -1,5 +1,17 @@
 const getConnection = require('./connection');
 
+// const findByName = async (name) => {
+//   const product = getConnection()
+//     .then((db) => db.collection('products').findOne({ name }));
+
+//   if (!product) return false;
+
+//   return true;
+// };
+
+const getAll = async () => getConnection()
+    .then((db) => db.collection('products').find().toArray());
+
 const create = async ({ name, quantity }) => {
   const db = await getConnection();
 
@@ -9,4 +21,4 @@ const create = async ({ name, quantity }) => {
   return product;
 };
 
-module.exports = { create };
+module.exports = { create, getAll };

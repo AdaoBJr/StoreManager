@@ -1,22 +1,17 @@
-const Joi = require('joi');
-const rescue = require('express-rescue');
 const ServiceProduct = require('../service/serviceProducts');
 
-const create = rescue(async (req, res, next) => {
-  const { error } = Joi.object({
-    name: Joi.string().not().empty.require(),
-    quantity: Joi.number().not().empty().required(),
-  }).validate(req.body);
-  
+const getAll = async (_req, res) => {
+  const products = await ServiceProduct.getAll();
+  return res.status(200).json(products);
+};
+
+const create = async (req, res) => {  
   const { name, quantity } = req.body;
   
-  if (error) return next(error);
-
   const product = await ServiceProduct.create({ name, quantity });
 
-  if (product.error) return next(product.error);
+  if (product.err) return res.status(422).json(product);
+  return res.status(201).json(product.ops[0]);
+};
 
-  return res.status(201).json(product);
-});
-
-module.exports = { create };
+module.exports = { create, getAll };
