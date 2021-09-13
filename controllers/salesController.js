@@ -3,7 +3,6 @@ const salesService = require('../services/salesService');
 const validProduct = async (res, next, item) => {
     const { productId } = item;
     const productVerified = await salesService.validProduct(productId);
-    console.log('validProduct');
     if (!productVerified) {
         return res.status(422).json({
             err: {
@@ -16,7 +15,6 @@ const validProduct = async (res, next, item) => {
 };
 
 const validQuantity = (req, res, next) => {
-    console.log('validquantity');
     const quantityVerified = salesService.validQuantity(req.body);
     const quantityTypeVerified = salesService.validTypeQuantity(req.body);
     if (quantityVerified.length !== 0 || quantityTypeVerified.length !== 0) {
@@ -43,20 +41,26 @@ const getAllSales = async (req, res) => {
     }
 };
 
-// const getAProductById = async (req, res) => {
-//     const { id } = req.params;
-//     try {
-//         const product = await productsService.getProductsById(id);
-//         return res.status(200).json(product);
-//     } catch (error) {
-//         return res.status(422).json({
-//             err: {
-//                 code: 'invalid_data',
-//                 message: 'Wrong id format',
-//             },
-//         });
-//     }
-// };
+const getSaleById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const product = await salesService.getSaleById(id);
+        if (product === false) {
+            return res.status(404).json({ err: {
+                code: 'not_found',
+                message: 'Sale not found',
+            } });
+        }
+        return res.status(200).json(product);
+    } catch (error) {
+        return res.status(422).json({
+            err: {
+                code: 'invalid_data',
+                message: 'Wrong id format',
+            },
+        });
+    }
+};
 
 const createSale = async (req, res) => {
     try {
@@ -109,4 +113,5 @@ module.exports = {
     createSale,
     validQuantity,
     validProduct,
+    getSaleById,
 };

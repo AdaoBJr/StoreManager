@@ -26,14 +26,18 @@ const getAllSales = async () => {
     return sales;
 };
 
-// const getProductsById = async (id) => {
-//     //  console.log(id);
-//     const product = await productsModel.getById(id);
-//     if (!product) {
-//         return null;
-//     }
-//     return product;
-// };
+const getSaleById = async (id) => {
+    // console.log(id);
+    const saleExist = await salesModel.saleExists(id);
+    if (!saleExist) {
+        return false;
+    }
+    const product = await salesModel.getById(id);
+    if (!product) {
+        return null;
+    }
+    return product;
+};
 
 const createSale = async (sales) => {
     const response = await salesModel.create(sales);
@@ -65,4 +69,5 @@ module.exports = {
     validTypeQuantity,
      validQuantity,
      validProduct,
+     getSaleById,
 };

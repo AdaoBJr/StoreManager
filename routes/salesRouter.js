@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', salesController.getAllSales);
 
-// router.get('/:id', productsController.getAProductById);
+router.get('/:id', salesController.getSaleById);
 router.post('/', 
 salesController.validQuantity,
 salesController.createSale);
