@@ -10,15 +10,19 @@ const errors = {
 const isString = (value) => (typeof value === 'string');
 const isLesserThanOrEqualTo0 = (value) => value <= 0;
 const lengthIsLesserThan = (value, min) => value.length <= min;
-const productExists = (name) => model.findByName(name);
+const productExists = async (name) => {
+  const insertedProduct = await model.findByName(name);
+  if (insertedProduct !== null) return true;
+  return false;
+};
 
-const validate = (name, quantity) => {
+const validate = async (name, quantity) => {
   const status = 422;
   const code = 'invalid_data';
   switch (true) {
     case lengthIsLesserThan(name, 5): 
       return { status, err: { code, message: errors.nameShort } };
-    case productExists(name): 
+    case await productExists(name): 
       return { status, err: { code, message: errors.nameExists } };
     case isLesserThanOrEqualTo0(quantity): 
       return { status, err: { code, message: errors.quantityLesserThanOne } };

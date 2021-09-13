@@ -2,8 +2,9 @@ const connection = require('./connection');
 
 const COLLECTION_NAME = 'products';
 
-const findByName = (name) => {
-  const productData = connection().then((db) => db.collection(COLLECTION_NAME).findOne({ name }));
+const findByName = async (name) => {
+  const productData = await connection().then((db) => 
+    db.collection(COLLECTION_NAME).findOne({ name }));
   return productData;
 };
 
