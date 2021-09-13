@@ -48,4 +48,13 @@ const exclude = async (id) => {
   return ProductModel.exclude(id);
 };
 
-module.exports = { create, update, exclude, findAll, findById };
+// const updateFromSale = (sale) => ProductModel.updateFromSale(sale);
+
+module.exports = {
+  create,
+  update,
+  exclude,
+  findAll,
+  findById,
+  // updateFromSale,
+};

@@ -59,4 +59,24 @@ const exclude = async (id) => {
   return productExcluded;
 };
 
-module.exports = { findByName, update, create, exclude, findAll, findById };
+const updateFromSale = async (sale, incresse = false) => {
+  const db = await connection();
+
+  sale.forEach(({ productId, quantity }) => {
+    const value = incresse ? quantity : -quantity;
+    db.collection('products').updateOne(
+      { _id: ObjectId(productId) },
+      { $inc: { quantity: value } },
+    );
+  });
+};
+
+module.exports = {
+  findByName,
+  update,
+  create,
+  exclude,
+  findAll,
+  findById,
+  updateFromSale,
+};

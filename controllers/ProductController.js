@@ -72,4 +72,13 @@ const findById = rescue(async (req, res, next) => {
   res.status(200).json(product);
 });
 
-module.exports = { create, update, exclude, findAll, findById };
+// const updateFromSale = rescue((sale) => ProductService.updateFromSale(sale));
+
+module.exports = {
+  create,
+  update,
+  exclude,
+  findAll,
+  findById,
+  // updateFromSale,
+};
