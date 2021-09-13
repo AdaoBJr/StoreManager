@@ -72,10 +72,10 @@ const checkQuantityValue = (quantity) => {
 
 const validate = async ({ name, quantity }) => {
   switch (true) {
-    case await checkProductWithSameName(name): return errors.productAlreadyExists;
     case checkNameLength(name, 5): return errors.smallName;
     case checkQuantityType(quantity): return errors.invalidQuantityType;
     case checkQuantityValue(quantity): return errors.invalidQuantity;
+    case await checkProductWithSameName(name): return errors.productAlreadyExists;
     default:
       return {};
   }
@@ -87,9 +87,16 @@ const createProduct = async (product) => {
   return createdProduct;
 };
 
+const updateProduct = async (product, id) => {
+  const updatedProduct = await Products.updateProduct(product, id);
+
+  return updatedProduct;
+};
+
 module.exports = {
   getAllProducts,
   findProductById,
   validate,
   createProduct,
+  updateProduct,
 };

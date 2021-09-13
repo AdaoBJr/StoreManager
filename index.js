@@ -17,3 +17,5 @@ app.get('/products', Products.getAllProducts);
 app.get('/products/:id', Products.findProductById);
 
 app.post('/products', Products.validateProduct, Products.createProduct);
+
+app.put('/products/:id', Products.validateProduct, Products.updateProduct);
