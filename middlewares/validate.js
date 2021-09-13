@@ -46,9 +46,20 @@ const validateQuantity = ({ quantity }) => {
   }
 };
 
+const isValidated = ({ name, quantity, existingProduct }) => {
+  const validateFunctions = [
+    productExists,
+    validateLenghtName,
+    validateQuantityType,
+    validateQuantity,
+  ];
+
+  for (let i = 0; i < validateFunctions.length; i += 1) {
+    const isValid = validateFunctions[i]({ name, quantity, existingProduct });
+    if (isValid) return (isValid);
+  }
+};
+
 module.exports = {
-  productExists,
-  validateLenghtName,
-  validateQuantityType,
-  validateQuantity,
+  isValidated,
 };

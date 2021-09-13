@@ -23,20 +23,13 @@ const getById = async (id) => {
 };
 
 const create = async (name, quantity) => {
-  // Buscamos um autor com o mesmo nome completo que desejamos criar
+  // Buscamos um produto com o mesmo nome que desejamos criar
   const existingProduct = await productsModel.findByName(name, quantity);
   
-  const validationArray = [
-    'productExists',
-    'validateLenghtName',
-    'validateQuantityType',
-    'validateQuantity',
-  ];
-  
-  for (let i = 0; i < validationArray.length; i += 1) {
-    const isValid = validations[validationArray[i]]({ name, quantity, existingProduct });
-    if (isValid) return (isValid);
-  }
+  const isvalid = validations.isValidated({ name, quantity, existingProduct });
+
+  if (isvalid) return isvalid;
+
   return productsModel.create(name, quantity);
 };
 
