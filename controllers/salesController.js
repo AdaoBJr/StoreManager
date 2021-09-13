@@ -18,7 +18,14 @@ next();
 const createSales = (req, res) => {
   const newSales = req.body;
   salesService.createSales(newSales)
-  .then((response) => res.status(200).json(response));
+  .then((response) => {
+    if (response === null) { 
+      return res.status(404).json({ err: { 
+        code: 'stock_problem', 
+        message: 'Such amount is not permitted to sell' } }); 
+      }
+    return res.status(200).json(response);
+  });
 };
 
 const getAll = (req, res) => salesService.getAll()
@@ -45,10 +52,8 @@ const editSale = (req, res) => {
 
 const deleteSale = (req, res) => {
   const { id } = req.params;
-  console.log('cheguei no controller com id', id);
   salesService.deleteSale(id)
   .then((result) => {
-    console.log('o retorno para o controller foi', result);
     if (result === null || result === undefined) {
       return res.status(422).json({ err: { 
         code: 'invalid_data', message: 'Wrong sale ID format' } });

@@ -2,15 +2,25 @@ const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
 const createSale = (data) => 
-  connection()
-  .then((db) => {
-    data.forEach((item) => {
-      db.collection('products')
-      .updateOne({ _id: ObjectId(item.productId) }, { $inc: { quantity: (-1) * item.quantity } }); 
+  connection().then((db) => {
+      const stockValidation = data.map(async (item) => {
+      const productFound = await db.collection('products')
+      .findOne({ _id: ObjectId(item.productId) });
+      if (item.quantity > productFound.quantity) { return false; } return true; 
 });
-    return db.collection('sales').insertOne({ itensSold: data });
-  })
-  .then((result) => result.ops[0]);
+  return Promise.all(stockValidation).then((values) => { 
+    const isStockValid = values.every((item) => item === true);
+    if (isStockValid === false) { return null; }
+    const alteration = data.map((item) => db.collection('products')
+    .updateOne({ _id: ObjectId(item.productId) }, { $inc: { quantity: (-1) * item.quantity } }));
+    return Promise.all(alteration).then(() => db.collection('sales')
+    .insertOne({ itensSold: data }));
+  });
+  })  
+  .then((result) => { 
+      if (result === null) { return null; }
+    return result.ops[0];
+});
 
 const getAll = () => connection()
 .then((db) => db.collection('sales').find({}).toArray());
@@ -31,7 +41,6 @@ const editSale = (id, itensSold) => {
 
 const deleteSale = (id) => { 
   if (!ObjectId.isValid(id)) return null;
-console.log('cheguei no model com id', id);
 const promises = [];
   return connection()
   .then((db) => db.collection('sales').findOne(ObjectId(id))
