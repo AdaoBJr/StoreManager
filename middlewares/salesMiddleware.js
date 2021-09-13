@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongodb');
 
 const { findById } = require('../models/salesModel');
+const { findById: findByIdProds } = require('../models/productsModel');
 
 const validateQuanty = (quantity) => quantity < 1 || typeof quantity === 'string';
 
@@ -54,8 +55,30 @@ const isCorrectId = async (req, res, next) => {
   next();
 };
 
+const assuranceStock = async (req, res, next) => {
+  const itensSold = req.body;
+  let nextStage = true;
+
+  itensSold.forEach(async ({ productId: id, quantity }) => {
+    const { product } = await findByIdProds({ id });
+
+    if ((product.quantity - quantity) < 1) {
+      nextStage = false;
+      return res.status(404).json({
+        err: {
+          code: 'stock_problem',
+          message: 'Such amount is not permitted to sell',
+        },
+      });
+    }
+  });
+
+  if (nextStage) next();
+};
+
 module.exports = {
   verifyQuantity,
   existsSale,
   isCorrectId,
+  assuranceStock,
 };
