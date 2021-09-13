@@ -5,12 +5,7 @@ const mongoConnection = require('./connection');
 const create = async (body) => {
   const productsCollection = await mongoConnection.getConnection()
     .then((db) => db.collection('sales'));
-
-  // const productID = await productModel.getById(body.productId);
-  // const { _id } = productID;
-  /* console.log(_id); */
   const { insertedId: id } = await productsCollection.insertOne({ itensSold: [...body] });
-  /* console.log(id); */
   return { _id: id, itensSold: [...body] };
 };
 

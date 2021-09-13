@@ -1,4 +1,4 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const salesModel = require('../models/salesModel');
 
 const isValidQuantityZero = (quantity) => {
@@ -18,16 +18,12 @@ const isValidQuantityNotNumber = (quantity) => {
 };
 
 const create = async (body) => {
-    /* console.log(body); */
     const valideQte = body.map((sale) => {
       const isProductQuantityValidZero = isValidQuantityZero(sale.quantity);
       const isProductQuantityNotNumber = isValidQuantityNotNumber(sale.quantity);
- /*   console.log(isProductQuantityValidZero, 'valida o zero');
-      console.log(isProductQuantityValidZero, 'se for string'); */
       if (!isProductQuantityValidZero || !isProductQuantityNotNumber) return false;
       return true;
     });
-    console.log(valideQte[0]);
     if (valideQte[0] === false) {
       return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
     }
@@ -35,4 +31,12 @@ const create = async (body) => {
     return resultModel;
 };
 
-module.exports = { create };
+const getById = async (id) => {
+  if (!ObjectId.isValid(id)) { 
+    return { code: 'not_found', message: 'Sale not found' }; 
+  }
+  const saleId = await salesModel.getById(id);
+  return saleId;
+};
+
+module.exports = { create, getById };
