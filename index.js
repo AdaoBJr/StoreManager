@@ -12,6 +12,10 @@ app.get('/', (_request, response) => {
 
 app.post('/products', productController.create);
 
+app.get('/products', productController.getAll);
+
+app.get('/products/:id', productController.getById);
+
 app.use((err, _req, res, _next) => {
   if (err.code === 'invalid_data') {
     return res.status(422).json({ err });
