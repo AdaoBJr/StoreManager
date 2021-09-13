@@ -8,7 +8,7 @@ const validName = (req, _res, next) => {
    if (!name || name.length < num) {
      const err = new Error(men);
      err.status = 422;
-     err.code = 'Invalid_data';
+     err.code = 'invalid_data';
      return next(err);
   }
    next();
@@ -21,7 +21,7 @@ const validNameExists = async (req, _res, next) => {
   if (product) {
     const err = new Error(men);
     err.status = 422;
-    err.code = 'Invalid_data';
+    err.code = 'invalid_data';
     return next(err);
   }
   next();
@@ -35,13 +35,13 @@ const validQuantity = (req, _res, next) => {
   if (quantity < num) {
     const err = new Error(mens);
     err.status = 422;
-    err.code = 'Invalid_data';
+    err.code = 'invalid_data';
     return next(err);
   }
   if (Number.isNaN(+quantity)) {
     const err = new Error(men);
     err.status = 422;
-    err.code = 'Invalid_data';
+    err.code = 'invalid_data';
     return next(err);
   }
   next();
@@ -54,7 +54,7 @@ const validId = (req, res, next) => {
     const mens = 'Wrong id format';
     const err = new Error(mens);
     err.status = 422;
-    err.code = 'Invalid_data';
+    err.code = 'invalid_data';
     return next(err);
   }
    next();
