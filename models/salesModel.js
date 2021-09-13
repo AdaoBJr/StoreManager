@@ -29,7 +29,7 @@ const getAll = async () => {
 const getId = async (id) => {
     const db = await connectionDB.connect();
     const saleOne = await db.collection('sales').findOne({ _id: ObjectId(id) });
-    return saleOne != null;
+    return saleOne;
 };
 
 // CREATE

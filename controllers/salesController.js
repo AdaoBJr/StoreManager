@@ -12,15 +12,15 @@ const getIdSale = async (req, res) => {
     try {
         const { id } = req.params;
         const sale = await salesModel.getId(id);
+        const msg = 'Sale not found';
+        if (sale === null) {
+            return res.status(status.NOT_FOUND)
+            .json(errorGeneral.errorNotFound(msg)); 
+        } 
         return res.status(status.OK).json(sale);
     } catch (error) {
         const msg = 'Sale not found';
-        return res.status(status.NOT_FOUND).json({
-            err: {
-              code: 'not_found',
-              message: msg,
-            },
-          });
+        return res.status(status.NOT_FOUND).json(errorGeneral.errorNotFound(msg));
     }
 };
 

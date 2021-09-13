@@ -5,4 +5,10 @@ const error = (msg) => ({
     },
   });
 
-module.exports = { error };
+const errorNotFound = (msg) => ({
+  err: {
+    code: 'not_found',
+    message: msg,
+  },
+});
+module.exports = { error, errorNotFound };
