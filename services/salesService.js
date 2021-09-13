@@ -1,4 +1,5 @@
 const salesModel = require('../models/salesModel');
+const productModel = require('../models/productModel');
 
 const validQuant = async (quantity) => {
     if (quantity <= 0 || typeof (quantity) === 'string') {
@@ -13,7 +14,7 @@ const addValidation = async (salesArray) => {
 
     const anwaser = await validQuant(salesObject.quantity);
 
-    const existId = await salesModel.existId(salesObject.productId);
+    const existId = await productModel.existId(salesObject.productId);
     
     if (existId === null) {
         return 'Wrong product ID or invalid quantity';

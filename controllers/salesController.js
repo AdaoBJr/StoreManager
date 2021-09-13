@@ -1,23 +1,23 @@
 const status = require('http-status');
-// const productModel = require('../models/productModel');
+const salesModel = require('../models/salesModel');
 const salesService = require('../services/salesService');
 const errorGeneral = require('../middlewares/errorGeneral');
 
-// const getAllProducts = async (_req, res) => {
-//     const products = await productModel.getAll();
-//     return res.status(status.OK).json({ products });
-// };
+const getAllSales = async (_req, res) => {
+    const sales = await salesModel.getAll();
+    return res.status(status.OK).json({ sales });
+};
 
-// const getIdProduct = async (req, res) => {
-//     try {
-//         const { id } = req.params;
-//         const product = await productModel.getId(id);
-//         return res.status(status.OK).json(product);
-//     } catch (error) {
-//         const msg = 'Wrong id format';
-//         return res.status(status.UNPROCESSABLE_ENTITY).json(errorGeneral.error(msg));
-//     }
-// };
+const getIdSale = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const sale = await salesModel.getId(id);
+        return res.status(status.OK).json(sale);
+    } catch (error) {
+        const msg = 'Sale not found';
+        return res.status(status.UNPROCESSABLE_ENTITY).json(errorGeneral.error(msg));
+    }
+};
 
 const createSales = async (req, res) => {
     const salesObject = req.body;
@@ -29,7 +29,7 @@ const createSales = async (req, res) => {
         return res.status(status.OK).json(createMSG);
 };
 
-// const updateProduct = async (req, res) => {
+// const updatesale = async (req, res) => {
 //     const { id } = req.params;
 //     const { name, quantity } = req.body;
 //     const createMSG = await productService.updateValidation(id, name, quantity);
@@ -50,4 +50,4 @@ const createSales = async (req, res) => {
 //         return res.status(status.OK).json(createMSG);
 // };
 
-module.exports = { createSales };
+module.exports = { createSales, getIdSale, getAllSales };

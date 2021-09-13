@@ -21,22 +21,22 @@ const existName = async (name) => {
 const existId = async (id) => {
     if (!ObjectId.isValid(id)) { return null; }
     const db = await connectionDB.connect();
-    const product = await db.collection('products').findOne({ _id: ObjectId(id) });
-    return product;
+    const sale = await db.collection('sales').findOne({ _id: ObjectId(id) });
+    return sale;
 };
 
 // READ
 const getAll = async () => {
     const db = await connectionDB.connect();
-    const products = await db.collection('products').find().toArray();
-    return products;
+    const sales = await db.collection('sales').find().toArray();
+    return sales;
 };
 
 // READ
 const getId = async (id) => {
     const db = await connectionDB.connect();
-    const productOne = await db.collection('products').findOne({ _id: ObjectId(id) });
-    return productOne;
+    const saleOne = await db.collection('sales').findOne({ _id: ObjectId(id) });
+    return saleOne;
 };
 
 // CREATE

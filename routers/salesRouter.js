@@ -6,4 +6,10 @@ const router = express.Router();
 // ADD
 router.post('/', salesController.createSales);
 
+// READ
+router.get('/', salesController.getAllSales);
+
+// READ ID
+router.get('/:id', salesController.getIdSale);
+
 module.exports = router;
