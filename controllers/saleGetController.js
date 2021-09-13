@@ -14,7 +14,7 @@ const getOneSal = async (req, res) => {
   const list = await getOneSale();
   if (id.length <= 23) return res.status(404).json(err);
   if (list === null) {
-    return res.status(422).json(err);
+    return res.status(404).json(err);
   }
   return res.status(200).json(list);
 };
