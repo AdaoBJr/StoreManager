@@ -27,9 +27,12 @@ const create = rescue(async (req, res) => {
   isValidNewSales(body);
   
   const itensSold = body;
-  const id = await salesService.create(itensSold);
+  const response = await salesService.create(itensSold);
 
-  res.status(200).json({ _id: id, itensSold });
+  res.status(200).json(response);
 });
 
 module.exports = { create };
+
+// validação tirado deste forum:
+// https://stackoverflow.com/questions/42656549/joi-validation-of-array
