@@ -26,7 +26,7 @@ const createSales = async (req, res) => {
     if (typeof (createMSG) === 'string') {
         return res.status(status.UNPROCESSABLE_ENTITY).json(errorGeneral.error(createMSG));
     } 
-        return res.status(status.CREATED).json(createMSG);
+        return res.status(status.OK).json(createMSG);
 };
 
 // const updateProduct = async (req, res) => {
