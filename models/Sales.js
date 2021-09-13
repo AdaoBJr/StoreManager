@@ -35,10 +35,19 @@ const deleteSale = async (id) => {
     .then((result) => result.value);
 };
 
+const sellQuantity = async (id, quantity) => {
+  console.log(quantity);
+  return connection()
+    .then((db) => db.collection('products').updateOne(
+      { _id: ObjectId(id) }, { $inc: { quantity: -quantity } },
+    ));
+};
+
 module.exports = {
   getAll,
   getById,
   newSale,
   updateSale,
   deleteSale,
+  sellQuantity,
 };

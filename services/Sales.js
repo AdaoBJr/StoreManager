@@ -26,6 +26,12 @@ const validateDeletion = (sale) => {
   }
 };
 
+const updateProductQtts = async (sale) => {
+  const sellPromises = sale.map((item) =>
+    model.sellQuantity(item.productId, item.quantity));
+  Promise.all(sellPromises);
+};
+
 const getAll = () => model.getAll();
 
 const getById = async (id) => {
@@ -36,19 +42,25 @@ const getById = async (id) => {
 
 const newSale = async (sale) => {
   validateSale(sale);
+  await updateProductQtts(sale);
   const result = await model.newSale(sale);
   return result;
 };
 
 const updateSale = async (id, sale) => {
   validateSale(sale);
+
   const result = await model.updateSale(id, sale);
   return result;
 };
 
 const deleteSale = async (id) => {
+  const sale = await model.getById(id);
+  validateDeletion(sale);
+  const { itensSold } = sale;
+  const item = [{ productId: itensSold[0].productId, quantity: itensSold[0].quantity * -1 }];
+  if (itensSold) await updateProductQtts(item);
   const result = await model.deleteSale(id);
-  validateDeletion(result);
   return result;
 };
 
