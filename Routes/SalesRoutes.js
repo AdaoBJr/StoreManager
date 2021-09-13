@@ -7,7 +7,8 @@ const salesRoutes = (app) => {
     .get(rescue(controller.getAll))
     .post(rescue(controller.newSale));
   app.route('/sales/:id')
-    .get(rescue(controller.getById));
+    .get(rescue(controller.getById))
+    .put(rescue(controller.updateSale));
 };
 
 module.exports = salesRoutes;

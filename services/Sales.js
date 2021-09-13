@@ -32,8 +32,15 @@ const newSale = async (sale) => {
   return result;
 };
 
+const updateSale = async (id, sale) => {
+  validateSale(sale);
+  const result = await model.updateSale(id, sale);
+  return result;
+};
+
 module.exports = {
-  newSale,
   getAll,
   getById,
+  newSale,
+  updateSale,
 };
