@@ -51,6 +51,11 @@ const update = async (_id, name, quantity) => {
       return { _id, name, quantity }; 
 };
 
+const deleteOne = async (id) => {
+  const db = await connection();
+  await db.collection('products').deleteOne({ _id: ObjectId(id) });
+};
+
 const findByName = async (name) => {
   const product = await connection()
     .then((db) => db.collection('products').findOne({ name }));
@@ -68,4 +73,5 @@ module.exports = {
   create,
   findByName,
   update,
+  deleteOne,
 };

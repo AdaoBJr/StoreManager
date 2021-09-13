@@ -46,9 +46,22 @@ const update = rescue(async (req, res, next) => {
   // do novo Produto
   return res.status(200).json(updatedProduct);
 });
+
+const deleteOne = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  
+  const deleteProduct = await productsService.deleteOne(id);
+  // Caso haja erro na criação do autor, iniciamos o fluxo de erro
+  if (deleteProduct.error) return next(deleteProduct);
+
+  // Caso esteja tudo certo, retornamos o status 201 Created, junto com as informações
+  // do novo Produto
+  return res.status(200).json(deleteProduct);
+});
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  deleteOne,
 };
