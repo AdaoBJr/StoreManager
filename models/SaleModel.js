@@ -36,4 +36,14 @@ const update = async (id, sale) => {
   return saleUpdated;
 };
 
-module.exports = { create, findAll, findById, update };
+const exclude = async (id) => {
+  const saleExcluded = await findById(id);
+  if (!saleExcluded) return false;
+  const db = await connection();
+
+  await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+
+  return saleExcluded;
+};
+
+module.exports = { create, findAll, findById, update, exclude };

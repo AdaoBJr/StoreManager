@@ -36,6 +36,8 @@ app.get('/sales/:id', SaleController.findById);
 
 app.put('/sales/:id', SaleController.update);
 
+app.delete('/sales/:id', SaleController.exclude);
+
 app.use(errorMiddleware);
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));

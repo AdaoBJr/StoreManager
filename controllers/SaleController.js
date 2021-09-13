@@ -12,7 +12,7 @@ const create = rescue(async (req, res, next) => {
 const update = rescue(async (req, res, next) => {
   const { id } = req.params;
   const productUpdated = await SaleService.update(id, req.body);
-  
+
   if (productUpdated.err) return next(productUpdated.err);
 
   return res.status(200).json(productUpdated);
@@ -34,4 +34,14 @@ const findById = rescue(async (req, res, next) => {
   res.status(200).json(sale);
 });
 
-module.exports = { create, findAll, findById, update };
+const exclude = rescue(async (req, res, next) => {
+  const { id } = req.params;
+
+  const productExcluded = await SaleService.exclude(id);
+
+  if (productExcluded.err) return next(productExcluded.err);
+
+  return res.status(200).json(productExcluded);
+});
+
+module.exports = { create, findAll, findById, update, exclude };
