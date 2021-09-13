@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { createProduct } = require('../controllers/produtos.controller');
 const { productIsValid, isValidName,
-  isValidQuantity } = require('');
+  isValidQuantity } = require('../middlewares/products.middlewares');
 
 const routes = new Router();
 
