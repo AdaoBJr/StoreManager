@@ -17,15 +17,23 @@ const getById = async ({ id }) => {
   return allSales;
 };
 
-const isValidQuantityProducts = async (productId, quantity) => {
-  // console.log(productId);
-  
-  const result = await getById(productId);
-  return console.log(result);
+const validarQuantidadeProduto = async ({ itensSold }) => {
+  const promises = [];
+
+  for (let index = 0; index < itensSold.length; index += 1) {
+    const { productId } = itensSold[index];
+    const result = productsModels.getById({ id: productId });
+    promises.push(result);
+  }
+
+  const product = await Promise.all(promises);
+  for (let index = 0; index < itensSold.length; index += 1) {
+    if (product[index].quantity < itensSold[index].quantity) return true;
+  }
+  return false;
 };
 
 const create = async ({ itensSold }) => {
-  
   const { error } = Joi.array().items(Joi.object({
     productId: Joi.string().length(24).required(),
     quantity: Joi.number().strict().min(1).required(),
@@ -33,25 +41,19 @@ const create = async ({ itensSold }) => {
 
   if (error) return error;
 
-  for (let index = 0; index < itensSold.length; index += 1) {
-    const { productId, quantity } = itensSold[index];
-    const result = await productsModels.getById({ id: productId });
-    if (result.quantity < quantity) return 'quantidade insuficiente';
-  }
+  const isValid = await validarQuantidadeProduto({ itensSold });
 
-  // itensSold.forEach(async ({ productId, quantity }) => {
-    
-  //   // console.log(result.quantity < quantity);
-  //   if (result.quantity < quantity) return true;
-  // });
+  if (isValid) return 'quantidade insuficiente';
 
-  const { id } = await salesModels
-  .create(itensSold);
+  // for (let index = 0; index < itensSold.length; index += 1) {
+  //   const { productId, quantity } = itensSold[index];
+  //   const result = await productsModels.getById({ id: productId });
+  //   if (result.quantity < quantity) return 'quantidade';
+  // }
 
-  return {
-    id,
-    itensSold,
-  };
+  const { id } = await salesModels.create(itensSold);
+
+  return { id, itensSold };
 };
 
 const updateById = async ({ id, itensSold }) => {
