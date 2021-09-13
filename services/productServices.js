@@ -37,11 +37,17 @@ const createProduct = async (name, quantity) => {
   const isValidName = isValidNameProduct(name);
   const isValidQuantity = isValidQuantityProduct(quantity);
 
+// valida inputs
   if (isValidName.err) return isValidName;
   if (isValidQuantity.err) return isValidQuantity;
 
+// check se já existe produto
+  const checkProductExists = await productModels.findProductByName(name);
+  if (checkProductExists) { 
+    return { err: { code: 'invalid_data', message: 'Product already exists' } }; 
+  }
+// Cria produto no banco 
   const resultModel = await productModels.createProduct(name, quantity);
-  // console.log(resultModel);
   
   return resultModel;
 };

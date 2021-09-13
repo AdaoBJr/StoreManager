@@ -5,8 +5,6 @@ const createProduct = async (req, res) => {
 
   const responseObj = await productService.createProduct(name, quantity);
   const { id } = responseObj;
-
-  console.log(responseObj);
   
   if (responseObj.err) {
     return res.status(422).json(responseObj);
