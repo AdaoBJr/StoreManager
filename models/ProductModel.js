@@ -38,6 +38,26 @@ const update = async (id, name, quantity) => {
       .then(() => ({ _id: id, name, quantity })));
 };
 
+const updateProductBySale = async (arr) => {
+  const listProducts = await connection()
+    .then((db) => db.collection('products').find().toArray())
+    .then((result) => result);
+
+  // console.log(listProducts);
+
+  arr.map((sale) => listProducts.map(({ _id, quantity }) => {
+      if (_id.toString() === sale.productId) {
+        return connection().then((db) => db.collection('products')
+        .updateOne(
+          { _id: ObjectId(sale.productId) },
+          { $set: { quantity: quantity - sale.quantity } },
+        ));
+      }
+
+      return null;
+    }));
+};
+
 const exclude = async (id) => {
   if (!ObjectId.isValid(id)) {
     return null;
@@ -51,6 +71,31 @@ const exclude = async (id) => {
   return excludeProduct;
 };
 
+const updateProductBySaleExclude = async (id) => {
+  const saleId = await connection()
+  .then((db) => db.collection('sales').findOne({ _id: ObjectId(id) }));
+  
+  const arrSale = saleId.itensSold;
+
+  const listProducts = await connection()
+    .then((db) => db.collection('products').find().toArray())
+    .then((result) => result);
+
+  // console.log(saleId.itensSold)
+
+  arrSale.map((sale) => listProducts.map(({ _id, quantity }) => {
+      if (_id.toString() === sale.productId) {
+        return connection().then((db) => db.collection('products')
+        .updateOne(
+          { _id: ObjectId(sale.productId) },
+          { $set: { quantity: quantity + sale.quantity } },
+        ));
+      }
+
+      return null;
+    }));
+};
+
 module.exports = {
   getAll,
   findById,
@@ -58,4 +103,6 @@ module.exports = {
   findName,
   update,
   exclude,
+  updateProductBySale,
+  updateProductBySaleExclude,
 };

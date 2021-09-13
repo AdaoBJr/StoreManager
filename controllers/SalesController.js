@@ -1,4 +1,5 @@
 const SalesService = require('../services/SalesService');
+const SalesModel = require('../models/ProductModel');
 
 const getAllSales = async (req, res) => {
   const listSales = await SalesService.getAll();
@@ -23,6 +24,8 @@ const createSales = async (req, res) => {
 
   const salesCreated = await SalesService.create(arrSales);
 
+  SalesModel.updateProductBySale(arrSales);
+
   if (salesCreated.err) {
     return res.status(422).json({ err: salesCreated.err });
   }
@@ -45,6 +48,9 @@ const updateSales = async (req, res) => {
 
 const excludeSales = async (req, res) => {
   const { id } = req.params;
+  const arrSales = req.body;
+
+  SalesModel.updateProductBySaleExclude(id, arrSales);
 
   const salesExclude = await SalesService.exclude(id);
 
