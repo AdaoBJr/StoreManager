@@ -4,6 +4,7 @@ const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
 const DB_NAME = 'StoreManager';
 
 let schema = null;
+
 async function connection() {
   if (schema) return Promise.resolve(schema);
   return MongoClient.connect(MONGO_DB_URL, {

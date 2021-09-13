@@ -46,4 +46,10 @@ module.exports = {
     message: 'Wrong sale ID format',
     status: 422,
   },
+
+  stockProblem: {
+    code: 'stock_problem',
+    message: 'Such amount is not permitted to sell',
+    status: 404,
+  },
 };

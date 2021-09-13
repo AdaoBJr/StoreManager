@@ -26,10 +26,21 @@ const validateDeletion = (sale) => {
   }
 };
 
+const verifyStock = (quantity) => {
+  if (!quantity) {
+    const error = new Error();
+    error.statusCode = 'stockProblem';
+    throw error;
+  }
+};
+
 const updateProductQtts = async (sale) => {
-  const sellPromises = sale.map((item) =>
-    model.sellQuantity(item.productId, item.quantity));
-  Promise.all(sellPromises);
+  const sellPromises = sale.map(async (item) => {
+    const verifyQtt = await model.sellQuantity(item.productId, item.quantity);
+    verifyStock(verifyQtt);
+    return verifyQtt;
+  });
+  await Promise.all(sellPromises);
 };
 
 const getAll = () => model.getAll();
@@ -49,7 +60,6 @@ const newSale = async (sale) => {
 
 const updateSale = async (id, sale) => {
   validateSale(sale);
-
   const result = await model.updateSale(id, sale);
   return result;
 };
