@@ -16,11 +16,13 @@ app.get('/', (_request, response) => {
 });
 
 // rotas
-app.post('/products', productsController.create);
-app.get('/products', productsController.findAll);
-app.get('/products/:id', productsController.findById);
-app.put('/products/:id', productsController.updateById);
-app.delete('/products/:id', productsController.remove);
+app.route('/products')
+  .post(productsController.create)
+  .get(productsController.findAll);
+app.route('/products/:id')
+  .get(productsController.findById)
+  .put(productsController.updateById)
+  .delete(productsController.remove);
 
 // error
 app.use(errorMiddleware);
