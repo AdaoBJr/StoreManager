@@ -6,22 +6,15 @@ const getAll = async () => {
   return responseConnection.collection('products').find().toArray();
 };
 
-const create = async (name, quantity) => {
+const create = async (product) => {
   const responseConnection = await connection();
-  const insert = responseConnection.collection('products').insertOne(name, quantity);
-
-  return insert;
+  const { ops } = await responseConnection.collection('products').insertOne(product);
+  return ops[0];
 };
 
 const findName = async (name) => {
   const product = await connection();
-
-  const findProduct = product.collection('products').findOne({ name });
-
-  if (!findProduct) {
-    return null;
-  }
-  return findProduct;
+  return product.collection('products').findOne(name);
 };
 
 module.exports = {
