@@ -49,7 +49,6 @@ const createProduct = async (name, quantity) => {
   }
 // Cria produto no banco 
   const resultModel = await productModels.createProduct(name, quantity, 'products');
-  
   return resultModel;
 };
 
@@ -80,9 +79,16 @@ const updateProduct = async (id, name, quantity) => {
   return productAdd;
 };
 
+const exclude = async (id) => {
+  const excludedProduct = productModels.exclude(id, 'products');
+  if (!excludedProduct) return { err: {} };
+  return excludedProduct;
+};
+
 module.exports = {
   createProduct,
   getAll,
   getProductById,
   updateProduct,
+  exclude,
 };
