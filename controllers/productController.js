@@ -1,6 +1,29 @@
 const service = require('../services/productService');
 const messages = require('../helpers/validationMessages');
 
+const getProducts = async (_req, res) => {
+  try {
+    const products = await service.getAllProducts();
+
+    return res.status(200).json(products);
+  } catch (err) {
+    return res.status(500).json(messages.error);
+  }
+};
+
+const getProductsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await service.getById(id);
+
+    if (product === null) return res.status(422).json(messages.productWrongFormat);
+
+    return res.status(200).json(product);
+  } catch (error) {
+    return res.status(422).json(messages.productWrongFormat);
+  }
+};
+
 const createProduct = async (req, res) => {
   // try {
     const { name, quantity } = req.body;
@@ -58,29 +81,6 @@ const excludeProduct = async (req, res) => {
     if (exclude === null) return res.status(422).json(messages.productWrongFormat);
 
     return res.status(200).json(exclude);
-  } catch (error) {
-    return res.status(422).json(messages.productWrongFormat);
-  }
-};
-
-const getProducts = async (_req, res) => {
-  try {
-    const products = await service.getAllProducts();
-
-    return res.status(200).json(products);
-  } catch (err) {
-    return res.status(500).json(messages.error);
-  }
-};
-
-const getProductsById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const product = await service.getById(id);
-
-    if (product === null) return res.status(422).json(messages.productWrongFormat);
-
-    return res.status(200).json(product);
   } catch (error) {
     return res.status(422).json(messages.productWrongFormat);
   }

@@ -6,15 +6,6 @@ const numberOfQuantity = (quantity) => {
   return true;
 };
 
-const createSale = (sale) => {
-  const [{ quantity }] = sale;
-  const numberQuantity = numberOfQuantity(quantity);
-
-  if (!numberQuantity) return false;
-
-  return SalesModel.create(sale);
-};
-
 const getAllSales = async () => {
   const getSales = await SalesModel.getAll();
 
@@ -29,9 +20,28 @@ const getById = async (id) => {
   return sale;
 };
 
+const createSale = (sale) => {
+  const [{ quantity }] = sale;
+  const numberQuantity = numberOfQuantity(quantity);
+
+  if (!numberQuantity) return false;
+
+  return SalesModel.create(sale);
+};
+
+const updateSale = async (id, sale) => {
+  const [{ quantity }] = sale;
+  const numberQuantity = numberOfQuantity(quantity);
+
+  if (!numberQuantity) return false;
+
+  return SalesModel.update(id, sale);
+};
+
 module.exports = {
   numberOfQuantity,
   createSale,
   getAllSales,
   getById,
+  updateSale,
 };

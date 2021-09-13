@@ -29,4 +29,6 @@ app.get('/sales', saleController.getSales);
 
 app.post('/sales', saleController.createSale);
 
+app.put('/sales/:id', saleController.updateSale);
+
 app.listen(port, () => console.log(`Listening on port ${port}!`));
