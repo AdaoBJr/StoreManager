@@ -1,47 +1,38 @@
 const salesService = require('../services/salesService');
 
-// const validName = (req, res, next) => {
-//     const { name } = req.body;
-//     const nameVerified = productsService.validName(name);
-//     if (!nameVerified) {
-//         return res.status(422).json({
-//             err: {
-//                 code: 'invalid_data',
-//                 message: '"name" length must be at least 5 characters long',
-//             },
-//         });
-//     }
-//     next();
-// };
+const validProduct = async (res, next, item) => {
+    const { productId } = item;
+    const productVerified = await salesService.validProduct(productId);
+    console.log('validProduct');
+    if (!productVerified) {
+        return res.status(422).json({
+            err: {
+                code: 'invalid_data',
+                message: 'Produto não cadastrado',
+            },
+        });
+    }
+    next();
+};
 
-// const validQuantity = (req, res, next) => {
-//     const { quantity } = req.body;
-//     const quantityVerified = productsService.validQuantity(quantity);
-//     if (!quantityVerified) {
-//         return res.status(422).json({
-//             err: { code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' },
-//         });
-//     }
-//     next();
-// };
-// const validTypeQuantity = (req, res, next) => {
-//     const { quantity } = req.body;
-//     const quantityTypeVerified = productsService.validTypeQuantity(quantity);
-//     if (!quantityTypeVerified) {
-//         return res.status(422).json({
-//             err: {
-//                 code: 'invalid_data',
-//                 message: '"quantity" must be a number',
-//             },
-//         });
-//     }
-//     next();
-// };
+const validQuantity = (req, res, next) => {
+    console.log('validquantity');
+    const quantityVerified = salesService.validQuantity(req.body);
+    const quantityTypeVerified = salesService.validTypeQuantity(req.body);
+    if (quantityVerified.length !== 0 || quantityTypeVerified.length !== 0) {
+        return res.status(422).json({
+            err: {
+                code: 'invalid_data', message: 'Wrong product ID or invalid quantity',
+            },
+        });
+    }
+    next();
+};
 
 const getAllSales = async (req, res) => {
     try {
-        const Allproducts = await salesService.getAllProducts();
-        return res.status(200).json({ products: Allproducts });
+        const AllSales = await salesService.getAllSales();
+        return res.status(200).json({ sales: AllSales });
     } catch (error) {
         return res.status(422).json({
             err: {
@@ -67,22 +58,19 @@ const getAllSales = async (req, res) => {
 //     }
 // };
 
-// const createProducts = async (req, res) => {
-//     try {
-//         const { name, quantity } = req.body;
-
-//         const result = await productsService.createProduct({ name, quantity });
-
-//         if (!result) {
-//             return res.status(422).json({
-//                 err: { code: 'invalid_data', message: 'Product already exists' },
-//             });
-//         }
-//         return res.status(201).json(result);
-//     } catch (error) {
-//         return res.status(500).json({ message: 'Ops, algo de errado :( ' });
-//     }
-// };
+const createSale = async (req, res) => {
+    try {
+        const result = await salesService.createSale(req.body);
+        if (!result) {
+            return res.status(422).json({
+                err: { code: 'invalid_data', message: 'Product already exists' },
+            });
+        }
+        return res.status(200).json({ _id: result, itensSold: req.body });
+} catch (error) {
+    return res.status(500).json({ message: 'Ops, algo de errado :( ' });
+}
+};
 
 // const updateProduct = async (req, res) => {
 //     const { id } = req.params;
@@ -118,4 +106,7 @@ const getAllSales = async (req, res) => {
 // };
 module.exports = {
     getAllSales,
+    createSale,
+    validQuantity,
+    validProduct,
 };
