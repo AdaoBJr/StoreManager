@@ -9,6 +9,21 @@ const createSale = async (item) => {
   return sale;
 };
 
+const findAllSales = async () => {
+  const sales = await salesModel.findAll();
+  return { sales };
+};
+
+const findId = async (id) => {
+  const sale = await salesModel.findById(id);
+  const err = { err: { code: 'not_found', message: 'Sale not found' }, error: true };
+
+  if (!sale) return err;
+  return sale;
+};
+
 module.exports = {
   createSale,
+  findAllSales,
+  findId,
 };
