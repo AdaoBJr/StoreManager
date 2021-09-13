@@ -2,6 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const ProductsController = require('./controllers/ProductsController');
+const SalesController = require('./controllers/salesController');
 const errorMiddleware = require('./middleware/error');
 
 const app = express();
@@ -12,6 +13,7 @@ app.get('/products', ProductsController.getAllProducts);
 app.get('/products/:id', ProductsController.getProductById);
 app.delete('/products/:id', ProductsController.deleteData);
 app.put('/products/:id', ProductsController.updateProduct);
+app.post('/sales', SalesController.saveSale);
 
 app.get('/', (_request, response) => {
   response.send();

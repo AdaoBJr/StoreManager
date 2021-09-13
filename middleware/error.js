@@ -12,8 +12,8 @@ module.exports = (err, _req, res, _next) => {
   };
 
   const status = statusByErorCode[err.code] || 500;
-  // const { code } = err;
-  const code = err.code.toLowerCase();
+  const { code } = err;
+  // const code = err.code.toLowerCase();
 
   return res.status(status).json({ err: { code, message: err.message } });
 };
