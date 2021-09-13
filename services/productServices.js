@@ -13,7 +13,6 @@ const erroMensage = (message) => ({
 
 const isValidProductName = (req, res, next) => {
   const { name } = req.body;
-  console.log('Validado o Tamanho do nome, se Existe ou se é um string vazia');
   const erroProductName = '"name" length must be at least 5 characters long';
   const ERRO = erroMensage(erroProductName);
 
@@ -28,7 +27,6 @@ const isValidProductName = (req, res, next) => {
 
 const qauntityIsNumber = (req, res, next) => {
   const { quantity } = req.body;
-  console.log('Validado se quantidade é um do tipo numero');
   const erroProductQuantity = '"quantity" must be a number';
   const ERRO = erroMensage(erroProductQuantity);
   if (typeof quantity !== 'number') {
@@ -39,7 +37,6 @@ const qauntityIsNumber = (req, res, next) => {
 
 const isValidQuantity = (req, res, next) => {
   const { quantity } = req.body;
-  console.log('Validando se quantidade é maior que 0 e existe');
   const erroProductQuantity = '"quantity" must be larger than or equal to 1';
   const ERRO = erroMensage(erroProductQuantity);
   if (!quantity || quantity < 1) {
@@ -50,11 +47,21 @@ const isValidQuantity = (req, res, next) => {
 
 const ifNameExists = async (req, res, next) => {
   const { name } = req.body;
-  console.log('Validando se o nome já existe no banco');
   const nameNotDuplicated = await productModel.findForNotDuplicate(name);
   const duplicateNameMensage = 'Product already exists';
   const ERRO = erroMensage(duplicateNameMensage);
   if (nameNotDuplicated) {
+    return res.status(HTTP_ERR_FALSE).json(ERRO);
+  }
+
+  next();
+};
+
+const ifProductIdNotExists = async (req, res, next) => {
+  const { id } = req.params;
+  const message = 'Wrong id format';
+  const ERRO = erroMensage(message);
+  if (id.length !== 24) {
     return res.status(HTTP_ERR_FALSE).json(ERRO);
   }
 
@@ -76,4 +83,5 @@ module.exports = {
   isValidQuantity,
   qauntityIsNumber,
   ifNameExists,
+  ifProductIdNotExists,
 };
