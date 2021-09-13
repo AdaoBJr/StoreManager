@@ -25,4 +25,12 @@ const productById = async (id) => {
     status: 422, err: { code: 'invalid_data', message: 'Wrong id format' } };
 };
 
-module.exports = { newProduct, allProducts, productById };
+const updatedProduct = async ({ id, name, quantity }) => {
+  const db = await connection();
+  const product = await db.collection('products').updateOne({ _id: ObjectId(id) },
+  { $set: { name, quantity } });
+
+return product;
+};
+
+module.exports = { newProduct, allProducts, productById, updatedProduct };

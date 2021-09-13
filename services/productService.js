@@ -1,4 +1,4 @@
-const { newProduct, allProducts, productById } = require('../models/productModel');
+const { newProduct, allProducts, productById, updatedProduct } = require('../models/productModel');
 
 const create = async ({ name, quantity }) => {
   const newProducts = await newProduct({ name, quantity });
@@ -15,4 +15,9 @@ const getById = async (id) => {
   return product;
 };
 
-module.exports = { create, getAll, getById };
+const update = async ({ id, name, quantity }) => {
+  const product = await updatedProduct({ id, name, quantity });
+  return product;
+};
+
+module.exports = { create, getAll, getById, update };
