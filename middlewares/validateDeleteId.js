@@ -6,15 +6,13 @@ module.exports = async (req, _res, next) => {
 
   if (!ObjectId.isValid(id)) {
     return next(
-      {
-        err: { code: 'invalid_data', message: 'Wrong sale ID format' },
-        statusCode: 422,
-      },
+      { err: { code: 'invalid_data', message: 'Wrong sale ID format' },
+        statusCode: 422 },
     );
   }
 
   const sales = await Model.getAllSales();
-  const sale = sales.find(({ _id: saleId }) => saleId === id);
+  const sale = sales.find(({ _id }) => JSON.stringify(_id) === JSON.stringify(id));
 
   if (sale === undefined) {
     return next(

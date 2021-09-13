@@ -15,8 +15,8 @@ module.exports = async (req, _res, next) => {
 
   for (let index = ZERO; index < sale.length; index += 1) {
     const item = sale[index];
-    const product = allProducts.find(({ _id: productId }) => productId === item.productId);
-    // const product = await Product.getProductById(item.productId);
+    const product = allProducts.find(({ _id }) => (
+      JSON.stringify(_id) === JSON.stringify(item.productId)));
     if (!product) { return next(error); }
     if (product.quantity < item.quantity) { return next(error); }
   }

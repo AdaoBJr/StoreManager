@@ -11,7 +11,7 @@ module.exports = async (req, _res, next) => {
   }
 
   const sales = await Model.getAllSales();
-  const sale = sales.find(({ _id: saleId }) => saleId === id);
+  const sale = sales.find(({ _id }) => _id === id);
 
   if (sale === undefined) {
     return next(
