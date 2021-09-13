@@ -1,4 +1,3 @@
-// const { ObjectId } = require('mongodb');
 const SalesModels = require('../models/salesModels');
 
 const verifyQuantity = (body) => {
@@ -46,9 +45,23 @@ const updateSaleId = async (id, body) => {
   return updateSale;
 };
 
+const deleteSaleId = async (id) => {
+  const deleteSale = await SalesModels.deleteSaleId(id);
+  if (!deleteSale) {
+    return {
+       err: {
+         code: 'invalid_data',
+         message: 'Wrong sale ID format',
+       },
+     }; 
+  }
+  return deleteSale;
+};
+
 module.exports = {
   createSale,
   getSaleById,
   getSales,
   updateSaleId,
+  deleteSaleId,
 };

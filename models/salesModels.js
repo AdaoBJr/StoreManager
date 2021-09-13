@@ -27,7 +27,6 @@ const getSales = async () => {
 
 const updateSaleId = async (id, body) => {
   if (!ObjectId.isValid(id)) return null;
-  console.log(body);
   const db = await mongoConnection.getConnection();
   await db.collection('sales')
   .updateOne({ _id: ObjectId(id) }, 
@@ -38,9 +37,18 @@ const updateSaleId = async (id, body) => {
   }; 
 };
 
+const deleteSaleId = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await mongoConnection.getConnection();
+  const deleteSale = await db.collection('sales')
+  .findOneAndDelete({ _id: ObjectId(id) });
+  return deleteSale.value;
+};
+
 module.exports = { 
   createSale,
   getSaleById,
   getSales,
   updateSaleId,
+  deleteSaleId,
  };
