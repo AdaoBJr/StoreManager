@@ -28,6 +28,9 @@ app.route('/products/:id')
 app.route('/sales')
   .post(salesController.create)
   .get(salesController.findAll);
+app.route('/sales/:id')
+  .get(salesController.findById);
+
 // error
 app.use(errorMiddleware);
 

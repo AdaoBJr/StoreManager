@@ -22,6 +22,22 @@ const isValidNewSales = (sales) => {
   }
 };
 
+/* const isValiId = (params) => {
+  const { error } = Joi.object({ 
+    id: Joi
+      .string()
+      .hex()
+      .length(24)
+      .not()
+      .empty()
+      .required(),
+  }).validate(params);
+
+  if (error) {
+    throw new CustomError('invalid_data', 'Wrong id format', 422);
+  } 
+}; */
+
 const create = rescue(async (req, res) => {
   const { body } = req;
   isValidNewSales(body);
@@ -38,7 +54,20 @@ const findAll = rescue(async (_req, res) => {
   res.status(200).json({ sales });
 });
 
-module.exports = { create, findAll };
+const findById = rescue(async (req, res) => {
+  // isValiId(req.params);
+  
+  const { id } = req.params;
+  const sale = await salesService.findById({ id });
+
+  // if (!sale) {
+  //   throw new CustomError('not_found', 'Sale not found', 404);
+  // }
+  
+  res.status(200).json(sale);
+});
+
+module.exports = { create, findAll, findById };
 
 // validação tirado deste forum:
 // https://stackoverflow.com/questions/42656549/joi-validation-of-array

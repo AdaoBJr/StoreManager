@@ -1,3 +1,5 @@
+const { ObjectId } = require('mongodb');
+const CustomError = require('../helpers/CustomError');
 const mongoConnection = require('./connection');
 
 const getConnectionWithSalesCollection = async () => {
@@ -26,4 +28,16 @@ const findAll = async () => {
   return sales;
 };
 
-module.exports = { create, findAll };
+const findById = async ({ id }) => {
+  try {
+    const salesCollection = await getConnectionWithSalesCollection();
+  
+    const sale = salesCollection.findOne(new ObjectId(id));
+  
+    return sale;
+  } catch (err) {
+    throw new CustomError('not_found', 'Sale not found', 404);
+  }
+};
+
+module.exports = { create, findAll, findById };
