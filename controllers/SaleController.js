@@ -5,8 +5,17 @@ const create = rescue(async (req, res, next) => {
   const saleAdd = await SaleService.create(req.body);
 
   if (saleAdd.err) return next(saleAdd.err);
-
+  
   return res.status(200).json(saleAdd);
+});
+
+const update = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const productUpdated = await SaleService.update(id, req.body);
+  
+  if (productUpdated.err) return next(productUpdated.err);
+
+  return res.status(200).json(productUpdated);
 });
 
 const findAll = rescue(async (_req, res, _next) => {
@@ -25,4 +34,4 @@ const findById = rescue(async (req, res, next) => {
   res.status(200).json(sale);
 });
 
-module.exports = { create, findAll, findById };
+module.exports = { create, findAll, findById, update };

@@ -16,6 +16,7 @@ app.get('/', (_req, res) => {
   res.send();
 });
 
+// Products
 app.get('/products', ProductController.findAll);
 
 app.post('/products', ProductController.create);
@@ -26,11 +27,14 @@ app.put('/products/:id', ProductController.update);
 
 app.delete('/products/:id', ProductController.exclude);
 
+// Sales
 app.get('/sales', SaleController.findAll);
+
+app.post('/sales', SaleController.create);
 
 app.get('/sales/:id', SaleController.findById);
 
-app.post('/sales', SaleController.create);
+app.put('/sales/:id', SaleController.update);
 
 app.use(errorMiddleware);
 
