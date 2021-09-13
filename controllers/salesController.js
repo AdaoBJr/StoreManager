@@ -12,11 +12,20 @@ const insertNewSale = async (req, res) => {
 
 const getAllSales = async (_req, res) => {
   const result = await service.getAllSales();
-  console.log(result);
   res.status(200).json({ sales: result });
+};
+
+const getSaleById = async (req, res) => {
+  const { id } = req.params;
+  const result = await service.getSaleById(id);
+  if (!result) {
+    return res.status(404).json({ err: { code: 'not_found', message: 'Sale not found' } });
+  }
+  res.status(result.status).json(result.data);
 };
 
 module.exports = {
   insertNewSale,
   getAllSales,
+  getSaleById,
 };

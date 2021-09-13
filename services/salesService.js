@@ -10,7 +10,15 @@ const insertNewSale = async (itensSold) => {
 
 const getAllSales = () => model.getAllSales();
 
+const getSaleById = async (id) => {
+  const validate = await salesSchema.validateIdAndQty(id);
+  if (validate.err) return false;
+  const sale = await model.getSaleById(id);
+  return sale;
+};
+
 module.exports = {
   insertNewSale,
   getAllSales,
+  getSaleById,
 };

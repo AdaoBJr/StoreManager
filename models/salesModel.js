@@ -17,8 +17,16 @@ const insertNewSale = (itensSold) =>
 const getAllSales = async () => 
    connection().then((db) => db.collection(COLLECTION_NAME).find().toArray());
 
+const getSaleById = async (id) => {
+  const comparisonId = new mongo.ObjectId(id);
+  const saleData = await connection().then((db) => 
+    db.collection(COLLECTION_NAME).findOne({ _id: comparisonId }));
+  return saleData;
+};
+
 module.exports = {
   insertNewSale,
   findProductById,
   getAllSales,
+  getSaleById,
 };
