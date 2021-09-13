@@ -8,7 +8,6 @@ const prodList = async (req, res) => {
 const prodId = async (req, res) => {
   const { id } = req.params;
   const fOne = await findOne(id);
-  console.log(fOne);
   if (typeof fOne === 'string') {
     return res
       .status(422).json({ err: { code: 'invalid_data', message: fOne } });
