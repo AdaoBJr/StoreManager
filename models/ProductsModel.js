@@ -12,7 +12,6 @@ const createProduct = async (name, quantity) => {
 };
 const findByName = async (name) => {
   const findProduct = await connection().then((db) => db.collection('products').findOne({ name }));
-  console.log(findProduct);
   if (!findProduct) return null;
   return findProduct;
 };

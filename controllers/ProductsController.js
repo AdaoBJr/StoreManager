@@ -10,8 +10,11 @@ const createProduct = rescue(async (req, res, next) => {
   if (error) {
     return next(error);
   }
+
   const { name, quantity } = req.body;
   const newProduct = await PrductsService.createProduct(name, quantity);
+  console.log(newProduct);
+  if (newProduct.err) return next(newProduct.err);
   res.status(201).json(newProduct);
 });
 
