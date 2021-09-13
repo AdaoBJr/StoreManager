@@ -5,6 +5,7 @@ const {
   getAllProducts,
   getProductById,
   updateProductById,
+  deleteProductById,
 } = require('../controllers/productsController');
 
 const {
@@ -12,7 +13,8 @@ const {
   validQntType,
   validQntValue,
   productExists,
-  validId } = require('../middlewares/validations');
+  validId,
+ } = require('../middlewares/validations');
 
 const router = express.Router();
 
@@ -23,6 +25,7 @@ router.route('/')
   validQntValue,
   productExists,
   createProduct,
+  
   )
 .get(getAllProducts);
 
@@ -36,6 +39,10 @@ router.route('/:id')
   validQntValue,
   validQntType,
   updateProductById,
-);
+)
+.delete(
+  validId,
+  deleteProductById,
+  );
 
 module.exports = router;
