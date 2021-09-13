@@ -1,10 +1,10 @@
 module.exports = (err, req, res, _next) => {
-  if (err.isJoi) {
-    // Status 400 - Validation error
-    return res.status(400).json({ message: err.details[0].message });
-  }
-
-  const status = err.status || 500;
+  const message = err.isJoi ? err.details[0].message : err.message;
   
-  return res.status(status).json({ message: err.message });
+  return res.status(422).json({
+    err: {
+      message,
+      code: 'invalid_data',
+    },
+  });
 };

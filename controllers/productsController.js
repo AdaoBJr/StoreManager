@@ -6,8 +6,18 @@ const createProduct = rescue(async (req, res, next) => {
   const { name, quantity } = req.body;
   
   const { error: joiError } = joi.object({
-    name: joi.string().not().empty().required(),
-    quantity: joi.string().not().empty().required(),
+    name: joi
+      .string()
+      .min(5)
+      .not().empty()
+      .required(),
+    quantity: joi
+      .number()
+      .greater(0)
+      .positive()
+      // eslint-disable-next-line newline-per-chained-call
+      .not().empty()
+      .required(),
   }).validate(req.body);
 
   if (joiError) return next(joiError);
