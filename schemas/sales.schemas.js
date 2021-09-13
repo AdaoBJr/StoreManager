@@ -30,4 +30,24 @@ const isQuantityValid = (sales) => {
   return true;
 };
 
-module.exports = { isQuantityValid, isIdValid };
+const isStockValid = (products, sales) => {
+  let stockValidation = false;
+  sales.forEach((sale, index) => {
+    if (products[index].quantity - sale.quantity < 1) {
+      console.log(sale.quantity, products[index].quantity);
+      stockValidation = true;
+      return stockValidation;
+    }
+  });
+  if (stockValidation) {
+    return {
+      code: 404,
+      err: {
+        code: 'stock_problem', message: 'Such amount is not permitted to sell',
+      },
+    };
+  }
+  return {};
+};
+
+module.exports = { isQuantityValid, isIdValid, isStockValid };

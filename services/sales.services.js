@@ -1,10 +1,18 @@
 const Sale = require('../models/sales.models');
+const Product = require('../models/products.models');
 const Validation = require('../schemas/sales.schemas');
 
 const create = async (sales) => {
   const isValid = Validation.isQuantityValid(sales);
   if (isValid.err) return isValid;
   const newSale = await Sale.create(sales);
+  const products = await Promise.all(sales.map(async (sale) => {
+    const eachProduct = await Product.getProductById(sale.productId);
+    return eachProduct;
+  }));
+  const stockInformation = Validation.isStockValid(products, sales);
+  console.log(stockInformation);
+  if (stockInformation.err) return stockInformation;
   sales.forEach((sale) => {
     Sale.updateProductsQuantity(sale.productId, sale.quantity, 'sale');
   });
