@@ -31,4 +31,6 @@ app.post('/sales', saleController.createSale);
 
 app.put('/sales/:id', saleController.updateSale);
 
+app.delete('/sales/:id', saleController.excludeSale);
+
 app.listen(port, () => console.log(`Listening on port ${port}!`));

@@ -16,6 +16,9 @@ const productTypeQuantity = {
 const saleNumberQuantity = {
   err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } };
 
+const saleWrongFormat = {
+  err: { code: 'invalid_data', message: 'Wrong sale ID format' } };  
+
 const saleNotFound = {
   err: { code: 'not_found', message: 'Sale not found' } };
 
@@ -28,4 +31,5 @@ module.exports = {
   productTypeQuantity,
   saleNumberQuantity,
   saleNotFound,
+  saleWrongFormat,
 };

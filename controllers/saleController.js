@@ -57,9 +57,23 @@ const updateSale = async (req, res) => {
   }
 };
 
+const excludeSale = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const exclude = await service.excludeSale(id);
+
+    if (exclude === null) return res.status(422).json(messages.saleWrongFormat);
+
+    return res.status(200).json(exclude);
+  } catch (error) {
+    return res.status(422).json(messages.saleWrongFormat);
+  }
+};
+
 module.exports = {
   createSale,
   getSales,
   getSalesById,
   updateSale,
+  excludeSale,
 };
