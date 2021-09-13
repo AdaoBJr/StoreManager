@@ -19,4 +19,11 @@ const create = async (itensSold) => {
   };
 };
 
-module.exports = { create };
+const findAll = async () => {
+  const salesCollection = await getConnectionWithSalesCollection();
+  const sales = await salesCollection.find().toArray();
+
+  return sales;
+};
+
+module.exports = { create, findAll };

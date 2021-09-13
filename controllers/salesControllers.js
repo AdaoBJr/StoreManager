@@ -32,7 +32,13 @@ const create = rescue(async (req, res) => {
   res.status(200).json(response);
 });
 
-module.exports = { create };
+const findAll = rescue(async (_req, res) => {
+  const sales = await salesService.findAll();
+
+  res.status(200).json({ sales });
+});
+
+module.exports = { create, findAll };
 
 // validação tirado deste forum:
 // https://stackoverflow.com/questions/42656549/joi-validation-of-array

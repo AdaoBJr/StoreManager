@@ -26,8 +26,8 @@ app.route('/products/:id')
   .delete(productsController.remove);
 
 app.route('/sales')
-  .post(salesController.create);
-  
+  .post(salesController.create)
+  .get(salesController.findAll);
 // error
 app.use(errorMiddleware);
 

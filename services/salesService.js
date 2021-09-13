@@ -6,4 +6,9 @@ const create = async (itensSold) => {
   return response;
 };
 
-module.exports = { create };
+const findAll = async () => {
+  const sales = await salesModel.findAll();
+  return sales;
+};
+
+module.exports = { create, findAll };
