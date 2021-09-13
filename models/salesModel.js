@@ -1,13 +1,17 @@
 const { ObjectId } = require('mongodb');
 const mongoConnect = require('./connection');
 
+const { expendQuantProducts, restoreQuantProducts } = require('./helpers/helperModel');
+
 const create = async ({ itensSold }) => {
   const salesCollection = await mongoConnect.getConnection()
     .then((db) => db.collection('sales'));
-
-  const { insertedId: id } = await salesCollection
+  
+    const { insertedId: id } = await salesCollection
     .insertOne({ itensSold });
 
+  await expendQuantProducts({ itensSold });
+    
   return { id };
 };
 
@@ -47,6 +51,8 @@ const deleteSale = async ({ id }) => {
 
   await salesCollection
     .deleteOne({ _id: new ObjectId(id) });
+
+  await restoreQuantProducts({ sale });
 
   return { sale };
 };
