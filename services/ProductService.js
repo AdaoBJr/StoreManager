@@ -26,17 +26,17 @@ const isValidQuantity = (quantity) => {
   return true;
 }; 
 
-const create = async (name, quantity) => {
+const createProduct = async (name, quantity) => {
   const productNameValid = isValidName(name);
   const productQuantityValid = isValidQuantity(quantity);
   if (productNameValid !== true) return productNameValid;
   if (productQuantityValid !== true) return productQuantityValid;
 
-  const searchProduct = await ProductModel.findByName(name);
+  const searchProduct = await ProductModel.findProductByName(name);
   if (searchProduct) return { code: 'invalid_data', message: 'Product already exists' };
 
   const { id } = await ProductModel
-    .create({ name, quantity });
+    .createProduct({ name, quantity });
 
   return {
     code: 201,
@@ -46,8 +46,8 @@ const create = async (name, quantity) => {
   };
 };
 
-const findById = async (id) => {
-  const productById = await ProductModel.findById(id);
+const findProductById = async (id) => {
+  const productById = await ProductModel.findProductById(id);
 
   if (!productById) {
     return {
@@ -59,8 +59,8 @@ const findById = async (id) => {
 };
 
 const updateProduct = async (id, name, quantity) => {
-  const productById = await ProductModel.updateProduct(id, name, quantity);
-  if (!productById) {
+  const product = await ProductModel.updateProduct(id, name, quantity);
+  if (!product) {
     return {
       code: 'invalid_data',
       message: 'Wrong id format',
@@ -71,7 +71,7 @@ const updateProduct = async (id, name, quantity) => {
   if (productNameValid !== true) return productNameValid;
   if (productQuantityValid !== true) return productQuantityValid;
 
-  const product = await ProductModel.updateProduct(id, name, quantity);
+  // const product = await ProductModel.updateProduct(id, name, quantity);
 
   return {
     product,
@@ -90,8 +90,8 @@ const deleteProduct = async (id) => {
 };
 
 module.exports = {
-   create,
-   findById,
-   updateProduct,
-   deleteProduct,
+  createProduct,
+  findProductById,
+  updateProduct,
+  deleteProduct,
 }; 

@@ -2,10 +2,10 @@ const StatusCodes = require('http-status-codes');
 const ProductService = require('../services/ProductService');
 const ProductModel = require('../models/ProductModel');
 
-const create = async (req, res) => {
+const createProduct = async (req, res) => {
   const { name, quantity } = req.body;
 
-  const { id, code, message } = await ProductService.create(name, quantity);
+  const { id, code, message } = await ProductService.createProduct(name, quantity);
 
   if (message) { 
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
@@ -14,8 +14,8 @@ const create = async (req, res) => {
   res.status(code).json({ _id: id, name, quantity });
 };
 
-const getAll = async (req, res) => {
-    const allProducts = await ProductModel.getAll();
+const getAllProducts = async (req, res) => {
+    const allProducts = await ProductModel.getAllProducts();
 
   if (!allProducts) {
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
@@ -25,10 +25,10 @@ const getAll = async (req, res) => {
   res.status(StatusCodes.OK).json({ products: allProducts });
 };
 
-const findById = async (req, res) => {
+const findProductById = async (req, res) => {
   const { id } = req.params;
 
-  const { code, message, name, quantity } = await ProductService.findById(id);
+  const { code, message, name, quantity } = await ProductService.findProductById(id);
 
   if (message) { 
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
@@ -53,7 +53,6 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
-  const { name, quantity } = req.body;
 
   const { code, message } = await ProductService.deleteProduct(id);
 
@@ -62,13 +61,13 @@ const deleteProduct = async (req, res) => {
     .json({ err: { code, message } });
   }
 
-  res.status(StatusCodes.OK).json({ _id: id, name, quantity });
+  res.status(StatusCodes.OK).json({ _id: id });
 };
 
 module.exports = { 
-  create,
-  getAll,
-  findById,
+  createProduct,
+  getAllProducts,
+  findProductById,
   updateProduct,
   deleteProduct,
  };
