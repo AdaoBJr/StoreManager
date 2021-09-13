@@ -21,51 +21,63 @@ const registerNewSale = async (sales) => {
   return salesModel.registerNewSale(sales);
 };
 
-const validateId = (id) => {
+const validateId = (id, error) => {
   if (!ObjectId.isValid(id)) {
-    return {
-      err: { 
-        code: 'not_found',
-        message: 'Sale not found',
-      },
-    };
+    return error;
   }
   return false;
 };
 
 const getSalesById = async (id) => {
-  // const idNotValid = validateId(id);
-  // if (idNotValid) return idNotValid;
+  const error = {
+    err: { 
+      code: 'not_found',
+      message: 'Sale not found',
+    },
+  };
+  const idNotValid = validateId(id, error);
+  if (idNotValid) return idNotValid;
   const getSales = await salesModel.getSalesById(id);
   if (!getSales) {
-    return {
-      err: { 
-        code: 'invalid_data',
-        message: 'Wrong product ID or invalid quantity',
-      },
-    };
+    return error;
   }
   return getSales;
 };
 
 const updateSale = ({ id, update }) => {
-  const idNotValid = validateId(id);
+  const error = {
+    err: { 
+      code: 'invalid_data',
+      message: 'Wrong product ID or invalid quantity',
+    },
+  };
+  const idNotValid = validateId(id, error);
   if (idNotValid) return idNotValid;
   const validateQuantity = update
     .find(({ quantity }) => typeof quantity !== 'number' || quantity < 1);
   if (validateQuantity) {
-    return {
-      err: { 
-        code: 'invalid_data',
-        message: 'Wrong product ID or invalid quantity',
-      },
-    };
+    return error;
   }
   return salesModel.updateSale({ id, update });
+};
+
+const deleteSale = async (id) => {
+  const error = {
+    err: { 
+      code: 'invalid_data',
+      message: 'Wrong sale ID format',
+    },
+  };
+  const idNotValid = validateId(id, error);
+  if (idNotValid) return idNotValid;
+  const sale = await salesModel.deleteSale(id);
+  if (sale) return sale;
+  return error;
 };
 
 module.exports = {
   registerNewSale,
   getSalesById,
   updateSale,
+  deleteSale,
 };

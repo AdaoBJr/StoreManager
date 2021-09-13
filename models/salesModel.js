@@ -26,9 +26,18 @@ const updateSale = async ({ id, update }) => {
   return getSalesById(id);
 };
 
+const deleteSale = async (id) => {
+  const sale = await getSalesById(id);
+  await mongodb.getConnection()
+  .then((db) => db.collection('sales')
+  .deleteOne({ _id: ObjectId(id) }));
+  return sale;
+};
+
 module.exports = {
   registerNewSale,
   getSales,
   getSalesById,
   updateSale,
+  deleteSale,
 };

@@ -36,3 +36,5 @@ app.get('/sales', salesController.getSales);
 app.get('/sales/:id', salesController.getSalesById);
 
 app.put('/sales/:id', salesController.updateSale);
+
+app.delete('/sales/:id', salesController.deleteSale);
