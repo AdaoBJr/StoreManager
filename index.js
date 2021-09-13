@@ -30,3 +30,7 @@ app.delete('/products/:id', productController.deleteProduct);
 // SALES
 
 app.post('/sales', salesController.registerNewSale);
+
+app.get('/sales', salesController.getSales);
+
+app.get('/sales/:id', salesController.getSalesById);
