@@ -10,10 +10,17 @@ FOLLOWING CRUD
 
 */
 
-// EXIST 
-const exist = async (name) => {
+// EXIST NAME
+const existName = async (name) => {
     const db = await connectionDB.connect();
     const product = await db.collection('products').findOne({ name });
+    return product;
+};
+
+// EXIST ID
+const existId = async (id) => {
+    const db = await connectionDB.connect();
+    const product = await db.collection('products').findOne({ _id: ObjectId(id) });
     return product;
 };
 
@@ -27,8 +34,8 @@ const getAll = async () => {
 // READ
 const getId = async (id) => {
     const db = await connectionDB.connect();
-    const product = await db.collection('products').findOne({ _id: ObjectId(id) });
-    return product;
+    const productOne = await db.collection('products').findOne({ _id: ObjectId(id) });
+    return productOne;
 };
 
 // CREATE
@@ -46,6 +53,12 @@ const update = async (id, name, quantity) => {
 };
 
 // DELETE
-const exclude = async () => {};
+const exclude = async (id) => {
+    const db = await connectionDB.connect();
+    const productFound = await db.collection('products').findOne({ _id: ObjectId(id) });
+    await db.collection('products').deleteOne({ _id: ObjectId(id) });
 
-module.exports = { exist, getId, getAll, add, update, exclude };
+    return productFound;
+};
+
+module.exports = { existName, existId, getId, getAll, add, update, exclude };

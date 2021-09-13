@@ -19,7 +19,7 @@ const validNameQuant = async (name, quantity) => {
 const addValidation = async (name, quantity) => {
     const anwaser = await validNameQuant(name, quantity);
 
-    const existName = await productModel.exist(name);
+    const existName = await productModel.existName(name);
     
     if (existName !== null) {
         return 'Product already exists';
@@ -38,6 +38,16 @@ const updateValidation = async (id, name, quantity) => {
         return update;
     }
     return anwaser;
-};  
+};
 
-module.exports = { addValidation, updateValidation };
+const deleteValidation = async (id) => {
+    const existId = await productModel.existId(id);
+
+    if (existId === null) {
+        return 'Wrong id format';
+    }
+    const update = await productModel.exclude(id);
+    return update;
+}; 
+
+module.exports = { addValidation, updateValidation, deleteValidation };
