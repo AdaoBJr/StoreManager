@@ -11,6 +11,10 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
+const products = require('./router/productsRouter');
+
+app.use('/products', products);
+
 app.listen(PORT, () => {
   console.log('Online');
 });
