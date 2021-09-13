@@ -1,4 +1,4 @@
-const { create, findByName, getAll, findByID } = require('../4models/product_model');
+const { create, findByName, getAll, findByID, update } = require('../4models/product_model');
 
 const validaName = (name) => (name.length < 6);
 const validaQuantity = (quantity) => (quantity <= 0);
@@ -36,7 +36,21 @@ const showProductsService = async (id) => {
   return { products: await getAll() };
 };
 
+const updateProductsService = async (id, name, quantity) => {
+  switch (true) {
+    case validaName(name):
+      return error(validastring);
+    case validaQuantity(quantity):
+      return error(valueQuantityNotValid);
+    case validaNumber(quantity):
+      return error(typeQuantityNotValid);
+    default:
+      return update(id, name, quantity);
+  }
+};
+
 module.exports = {
   createproducts,
   showProductsService,
+  updateProductsService,
 };

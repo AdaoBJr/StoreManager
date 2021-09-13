@@ -8,17 +8,25 @@ const create = async (name, quantity) => {
 };
 
 const getAll = async () => connection()
-      .then((db) => db.collection('products').find().toArray());
+      .then((DB) => DB.collection('products').find().toArray());
 
 const findByName = async (name) => connection()
-.then((db) => db.collection('products').findOne({ name }));
+.then((DB) => DB.collection('products').findOne({ name }));
 
 const findByID = async (id) => {
-  if (!ObjectId.isValid(id)) {
-    return 422;
-  }
+  if (!ObjectId.isValid(id)) { return 422; }
   return connection()
-    .then((db) => db.collection('products').findOne(new ObjectId(id))); 
+    .then((DB) => DB.collection('products').findOne(new ObjectId(id))); 
+};
+
+const update = async (id, name, quantity) => {
+  if (!ObjectId.isValid(id)) { return 422; }
+  connection()
+    .then((DB) => DB.collection('products')
+    .updateOne({ _id: ObjectId(id) }, 
+      { $set: { name, quantity } }));
+  return connection()
+    .then((DB) => DB.collection('products').findOne(new ObjectId(id)));
 };
 
 module.exports = {
@@ -26,4 +34,5 @@ module.exports = {
   getAll,
   findByName,
   findByID,
+  update,
 };
