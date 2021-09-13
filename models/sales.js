@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb');
-const connection = require('./connection');
+const { connection } = require('./connection');
 
 const createSales = async (sales) => {
   const db = await connection();
@@ -41,10 +41,16 @@ const deleteSale = async (id) => {
   });
 };
 
+const dropSales = async () => {
+  const db = await connection();
+  await db.collection('sales').deleteMany({});
+};
+
 module.exports = {
   createSales,
   getById,
   getAllSales,
   editSale,
   deleteSale,
+  dropSales,
 };

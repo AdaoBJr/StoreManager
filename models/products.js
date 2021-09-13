@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb');
-const connection = require('./connection');
+const { connection } = require('./connection');
 
 const getAll = async () => {
   const db = await connection();
@@ -79,6 +79,11 @@ const increaseProductQuantity = async (id, increasedQuantity) => {
   );
 };
 
+const dropProducts = async () => {
+  const db = await connection();
+  await db.collection('products').deleteMany({});
+};
+
 module.exports = {
   getAll,
   getById,
@@ -88,4 +93,5 @@ module.exports = {
   editProduct,
   decreaseProductQuantity,
   increaseProductQuantity,
+  dropProducts,
 };
