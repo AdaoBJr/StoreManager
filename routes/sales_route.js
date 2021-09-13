@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { createSales, getAllSales, getSalesById } = require('../controllers/sales_controller');
-const { IdValidation, QuantityValidation } = require('../middlewares/sales_midd');
+const { QuantityValidation, IdValidation } = require('../middlewares/sales_midd');
 
 const routes = new Router();
 

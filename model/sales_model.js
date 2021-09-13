@@ -16,7 +16,8 @@ const listSales = async () => {
     const db = await connection();
 
     const sales = await db.collection('sales').find().toArray();
-    return sales[0];
+    // console.log(sales[0]);
+     return sales;
 };
 
 const listById = async (id) => {
