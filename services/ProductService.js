@@ -56,6 +56,13 @@ const isValidQuantity = (quantity) => {
   return true;
 }; 
 
+const deleteById = async (id) => {
+  const productFound = await ProductModel.findById(id);
+  if (!productFound) return invalidId;
+  await ProductModel.deleteById(id);
+  return productFound;
+};
+
 const update = async (id, name, quantity) => {
   const isProductNameValid = isValidName(name);
   const isQuantityValid = isValidQuantity(quantity);
@@ -111,4 +118,5 @@ module.exports = {
   // getAll,
   findById,
   update,
+  deleteById,
 };  

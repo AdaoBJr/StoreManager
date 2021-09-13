@@ -60,9 +60,18 @@ const update = async (id, name, quantity) => {
     };
   };
 
+  const deleteById = async (id) => {
+    const productsCollection = await mongoConnection.getConnection()
+      .then((db) => db.collection('products'));
+  
+      await productsCollection
+        .deleteOne({ _id: ObjectId(id) });
+    };
+
 module.exports = {
   create,
   update,
+  deleteById,
   findByName,
   getAll,
   findById,
