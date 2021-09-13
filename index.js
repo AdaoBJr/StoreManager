@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { create } = require('./controllers/productsController');
+const { create, getAll, getById } = require('./controllers/productsController');
 
 const app = express();
 
@@ -16,4 +16,8 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
-app.post('/products', create);
+app.get('/products/:id', getById);
+
+app.route('/products')
+  .post(create)
+  .get(getAll);
