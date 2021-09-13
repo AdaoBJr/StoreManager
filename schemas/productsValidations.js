@@ -7,23 +7,12 @@ const INVALID_DATA = 'invalid_data';
 
 const allProductsNames = async () => {
   const allProducts = await Products.getAllProducts();
-
   if (allProducts.message) return { message: allProducts.message };
 
   const allNames = allProducts.map((product) => product.name);
 
   return allNames;
 };
-
-// const allProductIds = async () => {
-//   const allProducts = await Products.getAllProducts();
-
-//   if (allProducts.message) return { message: allProducts.message };
-
-//   const allIds = allProducts.map(({ _id }) => _id);
-
-//   return allIds;
-// };
 
 const validateName = async (name) => {
   if (!name || name.length < 5) {
@@ -87,7 +76,7 @@ const validateIfProductExists = async (count) => {
       message: 'Wrong id format',
     };
   }
-  
+
   return true;
 };
 

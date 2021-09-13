@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const Products = require('./controllers/Products');
+const Sales = require('./controllers/Sales');
 const errorMiddleware = require('./middlewares/error');
 
 const app = express();
@@ -14,12 +15,11 @@ app.get('/', (_request, response) => {
 
 app.get('/products', Products.getAllProducts);
 app.get('/products/:id', Products.getProductById);
-
 app.post('/products', Products.registerNewProduct);
-
 app.put('/products/:id', Products.updateProduct);
-
 app.delete('/products/:id', Products.deleteProduct);
+
+app.post('/sales', Sales.registerNewSales);
 
 app.use(errorMiddleware);
 

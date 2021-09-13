@@ -1,6 +1,6 @@
 const Products = require('../models/Products');
 
-const validations = require('../schemas/validations');
+const validations = require('../schemas/productsValidations');
 
 const registerNewProduct = async (name, quantity) => {
   const validateName = await validations.validateName(name);
