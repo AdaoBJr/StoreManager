@@ -5,7 +5,7 @@ const createProduct = async (name, quantity) => {
   if (alreadyExists) {
     return {
       error: {
-        code: 'alreadyExists',
+        status: 409,
         message: 'Product already exists',
       },
     };
