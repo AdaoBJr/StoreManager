@@ -1,3 +1,4 @@
+const mongo = require('mongodb');
 const model = require('../models/productsModel');
 
 const errors = {
@@ -5,7 +6,11 @@ const errors = {
   nameExists: 'Product already exists',
   quantityLesserThanOne: '"quantity" must be larger than or equal to 1',
   quantityNotANumber: '"quantity" must be a number',
+  wrongIdFormat: 'Wrong id format',
 };
+
+const status = 422;
+const code = 'invalid_data';
 
 const isString = (value) => (typeof value === 'string');
 const isLesserThanOrEqualTo0 = (value) => value <= 0;
@@ -15,10 +20,14 @@ const productExists = async (name) => {
   if (insertedProduct !== null) return true;
   return false;
 };
+const isObjectId = (id) => mongo.ObjectID.isValid(id);
+const productDonotExist = async (id) => {
+  const existingProduct = await model.findById(id);
+  if (existingProduct) return false;
+  return true;
+};
 
-const validate = async (name, quantity) => {
-  const status = 422;
-  const code = 'invalid_data';
+const validateNameAndQty = async (name, quantity) => {
   switch (true) {
     case lengthIsLesserThan(name, 5): 
       return { status, err: { code, message: errors.nameShort } };
@@ -32,6 +41,17 @@ const validate = async (name, quantity) => {
   }
 };
 
+const validateId = async (id) => {
+  switch (true) {
+    case !isObjectId(id):
+      return { status, err: { code, message: errors.wrongIdFormat } };
+    case await productDonotExist(id):
+        return { status, err: { code, message: errors.wrongIdFormat } };
+    default: return {};
+  }
+};
+
 module.exports = {
-  validate,
+  validateNameAndQty,
+  validateId,
 };
