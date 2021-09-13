@@ -24,9 +24,18 @@ const putProductsAll = async (id, name, quantity) => {
   return { _id: id, name, quantity };
 };
 
+const deletProducts = async (id) => {
+  const result = await ProductsModel.deletProducts(id);
+    if (!result) {
+      return false;
+    }
+  return { status: 200, result };
+};
+
 module.exports = {
   createProduct,
   getProductsAll,
   getProductsById,
   putProductsAll,
+  deletProducts,
 };

@@ -2,7 +2,6 @@ const ProductsModel = require('../models/ProductsModel');
 
 const validName = (req, _res, next) => {
   const { name } = req.body;
-  console.log(name);
    const num = 5;
    const men = '"name" length must be at least 5 characters long';
    if (!name || name.length < num) {
@@ -19,6 +18,19 @@ const validNameExists = async (req, _res, next) => {
   const product = await ProductsModel.findByName(name);
   const men = 'Product already exists';
   if (product) {
+    const err = new Error(men);
+    err.status = 422;
+    err.code = 'invalid_data';
+    return next(err);
+  }
+  next();
+};
+
+const validIdExists = async (req, _res, next) => {
+  const { id } = req.params;
+  const result = await ProductsModel.getProductsById(id);
+  const men = 'Wrong id format';
+  if (!result) {
     const err = new Error(men);
     err.status = 422;
     err.code = 'invalid_data';
@@ -65,5 +77,6 @@ module.exports = {
   validNameExists,
   validQuantity,
   validId,
+  validIdExists,
 
 };

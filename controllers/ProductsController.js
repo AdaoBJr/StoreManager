@@ -33,10 +33,25 @@ const putProductsAll = async (req, res) => {
   return res.status(200).json(result);
 };
 
+const deletProducts = async (req, res, next) => {
+  const { id } = req.params;
+  const result = await ProductsService.deletProducts(id);
+  if (!result) {
+    return next({
+      status: 422,
+      code: 'invalid_data',
+      message: 'Wrong id format',
+
+    });
+  }
+  return res.status(200).json(result);
+};
+
 module.exports = {
   createProduct,
   getProductsAll,
   getProductsById,
   putProductsAll,
+  deletProducts,
 
 };

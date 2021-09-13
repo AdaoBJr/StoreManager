@@ -23,6 +23,7 @@ app.get('/', (_request, response) => {
 
 app.use((err, _req, res, _next) => {
   const { status } = err;
+  console.log(status);
   return res.status(status)
   .json({ err: { code: err.code, message: err.message } });
 });
