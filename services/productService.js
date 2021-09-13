@@ -1,14 +1,8 @@
 const productModel = require('../models/productModel');
 
-const addValidation = async (name, quantity) => {
+const validNameQuant = async (name, quantity) => {
     if (name.length < 5) {
         return '"name" length must be at least 5 characters long';
-    }
-
-    const existName = await productModel.exist(name);
-    
-    if (existName !== null) {
-        return 'Product already exists';
     }
 
     if (quantity <= 0) {
@@ -18,8 +12,32 @@ const addValidation = async (name, quantity) => {
     if (typeof (quantity) === 'string') {
         return '"quantity" must be a number';
     }
-    const create = await productModel.add(name, quantity);
-    return create;
+
+    return null;
 };
 
-module.exports = { addValidation };
+const addValidation = async (name, quantity) => {
+    const anwaser = await validNameQuant(name, quantity);
+
+    const existName = await productModel.exist(name);
+    
+    if (existName !== null) {
+        return 'Product already exists';
+    }
+    if (anwaser === null) {
+        const create = await productModel.add(name, quantity);
+        return create;
+    } 
+        return anwaser;
+};
+
+const updateValidation = async (id, name, quantity) => {
+    const anwaser = await validNameQuant(name, quantity);
+    if (anwaser === null) {
+        const update = await productModel.update(id, name, quantity);
+        return update;
+    }
+    return anwaser;
+};  
+
+module.exports = { addValidation, updateValidation };

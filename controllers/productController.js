@@ -29,4 +29,15 @@ const createProduct = async (req, res) => {
         return res.status(status.CREATED).json(createMSG);
 };
 
-module.exports = { getAllProducts, createProduct, getIdProduct };
+const updateProduct = async (req, res) => {
+    const { id } = req.params;
+    const { name, quantity } = req.body;
+    const createMSG = await productService.updateValidation(id, name, quantity);
+
+    if (typeof (createMSG) === 'string') {
+        return res.status(status.UNPROCESSABLE_ENTITY).json(errorGeneral.error(createMSG));
+    } 
+        return res.status(status.OK).json(createMSG);
+};
+
+module.exports = { getAllProducts, createProduct, getIdProduct, updateProduct };

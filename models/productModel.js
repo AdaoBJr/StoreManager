@@ -39,7 +39,11 @@ const add = async (name, quantity) => {
 };
 
 // UPDATE
-const update = async () => {};
+const update = async (id, name, quantity) => {
+    const db = await connectionDB.connect();
+    await db.collection('products').updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
+    return { _id: id, name, quantity };
+};
 
 // DELETE
 const exclude = async () => {};
