@@ -31,7 +31,6 @@ const createProduct = async (name, quantity) => {
 
 const updateProduct = async (id, name, quantity) => {
   const err = await isValidUpdate(name, quantity);
-  console.log(name, quantity, err);
   if (err.message) return { err, error: true };
 
   const product = await productsModel.updateProduct(id, name, quantity);
