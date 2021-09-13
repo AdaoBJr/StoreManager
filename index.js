@@ -5,7 +5,7 @@ const ProductsController = require('./controllers/ProductsController');
 const errorMiddleware = require('./middleware/error');
 
 const app = express();
-app.use(bodyParser.json);
+app.use(bodyParser.json());
 
 app.post('/products', ProductsController.createProduct);
 

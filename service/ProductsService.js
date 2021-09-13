@@ -2,6 +2,7 @@ const ProductsModel = require('../models/ProductsModel');
 
 const createProduct = async (name, quantity) => {
   const isHaveName = await ProductsModel.findByName(name);
+  console.log(isHaveName);
   if (isHaveName) {
     return { err: {
       code: 'INVALID_DATA',
