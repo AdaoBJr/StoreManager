@@ -1,4 +1,4 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const connect = require('./connect');
 
 const create = async (itensSold) => {
@@ -9,4 +9,12 @@ const create = async (itensSold) => {
         return out;
 };
 
-module.exports = { create };
+const findAll = async () => connect()
+    .then((db) => db.collection('sales')
+    .find().toArray()).then((out) => (out));
+
+const findByID = async (id) => connect()
+    .then((db) => db.collection('sales')
+    .findOne({ _id: ObjectId(id) })).then((out) => (out));
+
+module.exports = { create, findAll, findByID };

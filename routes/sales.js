@@ -1,12 +1,20 @@
 const app = require('express');
 
-const { sell } = require('../services/sales');
+const { sell, getAll, findSale } = require('../services/sales');
 
 const router = app.Router();
 
 router.route('/')
+    .get(
+        getAll,
+    )
     .post(
         sell,
+    );
+
+router.route('/:id')
+    .get(
+        findSale,
     );
 
 module.exports = router;
