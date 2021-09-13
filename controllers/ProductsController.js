@@ -25,15 +25,25 @@ if (allProducts.err) return next(allProducts.err);
 
 const getProductById = rescue(async (req, res, next) => {
   const { id } = req.params;
-  console.log(id);
+
   const findProduct = await PrductsService.getProductById(id);
 if (findProduct.err) return next(findProduct.err);
 
   res.status(200).json(findProduct);
 });
 
+const deleteData = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id);
+
+  const deleteProduct = await PrductsService.deleteData(id);
+if (deleteProduct.err) return next(deleteProduct.err);
+res.status(200).json(deleteProduct);
+});
+
 module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
+  deleteData,
 };

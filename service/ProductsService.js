@@ -18,7 +18,6 @@ const getAll = async () => {
 };
 const getProductById = async (id) => {
   const getProduct = await ProductsModel.getProductById(id);
-  console.log(getProduct, 'service');
   if (!getProduct) {
     return {
       err: {
@@ -29,8 +28,22 @@ const getProductById = async (id) => {
   }
   return getProduct;
 };
+const deleteData = async (id) => {
+  console.log(id);
+const deleteProduct = await ProductsModel.deleteProduct(id);
+if (!deleteProduct) {
+  return {
+    err: {
+      code: 'INVALID_DATA',
+      message: 'Wrong id format',
+    },
+  };
+}
+return deleteProduct;
+};
 module.exports = {
   createProduct,
   getAll,
   getProductById,
+  deleteData,
 };
