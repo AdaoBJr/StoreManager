@@ -9,7 +9,12 @@ const {
   deleteProd,
 } = require('./controllers/productsController');
 
-const { createSale, getAllSales, findByIdSale } = require('./controllers/salesController');
+const { 
+  createSale, 
+  getAllSales, 
+  findByIdSale, 
+  updateSale,
+} = require('./controllers/salesController');
 
 const { validateProducts, isValidId } = require('./middlewares/productsMiddleware');
 const { verifyQuantity, existsSale } = require('./middlewares/salesMiddleware');
@@ -29,6 +34,7 @@ app.delete('/products/:id', isValidId, deleteProd);
 app.get('/sales', getAllSales);
 app.get('/sales/:id', existsSale, findByIdSale);
 app.post('/sales', verifyQuantity, createSale);
+app.put('/sales/:id', verifyQuantity, updateSale);
 
 app.listen(PORT, () => {
   console.log(`listening port ${PORT}...`);
