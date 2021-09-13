@@ -11,7 +11,7 @@ const createProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
     const products = await getAll();
-    // tem que retornar umobj com o array products e a lista dentro
+    // tem que retornar um obj com o array products e a lista dentro
     return res.status(200).json({ products });
 };
 
