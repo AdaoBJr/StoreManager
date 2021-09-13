@@ -5,7 +5,7 @@ const verify = async (itensSold) => {
     let pass = true;
     const products = await findAll();
     const IDList = products.map(({ _id }) => _id);
-    itensSold.forEach(async ({ productId, quantity }) => {
+    itensSold.forEach(async ({ productId }) => {
         const found = () => {
             let find = false;
             for (let i = 0; i < IDList.length; i += 1) {
@@ -13,7 +13,7 @@ const verify = async (itensSold) => {
             }
             return find;
         };
-        if (!found()) pass = false; 
+        pass = found(); 
     });
     itensSold.forEach(async ({ quantity }) => {
         if (quantity < 1) pass = false;
