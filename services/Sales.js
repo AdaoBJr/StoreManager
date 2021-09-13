@@ -10,7 +10,21 @@ const validateSale = (sale) => {
   });
 };
 
+const isValidSale = (sale) => {
+  if (!sale) {
+    const error = new Error();
+    error.statusCode = 'saleNotFound';
+    throw error;
+  }
+};
+
 const getAll = () => model.getAll();
+
+const getById = async (id) => {
+  const result = await model.getById(id);
+  isValidSale(result);
+  return result;
+};
 
 const newSale = async (sale) => {
   validateSale(sale);
@@ -21,4 +35,5 @@ const newSale = async (sale) => {
 module.exports = {
   newSale,
   getAll,
+  getById,
 };
