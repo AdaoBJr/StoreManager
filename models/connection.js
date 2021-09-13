@@ -2,10 +2,10 @@
 
 const { MongoClient } = require('mongodb'); // cliente mongo para o node
 
-const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
-// const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
+// const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
+const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
 const DB_NAME = 'StoreManager';
-// 613f5308eb99c80f5ea14ffe
+
 let schema = null;
 
 const connect = async () => {

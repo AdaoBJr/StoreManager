@@ -53,6 +53,18 @@ const update = async (id, name, quantity) => {
     return { _id: id, name, quantity };
 };
 
+const updateWithSale = async (id, quantity) => {
+    // console.log('aqui1');
+    const db = await connectionDB.connect();
+    const productOne = await db.collection('products').findOne({ _id: ObjectId(id) });
+    const newQuantity = productOne.quantity - quantity;
+    // console.log(newQuantity);
+    const atua = await db.collection('products').updateOne(
+        { _id: ObjectId(id) }, { $set: { name: productOne.name, quantity: newQuantity } },
+    );
+    return atua;
+};
+
 // DELETE
 const exclude = async (id) => {
     const db = await connectionDB.connect();
@@ -62,4 +74,4 @@ const exclude = async (id) => {
     return product;
 };
 
-module.exports = { existName, existId, getId, getAll, add, update, exclude };
+module.exports = { existName, existId, getId, getAll, add, update, exclude, updateWithSale };

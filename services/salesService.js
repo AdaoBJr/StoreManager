@@ -20,6 +20,8 @@ const addValidation = async (salesArray) => {
         return 'Wrong product ID or invalid quantity';
     }
     if (anwaser === null) {
+        // console.log('aqui1');
+        await productModel.updateWithSale(salesObject.productId, salesObject.quantity);
         const create = await salesModel.add(salesArray);
         return create;
     } 
@@ -27,7 +29,7 @@ const addValidation = async (salesArray) => {
 };
 
 const updateValidation = async (id, salesArray) => {
-    console.log(salesArray);
+    // console.log(salesArray);
     const salesObject = salesArray[0];
 
     const anwaser = await validQuant(salesObject.quantity);
