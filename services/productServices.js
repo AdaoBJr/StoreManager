@@ -16,7 +16,9 @@ const isValidNameProduct = (name) => {
 const isValidQuantityProduct = (quantity) => {
   const requiredQuantitySize = 0; 
   if (quantity <= requiredQuantitySize) {
-    return { err: { code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' } }; 
+    return { err: {
+      code: 'invalid_data',
+      message: '"quantity" must be larger than or equal to 1' } }; 
   }
 
   if (typeof quantity !== 'number') {
