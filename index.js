@@ -34,6 +34,13 @@ productsController.getAll);
 app.get('/products/:id', ifProductIdNotExists,
 productsController.getById);
 
+app.put('/products/:id', 
+ifProductIdNotExists,
+isValidProductName,
+isValidQuantity,
+qauntityIsNumber,
+productsController.updateByIdController);
+
 app.use((err, req, res, next) => res.status(500).send(`Algo deu errado! Mensagem: ${err.message}`));
 
 app.listen(PORT, () => {

@@ -27,8 +27,14 @@ const findAll = async () => {
 
 const findById = async (id) => {
     const db = await connection();
-    console.log('FindbyId no model');
     const product = await db.collection('products').findOne({ _id: ObjectId(id) });
+    return product;
+};
+
+const updateById = async (id, name, quantity) => {
+    const db = await connection();
+    const product = await db.collection('products')
+    .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
     return product;
 };
 // Aqui estou exportando este produto!
@@ -37,4 +43,5 @@ module.exports = {
     findForNotDuplicate,
     findAll,
     findById,
+    updateById,
 };

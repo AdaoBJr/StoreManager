@@ -13,7 +13,6 @@ const getById = async (req, res) => {
     const { id } = req.params;
     // abaixo é a função que vai adicionar um produto!
    const productById = await productModel.findById(id);
-   console.log(productById, 'product no meu controller');
    return res.status(HTTP_OK_DUZENTOS).json(productById);
 };
 
@@ -24,8 +23,16 @@ const createNewProduct = async (req, res) => {
     return res.status(HTTP_OK_STATUS).json(newUser);
 };
 
+const updateByIdController = async (req, res) => {
+    const { id } = req.params;
+    const { name, quantity } = req.body;
+    await productModel.updateById(id, name, quantity);
+    return res.status(HTTP_OK_DUZENTOS).send({ id, name, quantity });
+};
+
 module.exports = {
     createNewProduct,
     getAll,
     getById,
+    updateByIdController,
 };
