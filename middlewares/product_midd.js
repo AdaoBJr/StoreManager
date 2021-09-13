@@ -42,7 +42,7 @@ const QuantityValidation = async (req, res, next) => {
 const IdValidation = async (req, res, next) => {
     const { id } = req.params;
 
-    if (!id) {
+    if (!id || id.length !== 24) {
         return res.status(422).json({ err: { code: 'invalid_data', message: 'Wrong id format' } });
     }
     next();
