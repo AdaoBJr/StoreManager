@@ -17,19 +17,22 @@ const isValidQuantityNotNumber = (quantity) => {
   return true;
 };
 
-const create = async (productId, quantity) => {
-    const isProductQuantityValidZero = isValidQuantityZero(quantity);
-    // console.log(isProductQuantityValidZero, 'service');
-    const isProductQuantityNotNumber = isValidQuantityNotNumber(quantity);
-    // console.log(isProductQuantityNotNumber, 'service');
-    if (!isProductQuantityNotNumber) {
+const create = async (body) => {
+    /* console.log(body); */
+    const valideQte = body.map((sale) => {
+      const isProductQuantityValidZero = isValidQuantityZero(sale.quantity);
+      const isProductQuantityNotNumber = isValidQuantityNotNumber(sale.quantity);
+ /*   console.log(isProductQuantityValidZero, 'valida o zero');
+      console.log(isProductQuantityValidZero, 'se for string'); */
+      if (!isProductQuantityValidZero || !isProductQuantityNotNumber) return false;
+      return true;
+    });
+    console.log(valideQte[0]);
+    if (valideQte[0] === false) {
       return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
     }
-    if (!isProductQuantityValidZero) {
-      return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
-    }
-    const { id } = await salesModel.create({ productId, quantity });
-    return { id, productId, quantity };
+    const resultModel = await salesModel.create(body);
+    return resultModel;
 };
 
 module.exports = { create };
