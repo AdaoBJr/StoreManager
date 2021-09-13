@@ -2,11 +2,18 @@ const salesService = require('../services/salesServices');
 
 const CODE_INVALID_DATA = 'invalid_data';
 const CODE_NOT_FOUND = 'not_found';
+const STOCK_PROBLEM = 'stock_problem';
 
 const create = async (req, res) => {
   const itensSold = req.body;
 
   const sale = await salesService.create({ itensSold });
+
+  if (sale === 'quantidade insuficiente') {
+    return res.status(404)
+      .send({ err: { code: STOCK_PROBLEM, message: 'Such amount is not permitted to sell' },
+      });
+  }
 
   if (sale.isJoi) {
     return res.status(422)

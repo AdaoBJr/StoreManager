@@ -10,7 +10,6 @@ const create = async (sold) => {
     const menosQuantity = -quantity;
     const filterQuery = { _id: ObjectId(productId) };
     const updateQuery = { $inc: { quantity: menosQuantity } };
-
     await products.findOneAndUpdate(filterQuery, updateQuery);
   });
 
