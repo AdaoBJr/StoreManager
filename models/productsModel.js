@@ -1,4 +1,4 @@
-const { connection } = require('./connection');
+const connection = require('./connection');
 
 const findByName = async (name) => { 
   const find = await connection().then((db) => db.collection('products').findOne({ name }));
