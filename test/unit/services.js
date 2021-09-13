@@ -362,7 +362,7 @@ describe('Services - Validações para a rota "/sales"', () => {
     });
   });
 
-  describe('Buscar um produto por ID', () => {
+  describe('Buscar uma venda por ID', () => {
     describe('Quando não existe produto cadastrado', () => {
       before(() => {
         sinon.stub(SaleModel, 'findById')
@@ -411,30 +411,46 @@ describe('Services - Validações para a rota "/sales"', () => {
     });
   });
 
-  describe('Criar um produto', () => {
-    describe.skip('Verifica que é possivel adicionar um novo produto com sucesso', () => {
-      const products =  {
+  describe('Criar uma venda', () => {
+    describe('Verifica que é possivel adicionar uma nova venda com sucesso', () => {
+      const sale = [
+        {
+          productId: id,
+          quantity: 3,
+        }
+      ]
+      const product = {
         _id: id,
-        name: "Produto",
-        quantity: 1,
+        name: 'Produto teste',
+        quantity: 5
+      }
+      const saleCreated = {
+        _id: saleId,
+        itensSold: [
+          {
+            productId: id,
+            quantity: 3,
+          }
+        ]
       }
       before(() => {
-        sinon.stub(ProductModel, 'create')
-        .resolves(products);
+        sinon.stub(ProductModel, 'findById')
+        .resolves(product);
+        sinon.stub(SaleModel, 'create')
+        .resolves(saleCreated);
       });
 
       after(() => {
-        ProductModel.create.restore();
+        ProductModel.findById.restore();
+        SaleModel.create.restore();
       });
 
       it('Verifica se é retornado o produto inserido', async () => {
-        const { name, quantity } = products;
-        const response = await ProductService.insert(name, quantity)
-        console.log(response)
-        expect(response).to.include.all.keys('_id', 'name', 'quantity');
+        const response = await SaleService.insert(sale);
+        expect(response).to.include.all.keys('_id', 'itensSold');
       });
     });
-    describe('Verifica que não é possivel inserir um produto', () => {
+    describe('Verifica que não é possivel inserir uma venda', () => {
       describe('Verfica a propriedade "quantity"', () => {
         it('Verfica que retorna erro ao tentar inserir um produto com quantidade menor que zero ', async () => {
           const salesinfo = [
@@ -469,7 +485,56 @@ describe('Services - Validações para a rota "/sales"', () => {
           expect(response).to.deep.equals(ERR_QUANTITY_SALE);
         });
       });
-    })
+      describe('Verifica se existe um produto', () => {
+        const sale = [
+          {
+            productId: id,
+            quantity: 1,
+          }
+        ]
+        before(() => {
+          sinon.stub(ProductModel, 'findById')
+          .resolves(false);
+        });
+
+        after(() => {
+          ProductModel.findById.restore();
+        });
+        it('Não existe produto cadastrado', async () => {
+          const response = await SaleService.insert(sale);
+          expect(response).to.deep.equals(ERR_STOCK_SALE)
+        })
+      });
+      describe('O Produto tem uma quantidade inferior à da venda', () => {
+        const sale = [
+          {
+            productId: id,
+            quantity: 3,
+          }
+        ]
+        const product = {
+          _id: id,
+          name: 'Produto teste',
+          quantity: 2
+        }
+
+        before(() => {
+          sinon.stub(ProductModel, 'findById')
+          .resolves(product);
+        });
+
+        after(() => {
+          ProductModel.findById.restore();
+        });
+
+        it('Quantitdade do produto é menor de a quantidade da venda', async () => {
+          const response = await SaleService.insert(sale);
+          expect(response).to.deep.equals(ERR_STOCK_SALE)
+        })
+
+      })
+    });
+
   });
 
   describe('Atualizar um produto', () => {
@@ -527,27 +592,38 @@ describe('Services - Validações para a rota "/sales"', () => {
         expect(response).to.deep.equals(ERR_ID_SALE);
       });
     });
-    describe.skip('Verifica se o produto deletado é retornado', () => {
+    describe('Verifica se o produto deletado é retornado', () => {
       const product = {
         _id: id,
         name: 'Produto teste',
-        quantity: 1
+        quantity: 5
+      }
+      const saleCreated = {
+        _id: saleId,
+        itensSold: [
+          {
+            productId: id,
+            quantity: 3,
+          }
+        ]
       }
       before(() => {
-        sinon.stub(ProductModel, 'findById').resolves(true);
-        sinon.stub(ProductModel, 'exclude').resolves(product);
+        sinon.stub(ProductModel, 'findById')
+        .resolves(product);
+        sinon.stub(SaleModel, 'exclude')
+        .resolves(saleCreated);
       });
 
       after(() => {
         ProductModel.findById.restore();
-        ProductModel.exclude.restore();
+        SaleModel.exclude.restore();
       });
 
-      it('Quando não existe o produto cadastrado', async () => {
-        const response = await ProductService.deleteProduct(id);
-        expect(response).to.deep.equals(product);
+      it('Verifica se é retornado o produto inserido', async () => {
+        const response = await SaleService.deleteProduct(saleId);
+        expect(response).to.include.all.keys('_id', 'itensSold');
       });
-    })
+    });
   });
 });
 
