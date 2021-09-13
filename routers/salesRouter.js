@@ -4,10 +4,12 @@ const {
   createSale,
   getAllSales,
   getSaleById,
+  updateSaleById,
 } = require('../controllers/salesController');
 
 const {
-  validSale,
+  validQntSale,
+  validProductId,
   saleExists, 
 } = require('../middlewares/validations');
 
@@ -15,7 +17,8 @@ const router = express.Router();
 
 router.route('/')
 .post(
-  validSale,
+  validQntSale,
+  validProductId,
   createSale,
 )
 .get(getAllSales);
@@ -24,6 +27,11 @@ router.route('/:id')
 .get(
   saleExists,
   getSaleById,
+)
+.put(
+  validQntSale,
+  validProductId,
+  updateSaleById,
 );
 
 module.exports = router;

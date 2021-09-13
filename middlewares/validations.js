@@ -40,18 +40,30 @@ const productExists = async (req, res, next) => {
 };
 
 const validId = async (req, res, next) => {
+  // refatorar p ObjectId.isValid(id)
   const { id } = req.params;
   if (id.length !== 24) return res.status(422).json(invData(errors.wrongId));
   next();
 };
 
-const validSale = async (req, res, next) => {
-const checkQnt = req.body.every(({ quantity }) => typeof quantity !== 'number' || quantity <= 0); // ajuda do leandro reis
-const checkprodId = req.body.every(async ({ productId }) => 
-  productsModel.getProductById(productId));
-if (checkQnt || !checkprodId) return res.status(422).json(invData(errors.wrongIdOrQnt));
-next();
+const validQntSale = (req, res, next) => {
+  const checkQnt = req.body.every(({ quantity }) => typeof quantity !== 'number' || quantity <= 0); // ajuda do leandro reis
+  if (checkQnt) return res.status(422).json(invData(errors.wrongIdOrQnt));
+  next();
 };
+
+const validProductId = async (req, res, next) => {
+  const productId = req.body.every(({ prodId }) => productsModel.getProductById(prodId));
+  if (!productId) return res.status(422).json(invData(errors.wrongIdOrQnt));
+  next();
+};
+
+// const validSale = async (req, res, next) => {
+// const checkprodId = req.body.every(async ({ productId }) => 
+//   productsModel.getProductById(productId));
+// if (checkQnt || !checkprodId) return res.status(422).json(invData(errors.wrongIdOrQnt));
+// next();
+// };
 
 const saleExists = async (req, res, next) => {
   const { id } = req.params;
@@ -67,6 +79,7 @@ module.exports = {
   validQntValue,
   productExists,
   validId,
-  validSale,
+  validQntSale,
+  validProductId,
   saleExists,
 };

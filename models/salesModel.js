@@ -20,8 +20,17 @@ const getSaleById = async (id) => {
   return { sale };
 };
 
+const updateSaleById = async (id, arr) => {
+  const db = await mongoConnection();
+  console.log(arr);
+  await db.collection('sales')
+  .updateOne(({ _id: ObjectId(id) }), { $set: { itensSold: arr } });
+  return { itensSold: arr, _id: id };
+};
+
 module.exports = {
   createSale,
   getAllSales,
   getSaleById,
+  updateSaleById,
 };
