@@ -13,7 +13,7 @@ const createProduct = rescue(async (req, res, next) => {
       .required(),
     quantity: joi
       .number()
-      .greater(0)
+      .min(1)
       .positive()
       // eslint-disable-next-line newline-per-chained-call
       .not().empty()
