@@ -19,6 +19,7 @@ const existName = async (name) => {
 
 // EXIST ID
 const existId = async (id) => {
+    if (!ObjectId.isValid(id)) { return null; }
     const db = await connectionDB.connect();
     const product = await db.collection('products').findOne({ _id: ObjectId(id) });
     return product;
