@@ -15,10 +15,18 @@ connection()
 const getAll = () => connection()
   .then((db) => db.collection('products').find({}).toArray());
 
-const getById = (id) => {
+  const getById = (id) => {
   if (!ObjectId.isValid(id)) return null;
   return connection()
   .then((db) => db.collection('products').findOne(ObjectId(id))); 
+};
+
+const editProduct = (id, name, quantity) => {
+  connection()
+  .then((db) => db.collection('products')
+  .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } }));
+
+  return { _id: id, name, quantity };
 };
 
 module.exports = { 
@@ -26,4 +34,5 @@ module.exports = {
   createProduct,
   getAll,
   getById,
+  editProduct,
 };
