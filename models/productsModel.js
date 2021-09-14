@@ -1,8 +1,14 @@
 const connection = require('./connection');
 
 const createProduct = async ({ name, quantity }) => {
-  connection.getConnection().then((db) =>
+  const result = connection.getConnection().then((db) =>
     db.collection('produtos').insertOne({ name, quantity }));
+  return { id: result.insertedId, name, quantity };
 };
 
-module.exports = { createProduct };
+const findProductByName = async (name) => {
+  connection.getConnection().then((db) =>
+    db.collection('produtos').find({ name }));
+};
+
+module.exports = { createProduct, findProductByName };
