@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { create, getAll, getById, update, delProduct } = require('./controllers/productsController');
-const { createSale, getAllSales, getByIdSale } = require('./controllers/salesController');
+const { createSale, getAllSales, getByIdSale,
+  updateSale } = require('./controllers/salesController');
 
 const app = express();
 
@@ -27,7 +28,8 @@ app.route('/products')
   .get(getAll);
 
 app.route('/sales/:id')
-  .get(getByIdSale);
+  .get(getByIdSale)
+  .put(updateSale);
 
 app.route('/sales')
   .post(createSale)
