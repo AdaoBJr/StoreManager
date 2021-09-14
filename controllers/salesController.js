@@ -51,22 +51,22 @@ const update = rescue(async (req, res, next) => {
   return res.status(200).json(updatedSale);
 });
 
-// const deleteOne = rescue(async (req, res, next) => {
-//   const { id } = req.params;
+const deleteOne = rescue(async (req, res, next) => {
+  const { id } = req.params;
   
-//   const deleteProduct = await productsService.deleteOne(id);
-//   // Caso haja erro na criação do autor, iniciamos o fluxo de erro
-//   if (deleteProduct.error) return next(deleteProduct);
+  const deleteSale = await salesService.deleteOne(id);
+  // Caso haja erro na criação do autor, iniciamos o fluxo de erro
+  if (deleteSale.error) return next(deleteSale);
 
-//   // Caso esteja tudo certo, retornamos o status 200 Ok, junto com as informações
-//   // atualizadas do Produto
-//   return res.status(200).json(deleteProduct);
-// });
+  // Caso esteja tudo certo, retornamos o status 200 Ok, junto com as informações
+  // atualizadas do Produto
+  return res.status(200).json(deleteSale);
+});
 
 module.exports = {
   getAll,
   getById,
   create,
   update,
-  // deleteOne,
+  deleteOne,
 };

@@ -52,28 +52,16 @@ const update = async (_id, productArray) => {
       return { _id, itensSold: productArray }; 
 };
 
-// const deleteOne = async (id) => {
-//   const db = await connection();
-//   await db.collection('products').deleteOne({ _id: ObjectId(id) });
-// };
-
-// const findByName = async (name) => {
-//   const product = await connection()
-//     .then((db) => db.collection('products').findOne({ name }));
-
-//   // Caso nenhum product seja encontrado, devolvemos null
-//   if (!product) return null;
-
-//   // Caso contrário, retornamos o produto encontrado
-//   return (product);
-// };
+const deleteOne = async (id) => {
+  const db = await connection();
+  await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+};
 
 module.exports = {
   getAll,
   getById,
   create,
   productsExist,
-  // findByName,
   update,
-  // deleteOne,
+  deleteOne,
 };

@@ -65,20 +65,39 @@ const update = async (id, productArray) => {
   return salesModel.update(id, productArray);
 };
 
-// const deleteOne = async (id) => {
-//   const getProduct = await getById(id);
+const getForDelete = async (id) => {
+  // Solicitamos que o model realize a busca no banco
+  const sale = await salesModel.getById(id);
 
-//   if (getProduct.error) return getProduct;
+  // Caso nenhum autor seja encontrado, retornamos um objeto de erro.
+  if (!sale) {
+    return {
+      number: 422,
+      error: {
+        code: 'invalid_data',
+        message: 'Wrong sale ID format',
+      },
+    };
+  }
 
-//   productsModel.deleteOne(id);
+  // Caso haja um autor com o ID informado, retornamos esse autor
+  return sale;
+};
+
+const deleteOne = async (id) => {
+  const getSale = await getForDelete(id);
+
+  if (getSale.error) return getSale;
+
+  salesModel.deleteOne(id);
   
-//   return getProduct;
-// };
+  return getSale;
+};
 
 module.exports = {
   getAll,
   getById,
   create,
   update,
-  // deleteOne,
+  deleteOne,
 };
