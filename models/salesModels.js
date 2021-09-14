@@ -17,7 +17,6 @@ const createSale = async (body) => {
     promises = [...promises, updateQuantity(productId, x)];
   }
    await Promise.all(promises);
- 
   return {
     _id: sales.insertedId,
     itensSold: body,

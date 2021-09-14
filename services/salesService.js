@@ -1,4 +1,5 @@
 const SalesModels = require('../models/salesModels');
+const ProductModels = require('../models/productsModels');
 
 const verifyQuantity = (body) => {
  const condiction = body.some((item) => typeof item.quantity !== 'number' || item.quantity <= 0);
@@ -13,9 +14,31 @@ const verifyQuantity = (body) => {
 return false;
 };
 
+const quantityVerification = async (body) => {
+  let promises = [];
+  body.map(({ productId }) => {
+    const product = ProductModels.getProductById(productId);
+    promises = [...promises, product];
+    return promises;
+  });
+  const products = await Promise.all(promises);
+  const amout = products.some(({ quantity }, i) => quantity < body[i].quantity);
+ if (amout) {
+   return {
+     err: {
+       code: 'stock_problem',
+       message: 'Such amount is not permitted to sell',
+     },
+   };
+ }
+ return false;
+};
+
 const createSale = async (body) => {
   const x = verifyQuantity(body);
   if (x) return x;
+  const y = await quantityVerification(body);
+  if (y) return y;
   const sale = await SalesModels.createSale(body);
   return sale;
 };
