@@ -1,4 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
+const { ObjectId } = require('mongodb');
+
 // const Joi = require('joi');
 const SalesService = require('../services/salesService');
 
@@ -13,6 +15,7 @@ const findId = async (request, response, next) => {
       },
     });
   }
+
   next();
 };
 
@@ -31,7 +34,22 @@ const validQuantity = async (request, response, next) => {
   next();
 };
 
+const validId = async (request, response, next) => {
+  const { id } = request.params;
+
+  if (!ObjectId.isValid(id)) {
+    return response.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong sale ID format',
+      },
+    });
+  }
+  next();
+};
+
 module.exports = {
   findId,
   validQuantity,
+  validId,
 };
