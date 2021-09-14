@@ -100,6 +100,13 @@ const updateProduct = async (name, quantity, id) => {
   return productNotIsValid;
 };
 
+const deleteProduct = async (id) => {
+  const productExists = await verifyExistenceId(id);
+
+  if (!productExists.err) return productsModel.deleteProduct(id);
+  return productExists;
+};
+
 module.exports = {
   verifyEqualProduct,
   verifyName,
@@ -109,4 +116,5 @@ module.exports = {
   verifyProduct,
   verifyExistenceId,
   updateProduct,
+  deleteProduct,
 };
