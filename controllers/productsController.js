@@ -4,10 +4,10 @@ const productsService = require('../services/productsService');
 
 const productsRouter = express.Router();
 
-productsRouter.post('/', (req, res) => {
+productsRouter.post('/', async (req, res) => {
   const { body } = req;
-  const result = productsService.createProduct(body);
+  const result = await productsService.createProduct(body);
   return res.StatusCode(StatusCode.OK).json(result);
 });
 
-module.exports = { productsRouter };
+module.exports = productsRouter;

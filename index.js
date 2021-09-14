@@ -10,8 +10,8 @@ const salesRouter = require('./controllers/salesController');
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
-app.get('/', async (_req, res) => {
-  res.send();
+app.get('/', (_request, response) => {
+  response.send();
 });
 
 app.use('/products', productsRouter);
