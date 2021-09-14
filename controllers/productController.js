@@ -15,7 +15,6 @@ const getById = async (req, res) => {
   try {
     const { id } = req.params;
     const productId = await productService.getByIdService(id);
-    console.log(productId, 'produto que chega no controller');
     if (productId === false) {
       return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ 
         err: { 
@@ -41,13 +40,24 @@ const create = async (req, res) => {
   }
 };
 
-// const update = async (req, res) => {};
+const update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, quantity } = req.body;
+    const updateProduct = await productService.updateService({ id, name, quantity });
+    return res.status(StatusCodes.OK).json(updateProduct);
+  } catch (error) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
+      .send('Sorry! There is something wrong!');
+  }
+};
+
 // const remove = async (req, res) => {};
 
 module.exports = {
   create,
   getAll,
   getById,
-  // update,
+  update,
   // remove,
 };

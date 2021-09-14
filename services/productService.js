@@ -16,15 +16,20 @@ const getByIdService = async (id) => {
     return false;
   }
   const getIdProduct = await productModel.getById({ id });
-  console.log(getIdProduct, 'produto que chega no service');
   if (!getIdProduct) {
     return false;
   }
   return getIdProduct;
 };
 
+const updateService = async ({ id, name, quantity }) => {
+  const product = await productModel.update({ id, name, quantity });
+  return product;
+};
+
 module.exports = {
   getAllService,
   createService,
   getByIdService,
+  updateService,
 };
