@@ -1,5 +1,5 @@
 const express = require('express');
-const { StatusCode } = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const productsService = require('../services/productsService');
 
 const productsRouter = express.Router();
@@ -7,7 +7,10 @@ const productsRouter = express.Router();
 productsRouter.post('/', async (req, res) => {
   const { body } = req;
   const result = await productsService.createProduct(body);
-  res.status(StatusCode.OK).json(result);
+  if (result.err) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(result);
+  }
+  res.status(StatusCodes.CREATED).json(result);
 });
 
 module.exports = productsRouter;

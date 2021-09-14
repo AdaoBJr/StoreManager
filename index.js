@@ -14,6 +14,8 @@ app.use('/products', productsRouter);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
+  // console.log('deu bom');
+  // response.status(200).json({ message: 'deu bom' });
   response.send();
 });
 
