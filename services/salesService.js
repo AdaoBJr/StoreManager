@@ -26,7 +26,7 @@ const updateSaleById = async (saleId, updates) => {
 
 const deleteSaleById = async (saleId) => {
   const validate = await salesSchema.validateIdAndQty(saleId);
-  if (validate.err) return false;
+  if (validate.err) return validate;
   const saleDeleted = await model.deleteSaleById(saleId);
   return saleDeleted;
 };

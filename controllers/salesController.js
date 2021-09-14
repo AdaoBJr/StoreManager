@@ -38,8 +38,11 @@ const updateSaleById = async (req, res) => {
 const deleteSaleById = async (req, res) => {
   const { id } = req.params;
   const result = await service.deleteSaleById(id);
-  if (!result) {
-    return res.status(404).json({ err: { code: 'not_found', message: 'Sale not found' } });
+  if (result.err) {
+    return res.status(result.status).json({ err: {
+      code: 'invalid_data',
+      message: 'Wrong sale ID format',
+  } });
   }
   res.status(200).json(result);
 };
