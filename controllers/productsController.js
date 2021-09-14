@@ -13,7 +13,7 @@ const getAllProducts = async (req, res) => {
   if (products.err) {
     return res.status(422).json(products);
   }
-  res.status(200).json(products);
+  return res.status(200).json(products);
 };
 
 const getProductById = async (req, res) => {
@@ -22,11 +22,22 @@ const getProductById = async (req, res) => {
   if (product.err) {
     return res.status(422).json(product);
   }
-  res.status(200).json(product);
+  return res.status(200).json(product);
+};
+
+const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  const product = await productsService.updateProduct(name, quantity, id);
+  if (product.err) {
+    return res.status(422).json(product);
+  }
+  return res.status(200).json(product);
 };
 
 module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
+  updateProduct,
 };

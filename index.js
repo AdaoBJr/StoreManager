@@ -19,4 +19,6 @@ app.get('/products', productsController.getAllProducts);
 
 app.get('/products/:id', productsController.getProductById);
 
+app.put('/products/:id', productsController.updateProduct);
+
 app.listen(PORT, () => { console.log('Systems are online :D'); });

@@ -56,12 +56,12 @@ const verifyQuantity = (quantity) => {
 };
 
 const verifyProduct = async (name, quantity) => {
-  const notHaveEqual = await verifyEqualProduct(name);
+  // const notHaveEqual = await verifyEqualProduct(name);
   const nameNotIsValid = verifyName(name);
   const quantityNotIsValid = verifyQuantity(quantity);
   const quantityTypeNotIsValid = verifyQuantityType(quantity);
   
-  if (notHaveEqual) return notHaveEqual;
+  // if (notHaveEqual) return notHaveEqual;
   if (nameNotIsValid) return nameNotIsValid;
   if (quantityNotIsValid) return quantityNotIsValid;
   if (quantityTypeNotIsValid) return quantityTypeNotIsValid;
@@ -69,8 +69,10 @@ const verifyProduct = async (name, quantity) => {
 };
 
 const createProduct = async (name, quantity) => {
+  const notHaveEqual = await verifyEqualProduct(name);
   const productNotIsValid = await verifyProduct(name, quantity);
 
+  if (notHaveEqual) return notHaveEqual;
   if (productNotIsValid === false) return productsModel.addProduct(name, quantity);
   return productNotIsValid;
 };
@@ -88,6 +90,16 @@ const verifyExistenceId = async (id) => {
   return product;
 };
 
+const updateProduct = async (name, quantity, id) => {
+  const productNotIsValid = await verifyProduct(name, quantity);
+  const productExists = await verifyExistenceId(id);
+  
+  if (productNotIsValid === false && !productExists.err) {
+    return productsModel.updateProduct(id, name, quantity);
+  }
+  return productNotIsValid;
+};
+
 module.exports = {
   verifyEqualProduct,
   verifyName,
@@ -96,4 +108,5 @@ module.exports = {
   createProduct,
   verifyProduct,
   verifyExistenceId,
+  updateProduct,
 };
