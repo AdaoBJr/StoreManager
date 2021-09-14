@@ -11,4 +11,8 @@ router.get('/', salesController.getAll);
 
 router.get('/:id', salesController.getById);
 
+router.put('/:id',
+ salesController.verifyQuantities,
+ salesController.editSale);
+
 module.exports = router;
