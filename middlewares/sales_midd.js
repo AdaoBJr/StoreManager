@@ -16,8 +16,19 @@ const QuantityValidation = async (req, res, next) => {
 
 const IdValidation = async (req, res, next) => {
     const { id } = req.params;
+    const sales = req.params;
+    console.log(sales);
     if (!id || id.length !== 24) {
         return res.status(404).json({ err: { code: 'not_found', message: 'Sale not found' } });
+    }
+    next();
+};
+
+const IdExistence = async (req, res, next) => {
+    const { id } = req.params;
+    if (!id || id.length !== 24) {
+        return res.status(422)
+        .json({ err: { code: 'invalid_data', message: 'Wrong sale ID format' } });
     }
     next();
 };
@@ -25,4 +36,5 @@ const IdValidation = async (req, res, next) => {
 module.exports = {
     IdValidation,
     QuantityValidation,
+    IdExistence,
 };

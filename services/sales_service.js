@@ -1,4 +1,5 @@
-const { listSales, listById, createSales, updateById } = require('../model/sales_model');
+const { listSales, listById, createSales, updateById,
+    deleteById } = require('../model/sales_model');
 
 const create = async (itensSold) => {
     const newSale = await createSales(itensSold);
@@ -12,6 +13,10 @@ const getAll = async () => {
 
 const getById = async (id) => {
     const sale = await listById(id);
+    console.log(sale, 'service');
+
+    if (!sale) return { error: { code: 'NOT_FOUND', message: 'Sale not found' } };
+
     return sale;
 };
 
@@ -21,9 +26,15 @@ const update = async (id, productId, quantity) => {
     return updateProduct;
 };
 
+const remove = async (id) => {
+    const product = await deleteById(id);
+    return product;
+};
+
 module.exports = {
     create,
     getAll,
     getById,
     update,
+    remove,
 };

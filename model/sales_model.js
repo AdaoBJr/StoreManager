@@ -23,6 +23,7 @@ const listSales = async () => {
 const listById = async (id) => {
     const db = await connection();
     const product = await db.collection('sales').findOne(ObjectId(id));
+    if (!product) return null;
     return product;
 };
 
@@ -34,9 +35,17 @@ const updateById = async (id, productId, quantity) => {
     return product;
 };
 
+const deleteById = async (id) => {
+    const db = await connection();
+     const product = await listById(id);
+    await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+    return product;
+};
+
 module.exports = {
     createSales,
     listSales,
     listById,
     updateById,
+    deleteById,
 };
