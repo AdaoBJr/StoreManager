@@ -1,8 +1,8 @@
 const { ObjectID } = require('mongodb');
-const connection = require('./connection');
+const { getConnection } = require('./connection');
 
 const findByName = async (name) => {
-  const productsCollection = await connection()
+  const productsCollection = await getConnection()
     .then((db) => db.collection('products'));
 
   const result = await productsCollection.findOne({ name });
@@ -10,7 +10,7 @@ const findByName = async (name) => {
 };
 
 const getAll = async () => {
-  const productsCollection = await connection()
+  const productsCollection = await getConnection()
     .then((db) => db.collection('products'));
 
   const products = await productsCollection.find().toArray();
@@ -18,7 +18,7 @@ const getAll = async () => {
 };
 
 const getById = async (id) => {
-  const productsCollection = await connection()
+  const productsCollection = await getConnection()
     .then((db) => db.collection('products'));
 
   const response = await productsCollection.findOne(new ObjectID(id));
@@ -26,7 +26,7 @@ const getById = async (id) => {
 };
 
 const create = async (name, quantity) => {
-  const productsCollection = await connection()
+  const productsCollection = await getConnection()
     .then((db) => db.collection('products'));
 
   const response = await productsCollection
@@ -40,7 +40,7 @@ const create = async (name, quantity) => {
 };
 
 const updateById = async (id, name, quantity) => {
-  const productsCollection = await connection()
+  const productsCollection = await getConnection()
     .then((db) => db.collection('products'));
   try {
     const response = await productsCollection.updateOne(
@@ -55,7 +55,7 @@ const updateById = async (id, name, quantity) => {
 };
 
 const deleteById = async (id) => {
-  const productsCollection = await connection()
+  const productsCollection = await getConnection()
     .then((db) => db.collection('products'));
 
   try {
@@ -69,7 +69,7 @@ const deleteById = async (id) => {
 };
 
 const subtractProductsQuantity = async (id, quantity) => {
-  const productsCollection = await connection()
+  const productsCollection = await getConnection()
     .then((db) => db.collection('products'));
   const oldValue = await productsCollection.findOne(new ObjectID(id));
   console.log(oldValue);
@@ -84,7 +84,7 @@ const subtractProductsQuantity = async (id, quantity) => {
 };
 
 const addProductsQuantity = async (id, quantity) => {
-  const productsCollection = await connection()
+  const productsCollection = await getConnection()
     .then((db) => db.collection('products'));
 
   try {

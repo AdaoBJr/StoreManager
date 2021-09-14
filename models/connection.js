@@ -6,7 +6,7 @@ const DB_NAME = process.env.DB_NAME || 'StoreManager';
 
 let schema = null;
 
-async function connection() {
+async function getConnection() {
   if (schema) return Promise.resolve(schema);
   return MongoClient
     .connect(MONGO_DB_URL, {
@@ -23,4 +23,4 @@ async function connection() {
     });
 }
 
-module.exports = connection;
+module.exports = { getConnection };

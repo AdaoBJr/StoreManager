@@ -1,8 +1,8 @@
 const { ObjectID } = require('mongodb');
-const connection = require('./connection');
+const { getConnection } = require('./connection');
 
 const create = async (productsArray) => {
-  const salesCollection = await connection()
+  const salesCollection = await getConnection()
     .then((db) => db.collection('sales'));
 
   const response = await salesCollection
@@ -11,7 +11,7 @@ const create = async (productsArray) => {
 };
 
 const getAll = async () => {
-  const salesCollection = await connection()
+  const salesCollection = await getConnection()
     .then((db) => db.collection('sales'));
 
   const response = await salesCollection
@@ -23,7 +23,7 @@ const getAll = async () => {
 };
 
 const getById = async (id) => {
-  const salesCollection = await connection()
+  const salesCollection = await getConnection()
     .then((db) => db.collection('sales'));
 
   const response = await salesCollection.findOne(new ObjectID(id));
@@ -31,7 +31,7 @@ const getById = async (id) => {
 };
 
 const update = async (id, sale) => {
-  const salesCollection = await connection()
+  const salesCollection = await getConnection()
     .then((db) => db.collection('sales'));
   const response = await salesCollection.updateOne(
     { _id: new ObjectID(id) },
@@ -41,7 +41,7 @@ const update = async (id, sale) => {
 };
 
 const deleteById = async (id) => {
-  const salesCollection = await connection()
+  const salesCollection = await getConnection()
     .then((db) => db.collection('sales'));
 
   try {
