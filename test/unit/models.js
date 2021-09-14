@@ -336,13 +336,44 @@ describe('Retorna uma venda pesquisada por sua id', () => {
     MongoClient.connect.restore();
   });
 
+  it('O retorno é null se o id for invalido', async () => {
+    const insertProduct = await productsModel.createProduct(productTest);
+    const saleTest = [{productId: insertProduct._id, quantity: 5}];
+    const saleCreated = await salesModel.createSale(saleTest);
+    const fakeId = 'aaaaa'
+    const result = await salesModel.getById(fakeId);
+
+    expect(result).to.be.null;
+  })
+
   it('o retorno é um objeto', async () =>{
     const insertProduct = await productsModel.createProduct(productTest);
     const saleTest = [{productId: insertProduct._id, quantity: 5}];
     const saleCreated = await salesModel.createSale(saleTest);
     const result = await salesModel.getById(saleCreated._id);
 
-
     expect(result).to.be.an('object');
   })
+
+  it('Que possui o id informado e uma chave "itensSold"', async () =>{
+    const insertProduct = await productsModel.createProduct(productTest);
+    const saleTest = [{productId: insertProduct._id, quantity: 5}];
+    const saleCreated = await salesModel.createSale(saleTest);
+    const result = await salesModel.getById(saleCreated._id);
+
+    expect(result).to.be.haveOwnProperty('_id');
+    expect(result).to.be.haveOwnProperty('itensSold');
+  })
+
+  it('A chave "itensSold" possui um array com as vendas feitas', async () =>{
+    const insertProduct = await productsModel.createProduct(productTest);
+    const saleTest = [{productId: insertProduct._id, quantity: 5}];
+    const saleCreated = await salesModel.createSale(saleTest);
+    const result = await salesModel.getById(saleCreated._id);
+
+
+    expect(result.itensSold).to.an('array');
+    expect(result).to.be.eql(saleCreated);
+  })
+
 })
