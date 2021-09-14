@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb');
-const { saleExists, checkAvailableQuantity } = require('../models/salesModel');
+const { saleExists } = require('../models/salesModel');
+const { findById: findProdById } = require('../models/productsModel');
 
 const errors = {
   invalidQuantity: 'Wrong product ID or invalid quantity',
@@ -53,20 +54,23 @@ const existenceValidation = async (id) => {
   return {};
 };
 
-const stockVerification = async (req, res, next) => {
-  req.body.forEach(async ({ productId, quantity }) => {
-    const isAvailable = await checkAvailableQuantity(productId, quantity);
-    if (!isAvailable) {
-      return res.status(404).json({
-      err: {
-        code: 'stock_problem',
-        message: errors.insufficientStock,
-      },
-     });
-    }
+const stockVerification = async (sales) => {
+  const availableQuantity = await sales.map(async ({ productId, quantity }) => {
+    const currProd = await findProdById(productId);
+    if (currProd === null) return false;
+    return currProd.quantity - quantity > 0;
   });
 
-  next();   
+  const arrResolvedProm = await Promise.all(availableQuantity).then((result) => result);
+  if (arrResolvedProm.some((el) => el === false)) {
+    return {
+      stockError: {
+        code: 'stock_problem',
+        message: 'Such amount is not permitted to sell',
+      },
+     };
+  }
+  return {};
 };
 
 module.exports = { 
@@ -75,12 +79,3 @@ module.exports = {
   existenceValidation,
   stockVerification,
 };
-
-// return ({
-//   stockError: 'Stock Insufficient',
-//   err: {
-//     code: 'stock_problem',
-//     message: errors.insufficientStock,
-//   },
-//  });
-// }

@@ -3,7 +3,8 @@ const { StatusCodes: {
   INTERNAL_SERVER_ERROR,
   UNPROCESSABLE_ENTITY,
   NOT_FOUND,
- } } = require('http-status-codes');
+ },
+} = require('http-status-codes');
 const { include, getAll, getById, update, remove } = require('../services/salesService');
 
 const INTERNAL_SERVER_ERROR_MSG = 'Something went wrong :(';
@@ -12,7 +13,7 @@ const addSales = async (req, res) => {
   try {
     const result = await include(req.body);
 
-    if (result.stockError) return res.status(NOT_FOUND).json(result.err);
+    if (result.stockError) return res.status(NOT_FOUND).json({ err: result.stockError });
     if (result.err) return res.status(UNPROCESSABLE_ENTITY).json(result);
     
     return res.status(OK).json(result);

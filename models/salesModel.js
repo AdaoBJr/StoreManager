@@ -42,12 +42,16 @@ const removeSale = async (id) => {
   return value;
 };
 
-const checkAvailableQuantity = async (id, quantity) => {
-  const db = await connection();
-  const stock = await db.collection('products').findOne({ _id: ObjectId(id) });
-  if (stock === null) return false;
+const checkAvailableQuantity = async (sales) => {
+  sales.forEach(async ({ id, quantity }) => {
+    const stock = await findById(id);
+
+    if (stock === null) return false;
+    if (stock.quantity - quantity <= 0) return false;
+    return true;
+  });
   
-  return stock.quantity - quantity > 0;
+  return 'teste';
 };
  
 module.exports = {

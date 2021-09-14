@@ -5,6 +5,7 @@ const {
   updateSale,
   removeSale,
 } = require('../models/salesModel');
+
 const {
   quantityValidations,
   idValidation,
@@ -37,6 +38,8 @@ const include = async (sales) => {
   const quantityValid = quantityValidations(sales);
   if (quantityValid.err) return quantityValid;
 
+  const stockValid = await stockVerification(sales);
+  if (stockValid.stockError) return stockValid;
   sales.forEach(({ productId, quantity }) => {
     updateStock(productId, -quantity);    
   });
