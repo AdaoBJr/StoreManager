@@ -22,7 +22,7 @@ const productExists = async (req, res, next) => {
     return res.status(422).json({
       err: {
         code: 'invalid_data',
-        message: 'product already exists',
+        message: 'Product already exists',
       },
     });
   }
