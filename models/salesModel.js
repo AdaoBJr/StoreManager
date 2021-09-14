@@ -24,9 +24,26 @@ const getSaleById = async (id) => {
   return saleData;
 };
 
+const updateSaleById = async (saleId, updates) => {
+  const comparisonId = new mongo.ObjectId(saleId);
+  await updates.forEach(async (sale) => {
+    const { productId } = sale;
+    await connection().then((db) => 
+      db.collection(COLLECTION_NAME).updateOne({ _id: comparisonId }, {
+        pull: { itensSold: { productId } },
+    }));
+  });
+  await connection().then((db) => db.collection(COLLECTION_NAME)
+    .updateOne({ _id: comparisonId }, { push: { itensSold: { each: updates } } }));
+  const saleAfterUpdate = await connection().then((db) => 
+    db.collection(COLLECTION_NAME).findOne({ _id: comparisonId }));
+  return saleAfterUpdate;
+};
+
 module.exports = {
   insertNewSale,
   findProductById,
   getAllSales,
   getSaleById,
+  updateSaleById,
 };
