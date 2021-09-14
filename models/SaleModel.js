@@ -30,8 +30,25 @@ const createSale = async (body) => {
     return sale;
   };
 
+  const updateSale = async (id, body) => {
+    if (!ObjectId.isValid(id)) {
+      return null;
+    }
+    const salesCollection = await Connection.getConnection();
+    await salesCollection.collection('sales').updateOne(
+      { _id: ObjectId(id) },
+      { $set: { itensSold: body } },
+    );
+
+    return {
+      _id: id,
+      itensSold: body,
+    };
+  };
+
 module.exports = {
   createSale,
   getAllSales,
   getSaleById,
+  updateSale,
   };
