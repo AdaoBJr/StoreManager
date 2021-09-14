@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { create, getAll, getById, update, delProduct } = require('./controllers/productsController');
 const { createSale, getAllSales, getByIdSale,
-  updateSale } = require('./controllers/salesController');
+  updateSale, delSale } = require('./controllers/salesController');
 
 const app = express();
 
@@ -29,7 +29,8 @@ app.route('/products')
 
 app.route('/sales/:id')
   .get(getByIdSale)
-  .put(updateSale);
+  .put(updateSale)
+  .delete(delSale);
 
 app.route('/sales')
   .post(createSale)

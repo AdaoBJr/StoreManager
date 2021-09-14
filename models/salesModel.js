@@ -21,9 +21,14 @@ const updateSale = async (id, itensSold) => {
   console.log(update);
   return { _id: id, itensSold };
 };
+
+const deleteById = async (id) => ObjectId.isValid(id)
+  && connection().then((db) => db.collection('sales').deleteOne({ _id: ObjectId(id) }));
+
 module.exports = {
   addSale,
   findAll,
   findById,
   updateSale,
+  deleteById,
 };
