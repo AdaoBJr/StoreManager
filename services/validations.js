@@ -56,8 +56,26 @@ const validateFindById = async (id) => {
   return productById;
 };
 
+const validateUpdate = async ({ id, name, quantity }) => {
+  const validName = validateName(name);
+  const validQuant = validateQuantity(quantity);
+  const validQantNotNumber = validateQuantNotNumber(quantity);
+  if (!validName) {
+    return { code: 'invalid_data', message: '"name" length must be at least 5 characters long' };
+  }
+  if (!validQuant) {
+    return { code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' };
+  }
+  if (!validQantNotNumber) {
+    return { code: 'invalid_data', message: '"quantity" must be a number' };
+  }
+  const updateProduct = await modelProducts.updateProduct({ id, name, quantity });
+  return updateProduct;
+};
+
 module.exports = {
   validateCreate,
   validateFindAll,
   validateFindById,
+  validateUpdate,
 };

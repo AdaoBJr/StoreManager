@@ -8,9 +8,12 @@ const app = express();
 app.use(bodyParser.json());
 
 app.get('/products', productsController.findAllProducts);
+
 app.get('/products/:id', productsController.findProductById);
 
 app.post('/products', productsController.createProduct);
+
+app.put('/products/:id', productsController.updateProduct);
 
 app.get('/', (_request, response) => {
   response.send();

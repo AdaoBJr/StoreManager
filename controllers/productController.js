@@ -9,6 +9,18 @@ const createProduct = async (req, res) => {
   return res.status(201).json({ _id, name, quantity });
 };
 
+const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+
+  const update = await validation.validateUpdate({ id, name, quantity });
+  const { _id, message, code } = update;
+  if (message) {
+    res.status(422).json({ err: { code, message } });
+  }
+  res.status(200).json({ _id, name, quantity });
+};
+
 const findAllProducts = async (_req, res) => {
     const listProducts = await validation.validateFindAll();
     return res.status(200).json({ products: listProducts });
@@ -28,4 +40,5 @@ module.exports = {
   createProduct,
   findAllProducts,
   findProductById,
+  updateProduct,
 };
