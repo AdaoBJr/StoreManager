@@ -1,5 +1,4 @@
 const saleService = require('../services/saleService');
-const saleModel = require('../models/saleModel');
 
 const create = async (req, res, next) => {
   const sales = await saleService.createSale(req.body);
@@ -10,7 +9,7 @@ const create = async (req, res, next) => {
 };
 
 const getAll = async (_req, res) => {
-  const findAll = await saleModel.getAll();
+  const findAll = await saleService.getAll();
   return res.status(200).json(findAll);
 };
 

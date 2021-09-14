@@ -18,6 +18,8 @@ app.get('/products/:id', productController.getById)
   .delete('/products/:id', productController.deleteId);
 
 app.post('/sales', saleController.create);
+app.get('/sales', saleController.getAll);
+app.get('/sales/:id', saleController.getById);
 
 app.use((err, _req, res, _next) => {
   if (err.code === 'invalid_data') {

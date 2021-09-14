@@ -26,6 +26,16 @@ const createSale = async (items) => {
   };
 };
 
+const getAll = async () => {
+  const findAll = await saleModel.getAll();
+  let obj = {};
+  findAll.forEach(({ _id, productId, quantity }) => {
+    obj = { sales: [{ _id, itensSols: [{ productId, quantity }] }] };
+  });
+  console.log(obj);
+  return obj;
+};
+
 const getById = async (id) => {
   if (!ObjectId.isValid(id)) {
     return { err: { message: 'Sale not found', code: 'not_found' } };
@@ -39,5 +49,6 @@ const getById = async (id) => {
 
 module.exports = {
   createSale,
+  getAll,
   getById,
 };
