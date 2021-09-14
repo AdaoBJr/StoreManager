@@ -10,4 +10,6 @@ const insertName = async (name, quantity) => {
   return create;
 };
 
-module.exports = { insertName, getAll, getId };
+const auxGetAll = async () => getAll();
+
+module.exports = { insertName, auxGetAll, getId };

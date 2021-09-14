@@ -1,5 +1,5 @@
 const express = require('express');
-const { insertName, getAll, getId } = require('../service/services');
+const { insertName, auxGetAll, getId } = require('../services/services');
 const { validateProductInput } = require('../middleError/validProduct');
 
 const route = express.Router();
@@ -16,12 +16,12 @@ route.post('/', validateProductInput, async (req, res, next) => {
     name,
     quantity,
   };
-  res.status(201).json(opa);
+  return res.status(201).json(opa);
 });
 
 route.get('/', async (_req, res) => {
-  const auxGetAll = await getAll();
-  res.status(200).json(auxGetAll);
+  const getAll = await auxGetAll();
+  return res.status(200).json(getAll);
 });
 
 route.get('/:id', async (req, res, next) => {
@@ -31,7 +31,7 @@ route.get('/:id', async (req, res, next) => {
   if (auxGetId.isError) {
     return next(auxGetId);
   }
-  res.status(200).json(auxGetId);
+  return res.status(200).json(auxGetId);
 });
 
 module.exports = route;
