@@ -14,13 +14,13 @@ const getSaleById = async (req, res) => {
   try {
       const { id } = req.params;
       const result = await service.getSaleById(id);
-
-      if (result.err) {
-          return res.status(404).json(result);
-      }
+      // if (result.err) {
+      //     return res.status(404).json(result);
+      // Refatorar aqui!!
+      // }
       return res.status(200).json(result);
   } catch (error) {
-      return res.status(404).json({ message: error.message });
+      return res.status(404).json({ err: { code: 'not_found', message: 'Sale not found' } });
   }
 };
 

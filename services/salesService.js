@@ -7,11 +7,11 @@ const wrongIdFormat = {
     message: 'Wrong product ID or invalid quantity', 
   } };
 
-  const saleNotFound = {
-    err: { 
-      code: 'not_found', 
-      message: 'Sale not found', 
-    } };
+const saleNotFound = {
+  err: { 
+    code: 'not_found', 
+    message: 'Sale not found', 
+  } };
 
 const getSaleById = async (id) => {
   const verifySale = await saleModel.saleExists(id);

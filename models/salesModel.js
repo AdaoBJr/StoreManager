@@ -3,9 +3,9 @@ const connection = require('./connection');
 
 const saleExists = async (id) => {
   const db = await connection();
-  const product = await db.collection('sales').findOne({ _id: ObjectId(id) });
+  const sale = await db.collection('sales').findOne({ _id: ObjectId(id) });
 
-  return product !== null;
+  return sale !== null;
 };
 
 const getAll = async () => {
