@@ -64,7 +64,7 @@ const updateSold = async ({ id, productId, quantity }) => {
     return {
       err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } };
   }
-  const { venda: { itensSold } } = sell;
+  const { sold: { itensSold } } = sell;
 
   itensSold.forEach((item, index) => {
     if (item.productId === productId) {
