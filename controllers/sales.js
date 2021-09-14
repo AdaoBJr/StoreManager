@@ -38,7 +38,6 @@ const createSale = async (itensSold) => {
 const findAllSales = () => models.findAll();
 
 const findSales = (id) => {
-    console.log(ObjectId.isValid(id))
     if (ObjectId.isValid(id)) {
         return models.findByID(id);
     }
