@@ -19,7 +19,7 @@ const {
   
 } = require('./services/productServices');
 
-const { salesWithAllProductValid } = require('./services/salesServices');
+const { salesWithAllProductValid, ifSaleIdNotExists } = require('./services/salesServices');
 
 app.get('/', (_request, response) => {
   response.send(); 
@@ -56,6 +56,14 @@ salesController.createNewSale);
 
 app.use((err, req, res, _next) => 
 res.status(500).send(`Algo deu errado! Mensagem: ${err.message}`));
+
+app.get('/sales', 
+salesController.getAll);
+
+app.get('/sales/:id', ifSaleIdNotExists, 
+salesController.getById);
+// app.get('/products/:id', ifProductIdNotExists,
+// productsController.getById);
 
 app.listen(PORT, () => {
    console.log('Rodando na porta 3000');
