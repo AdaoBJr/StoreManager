@@ -242,7 +242,7 @@ describe('6 - Crie um endpoint para listar as vendas', () => {
         result = JSON.parse(body);
         resultProductId = result.products[0]._id;
       });
-
+      
     await frisby
       .post(`${url}/sales/`, [
         {
@@ -618,7 +618,6 @@ describe('8 - Crie um endpoint para deletar uma venda', () => {
         result = JSON.parse(body);
         resultProductId = result.products[0]._id;
       });
-
     await frisby
       .post(`${url}/sales/`, [
         {
