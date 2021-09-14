@@ -12,8 +12,7 @@ app.get('/', (_request, response) => {
 });
 
 const products = require('./router/productsRouter');
-
-const sales = require('./router/productsRouter');
+const sales = require('./router/salesRouter');
 
 app.use('/products', products);
 

@@ -8,7 +8,6 @@ const verifyQuantities = (req, res, next) => {
   const newSales = req.body;
   const badQuantities = salesService.verifyQuantities(newSales);
   const quantIsNotnumber = salesService.verifyQuantitiesString(newSales);
-
   if (badQuantities.length !== 0 || quantIsNotnumber.length !== 0) {
  return res.status(422).json({ err: { 
     code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } }); 
@@ -19,7 +18,14 @@ next();
 const createSales = (req, res) => {
   const newSales = req.body;
   salesService.createSales(newSales)
-  .then((response) => res.status(200).json(response));
+  .then((response) => {
+    if (response === null) { 
+      return res.status(404).json({ err: { 
+        code: 'stock_problem', 
+        message: 'Such amount is not permitted to sell' } }); 
+      }
+    return res.status(200).json(response);
+  });
 };
 
 const getAll = (req, res) => salesService.getAll()
@@ -44,6 +50,20 @@ const editSale = (req, res) => {
   .then((result) => res.status(200).json(result));
 };
 
+const deleteSale = (req, res) => {
+  const { id } = req.params;
+  salesService.deleteSale(id)
+  .then((result) => {
+    if (result === null || result === undefined) {
+      return res.status(422).json({ err: { 
+        code: 'invalid_data', message: 'Wrong sale ID format' } });
+    }
+    res.status(200).json(result);
+})
+  .catch(() => res.status(422).json({ err: { 
+    code: 'invalid_data', message: 'Wrong sale ID format' } }));
+};
+
 module.exports = {
   router,
   createSales,
@@ -51,4 +71,5 @@ module.exports = {
   getAll,
   getById,
   editSale,
+  deleteSale,
 };
