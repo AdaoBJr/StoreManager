@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const modelProducts = require('../models/productModels');
 
 const validateName = (name) => {
@@ -25,8 +26,6 @@ const validateCreate = async (name, quantity) => {
   const validName = validateName(name);
   const validQuant = validateQuantity(quantity);
   const validQantNotNumber = validateQuantNotNumber(quantity);
-  const validNameNotEquals = await modelProducts.findByName(name);
-  const { id } = await modelProducts.createProduct(name, quantity);
   if (!validName) {
     return { code: 'invalid_data', message: '"name" length must be at least 5 characters long' };
   }
@@ -36,12 +35,29 @@ const validateCreate = async (name, quantity) => {
   if (!validQantNotNumber) {
     return { code: 'invalid_data', message: '"quantity" must be a number' };
   }
+  const validNameNotEquals = await modelProducts.findByName(name);
   if (validNameNotEquals) {
     return { code: 'invalid_data', message: 'Product already exists' };
   }
+  const { id } = await modelProducts.createProduct({ name, quantity });
   return { _id: id, name, quantity };
+};
+
+const validateFindAll = async () => {
+  const allProducts = await modelProducts.findAllProducts();
+  return allProducts;
+};
+
+const validateFindById = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return { code: 'invalid_data', message: 'Wrong id format' }; 
+  }
+  const productById = await modelProducts.findProductById(id);
+  return productById;
 };
 
 module.exports = {
   validateCreate,
+  validateFindAll,
+  validateFindById,
 };
