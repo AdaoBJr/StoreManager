@@ -16,8 +16,9 @@ const findSaleById = async (id) => {
 };
 
 const saleExists = async (id) => {
+  if (!ObjectId.isValid(id)) return false;
   const db = await connection();
-  const wasFound = await db.collection('sales').findOne({ _id: id });
+  const wasFound = await db.collection('sales').findOne({ _id: ObjectId(id) });
 
   return wasFound;
 };
@@ -33,32 +34,26 @@ const createSale = async (sale) => {
   return createdProduct;
 };
 
-// const updateProduct = async (product, id) => {
-//   const { name, quantity } = product;
+const updateSale = async (id, sale) => {
+  const db = await connection();
+  await db.collection('sales').updateOne(
+    { _id: ObjectId(id) }, { $set: { itensSold: sale } },
+  );
+  return findSaleById(id);
+};
 
-//   const db = await connection();
-//   await db.collection('products').findOneAndUpdate(
-//     { _id: ObjectId(id) },
-//     { $set: { name, quantity } },
-//     );
+const deleteSale = async (id) => {
+  const db = await connection();
+  const { value } = await db.collection('sales').findOneAndDelete({ _id: ObjectId(id) });
 
-//   return findSaleById(id);
-// };
-
-// const deleteProduct = async (id) => {
-//   const db = await connection();
-//   const { value } = await db.collection('products').findOneAndDelete(
-//     { _id: ObjectId(id) },
-//     );
-
-//   return value;
-// };
+  return { value };
+};
 
 module.exports = {
   getAllSales,
   findSaleById,
   createSale,
   saleExists,
-  // updateProduct,
-  // deleteProduct,
+  updateSale,
+  deleteSale,
 };

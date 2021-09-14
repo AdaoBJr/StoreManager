@@ -14,6 +14,20 @@ const errors = {
       message: 'Sale not found',
     },
   },
+  wrongId: {
+    err: {
+      code: 'invalid_data',
+      message: 'Wrong sale ID format',
+    },
+  },
+};
+
+const idExists = async (id) => {
+  const existingId = await Sales.saleExists(id);
+
+  if (!existingId) return errors.wrongId;
+
+  return {};
 };
 
 const saleExists = async (id) => {
@@ -50,10 +64,25 @@ const createSale = async (sale) => {
   return createdSale;
 };
 
+const updateSale = async (id, sale) => {
+  const updatedSale = await Sales.updateSale(id, sale);
+
+  return updatedSale;
+};
+
+const deleteSale = async (id) => {
+  const deletedSale = await Sales.deleteSale(id);
+
+  return deletedSale;
+};
+
 module.exports = {
   getAllSales,
   findSaleById,
   createSale,
+  updateSale,
+  deleteSale,
   saleExists,
+  idExists,
   quantityValidation,
 };
