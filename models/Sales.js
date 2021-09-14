@@ -36,11 +36,11 @@ const deleteSale = async (id) => {
 };
 
 const sellQuantity = async (id, quantity) => {
-  console.log(quantity);
   const stock = await connection()
     .then((db) => db.collection('products').findOne({ _id: ObjectId(id) }));
-    console.log('stock qtt: ', stock.quantity);
+
   if (stock.quantity - quantity < 0) return null;
+
   return connection()
     .then((db) => db.collection('products').updateOne(
       { _id: ObjectId(id) }, { $inc: { quantity: -quantity } },
