@@ -44,7 +44,7 @@ const update = async (req, res) => {
 		);
 	}
 	
-    return res.status(statusCode.OK).json({ _id: id, itensSold: updatedProducts });
+    return res.status(statusCode.OK).json(updatedProducts);
 };
 
 module.exports = {
