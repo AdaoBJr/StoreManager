@@ -1,3 +1,4 @@
+// const { ObjectId } = require('mongodb');
 const SaleModel = require('../models/SaleModel');
 
 const isValidQuantity = (quantity) => {
@@ -15,20 +16,13 @@ const isValidQuantity = (quantity) => {
 }; 
 
 const createSale = async (body) => {
-  body.map(({productId, quantity}) => {
-    if (!isValidQuantity(quantity)) {
-      return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
-    }
-  });
+  const validQuantity = body.map((sale) => isValidQuantity(sale.quantity));
+  if (validQuantity.includes(false)) {
+    return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
+  }
 
-  const { id } = await SaleModel.createSale(body);
-    
-  return {
-    code: 200,
-    id,
-    productId,
-    quantity,
-  };
+  const sale = await SaleModel.create(body);
+  return sale;
 };
 
 module.exports = {
