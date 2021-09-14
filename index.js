@@ -1,5 +1,6 @@
 const express = require('express');
 const Products = require('./controllers/Products');
+const Sales = require('./controllers/Sales');
 
 const app = express();
 app.use(express.json());
@@ -13,11 +14,11 @@ app.get('/', (_request, response) => {
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 app.get('/products', Products.getAllProducts);
-
 app.get('/products/:id', Products.validateProductId, Products.findProductById);
-
 app.post('/products', Products.validateProduct, Products.createProduct);
-
 app.put('/products/:id', Products.validateProduct, Products.updateProduct);
-
 app.delete('/products/:id', Products.validateProductId, Products.deleteProduct);
+
+app.get('/sales', Sales.getAllSales); 
+app.get('/sales/:id', Sales.SaleExistenceValidation, Sales.findSaleById);
+app.post('/sales', Sales.quantityValidation, Sales.createSale);
