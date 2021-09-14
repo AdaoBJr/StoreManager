@@ -9,6 +9,12 @@ const num = 0;
   return isValidMinNumber;
 };
 
+// const incrementSales = async (sale) => {
+
+// };
+
+// const decrementaSales = async (sale) => {};
+
 // função
 
 const addSale = async (sale) => {
@@ -40,8 +46,30 @@ const getSaleById = async (id) => {
   return result;
 };
 
+const putSales = async (id, sale) => {
+  const valid = validQuantity(sale);
+    if (!valid) {
+      return {
+      status: 422,
+      code: 'invalid_data',
+      message: 'Wrong product ID or invalid quantity',
+      };
+    }
+    return SalesModel.putSales(id, sale);
+};
+
+const deleteSales = async (id) => {
+  const result = await SalesModel.deleteSales(id);
+  if (!result) {
+    return false;
+  }
+  return result;
+};
+
 module.exports = {
   addSale,
   getSale,
   getSaleById,
+  putSales,
+  deleteSales,
 };
