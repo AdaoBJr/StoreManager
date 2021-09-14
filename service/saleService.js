@@ -17,26 +17,24 @@ const isValidQuantityNotNumber = (quantity) => {
   return true;
 };
 
-/* const mapBody = (arrBody) => {
+const mapBody = (arrBody) => {
   const valideQte = arrBody.map((sale) => {
     const isProductQuantityValidZero = isValidQuantityZero(sale.quantity);
     const isProductQuantityNotNumber = isValidQuantityNotNumber(sale.quantity);
     if (!isProductQuantityValidZero || !isProductQuantityNotNumber) return false;
     return true;
   });
-  if (valideQte[0] === false) {
-    return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
-  }
-}; */
+  return valideQte[0];
+};
 
 const create = async (body) => {
-    const valideQte = body.map((sale) => {
+   /*  const valideQte = body.map((sale) => {
       const isProductQuantityValidZero = isValidQuantityZero(sale.quantity);
       const isProductQuantityNotNumber = isValidQuantityNotNumber(sale.quantity);
       if (!isProductQuantityValidZero || !isProductQuantityNotNumber) return false;
       return true;
-    });
-    if (valideQte[0] === false) {
+    }); */
+    if (mapBody(body) === false) {
       return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
     }
     const resultModel = await salesModel.create(body);
@@ -52,17 +50,17 @@ const getById = async (id) => {
 };
 
 const update = async (id, body) => {
-  const valideQteUpdate = body.map((sale) => {
+ /*  const valideQteUpdate = body.map((sale) => {
     const isProductQuantityValidZero = isValidQuantityZero(sale.quantity);
     const isProductQuantityNotNumber = isValidQuantityNotNumber(sale.quantity);
     if (!isProductQuantityValidZero || !isProductQuantityNotNumber) return false;
     return true;
-  });
-  if (valideQteUpdate[0] === false) {
+  }); */
+  if (mapBody(body) === false) {
     return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
   }
   const saleUpdate = await salesModel.update(id, body);
- console.log(saleUpdate); 
+/*  console.log(saleUpdate);  */
   return saleUpdate;
 };
 
