@@ -1,10 +1,12 @@
 const express = require('express');
 const { insertName, getAll } = require('../service/services');
+const { validateProductInput } = require('../middleError/validProduct');
 
 const route = express.Router();
 
-route.post('/', async (req, res, next) => {
+route.post('/', validateProductInput, async (req, res, next) => {
   const { name, quantity } = req.body;
+  
   const auxServices = await insertName(name, quantity);
   if (auxServices.isError) {
     return next(auxServices);
@@ -14,7 +16,7 @@ route.post('/', async (req, res, next) => {
     name,
     quantity,
   };
-  res.status(200).json(opa);
+  res.status(201).json(opa);
 });
 
 route.get('/', async (_req, res) => {

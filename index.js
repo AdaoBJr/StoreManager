@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const route = require('./routes/index');
+const middleError = require('./middleError/middleError');
 
 const app = express();
 
@@ -13,4 +14,6 @@ app.get('/', (_request, response) => {
 
 app.use(route);
 
-app.listen(3000, () => console.log('Online')); 
+app.use(middleError);
+
+app.listen(3000, () => console.log('Online'));

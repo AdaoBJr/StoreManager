@@ -1,5 +1,5 @@
 const { getName, insertOne, getAll } = require('../models/models');
-const { errorBusines } = require('../error/index');
+const { errorBusines } = require('../estruturaErro/estruturaErro');
 
 const insertName = async (name, quantity) => {
   const aux = await getName(name);
