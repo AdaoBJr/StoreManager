@@ -10,7 +10,7 @@ const add = async (req, res) => {
     }
     return res.status(201).json(products);
   } catch (error) {
-    return res.status(422).json({ message: error.message });
+    return console.error(res.status(422).json({ message: error.message }));
   }
 };
 
