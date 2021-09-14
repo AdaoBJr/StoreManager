@@ -29,15 +29,17 @@ const errors = {
   },
   invalidId: {
     err: {
-      code: 'invalid_data',
+      code: invalidData,
       message: 'Wrong id format',
     },
   },
 };
 
-// const checkValidId = (id) => {
-//   if (!ObjectId.isValid(id)) return errors.invalidId;
-// };
+const checkValidId = (id) => {
+  if (!ObjectId.isValid(id)) return errors.invalidId;
+
+  return {};
+};
 
 const getAllProducts = async () => {
   const products = await Products.getAllProducts();
@@ -46,9 +48,6 @@ const getAllProducts = async () => {
 };
 
 const findProductById = async (id) => {
-  // checkValidId(id);
-  if (!ObjectId.isValid(id)) return errors.invalidId;
-
   const productFound = await Products.findProductById(id);
 
   return productFound;
@@ -98,9 +97,6 @@ const updateProduct = async (product, id) => {
 };
 
 const deleteProduct = async (id) => {
-  // checkValidId(id);
-  if (!ObjectId.isValid(id)) return errors.invalidId;
-
   const deletedProduct = await Products.deleteProduct(id);
 
   return deletedProduct;
@@ -110,6 +106,7 @@ module.exports = {
   getAllProducts,
   findProductById,
   validate,
+  checkValidId,
   createProduct,
   updateProduct,
   deleteProduct,

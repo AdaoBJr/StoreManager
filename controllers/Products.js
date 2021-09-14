@@ -28,6 +28,18 @@ const validateProduct = async (req, res, next) => {
   next();
 };
 
+const validateProductId = async (req, res, next) => {
+  const { id } = req.params;
+
+  const validation = Products.checkValidId(id);
+
+  if (validation.err) {
+    return res.status(422).json(validation);
+  }
+
+  next();
+};
+
 const createProduct = async (req, res) => {
   const { name, quantity } = req.body;
 
@@ -57,6 +69,7 @@ module.exports = {
   getAllProducts,
   findProductById,
   validateProduct,
+  validateProductId,
   createProduct,
   updateProduct,
   deleteProduct,

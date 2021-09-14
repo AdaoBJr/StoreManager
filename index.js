@@ -14,10 +14,10 @@ app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 app.get('/products', Products.getAllProducts);
 
-app.get('/products/:id', Products.findProductById);
+app.get('/products/:id', Products.validateProductId, Products.findProductById);
 
 app.post('/products', Products.validateProduct, Products.createProduct);
 
 app.put('/products/:id', Products.validateProduct, Products.updateProduct);
 
-app.delete('/products/:id', Products.deleteProduct);
+app.delete('/products/:id', Products.validateProductId, Products.deleteProduct);
