@@ -17,8 +17,16 @@ const getSaleById = async (id) => {
   return sale;
 };
 
+const updateSaleById = async (saleId, updates) => {
+  const validation = salesSchema.validation(updates);
+  if (validation.err) return validation;
+  const updatedSale = model.updateSaleById(saleId, updates);
+  return updatedSale;
+};
+
 module.exports = {
   insertNewSale,
   getAllSales,
   getSaleById,
+  updateSaleById,
 };
