@@ -13,7 +13,11 @@ app.get('/', (_request, response) => {
 
 const products = require('./router/productsRouter');
 
+const sales = require('./router/productsRouter');
+
 app.use('/products', products);
+
+app.use('/sales', sales);
 
 app.listen(PORT, () => {
   console.log('Online');
