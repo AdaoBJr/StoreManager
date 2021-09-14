@@ -20,6 +20,12 @@ const getById = async (id) => {
 
 const create = async (sale) => {
   const db = await connection();
+  const [{ productId, quantity }] = sale;
+  // const soldProduct = await ProductsModel.getById(productId);
+  
+  await db.collection('products')
+    .updateOne({ _id: ObjectId(productId) }, { $inc: { quantity: quantity * (-1) } });  
+  
   const createdSale = await db.collection('sales')
     .insertOne({ itensSold: sale });
 
@@ -39,8 +45,13 @@ const update = async (id, itensSold) => {
 const exclude = async (id) => {
   const db = await connection();
   const response = await getById(id);
-  
+  const { itensSold } = await getById(id);
+
   if (!response) return null;
+  
+  await db.collection('products')
+    .updateOne({ _id: ObjectId(itensSold[0].productId) },
+      { $inc: { quantity: itensSold[0].quantity * 1 } }); 
 
   await db.collection('sales').deleteOne({ _id: ObjectId(id) });
 
