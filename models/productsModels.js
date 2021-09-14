@@ -73,4 +73,41 @@ const remove = async ({ id }) => {
   return false;
 };
 
-module.exports = { create, findName, findAll, findById, updateById, remove };
+const decrementeQuantityProduct = async (id, quantity) => {
+  const productCollections = await getConnectionWithProductsCollection();
+  const { result } = await productCollections.updateOne(
+    { _id: ObjectId(id) },
+    { $inc: { quantity: -quantity } },
+  );
+
+  if (result.nModified > 0) {
+    return true;
+  }
+
+  return false;
+};
+
+const incrementeQuantityProduct = async (id, quantity) => {
+  const productCollections = await getConnectionWithProductsCollection();
+  const { result } = await productCollections.updateOne(
+    { _id: ObjectId(id) },
+    { $inc: { quantity: +quantity } },
+  );
+
+  if (result.nModified > 0) {
+    return true;
+  }
+
+  return false;
+};
+
+module.exports = { 
+  create, 
+  findName, 
+  findAll, 
+  findById, 
+  updateById,
+  remove,
+  decrementeQuantityProduct,
+  incrementeQuantityProduct,
+};
