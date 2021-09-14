@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const songController = require('./controllers/songController')
+const productsController = require('./controllers/productsController');
 
 const app = express();
 const DEFAULT_PORT = 3000;
@@ -12,5 +12,7 @@ app.use(bodyParser.json());
 app.get('/', (_request, response) => {
   response.send();
 });
+
+app.post('/products', productsController.createProduct);
 
 app.listen(PORT, () => { console.log('Systems are online :D'); });
