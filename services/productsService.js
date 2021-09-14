@@ -6,9 +6,21 @@ const error = {
       message: null,
 } };
 
+const getAllProducts = async () => {
+  const allProducts = { products: await productsModel.getAllProducts() };
+  return allProducts;
+};
+
 const getProductByName = async (name) => {
-  const product = await productsModel.getProductByName(name);
-  return product;
+  const productByName = await productsModel.getProductByName(name);
+  return productByName;
+};
+
+const getProductById = async (id) => {
+  error.err.message = 'Wrong id format';
+  const productById = await productsModel.getProductById(id);
+  if (!productById) return error;
+  return productById;
 };
 
 const createProduct = async ({ name, quantity }) => {
@@ -32,9 +44,4 @@ const createProduct = async ({ name, quantity }) => {
   return productsModel.createProduct({ name, quantity });
 };
 
-const getAllProducts = async () => {
-  const allProducts = { products: await productsModel.getAllProducts() };
-  return allProducts;
-};
-
-module.exports = { createProduct, getAllProducts };
+module.exports = { createProduct, getAllProducts, getProductById };
