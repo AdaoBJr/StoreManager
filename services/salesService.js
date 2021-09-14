@@ -1,4 +1,4 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const salesModels = require('../models/salesModels');
 const { 
   isValidQuantitySales, isValidIdForReqSix } = require('../middlewares/validations');
@@ -19,8 +19,10 @@ const getAll = async () => salesModels.getAll();
 
 const getSalesById = async (id) => {
   const isValid = isValidIdForReqSix(id);
+  // console.log(isValid);
   if (isValid.err) return isValid;
   const resultModel = await salesModels.getSalesById(id);
+  if (!resultModel) return { err: { code: 'not_found', message: 'Sale not found' } };
   return resultModel;
 };
 
@@ -32,7 +34,13 @@ const update = async ({ id, arrayBody }) => {
 };
 
 const exclude = async (id) => {
-  
+  if (!ObjectId.isValid(id)) {
+    return { err: { code: 'invalid_data', message: 'Wrong sale ID format' } }; 
+}
+  const { _id } = await getSalesById(id);
+  if (_id) return { err: { code: 'not_found', message: 'Sale not found' } };
+  await salesModels.exclude(id);
+  return { _id };
 };
 
 module.exports = {

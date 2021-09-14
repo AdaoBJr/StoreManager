@@ -19,26 +19,29 @@ const getAll = async () => {
 
 const getSalesById = async (id) => {
   const db = await mongoConnection.connection();
-  const resultQuery = await db.collection('sales').findOne(ObjectId(id));
+  const resultQuery = await db.collection('sales').findOne({ _id: id });
   return resultQuery;
 };
 
 const update = async ({ id, arrayBody: { productId, quantity } }) => {
   const db = await mongoConnection.connection();
-  await db.collection('sales').updateOne(
-    { _id: ObjectId(id) },
-    { $set: { itensSold: [productId, quantity] } },
-  );
+  await db.collection('sales')
+    .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: [productId, quantity] } });
   return {
     _id: id,
     itensSold: [{ productId, quantity }],
   };
 };
+
+const exclude = async (id) => {
+  const db = await mongoConnection.connection();
+  await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+};
+
 module.exports = {
   createSale,
   getSalesById,
   getAll,
-  // getById,
   update,
-  // exclude,
+  exclude,
 };

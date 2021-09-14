@@ -16,7 +16,8 @@ const getAll = async (_req, res) => {
 const getSalesById = async (req, res) => {
   const { id } = req.params;
   const resultService = await salesService.getSalesById(id);
-  if (resultService.err) return res.status(404).json(resultService);
+  // console.log(resultService);
+  if (resultService === null || resultService.err) return res.status(404).json(resultService);
   return res.status(200).json(resultService);
 };
 
@@ -28,10 +29,18 @@ const update = async (req, res) => {
   return res.status(200).json(resultService);
 };
 
+const exclude = async (req, res) => {
+  const { id } = req.params;
+  const resultService = await salesService.exclude(id);
+  if (resultService.err) return res.status(422).json(resultService);
+
+  return res.status(200).json(resultService);
+};
+
 module.exports = {
   createSale,
   getAll,
   getSalesById,
   update,
-  // exclude,
+  exclude,
 };
