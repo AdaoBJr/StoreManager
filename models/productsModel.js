@@ -7,6 +7,7 @@ const findProductByName = async (name) => {
   if (!product) return null;
   return product;
 };
+
 const createProduct = ({ name, quantity }) => 
 connection()
 .then((db) => db.collection('products').insertOne({ name, quantity }))
@@ -29,10 +30,16 @@ const editProduct = (id, name, quantity) => {
   return { _id: id, name, quantity };
 };
 
+const deleteProduct = (id) => {
+  connection()
+  .then((db) => db.collection('products').deleteOne({ _id: ObjectId(id) }));
+};
+
 module.exports = { 
   findProductByName,
   createProduct,
   getAll,
   getById,
   editProduct,
+  deleteProduct,
 };
