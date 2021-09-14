@@ -13,7 +13,6 @@ const verifyQuantitiesString = (sales) => {
 
 const createSales = async (newSales) => {
   const addNewSale = await salesModel.createSale(newSales);
-  
   return addNewSale;
 };
 
@@ -26,9 +25,15 @@ const getById = async (id) => {
   const product = await salesModel.getById(id);
   return product;
 };
+
 const editSale = async (id, sale) => {
   const editedSale = await salesModel.editSale(id, sale);
   return editedSale;
+};
+
+const deleteSale = async (id) => {
+  const deletedProduct = await salesModel.deleteSale(id);
+  return deletedProduct;
 };
 
 module.exports = {
@@ -38,4 +43,5 @@ module.exports = {
   getAll,
   getById,
   editSale,
+  deleteSale,
 };
