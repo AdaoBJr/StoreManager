@@ -19,3 +19,5 @@ app.get('/products/:id', Products.findProductById);
 app.post('/products', Products.validateProduct, Products.createProduct);
 
 app.put('/products/:id', Products.validateProduct, Products.updateProduct);
+
+app.delete('/products/:id', Products.deleteProduct);

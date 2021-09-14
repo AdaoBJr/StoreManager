@@ -35,6 +35,10 @@ const errors = {
   },
 };
 
+// const checkValidId = (id) => {
+//   if (!ObjectId.isValid(id)) return errors.invalidId;
+// };
+
 const getAllProducts = async () => {
   const products = await Products.getAllProducts();
 
@@ -42,8 +46,8 @@ const getAllProducts = async () => {
 };
 
 const findProductById = async (id) => {
+  // checkValidId(id);
   if (!ObjectId.isValid(id)) return errors.invalidId;
-  console.log(ObjectId.isValid(id));
 
   const productFound = await Products.findProductById(id);
 
@@ -93,10 +97,20 @@ const updateProduct = async (product, id) => {
   return updatedProduct;
 };
 
+const deleteProduct = async (id) => {
+  // checkValidId(id);
+  if (!ObjectId.isValid(id)) return errors.invalidId;
+
+  const deletedProduct = await Products.deleteProduct(id);
+
+  return deletedProduct;
+};
+
 module.exports = {
   getAllProducts,
   findProductById,
   validate,
   createProduct,
   updateProduct,
+  deleteProduct,
 };
