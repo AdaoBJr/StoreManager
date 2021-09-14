@@ -23,11 +23,11 @@ const createSale = async ([itensSold]) => {
   return db.collection('sales').insertMany([{ itensSold }]);
 };
 
-// const updateProduct = async (id, name, quantity) => {
-//   const db = await connection();
-//   return db.collection('products').updateOne({ _id: ObjectId(id) },
-//   { $set: { name, quantity } });
-// };
+const updateSale = async (id, productId, quantity) => {
+  const db = await connection();
+  return db.collection('products').updateOne({ ObjectId: id },
+  { $set: { intensSold: [{ productId, quantity }] } });
+};
 
 // const deleteProduct = async (id) => {
 //   const db = await connection();
@@ -40,6 +40,6 @@ module.exports = {
   createSale,
   // findProduct,
   getSaleById,
-  // updateProduct,
+  updateSale,
   // deleteProduct,
 };

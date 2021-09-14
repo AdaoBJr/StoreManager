@@ -26,18 +26,17 @@ router.get(
   }),
 );
 
-// router.put(
-//   '/:id',
-//   isValidName,
-//   isValidQuantity,
-//   async (req, res) => {
-//     console.log('controller');
-//     const { id } = req.params;
-//     const { name, quantity } = req.body;
-//     await products.updateById(id, name, quantity);
-//     res.status(200).json({ id, name, quantity });
-//   },
-// );
+router.put(
+  '/:id',
+  isValidQuantity,
+  async (req, res) => {
+    console.log('controller');
+    const { id } = req.params;
+    const [{ productId, quantity }] = req.body;
+    await sales.updateById(id, productId, quantity);
+    res.status(200).json({ _id: id, itensSold: [{ productId, quantity }] });
+  },
+);
 
 // router.delete(
 //   '/:id',
