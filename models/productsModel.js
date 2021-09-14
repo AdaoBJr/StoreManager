@@ -1,16 +1,8 @@
-const getConnection = require('./connection');
+const { createProduct } = require('../models/productsModel');
 
-const createProduct = async ({ name, quantity }) => {
-  const db = await getConnection();
-  const product = await db.collection('products').insertOne({ name, quantity });
-  const { insertedId } = JSON.parse(product);
-  return {
-    _id: insertedId,
-    name,
-    quantity,
-  };
+const createProducts = async ({ name, quantity }) => {
+  const product = await createProduct({ name, quantity });
+  return product; 
 };
 
-module.exports = {
-  createProduct,
-};
+module.exports = { createProducts };
