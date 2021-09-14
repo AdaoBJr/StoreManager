@@ -21,7 +21,7 @@ const soldById = async (req, res) => {
   const { id } = req.params;
   if (!ObjectId.isValid(id)) {
     return res.status(404).json({
-      err: { code: 'not found', message: 'Sale not found' },
+      err: { code: 'not_found', message: 'Sale not found' },
     });
   }
   const sales = await IdSales(id);
