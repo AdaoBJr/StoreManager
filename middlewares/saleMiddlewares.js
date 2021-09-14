@@ -11,4 +11,12 @@ const ValidQuantity = async (req, res, next) => {
   next();
 };
 
-module.exports = { ValidQuantity };
+const ValidQuantityToUpdate = async (req, res, next) => {
+  if (!req.params.id || typeof req.body[0].quantity === 'string' || req.body[0].quantity <= 0) {
+    return res.status(422).json({
+      err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } });
+  }
+  next();
+};
+
+module.exports = { ValidQuantity, ValidQuantityToUpdate };

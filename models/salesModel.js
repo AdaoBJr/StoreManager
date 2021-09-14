@@ -56,4 +56,25 @@ const soldId = async (id) => {
   return { status: 404, err: { code: 'not_found', message: 'Sale not found' } };
 };
 
-module.exports = { newSale, allSolds, soldId };
+const updateSold = async ({ id, productId, quantity }) => {
+  const db = await connection();
+
+  const sell = await soldId(id);
+  if (sell.err) {
+    return {
+      err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } };
+  }
+  const { venda: { itensSold } } = sell;
+
+  itensSold.forEach((item, index) => {
+    if (item.productId === productId) {
+      itensSold[index].quantity = quantity;
+    }
+  });
+  await db.collection('sales').updateOne({ _id: ObjectId(id) },
+  { $set: { itensSold } });
+
+return { _id: ObjectId(id), itensSold };
+};
+
+module.exports = { newSale, allSolds, soldId, updateSold };

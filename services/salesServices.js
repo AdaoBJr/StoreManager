@@ -1,4 +1,4 @@
-const { newSale, allSolds, soldId } = require('../models/salesModel');
+const { newSale, allSolds, soldId, updateSold } = require('../models/salesModel');
 
 const create = async (res) => {
   const sale = await newSale(res);
@@ -15,4 +15,9 @@ const IdSales = async (id) => {
   return sold;
 };
 
-module.exports = { create, getAll, IdSales };
+const update = async ({ id, productId, quantity }) => {
+  const updateSales = await updateSold({ id, productId, quantity });
+  return updateSales;
+};
+
+module.exports = { create, getAll, IdSales, update };

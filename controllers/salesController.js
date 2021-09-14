@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb');
-const { create, getAll, IdSales } = require('../services/salesServices');
+const { create, getAll, IdSales, update } = require('../services/salesServices');
 
 const createSales = async (req, res) => {
   const sale = req.body;
@@ -32,4 +32,12 @@ const soldById = async (req, res) => {
   return res.status(sales.status).json(sales.sold);
 };
 
-module.exports = { createSales, allSales, soldById };
+const updateSale = async (req, res) => {
+  const { id } = req.params;
+
+  await update({ id, productId: req.body[0].productId, quantity: req.body[0].quantity });
+  return res.status(200).json({
+    _id: id, itensSold: [{ productId: req.body[0].productId, quantity: req.body[0].quantity }] });
+};
+
+module.exports = { createSales, allSales, soldById, updateSale };
