@@ -64,7 +64,6 @@ async function idValidation(id) {
 
 async function findById(id) {
   const result = await model.findById(id);
-  console.log(result);
   productValidation(result);
   return result;
 }
