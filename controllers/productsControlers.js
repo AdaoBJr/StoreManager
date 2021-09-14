@@ -65,6 +65,13 @@ const getById = (req, res) => {
   .catch(() => res.status(422).json({ err: { code: 'invalid_data', message: 'Wrong id format' } }));
 };
 
+const editProduct = (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  productsService.editProduct(id, name, quantity)
+  .then((result) => res.status(200).json(result));
+};
+
 module.exports = {
   router,
   validName,
@@ -73,4 +80,5 @@ module.exports = {
   addNewProduct,
   getAll,
   getById,
+  editProduct,
 };
