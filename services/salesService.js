@@ -25,11 +25,14 @@ const getSalesById = async (id) => {
 };
 
 const update = async ({ id, arrayBody }) => {
-  // console.log(arrayBody);
   const validQuantity = isValidQuantitySales(arrayBody.quantity);
   if (validQuantity.err) return validQuantity;
   const resultModel = await salesModels.update({ id, arrayBody });
   return resultModel;
+};
+
+const exclude = async (id) => {
+  
 };
 
 module.exports = {
@@ -37,5 +40,5 @@ module.exports = {
   getAll,
   getSalesById,
   update,
-  // exclude,
+  exclude,
 };
