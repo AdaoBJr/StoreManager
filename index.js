@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const storeController = require('./controllers/storeControllers');
+const productController = require('./controllers/productControllers');
 
 const app = express();
 app.use(bodyParser.json());
@@ -11,13 +11,13 @@ app.get('/', (_request, response) => {
 });
 
 app.route('/products')
-  .get(storeController.getAllProducts)
-  .post(storeController.createProduct);
+  .get(productController.getAllProducts)
+  .post(productController.createProduct);
 
 app.route('/products/:id')
-  .get(storeController.getProduct)
-  .put(storeController.updateProduct)
-  .delete(storeController.deleteProduct);
+  .get(productController.getProduct)
+  .put(productController.updateProduct)
+  .delete(productController.deleteProduct);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => { console.log(`Ouvindo a porta ${PORT}`); });

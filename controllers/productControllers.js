@@ -1,11 +1,11 @@
-const storeModel = require('../models/storeModel');
-const storeService = require('../services/storeService');
+const productModel = require('../models/productModel');
+const productService = require('../services/productService');
 
 const err = 'Ops, algo de errado :( ';
 
 const getAllProducts = async (_req, res) => {
     try {
-        const products = await storeModel.getAll();
+        const products = await productModel.getAll();
         return res.status(200).json({ products });
     } catch (error) {
         return res.status(500).json({ message: err });
@@ -15,7 +15,7 @@ const getAllProducts = async (_req, res) => {
 const getProduct = async (req, res) => {
   try {
       const { id } = req.params;
-      const result = await storeModel.productIdExists(id);
+      const result = await productModel.productIdExists(id);
       return res.status(200).json(result);
   } catch (error) {
       return res.status(422).json({ err: { code: 'invalid_data', message: 'Wrong id format' } });
@@ -25,7 +25,7 @@ const getProduct = async (req, res) => {
 const createProduct = async (req, res) => {
     try {
         const { name, quantity } = req.body;
-        const result = await storeService.createProduct({ name, quantity });
+        const result = await productService.createProduct({ name, quantity });
 
         if (result.erro) {
           return res.status(422).json({ err: { code: 'invalid_data', message: result.erro } });
@@ -42,7 +42,7 @@ const updateProduct = async (req, res) => {
         const { name, quantity } = req.body;
         const { id } = req.params;
 
-        const result = await storeService.updateProduct({ id, name, quantity });
+        const result = await productService.updateProduct({ id, name, quantity });
         if (result.erro) {
           return res.status(422).json({ err: { code: 'invalid_data', message: result.erro } });
         }
@@ -56,7 +56,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await storeService.exclude(id);
+        const result = await productService.exclude(id);
 
         if (result) return res.status(200).json(result);
     } catch (error) {

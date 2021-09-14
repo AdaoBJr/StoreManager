@@ -1,4 +1,4 @@
-const storeModel = require('../models/storeModel');
+const productModel = require('../models/productModel');
 
 // const validationName = async ({ name }) => {
 //     const productExists = await storeModel.productExists(name);
@@ -28,7 +28,7 @@ const storeModel = require('../models/storeModel');
 // };
 
 const createProduct = async ({ name, quantity }) => {
-    const productExists = await storeModel.productExists(name);
+    const productExists = await productModel.productExists(name);
 
     if (productExists) return { erro: 'Product already exists' };
     if (name.length < 5) {
@@ -38,7 +38,7 @@ const createProduct = async ({ name, quantity }) => {
     if (quantity <= 0) return { erro: '"quantity" must be larger than or equal to 1' };
     if (typeof quantity !== 'number') return { erro: '"quantity" must be a number' };
 
-    return storeModel.create({ name, quantity });
+    return productModel.create({ name, quantity });
 };
 
 const updateProduct = async ({ id, name, quantity }) => {
@@ -49,15 +49,15 @@ const updateProduct = async ({ id, name, quantity }) => {
     if (quantity <= 0) return { erro: '"quantity" must be larger than or equal to 1' };
     if (typeof quantity !== 'number') return { erro: '"quantity" must be a number' };
 
-    return storeModel.update({ id, name, quantity });
+    return productModel.update({ id, name, quantity });
 };
 
 const exclude = async (id) => {
-    const product = await storeModel.productIdExists(id);
+    const product = await productModel.productIdExists(id);
     if (!product) return null;
 
     const { name, quantity, _id } = product;
-    await storeModel.exclude(id);
+    await productModel.exclude(id);
     return { name, quantity, _id };
 };
 
