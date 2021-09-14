@@ -15,4 +15,8 @@ app.get('/', (_request, response) => {
 
 app.post('/products', productsController.createProduct);
 
+app.get('/products', productsController.getAllProducts);
+
+app.get('/products/:id', productsController.getProductById);
+
 app.listen(PORT, () => { console.log('Systems are online :D'); });

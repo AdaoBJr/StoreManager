@@ -75,6 +75,19 @@ const createProduct = async (name, quantity) => {
   return productNotIsValid;
 };
 
+const verifyExistenceId = async (id) => {
+  const product = await productsModel.getProductById(id);
+  if (!product) {
+    return {
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    };
+  }
+  return product;
+};
+
 module.exports = {
   verifyEqualProduct,
   verifyName,
@@ -82,4 +95,5 @@ module.exports = {
   verifyQuantityType,
   createProduct,
   verifyProduct,
+  verifyExistenceId,
 };

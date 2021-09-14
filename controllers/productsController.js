@@ -1,4 +1,5 @@
 const productsService = require('../services/productsService');
+const productsModel = require('../models/productsModel');
 
 const createProduct = async (req, res) => {
   const { name, quantity } = req.body;
@@ -7,6 +8,25 @@ const createProduct = async (req, res) => {
   return res.status(201).json(product);
 };
 
+const getAllProducts = async (req, res) => {
+  const products = await productsModel.getAllProducts();
+  if (products.err) {
+    return res.status(422).json(products);
+  }
+  res.status(200).json(products);
+};
+
+const getProductById = async (req, res) => {
+  const { id } = req.params;
+  const product = await productsService.verifyExistenceId(id);
+  if (product.err) {
+    return res.status(422).json(product);
+  }
+  res.status(200).json(product);
+};
+
 module.exports = {
   createProduct,
+  getAllProducts,
+  getProductById,
 };
