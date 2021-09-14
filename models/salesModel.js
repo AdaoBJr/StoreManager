@@ -22,8 +22,25 @@ const getById = async (id) => {
   return saleId;
 };
 
+const update = async (idParams, body) => {
+  if (!ObjectId.isValid(idParams)) return null;
+  const updateSale = body.filter(async (sale) => {
+    // console.log(sale.quantity, sale.productId);
+    const { productId, quantity } = await mongoConnection.getConnection()
+      .then((db) => db.collection('sales').updateOne({ _id: ObjectId(idParams) },
+      { $set: { productId: sale.productId, quantity: sale.quantity } }));
+      // console.log(updateSales);
+    return { productId, quantity };  
+  });
+  // console.log(updateSale[0]);
+  return updateSale;
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };
+
+/* { id, productId, quantity } */

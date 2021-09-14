@@ -17,6 +17,18 @@ const isValidQuantityNotNumber = (quantity) => {
   return true;
 };
 
+/* const mapBody = (arrBody) => {
+  const valideQte = arrBody.map((sale) => {
+    const isProductQuantityValidZero = isValidQuantityZero(sale.quantity);
+    const isProductQuantityNotNumber = isValidQuantityNotNumber(sale.quantity);
+    if (!isProductQuantityValidZero || !isProductQuantityNotNumber) return false;
+    return true;
+  });
+  if (valideQte[0] === false) {
+    return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
+  }
+}; */
+
 const create = async (body) => {
     const valideQte = body.map((sale) => {
       const isProductQuantityValidZero = isValidQuantityZero(sale.quantity);
@@ -39,4 +51,19 @@ const getById = async (id) => {
   return saleId;
 };
 
-module.exports = { create, getById };
+const update = async (id, body) => {
+  const valideQteUpdate = body.map((sale) => {
+    const isProductQuantityValidZero = isValidQuantityZero(sale.quantity);
+    const isProductQuantityNotNumber = isValidQuantityNotNumber(sale.quantity);
+    if (!isProductQuantityValidZero || !isProductQuantityNotNumber) return false;
+    return true;
+  });
+  if (valideQteUpdate[0] === false) {
+    return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
+  }
+  const saleUpdate = await salesModel.update(id, body);
+ console.log(saleUpdate); 
+  return saleUpdate;
+};
+
+module.exports = { create, getById, update };

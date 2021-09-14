@@ -33,8 +33,23 @@ const getById = async (req, res) => {
 	return res.status(statusCode.OK).json(sale);
 };
 
+const update = async (req, res) => {
+	const { body } = req;
+    const { id } = req.params;
+    const updatedProducts = await saleService.update(id, body);
+	console.log(updatedProducts);
+	if (updatedProducts.message) {
+		return res.status(statusCode.UNPROCESSABLE_ENTITY).json(
+			{ err: { code: updatedProducts.code, message: updatedProducts.message } },
+		);
+	}
+	
+    return res.status(statusCode.OK).json({ _id: id, itensSold: updatedProducts });
+};
+
 module.exports = {
 	create,
 	getAll,
 	getById,
+	update,
 }; 
