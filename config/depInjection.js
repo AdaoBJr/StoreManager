@@ -1,7 +1,7 @@
 const { ObjectID } = require('mongodb');
 const { connection } = require('../infraestructure/database/connection');
 const { errorBuilder } = require('../middleware');
-const { Product, ProductSerializer, Sales, SalesSerializer } = require('../model');
+const { Product, ProductSerializer, Sales, SalesSerializer } = require('../models');
 const { codes, messages } = require('../schemas');
 const { ProductService, SalesService } = require('../service');
 

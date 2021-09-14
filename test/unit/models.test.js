@@ -27,7 +27,7 @@ describe("checa interação do model product no BD", () => {
   let product;
   const DBServer = new MongoMemoryServer();
 
-  before(async () => {
+  beforeAll(async () => {
     const URLMock = await DBServer.getUri(); //
     connectionMock = await MongoClient.connect(URLMock, {
       useNewUrlParser: true,
@@ -37,7 +37,7 @@ describe("checa interação do model product no BD", () => {
     sinon.stub(MongoClient, "connect").resolves(connectionMock);
   });
 
-  after(async () => {
+  afterAll(async () => {
     await MongoClient.connect.restore();
     await DBServer.stop();
   });
@@ -197,7 +197,7 @@ describe("checa interação do model sales no BD", () => {
   let product;
   const DBServer = new MongoMemoryServer();
 
-  before(async () => {
+  beforeAll(async () => {
     const URLMock = await DBServer.getUri(); //
     connectionMock = await MongoClient.connect(URLMock, {
       useNewUrlParser: true,
@@ -208,7 +208,7 @@ describe("checa interação do model sales no BD", () => {
     sinon.stub(MongoClient, "connect").resolves(connectionMock);
   });
 
-  after(async () => {
+  afterAll(async () => {
     await MongoClient.connect.restore();
     await DBServer.stop();
   });
@@ -331,7 +331,7 @@ describe("checa os serializers", () => {
   let salesSerializer;
   const DBServer = new MongoMemoryServer();
 
-  before(async () => {
+  beforeAll(async () => {
     const URLMock = await DBServer.getUri(); //
     connectionMock = await MongoClient.connect(URLMock, {
       useNewUrlParser: true,
@@ -342,7 +342,7 @@ describe("checa os serializers", () => {
     sinon.stub(MongoClient, "connect").resolves(connectionMock);
   });
 
-  after(async () => {
+  afterAll(async () => {
     await MongoClient.connect.restore();
     await DBServer.stop();
   });
