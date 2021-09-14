@@ -80,7 +80,7 @@ const deleteProduct = async (id) => {
   }
 
   const product = await Products.getProductById(id);
-  if (product.message) return { message: product.message };
+  if (product.message) return { code: product.code, message: product.message };
 
   const deletedProductCount = await Products.deleteProduct(id);
   const validateIfProductExists = validations.validateIfProductExists(deletedProductCount);

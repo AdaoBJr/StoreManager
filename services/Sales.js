@@ -109,9 +109,25 @@ const updateSales = async (id, sales) => {
   return updatedSales;
 };
 
+const deleteSale = async (id) => {
+  try {
+    const sale = await Sales.getSaleById(id);
+    console.log(sale);
+    // if (sale.message) return { code: sale.code, message: sale.message };
+  
+    const deletedSale = await Sales.deleteSale(id);
+    if (deletedSale.message) return { message: deletedSale.message };
+  
+    return sale;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   registerNewSales,
   getAllSales,
   getSaleById,
   updateSales,
+  deleteSale,
 };

@@ -63,6 +63,7 @@ const validateIfSaleExists = async (id) => {
   if (allSales.message) return { message: allSales.message };
 
   const allIds = allSales.map(({ _id }) => _id);
+  console.log(allIds);
 
   const saleExists = allIds.some((idOfSales) => idOfSales === id);
   if (!saleExists) {
