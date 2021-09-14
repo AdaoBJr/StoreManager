@@ -16,6 +16,11 @@ const createSale = async (body) => {
     };
   };
 
+  const getAllProducts = async () => {
+    const salesCollection = await Connection.getConnection()
+    const sales = await salesCollection('sales').find().toArray();
+    return sales;
+
 module.exports = {
   createSale,
   };
