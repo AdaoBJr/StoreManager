@@ -20,12 +20,12 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.put('/producst/:id', validateName, validateQuantity, updateProductById);
-
 app.get('/products/:id', listProductById);
 
 app.get('/products', listAllProducts);
 
 app.post('/products', validateName, validateQuantity, addProduct);
+
+app.put('/products/:id', validateName, validateQuantity, updateProductById);
 
 app.listen(PORT, () => console.log(`Online na porta ${PORT}`));

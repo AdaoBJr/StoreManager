@@ -45,7 +45,8 @@ const listProductById = async (req, res) => {
 };
 
 const updateProductById = async (req, res) => {
-  const { id, name, quantity } = req.params;
+  const { id } = req.params;
+  const { name, quantity } = req.body;
 
   const updatedProductById = await attProductById(id, name, quantity);
 

@@ -21,10 +21,19 @@ const updateProductById = async (id, name, quantity) => {
   if (!ObjectId.isValid(id)) {
     return null;
   }
-
+  
   const db = await connection();
 
-  return db.collection('products').updateOne({ _id: id }, { $set: name, quantity });
+ await db.collection('products').updateOne(
+    { _id: ObjectId(id) },
+    { $set: { name, quantity } },
+  );
+
+  return {
+    _id: id,
+    name,
+    quantity,
+  };
 };
 
 const newProduct = async (name, quantity) => {
