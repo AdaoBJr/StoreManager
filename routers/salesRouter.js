@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const salesController = require('../controllers/salesController');
+const { checkQuantity } = require('../middlewares/salesMiddleware');
 // const {
 //   checkQuantity,
 //   checkNameLength,
@@ -17,6 +18,6 @@ const salesController = require('../controllers/salesController');
 
 // router.get('/', salesController.getProducts);
 
-router.post('/', salesController.registerSale);
+router.post('/', checkQuantity, salesController.registerSale);
 
 module.exports = router;

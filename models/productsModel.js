@@ -31,7 +31,6 @@ const updateProduct = async (id, name, quantity) => {
     { _id: ObjectId(id) }, { $set: { name, quantity } },
   );
   const productUpdated = await db.collection('products').findOne(ObjectId(id));
-  console.log(productUpdated);
   return productUpdated;
 };
 
