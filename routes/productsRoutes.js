@@ -7,7 +7,7 @@ const { validateProduct,
 
 const router = express.Router();
 
-router.route('/').post(validateProduct, create);
+router.route('/').post(create);
 
 router.route('/:id')
   .get(validateProductId, getById)

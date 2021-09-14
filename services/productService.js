@@ -1,22 +1,18 @@
-const { createProd,
+const {
+  createProd,
   getAllProds,
   getProdById,
   deleteProduct,
-  getProdByName,
-  updateProd } = require('../models/productModel');
+  // getProdByName,
+  updateProd,
+} = require('../models/productModel');
+const { validateProduct } = require('./validations');
 
-  const createProduct = async (name, quantity) => {
-    let product = await getProdByName(name);
-
-    if (!product) {
-      product = await createProd(name, quantity);
-      return product;
-    }
-      return { err: {
-        code: 'invalid_data',
-        message: 'Product already exists',
-      } };
-  };
+const createProduct = async (name, quantity) => {
+  await validateProduct(name, quantity);
+  const product = await createProd(name, quantity);
+  return product;
+};
 
 const getAllProducts = async () => {
   const response = await getAllProds();

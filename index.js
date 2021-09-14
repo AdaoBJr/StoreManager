@@ -1,6 +1,7 @@
 const express = require('express');
 const productsRouter = require('./routes/productsRoutes');
 const salesRouter = require('./routes/salesRouter');
+const { handleError } = require('./middlewares/globalErrors');
 
 const app = express();
 
@@ -14,6 +15,10 @@ app.get('/', (_request, response) => {
 
 app.use('/products', productsRouter);
 app.use('/sales', salesRouter);
+
+app.use((err, req, res, _next) => {
+    handleError(err, res);
+});
 
 const port = 3000;
 app.listen(port, () => {

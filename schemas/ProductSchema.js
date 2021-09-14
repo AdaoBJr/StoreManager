@@ -12,13 +12,12 @@ const errors = {
   amount: 'Such amount is not permitted to sell',
 };
 
-const nameLength = (value, min) => value.length <= min;
+const nameLength = (value, min) => value.length < min;
 const isNumber = (value) => typeof value !== 'number';
 const lessThanZero = (value) => value <= NUM;
 
 const validate = async (name, quantity) => {
   const len = 5;
-
   switch (true) {
   case nameLength(name, len): return { code, message: errors.nameLength };
   case isNumber(quantity): return { code, message: errors.quantType };
