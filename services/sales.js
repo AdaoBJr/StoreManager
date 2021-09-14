@@ -33,4 +33,20 @@ const getAll = async (_req, res) => {
     return res.status(200).json({ sales }); 
 };
 
-module.exports = { sell, getAll, findSale };
+const updateSale = async (req, res) => {
+    const { id } = req.params;
+    const products = req.body;
+    const update = await controller.updateSale(id, products);
+    if (!update) {
+        return res.status(422).json({
+                err: {
+                    code: 'invalid_data',
+                    message: 'Wrong product ID or invalid quantity',
+                },
+            }); 
+        }
+    const result = await controller.findSales(id);
+    return res.status(200).json(result);
+};
+
+module.exports = { sell, getAll, findSale, updateSale };

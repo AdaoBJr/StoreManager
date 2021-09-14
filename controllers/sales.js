@@ -44,4 +44,13 @@ const findSales = (id) => {
     return null;
 };
 
-module.exports = { createSale, findAllSales, findSales };
+const updateSale = async (id, itensSold) => {
+    const valid = await findSales(id);
+    const verif = await verify(itensSold);
+    if (valid && verif) {
+        return models.update(id, itensSold);
+    }
+    return false;
+};
+
+module.exports = { createSale, findAllSales, findSales, updateSale };
