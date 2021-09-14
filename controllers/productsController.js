@@ -31,6 +31,17 @@ productsRouter.get('/', async (_req, res) => {
   return res.status(StatusCodes.OK).json(result);
 });
 
+productsRouter.put('/:id', async (req, res) => {
+  const { params: { id }, body } = req;
+  const result = await productsService.updateProductById({ id, ...body });
+
+  if (result.err) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(result);
+  }
+
+  return res.status(StatusCodes.OK).json(result);
+});
+
 productsRouter.delete('/:id', async (req, res) => {
   const { id } = req.params;
   const result = await productsService.excludeProductById(id);
