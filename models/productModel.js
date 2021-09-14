@@ -15,14 +15,14 @@ const createProduct = async ({ name, quantity }) => {
   return newProduct;
 };
 
-const getAll = async () => {
+const getAllProduct = async () => {
   const data = await connection().then((db) => db.collection('products'));
 
   const productsAll = await data.find().toArray();
   return productsAll;
 };
 
-const getById = async (id) => {
+const getByIdProduct = async (id) => {
   const data = await connection().then((db) => db.collection('products'));
 
   const findById = await data.findOne({ _id: new ObjectId(id) });
@@ -44,8 +44,8 @@ const deleteId = async (id) => {
 
 module.exports = {
   createProduct,
-  getAll,
-  getById,
+  getAllProduct,
+  getByIdProduct,
   updateId,
   deleteId,
   findByName,

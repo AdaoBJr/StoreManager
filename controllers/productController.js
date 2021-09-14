@@ -11,14 +11,14 @@ const create = async (req, res, next) => {
   }
 };
 
-const getAll = async (_req, res) => {
-  const products = await productModel.getAll();
+const getAllProduct = async (_req, res) => {
+  const products = await productModel.getAllProduct();
   return res.status(200).json({ products });
 };
 
-const getById = async (req, res, next) => {
+const getByIdProduct = async (req, res, next) => {
   const { id } = req.params;
-  const product = await productService.getById(id);
+  const product = await productService.getByIdProduct(id);
   if (product.err) {
     return next(product.err);
   }
@@ -50,8 +50,8 @@ const deleteId = async (req, res, next) => {
 
 module.exports = {
   create,
-  getAll,
+  getAllProduct,
   deleteId,
   updateById,
-  getById,
+  getByIdProduct,
 };

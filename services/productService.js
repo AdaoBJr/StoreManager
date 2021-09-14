@@ -27,7 +27,7 @@ const createProduct = async (obj) => {
   if (find) {
     return { err: { message: 'Product already exists', code: 'invalid_data' } };
   }
-  const { insertedId } = await productModel.create(obj);
+  const { insertedId } = await productModel.createProduct(obj);
   return {
     _id: insertedId,
     name,
@@ -35,11 +35,11 @@ const createProduct = async (obj) => {
   };
 };
 
-const getById = async (id) => {
+const getByIdProduct = async (id) => {
   if (id.length !== 24) {
     return { err: { message: 'Wrong id format', code: 'invalid_data' } };
   }
-  const data = await productModel.getById(id);
+  const data = await productModel.getByIdProduct(id);
   return data;
 };
 
@@ -57,7 +57,7 @@ const deleteId = async (id) => {
   if (!ObjectId.isValid(id)) {
     return { err: { message: 'Wrong id format', code: 'invalid_data' } };
   }
-  const people = await productModel.getById(id);
+  const people = await productModel.getByIdProduct(id);
   await productModel.deleteId(id);
   return people;
 };
@@ -66,5 +66,5 @@ module.exports = {
   createProduct,
   updateById,
   deleteId,
-  getById,
+  getByIdProduct,
 };
