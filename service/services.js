@@ -1,4 +1,4 @@
-const { getName, insertOne, getAll } = require('../models/models');
+const { getName, insertOne, getAll, getId } = require('../models/productModel');
 const { errorBusines } = require('../estruturaErro/estruturaErro');
 
 const insertName = async (name, quantity) => {
@@ -10,4 +10,4 @@ const insertName = async (name, quantity) => {
   return create;
 };
 
-module.exports = { insertName, getAll };
+module.exports = { insertName, getAll, getId };

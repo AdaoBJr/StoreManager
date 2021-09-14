@@ -11,4 +11,5 @@ const validateProductInput = (req, _res, next) => {
   if (error) return next(error);
   next();
 };
+
 module.exports = { validateProductInput };
