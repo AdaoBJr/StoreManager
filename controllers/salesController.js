@@ -25,9 +25,16 @@ const update = rescue(async (request, response) => {
   return response.status(StatusCodes.OK).json(sales);
 });
 
+const deleteProduct = rescue(async (request, response) => {
+  const { id } = request.params;
+  const sales = await Service.deleteSales(id);
+  return response.status(StatusCodes.OK).json(sales);
+});
+
 module.exports = {
   create,
   getAll,
   getById,
   update,
+  deleteProduct,
 };
