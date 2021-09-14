@@ -9,7 +9,7 @@ const getProductById = async (id) => productsModel.getProductById(id);
 const updateProductById = async (id, name, quantity) => 
   productsModel.updateProductById(id, name, quantity);
 
-  const deleteProductById = async (id) => productsModel.deleteProductById(id);
+const deleteProductById = async (id) => productsModel.deleteProductById(id);
 
 module.exports = {
   createProduct,

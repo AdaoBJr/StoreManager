@@ -44,6 +44,12 @@ const deleteProductById = async (id) => {
   return deletedProduct.value;
 };
 
+const updateProductsDB = async (productId, quantity) => {
+  const db = await mongoConnection();
+  await db.collection('products')
+  .updateOne({ _id: ObjectId(productId) }, { $inc: { quantity } });
+};
+
 module.exports = {
   findByName,
   createProduct,
@@ -51,4 +57,5 @@ module.exports = {
   getProductById,
   updateProductById,
   deleteProductById,
+  updateProductsDB,
 };
