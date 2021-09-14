@@ -8,9 +8,6 @@ const getAll = async () => {
 };
 
 const getById = async ({ id }) => {
-  if (!ObjectId.isValid(id)) {
-    return false;
-  }
   const db = await connect.connection();
   const product = await db.collection('products').findOne(ObjectId(id));
   console.log(product, 'produto achado no model');

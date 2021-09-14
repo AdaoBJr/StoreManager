@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const productModel = require('../models/productModel');
 
 const getAllService = async () => {
@@ -11,6 +12,9 @@ const createService = async ({ name, quantity }) => {
 };
 
 const getByIdService = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return false;
+  }
   const getIdProduct = await productModel.getById({ id });
   console.log(getIdProduct, 'produto que chega no service');
   if (!getIdProduct) {
