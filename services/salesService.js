@@ -1,4 +1,3 @@
-const { ObjectId } = require('mongodb');
 const { salesValidator } = require('../middleware/sales');
 const {
   modelCreate, modelListAll, modelListById, modelUpdater, modelEraser,
@@ -14,10 +13,9 @@ const servCreate = async (itens) => {
 };
 
 const servEraser = async (id) => {
-  if (!ObjectId.isValid(id)) return { err: { code: 'invalid_data', message: 'Wrong sale ID format' }, code: 422 };
   const result = await modelEraser(id);
-  // if (!result) return { err: { code: 'invalid_data', message: 'Wrong sale ID format' }, code: 422 };
-  if (!result) return { err: { code: 'not_found', message: 'Sale not found' }, code: 404 };
+  if (!result) return { err: { code: 'invalid_data', message: 'Wrong sale ID format' }, code: 422 };
+  // if (!result) return { err: { code: 'not_found', message: 'Sale not found' }, code: 404 }
   return result;
 };
 
@@ -29,7 +27,7 @@ const servUpdater = async ({ id, itensSold }) => {
   return modelUpdater({ id, itensSold });
 };
 
-const servListByID = async (id) => {
+const servListByID = async (id) => { 
   const result = await modelListById(id);
   if (!result) return { err: { code: 'not_found', message: 'Sale not found' }, code: 404 };
  return result;
