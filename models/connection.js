@@ -24,4 +24,3 @@ const connection = () => (db
   }));
 
 module.exports = connection;
-
