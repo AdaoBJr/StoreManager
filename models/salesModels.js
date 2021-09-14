@@ -1,4 +1,4 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const mongoConnection = require('./connection');
 
 const createSale = async (body) => {
@@ -12,10 +12,21 @@ const createSale = async (body) => {
   };
 };
 
+const getAll = async () => {
+  const db = await mongoConnection.connection();
+  const arrayDates = await db.collection('sales').find().toArray();
+  return { sales: arrayDates };
+};
+
+const getSalesById = async (id) => {
+  const db = await mongoConnection.connection();
+  const resultQuery = await db.collection('sales').findOne(ObjectId(id));
+  return resultQuery;
+};
 module.exports = {
   createSale,
-  // findByName,
-  // getAll,
+  getSalesById,
+  getAll,
   // getById,
   // update,
   // exclude,

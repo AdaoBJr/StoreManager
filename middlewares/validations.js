@@ -47,9 +47,17 @@ const isValidID = (id) => {
   return true;
 };
 
+const isValidIdForReqSix = (id) => {
+  if (!ObjectId.isValid(id)) {
+    return { err: { code: 'not_found', message: 'Sale not found' } };
+  }
+  return true;
+};
+
 module.exports = {
   isValidNameProduct,
   isValidQuant,
   isValidID,
   isValidQuantitySales,
+  isValidIdForReqSix,
 };

@@ -8,10 +8,22 @@ const createSale = async (req, res) => {
   return res.status(200).json(resultService);
 };
 
+const getAll = async (_req, res) => {
+  const resultService = await salesService.getAll();
+  return res.status(200).json(resultService);
+};
+
+const getSalesById = async (req, res) => {
+  const { id } = req.params;
+  const resultService = await salesService.getSalesById(id);
+  if (resultService.err) return res.status(404).json(resultService);
+  return res.status(200).json(resultService);
+};
+
 module.exports = {
   createSale,
-  // getAll,
-  // getProductById,
+  getAll,
+  getSalesById,
   // updateProduct,
   // exclude,
 };
