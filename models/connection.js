@@ -3,7 +3,7 @@ const { MongoClient } = require('mongodb');
 let db = null;
 const connection = () => (db
     ? Promise.resolve(db)
-    : MongoClient.connect('mongodb://localhost:27017/StoreManager', {
+    : MongoClient.connect('mongodb://mongodb:27017/StoreManager', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
