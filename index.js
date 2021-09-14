@@ -5,6 +5,12 @@ const Product = require('./controller/controllerProducts');
 const app = express();
 app.use(bodyParser.json());
 
+app.get('/products/:id', Product.findById);
+
+app.put('/products/:id', Product.update);
+
+app.delete('/products/:id', Product.deleteProduct);
+
 app.get('/products', Product.getAll);
 
 app.post('/products', Product.create);

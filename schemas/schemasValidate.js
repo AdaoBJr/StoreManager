@@ -43,13 +43,12 @@ const findByName = async (name) => {
 
   const product = productList.find((el) => el.name === name);
   if (!product) return {};
-  
-  return true;
+
+  return errors.alreadyExist;
 };
 
 const nameValid = async (name) => {
   switch (true) {
-    case await findByName(name): return errors.alreadyExist;
     case nameLength(name): return errors.invalidName;
     case notString(name): return errors.isNotString;
     default: return {};
@@ -65,4 +64,4 @@ const isValid = async (name, quantity) => {
   return {};
 };
 
-module.exports = { isValid };
+module.exports = { isValid, findByName };
