@@ -21,13 +21,8 @@ const createSale = async (body) => {
     return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
   }
 
-  const sale = await SaleModel.create(body);
+  const sale = await SaleModel.createSale(body);
   return sale;
-};
-
-const getAllSales = async () => {
-  const sales = await SaleModel.getAllSales();
-  return sales;
 };
 
 const getSaleById = async (id) => {
@@ -41,6 +36,5 @@ const getSaleById = async (id) => {
 
 module.exports = {
   createSale,
-  getAllSales,
   getSaleById,
 };

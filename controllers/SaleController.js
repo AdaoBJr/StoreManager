@@ -13,12 +13,12 @@ const createSale = async (req, res) => {
   res.status(StatusCodes.OK).json({ _id, itensSold: [...req.body] });
 };
 
-const getAllSales = async (req, res) => {
+const getAllSales = async (_req, res) => {
   try {
-    const sales = await SaleService.getAllSales();
-    res.status(StatusCodes.OK).json({ sales });
+    const sales = await SaleModel.getAllSales();
+    return res.status(StatusCodes.OK).json({ sales });
   } catch (err) {
-    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ err });
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(err);
   }
 };
 

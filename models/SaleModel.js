@@ -18,8 +18,7 @@ const createSale = async (body) => {
 
   const getAllSales = async () => {
     const salesCollection = await Connection.getConnection();
-    const sales = await salesCollection('sales').find().toArray();
-    return sales;
+    return salesCollection.collection('sales').find().toArray();
   };
 
   const getSaleById = async (id) => {
