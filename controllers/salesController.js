@@ -94,14 +94,17 @@ const updateSale = async (req, res) => {
 
 const deleteSale = async (req, res) => {
     const { id } = req.params;
-
+    if (id.length < 24) {
+        return res.status(422).json({
+            err: { code: 'invalid_data', message: 'Wrong sale ID format' },
+        });
+    }
     try {
         const result = await salesService.deleteSale(id);
-       // const { _id, itensSolf } = result;
    
         if (!result) {
             return res.status(422).json({
-                err: { code: 'invalid_data', message: 'Wrong ID format' },
+                err: { code: 'invalid_data', message: 'Wrong sale ID format' },
             });
         }
         return res.status(200).json(result);
