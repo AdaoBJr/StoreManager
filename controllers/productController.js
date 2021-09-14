@@ -2,7 +2,7 @@ const productService = require('../services/productService');
 const productModel = require('../models/productModel');
 
 const create = async (req, res, next) => {
-  const product = await productService.create(req.body);
+  const product = await productService.createProduct(req.body);
   if (product.err) {
     return next(product.err);
   }
