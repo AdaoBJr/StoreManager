@@ -2,10 +2,10 @@ const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 const { allProducts } = require('./productModel');
 
-const update = async ({ productId, quantity, venda }) => {
+const update = async ({ productId, quantity, sold }) => {
   const db = await connection();
   const product = await db.collection('products').findOne({ _id: ObjectId(productId) });
-  if (venda) {
+  if (sold) {
     product.quantity -= quantity;
   } else {
     product.quantity += quantity;
