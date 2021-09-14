@@ -7,7 +7,6 @@ const add = async (req, res) => {
     const products = await service.add({ name, quantity });
     return res.status(201).json(products);
   } catch (error) {
-    console.error(error);
     return res.status(422).json(error);
   }
 };

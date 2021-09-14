@@ -24,7 +24,6 @@ const verifyQuantity = (quantity) => {
 
 const verifyNameExists = async (name) => {
 const nameExists = await productModel.productExists(name);
-console.log(nameExists);
   if (nameExists) {
   const error = { err:
     { code: 'invalid_data', message: 'Product already exists' } };
@@ -39,7 +38,6 @@ const add = async ({ name, quantity }) => {
   const callVerifyQuantity = verifyQuantity(quantity);
   if (callVerifyQuantity.err) return Promise.reject(callVerifyQuantity);
   const callverifyNameExists = await verifyNameExists(name);
-  console.log(callverifyNameExists);
   if (callverifyNameExists.err) return Promise.reject(callverifyNameExists);
 
   const callModel = await productModel.add({ name, quantity });
