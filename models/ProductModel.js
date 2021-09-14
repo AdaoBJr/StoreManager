@@ -38,26 +38,13 @@ const update = async (id, name, quantity) => {
       .then(() => ({ _id: id, name, quantity })));
 };
 
-const updateProductBySale = async (arr) => {
-  const listProducts = await connection()
-    .then((db) => db.collection('products').find().toArray())
-    .then((result) => result);
-
-  // console.log(listProducts);
-
-  arr.map((sale) => listProducts.map(({ _id, quantity }) => {
-      if (_id.toString() === sale.productId) {
-        return connection().then((db) => db.collection('products')
-        .updateOne(
-          { _id: ObjectId(sale.productId) },
-          { $set: { quantity: quantity - sale.quantity } },
-        ));
-      }
-
-      return null;
-    }));
-};
-
+const updateProductBySale = async (prodId, prodQuant, saleQuant) => connection()
+  .then((db) => db.collection('products')
+  .updateOne(
+    { _id: ObjectId(prodId) },
+    { $set: { quantity: prodQuant - saleQuant } },
+  ));
+ 
 const exclude = async (id) => {
   if (!ObjectId.isValid(id)) {
     return null;
@@ -77,9 +64,7 @@ const updateProductBySaleExclude = async (id) => {
   
   const arrSale = saleId.itensSold;
 
-  const listProducts = await connection()
-    .then((db) => db.collection('products').find().toArray())
-    .then((result) => result);
+  const listProducts = await getAll();
 
   // console.log(saleId.itensSold)
 
