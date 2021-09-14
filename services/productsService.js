@@ -37,6 +37,11 @@ const getById = async (id) => {
   return product;
 };
 
+const editProduct = async (id, name, quantity) => {
+  const editedProduct = await productsModel.editProduct(id, name, quantity);
+  return editedProduct;
+};
+
 module.exports = {
   validNameService,
   validQuantityService,
@@ -45,4 +50,5 @@ module.exports = {
   createProductService,
   getAll,
   getById,
+  editProduct,
 };
