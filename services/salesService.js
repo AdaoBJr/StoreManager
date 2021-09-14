@@ -28,7 +28,7 @@ const getAllSales = async () => {
 
 const getSaleById = async (id) => {
     // console.log(id);
-    const saleExist = await salesModel.saleExists(id);
+    const saleExist = await salesModel.saleExists1(id);
     if (!saleExist) {
         return false;
     }
@@ -44,15 +44,18 @@ const createSale = async (sales) => {
     return response;
 };
 
-// const updateProduct = async ({ id, name, quantity }) => {
-//     const productExists = await productsModel.productsExists(name);
-//     // console.log(productExists);
-//     if (productExists) {
-//         const response = await productsModel.update({ id, name, quantity });
-//         return response;
-//     }
-//     return false;
-// };
+const updateSale = async (id, sale) => {
+    // console.log(id);
+    // console.log(sale);
+    const productExists = await salesModel.saleExists(id);
+    //  console.log(productExists);
+    if (productExists) {
+        const response = await salesModel.update(id, sale);
+      
+        return response;
+    }
+    return false;
+};
 // const deleteProduct = async (id) => {
 //     const productDeletado = await productsModel.getById(id);
 //     const product = await productsModel.deleteProduct(id);
@@ -70,4 +73,5 @@ module.exports = {
      validQuantity,
      validProduct,
      getSaleById,
+     updateSale,
 };

@@ -19,6 +19,13 @@ const getById = async (id) => {
 
 const saleExists = async (id) => {
     const db = await connection();
+    const sale = await db.collection('sales').findOne({ _id: ObjectId(id) });
+
+    return sale !== null;
+};
+
+const saleExists1 = async (id) => {
+    const db = await connection();
     const sale = await db.collection('sales').findOne({ _id: id });
 
     return sale !== null;
@@ -27,33 +34,36 @@ const saleExists = async (id) => {
 const create = async (sales) => {
     const db = await connection();
     const nS = await db.collection('sales').insertOne({ itensSold: sales });
-//    console.log(nS);
+    //    console.log(nS);
     return nS.insertedId;
 };
-    // const update = async ({ id, name, quantity }) => {
-    //     const testeID = ObjectId.isValid(id);
-    //     // console.log(testeID);
-    //     if (!testeID) {
-    //         return null;
-    //     }
-    //     const db = await connection();
-    //     const product = await db.collection('products').updateOne(
-    //         { _id: ObjectId(id) }, { $set: { name, quantity } },
-    //     );
-    //     return product;
-    // };
+const update = async (id, sale) => {
+    const testeID = ObjectId.isValid(id);
+    // console.log(testeID);
+    if (!testeID) {
+        return null;
+    }
+    const db = await connection();
+    const product = await db.collection('sales').updateOne(
+        { _id: ObjectId(id) }, { $set: { itensSold: sale } },
+        );
+        if (product.modifiedCount === 1) {
+             return true;
+            }
+     return false;
+    };
 
-    // const deleteProduct = async (id) => {
+// const deleteProduct = async (id) => {
 
-    //     if (!ObjectId.isValid(id)) {
-    //         return null;
-    //     }
+//     if (!ObjectId.isValid(id)) {
+//         return null;
+//     }
 
-    //     const db = await connection();
-    //     const deleteP = await db.collection('products').deleteOne({ _id: ObjectId(id) });
-    //     if (deleteP.deletedCount === 1) return true;
+//     const db = await connection();
+//     const deleteP = await db.collection('products').deleteOne({ _id: ObjectId(id) });
+//     if (deleteP.deletedCount === 1) return true;
 
-    //     return false;
-    // };
+//     return false;
+// };
 
-module.exports = { getAll, create, getById, saleExists };
+module.exports = { getAll, create, getById, saleExists, update, saleExists1 };

@@ -10,6 +10,10 @@ router.post('/',
 salesController.validQuantity,
 salesController.createSale);
 
+router.put('/:id', 
+salesController.validQuantity,
+salesController.updateSale);
+
 // router.put('/:id', 
 // productsController.validName, 
 // productsController.validQuantity,

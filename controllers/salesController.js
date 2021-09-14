@@ -76,21 +76,21 @@ const createSale = async (req, res) => {
 }
 };
 
-// const updateProduct = async (req, res) => {
-//     const { id } = req.params;
-//     try {
-//         const { name, quantity } = req.body;
-//         const result = await productsService.updateProduct({ id });
-//         if (result) {
-//             return res.status(422).json({
-//                 err: { code: 'invalid_data', message: 'Product already exists' },
-//             });
-//         }
-//         return res.status(200).json({ _id: id, name, quantity });
-//     } catch (error) {
-//         return res.status(500).json({ message: 'Ops, algo de errado :( ' });
-//     }
-// };
+const updateSale = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await salesService.updateSale(id, req.body);
+        console.log(result);
+        if (!result) {
+            return res.status(422).json({
+                err: { code: 'invalid_data', message: 'Product already exists' },
+            });
+        }
+        return res.status(200).json({ _id: result, itensSold: req.body });
+    } catch (error) {
+        return res.status(500).json({ message: 'Ops, algo de errado :( ' });
+    }
+};
 
 // const deleteProduct = async (req, res) => {
 //     const { id } = req.params;
@@ -114,4 +114,5 @@ module.exports = {
     validQuantity,
     validProduct,
     getSaleById,
+    updateSale,
 };
