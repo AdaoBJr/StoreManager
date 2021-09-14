@@ -13,10 +13,10 @@ const getSaleById = async (id) => {
   return db.collection('sales').findOne(ObjectId(id));
 };
 
-// const findProduct = async (name) => {
-//   const db = await connection();
-//   return db.collection('products').findOne({ name });
-// };
+const findSale = async (id) => {
+  const db = await connection();
+  return db.collection('sales').findOne(ObjectId(id));
+};
 
 const createSale = async ([itensSold]) => {
   const db = await connection();
@@ -25,21 +25,21 @@ const createSale = async ([itensSold]) => {
 
 const updateSale = async (id, productId, quantity) => {
   const db = await connection();
-  return db.collection('products').updateOne({ ObjectId: id },
+  return db.collection('sales').updateOne({ ObjectId: id },
   { $set: { intensSold: [{ productId, quantity }] } });
 };
 
-// const deleteProduct = async (id) => {
-//   const db = await connection();
-//   console.log('model');
-//   return db.collection('products').deleteOne({ _id: ObjectId(id) });
-// };
+const deleteSale = async (id) => {
+  const db = await connection();
+  console.log('model');
+  return db.collection('sales').deleteOne({ _id: ObjectId(id) });
+};
 
 module.exports = {
   getAllSales,
   createSale,
-  // findProduct,
+  findSale,
   getSaleById,
   updateSale,
-  // deleteProduct,
+  deleteSale,
 };

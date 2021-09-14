@@ -8,12 +8,12 @@ const getSales = async () => sale.getAllSales();
 const getById = async (id) => sale.getSaleById(id);
 const updateById = async (id, name, quantity) => sale.updateSale(id, name, quantity);
 
-// const deleteProductById = async (id) => product.deleteProduct(id);
+const deleteSaleById = async (id) => sale.deleteSale(id);
 
 module.exports = {
   create,
   getSales,
   getById,
   updateById,
-  // deleteProductById,
+  deleteSaleById,
 };
