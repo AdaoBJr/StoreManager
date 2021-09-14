@@ -25,17 +25,37 @@ const errors = {
     code,
     message: '"quantity" must be a number',
   } },
+  invalidQuantitySales: { err: {
+    // code: 'stock_problem',
+    code,
+    message: '"quantity" must be larger than or equal to 1',
+  } },
+  isNotNumberSales: { err: {
+    // code: 'stock_problem',
+    code,
+    message: '"quantity" must be a number',
+  } },
 };
+
+const format = (sale) => ({ itensSold: sale });
 
 const nameLength = (value) => (value.length < 5);
 const notString = (value) => (typeof value !== 'string');
 const notNumber = (value) => (typeof value !== 'number');
 const largerThanOne = (value) => (value < 1);
 
-const quantityValid = (quantity) => {
+const quantityValid = async (quantity) => {
   switch (true) {
-    case largerThanOne(quantity): return errors.invalidQuantity;
-    case notNumber(quantity): return errors.isNotNumber;
+    case await largerThanOne(quantity): return errors.invalidQuantity;
+    case await notNumber(quantity): return errors.isNotNumber;
+    default: return {};
+  }
+};
+
+const quantitySalesValid = async (quantity) => {
+  switch (true) {
+    case await largerThanOne(quantity): return errors.invalidQuantitySales;
+    case await notNumber(quantity): return errors.isNotNumberSales;
     default: return {};
   }
 };
@@ -76,4 +96,4 @@ const isValid = async (name, quantity) => {
   return {};
 };
 
-module.exports = { isValid, findByName, productExists };
+module.exports = { isValid, findByName, productExists, format, quantitySalesValid };
