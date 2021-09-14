@@ -27,11 +27,18 @@ const findById = async (id) => {
         },
       };
     }
-  
     return sale;
 };
-module.exports = {
+
+const updateSale = async (id, obj) => {
+    const existingProduct = await findById(id);
+    if (existingProduct.err) return existingProduct;
+
+     return saleModel.updateSale(id, obj);
+  };
+  module.exports = {
       create,
       getAll,
       findById,
+      updateSale,
   };

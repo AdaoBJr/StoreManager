@@ -41,12 +41,33 @@ const findById = async (req, res) => {
       message: 'Sale not found' },
   }); 
 }
-
   res.status(200).json(sale);
+};
+
+const updateSale = async (req, res) => {
+  const { id } = req.params;
+  const { error } = Joi.array().items({
+    productId: Joi.not().empty().required(),
+    quantity: Joi.number().integer().not().empty()
+.min(1)
+    .required(),
+  })
+    .validate(req.body);
+  if (error) {
+return res.status(422).json({
+    err: { 
+      code: 'invalid_data',
+      message: 'Wrong product ID or invalid quantity' } }); 
+}
+const product = await saleService.updateSale(id, req.body);
+if (!product) return res.status(422).json(product);
+
+return res.status(200).json(product); 
 };
 
 module.exports = {
     create,
     getAll,
     findById,
+    updateSale,
 };
