@@ -29,7 +29,7 @@ const soldById = async (req, res) => {
     const { err } = sales;
     return res.status(sales.status).json({ err });
   }
-  return res.status(sales.status).json(sales.venda);
+  return res.status(sales.status).json(sales.sold);
 };
 
 module.exports = { createSales, allSales, soldById };
