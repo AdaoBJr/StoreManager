@@ -4,10 +4,11 @@ const SaleService = require('../services/salesService');
 const createSale = rescue(async (req, res) => {
   const { body } = req;
   const Obj = await SaleService.createSale(body);
-  if (Obj.err.code === 'stock_problem') {
-    return res.status(404).json(Obj);
-  }
+  
   if (Obj.err) {
+    if (Obj.err.code === 'stock_problem') {
+      return res.status(404).json(Obj);
+    }
    return res.status(422).json(Obj);
   } 
   return res.status(200).json(Obj);
