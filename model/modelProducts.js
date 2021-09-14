@@ -28,4 +28,33 @@ const create = async ({ name, quantity }) => {
   return product;
 };
 
-module.exports = { create, getAll, findById, deleteProduct };
+// reduz stock de produtos
+const decProducts = async (id, decQuantity) => {
+  const db = await getConnection();
+  await db.collection('products').updateOne(
+    { _id: ObjectId(id) },
+    { $inc: {
+      quantity: (decQuantity * -1),
+    } },
+  );
+};
+
+// aumenta stock de produtos
+const incProducts = async (id, incQuantity) => {
+  const db = await getConnection();
+  await db.collection('producst').updateOne(
+    { _id: ObjectId(id) },
+    { $inc: {
+      quantity: incQuantity,
+    } },
+  );
+};
+
+module.exports = { 
+  create,
+  getAll,
+  findById,
+  deleteProduct,
+  decProducts,
+  incProducts,
+};
