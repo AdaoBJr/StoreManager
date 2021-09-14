@@ -48,7 +48,7 @@ const newProducts = async (name, quantity) => {
 
   const validateName = await productName(name);
   if (validateName) return validateName;
-
+  if (validateName) return null;
   const validateQuantity = await checkQuantity(quantity);
   if (validateQuantity) return validateQuantity;
 
