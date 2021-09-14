@@ -13,4 +13,13 @@ productsRouter.post('/', async (req, res) => {
   res.status(StatusCodes.CREATED).json(result);
 });
 
+// productsRouter.get('/:id', async (req, res) => {
+
+// });
+
+productsRouter.get('/', async (req, res) => {
+  const result = await productsService.getAllProducts();
+  return res.status(StatusCodes.OK).json(result);
+});
+
 module.exports = productsRouter;

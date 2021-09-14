@@ -6,14 +6,13 @@ const error = {
       message: null,
 } };
 
-const findProductByName = async (name) => {
-  const product = await productsModel.findProductByName(name);
+const getProductByName = async (name) => {
+  const product = await productsModel.getProductByName(name);
   return product;
 };
 
 const createProduct = async ({ name, quantity }) => {
-  const existsProduct = await findProductByName(name);
-  // console.log('existsProducts', existsProduct);
+  const existsProduct = await getProductByName(name);
   if (name.length < 6) {
     error.err.message = '"name" length must be at least 5 characters long';
     return error;
@@ -33,4 +32,9 @@ const createProduct = async ({ name, quantity }) => {
   return productsModel.createProduct({ name, quantity });
 };
 
-module.exports = { createProduct };
+const getAllProducts = async () => {
+  const allProducts = { products: await productsModel.getAllProducts() };
+  return allProducts;
+};
+
+module.exports = { createProduct, getAllProducts };
