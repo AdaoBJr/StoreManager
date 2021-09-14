@@ -21,13 +21,6 @@ const getById = (id) => {
   return productModel.getById(id);
 };
 
-const update = (name, quantity) => {
-  if (name.length < 5) return lengthError;
-  if (quantity < 1) return quantityLargerError;
-  if (quantity === 0) return quantityLargerError;
-  if (typeof quantity !== 'number') return mustBeANumbererror;
-};
-
 const add = async ({ name, quantity }) => {
   const nameExists = await productModel.productExists(name);
   if (nameExists) return productAlreadyExistsError;
@@ -38,4 +31,19 @@ const add = async ({ name, quantity }) => {
   return productModel.add({ name, quantity });
 };
 
-module.exports = { add, getById, update };
+const update = async ({ id, name, quantity }) => {
+  const productExists = await productModel.getById(id);
+  if (!productExists) return formatError;
+  if (name.length < 5) return lengthError;
+  if (quantity < 1) return quantityLargerError;
+  if (typeof quantity !== 'number') return mustBeANumbererror;
+  return productModel.update({ id, name, quantity });
+};
+
+const remove = async (id) => {
+  const productExists = await productModel.getById(id);
+  if (!productExists) return formatError;
+  return productModel.remove(id);
+};
+
+module.exports = { add, getById, update, remove };

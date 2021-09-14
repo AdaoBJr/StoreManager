@@ -27,13 +27,21 @@ const getById = async (id) => {
   return productId;
 };
 
-const update = async (id, name, age) => {
+const update = async ({ id, name, quantity }) => {
   if (!ObjectId.isValid(id)) return null;
   const db = await connect();
   await db.collection('products')
-      .updateOne({ _id: ObjectId(id) }, { $set: { name, age } });
+      .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
 
-  return { id, name, age };
+  return { id, name, quantity };
 };
 
-module.exports = { add, productExists, getAll, getById, update };
+const remove = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await connect();
+  const deleteProduct = await db.collection('products').findOne({ _id: ObjectId(id) });
+  await db.collection('products').deleteOne({ _id: ObjectId(id) });
+  return deleteProduct;
+};
+
+module.exports = { add, productExists, getAll, getById, update, remove };

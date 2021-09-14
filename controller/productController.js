@@ -39,15 +39,28 @@ const getById = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { name, quantity } = req.body;
-    const { id } = req.params.id;
-    const updateProduct = await service.update(id, name, quantity);
+    const { id } = req.params;
+    const updateProduct = await service.update({ id, name, quantity });
     if (updateProduct.err) {
       return res.status(422).json(updateProduct);
     }
   return res.status(200).json(updateProduct);
   } catch (error) {
-    return res.status(422).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { add, getAll, getById, update };
+const remove = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteProduct = await service.remove(id);
+    if (deleteProduct.err) {
+      return res.status(422).json(deleteProduct);
+    }
+    return res.status(200).json(deleteProduct);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { add, getAll, getById, update, remove };
