@@ -18,7 +18,7 @@ productRouter.post('/', async (req, res) => {
 
   if (message) {
     return res.status(code).json(
-      { err: { code: 'Invalid data', message } },
+      { err: { code: 'invalid_data', message } },
     );
   }
 

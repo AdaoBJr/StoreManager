@@ -16,7 +16,7 @@ const findProductByName = async ({ name }) => connection()
 // Comment: Parâmetros recebidos/passados como objeto {}, para que a ordem não interfira no funcionamento: Boa pŕatica by Zambis.
 const postProducts = async ({ name, quantity }) => connection()
     .then((db) => db.collection('products').insertOne({ name, quantity }))
-    .then((result) => ({ id: result.insertedId, name, quantity }));
+    .then((result) => ({ _id: result.insertedId, name, quantity }));
 
 // ------------------------------------------------------------------
 
