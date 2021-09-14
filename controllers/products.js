@@ -17,8 +17,16 @@ async function fetchProducts(_req, res) {
   return res.status(200).json(result);
 }
 
+async function updateProduct(req, res) {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  const result = await service.updateProduct(id, name, quantity);
+  return res.status(200).json(result);
+}
+
 module.exports = {
   findById,
   createProduct,
   fetchProducts,
+  updateProduct,
 };

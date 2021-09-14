@@ -83,9 +83,18 @@ async function fetchProducts() {
   return { products: result };
 }
 
+async function updateProduct(id, name, quantity) {
+  nameValidation(name);
+  quantityValidation(quantity);
+  quantityIsNumber(quantity);
+  await model.updateProduct(id, name, quantity);
+  return { _id: id, name, quantity };
+}
+
 module.exports = {
   findById,
   idValidation,
   createProduct,
   fetchProducts,
+  updateProduct,
 };

@@ -19,6 +19,8 @@ app.get('/products', rescue(productsController.fetchProducts));
 
 app.post('/products', rescue(productsController.createProduct));
 
+app.put('/products/:id', rescue(productsController.updateProduct));
+
 app.use((err, _req, res, _next) => {
   if (err.err) {
     const { status, err: { code, message } } = err;
