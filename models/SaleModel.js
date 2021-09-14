@@ -22,27 +22,22 @@ const createSale = async (body) => {
   };
 
   const getSaleById = async (id) => {
-    if (!ObjectId.isValid(id)) {
-      return null;
-    }
     const salesCollection = await Connection.getConnection();
-    const sale = await salesCollection('sales').findOne({ _id: ObjectId(id) });
+    const sale = await salesCollection.collection('sales').findOne(ObjectId(id));
+    console.log(sale, 'sale no Model');
     return sale;
   };
 
-  const updateSale = async (id, body) => {
-    if (!ObjectId.isValid(id)) {
-      return null;
-    }
+  const updateSale = async (id, sale) => {
+    if (!ObjectId.isValid(id)) return null;
+  
     const salesCollection = await Connection.getConnection();
-    await salesCollection.collection('sales').updateOne(
-      { _id: ObjectId(id) },
-      { $set: { itensSold: body } },
-    );
-
+    await salesCollection.collection('sales').updateOne({
+       _id: ObjectId(id) }, { $set: { itensSold: sale } });
+    
     return {
       _id: id,
-      itensSold: body,
+      itensSold: sale,
     };
   };
 

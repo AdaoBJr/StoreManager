@@ -1,27 +1,38 @@
 const { ObjectId } = require('mongodb');
 const SaleModel = require('../models/SaleModel');
 
+const errorMessage = 'Wrong product ID or invalid quantity';
+
 const isValidQuantity = (quantity) => {
   if (quantity <= 0) {
     return {
-      code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
+      code: 'invalid_data', message: errorMessage };
 }
-  if (!quantity) return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
+  if (!quantity) return { code: 'invalid_data', message: errorMessage };
 
   if (typeof quantity !== 'number') {
-     return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
+     return { code: 'invalid_data', message: errorMessage }; 
 }
 
   return true;
 }; 
 
 const createSale = async (body) => {
-  const validQuantity = body.map((sale) => isValidQuantity(sale.quantity));
-  if (validQuantity.includes(false)) {
-    return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
-  }
+  const validQuantity = body.map((sale) => {
+    const quantityValidation = isValidQuantity(sale.quantity);
+    if (quantityValidation !== true) {
+      return quantityValidation;
+    }
+  
+    return true;
+  });
 
+  if (validQuantity[0] !== true) {
+    return { code: 'invalid_data', message: errorMessage };
+  }
+  
   const sale = await SaleModel.createSale(body);
+  
   return sale;
 };
 
@@ -31,10 +42,31 @@ const getSaleById = async (id) => {
   }
 
   const sale = await SaleModel.getSaleById(id);
+  
   return sale;
 };
 
-module.exports = {
+const updateSale = async (id, sale) => {
+  const validQuantity = sale.map((sales) => {
+    const quantityValidation = isValidQuantity(sales.quantity);
+    if (quantityValidation !== true) {
+      return quantityValidation;
+    }
+    
+    return true;
+  });
+
+  if (validQuantity[0] !== true) {
+    return { code: 'invalid_data', message: errorMessage };
+  }
+  
+  const sales = await SaleModel.updateSale(id, sale);
+  
+  return sales;
+};
+ 
+  module.exports = {
   createSale,
   getSaleById,
+  updateSale,  
 };
