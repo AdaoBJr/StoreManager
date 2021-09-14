@@ -7,12 +7,11 @@ const OPTIONS = {
 
 // local
 // const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
-// const DB_NAME = 'StoreManager';
 
 // remoto
 const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
-const DB_NAME = 'StoreManager';
 
+const DB_NAME = 'StoreManager';
 let DB = null;
 
 const connection = () => (DB ? Promise.resolve(DB)

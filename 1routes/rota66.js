@@ -5,13 +5,16 @@ const {
   updateProducts,
   deleteProducts,
 } = require('../2controllers/products_controllers');
+const { createsales } = require('../2controllers/sales_controllers');
 
-const products = new Router();
+const DB = new Router();
 
-products.post('/products', createproduct);
-products.get('/products/:id', showProducts);
-products.get('/products', showProducts);
-products.put('/products/:id', updateProducts);
-products.delete('/products/:id', deleteProducts);
+DB.post('/products', createproduct);
+DB.get('/products/:id', showProducts);
+DB.get('/products', showProducts);
+DB.put('/products/:id', updateProducts);
+DB.delete('/products/:id', deleteProducts);
 
-module.exports = products;
+DB.post('/sales', createsales);
+
+module.exports = DB;

@@ -7,12 +7,12 @@ const {
 
 const UPDATE_OK = 200;
 const STATUS_OK = 201;
-const VALIDADE_ERROR = 422;
+const VALIDATE_ERROR = 422;
 
 const createproduct = async (req, res) => {
   const { name, quantity } = req.body;
   const answer = await createproducts(name, quantity);
-  if (answer.err) { return res.status(VALIDADE_ERROR).json(answer); }
+  if (answer.err) { return res.status(VALIDATE_ERROR).json(answer); }
   return res.status(STATUS_OK).json(answer);
 };
 
@@ -30,7 +30,7 @@ const updateProducts = async (req, res) => {
   const { name, quantity } = req.body;
   const { id } = req.params;
   const answer = await updateProductsService(id, name, quantity);
-  if (answer.err) { return res.status(VALIDADE_ERROR).json(answer); }
+  if (answer.err) { return res.status(VALIDATE_ERROR).json(answer); }
   return res.status(UPDATE_OK).json(answer);
 };
 
