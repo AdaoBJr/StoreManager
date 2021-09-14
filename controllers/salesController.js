@@ -17,14 +17,27 @@ const getAll = async (req, res) => {
     return res.status(HTTP_OK_DUZENTOS).json({ sales: newSale });
     };
     
-    const getById = async (req, res) => {
+const getById = async (req, res) => {
         const { id } = req.params;
         const saleById = await salesModel.findSaleById(id);
         console.log(saleById);
         return res.status(HTTP_OK_DUZENTOS).json(saleById);
     };
+
+const updateById = async (req, res) => {
+    const { id } = req.params;
+    const productsSoldOut = req.body;
+    console.log(productsSoldOut, ' do reqbody');
+    await salesModel.updateSaleByid(id, { productsSoldOut });
+    console.log(productsSoldOut, ' do retorno');
+    return res.status(HTTP_OK_DUZENTOS).json({
+        _id: id,
+        itensSold: productsSoldOut,
+    });
+};
 module.exports = {
     createNewSale,
     getAll,
     getById,
+    updateById,
 };

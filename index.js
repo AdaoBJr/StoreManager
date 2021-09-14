@@ -54,16 +54,20 @@ app.post('/sales',
 salesWithAllProductValid,
 salesController.createNewSale);
 
-app.use((err, req, res, _next) => 
-res.status(500).send(`Algo deu errado! Mensagem: ${err.message}`));
-
 app.get('/sales', 
 salesController.getAll);
 
 app.get('/sales/:id', ifSaleIdNotExists, 
 salesController.getById);
+
+app.put('/sales/:id',
+salesWithAllProductValid,
+ifSaleIdNotExists,
+salesController.updateById);
 // app.get('/products/:id', ifProductIdNotExists,
 // productsController.getById);
+app.use((err, req, res, _next) => 
+res.status(500).send(`Algo deu errado! Mensagem: ${err.message}`));
 
 app.listen(PORT, () => {
    console.log('Rodando na porta 3000');
