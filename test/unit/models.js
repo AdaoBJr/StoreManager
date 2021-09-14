@@ -241,11 +241,108 @@ describe('Ao criar uma venda', () => {
   beforeEach(async () => {
     mockConnection = await getConnection();
     sinon.stub(MongoClient, 'connect').resolves(mockConnection);
-    const insertProduct = await productsModel.createProduct(productTest);
+    // const insertProduct = await productsModel.createProduct(productTest);
   });
 
   afterEach(async () => {
     await mockConnection.db('StoreManager').collection('sales').deleteMany({});
     MongoClient.connect.restore();
   });
+
+  it('Retorna um objeto', async () => {
+    const insertProduct = await productsModel.createProduct(productTest);
+    const saleTest = [{productId: insertProduct._id, quantity: 5}];
+    const result = await salesModel.createSale(saleTest);
+
+    expect(result).to.be.an('object');
+  })
+
+  it('Possui um id gerado automaticamente', async ()=>{
+    const insertProduct = await productsModel.createProduct(productTest);
+    const saleTest = [{productId: insertProduct._id, quantity: 5}];
+    const result = await salesModel.createSale(saleTest);
+
+    expect(result).to.haveOwnProperty("_id");
+  })
+
+  it('Contém uma chave chamada "itensSold"', async ()=>{
+    const insertProduct = await productsModel.createProduct(productTest);
+    const saleTest = [{productId: insertProduct._id, quantity: 5}];
+    const result = await salesModel.createSale(saleTest);
+
+    expect(result).to.haveOwnProperty("itensSold");
+  })
+
+  it('A chave "itensSold" contém o array de objetos com os itens vendidos', async () => {
+    const insertProduct = await productsModel.createProduct(productTest);
+    const saleTest = [{productId: insertProduct._id, quantity: 5}];
+    const result = await salesModel.createSale(saleTest);
+
+    expect(result.itensSold).to.be.an('array')
+    expect(result.itensSold[0]).to.be.an('object')
+    expect(result.itensSold).to.be.eql(saleTest);
+  })
+
+  it('Retorna null se a quantidade em estoque for menor do que a vendida', async () => {
+    const insertProduct = await productsModel.createProduct(productTest);
+    const saleTest = [{productId: insertProduct._id, quantity: 20}];
+    const result = await salesModel.createSale(saleTest);
+
+    expect(result).to.be.null
+  })
+})
+
+describe('Retorna todas as vendas cadastradas', () => {
+  let mockConnection;
+
+  beforeEach(async () => {
+    mockConnection = await getConnection();
+    sinon.stub(MongoClient, 'connect').resolves(mockConnection);
+    // const insertProduct = await productsModel.createProduct(productTest);
+   
+  });
+
+  afterEach(async () => {
+    await mockConnection.db('StoreManager').collection('sales').deleteMany({});
+    await mockConnection.db('StoreManager').collection('products').deleteMany({});
+    MongoClient.connect.restore();
+  });
+
+  it('o retorno é um array com as vendas', async () =>{
+    const insertProduct = await productsModel.createProduct(productTest);
+    const saleTest = [{productId: insertProduct._id, quantity: 5}];
+    const saleCreated = await salesModel.createSale(saleTest);
+    const result = await salesModel.getAll();
+
+
+    expect(result).to.be.an('array');
+    expect(result[0]).to.be.eql(saleCreated);
+  })
+})
+
+describe('Retorna uma venda pesquisada por sua id', () => {
+  let mockConnection;
+
+  beforeEach(async () => {
+    mockConnection = await getConnection();
+    sinon.stub(MongoClient, 'connect').resolves(mockConnection);
+    // const insertProduct = await productsModel.createProduct(productTest);
+   
+  });
+
+  afterEach(async () => {
+    await mockConnection.db('StoreManager').collection('sales').deleteMany({});
+    await mockConnection.db('StoreManager').collection('products').deleteMany({});
+    MongoClient.connect.restore();
+  });
+
+  it('o retorno é um objeto', async () =>{
+    const insertProduct = await productsModel.createProduct(productTest);
+    const saleTest = [{productId: insertProduct._id, quantity: 5}];
+    const saleCreated = await salesModel.createSale(saleTest);
+    const result = await salesModel.getById(saleCreated._id);
+
+
+    expect(result).to.be.an('object');
+  })
 })
