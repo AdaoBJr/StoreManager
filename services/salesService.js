@@ -29,7 +29,7 @@ const create = async (itensSold) => {
 
       return response;
     }
-     throw new CustomError('stock_problen', 'Such amount is not permitted to sell.', 404);
+     throw new CustomError('stock_problem', 'Such amount is not permitted to sell', 404);
   });
 
   return productsSales;
