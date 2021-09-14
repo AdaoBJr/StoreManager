@@ -49,10 +49,17 @@ const updateSales = rescue(async (req, res, next) => {
   console.log(updateData);
   res.status(200).json(updateData);
 });
+const deleteSale = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const deleteData = await SalesService.deleteSale(id);
+  if (deleteData.err) return next(deleteData.err);
+  res.status(200).json(deleteData);
+});
 
 module.exports = {
   saveSale,
   getSaleById,
   getAllSales,
   updateSales,
+  deleteSale,
 };

@@ -29,7 +29,6 @@ const getProductById = async (id) => {
   return getProduct;
 };
 const deleteData = async (id) => {
-  console.log(id);
 const deleteProduct = await ProductsModel.deleteProduct(id);
 if (!deleteProduct) {
   return {

@@ -1,4 +1,4 @@
- const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
 const saveSale = async (body) => {
@@ -6,10 +6,9 @@ const saveSale = async (body) => {
     db.collection('sales').insertOne({ itensSold: body }));
   return {
     _id: id,
-    itensSold:
-       body,
+    itensSold: body,
   };
-  };
+};
 
 const getSaleById = async (id) => {
   if (!ObjectId.isValid(id)) {
@@ -17,16 +16,16 @@ const getSaleById = async (id) => {
   }
   console.log(id);
   const findSale = await connection().then((db) =>
-  db.collection('sales').findOne(new ObjectId(id)));
+    db.collection('sales').findOne(new ObjectId(id)));
   console.log(findSale);
   if (!findSale) return null;
   return findSale;
 };
 
 const getAll = async () => {
- const allSales = await connection().then((db) =>
- db.collection('sales').find().toArray());
- return allSales;
+  const allSales = await connection().then((db) =>
+    db.collection('sales').find().toArray());
+  return allSales;
 };
 
 const updateSale = async (id, body) => {
@@ -35,12 +34,22 @@ const updateSale = async (id, body) => {
   }
   const updateData = await connection().then((db) =>
     db.collection('sales').updateOne({ _id: ObjectId(id) }, { $set: { body } }));
-    if (!updateData) return null;
-    return {
-      _id: id,
-      itensSold:
-         body,
-    };
+  if (!updateData) return null;
+  return {
+    _id: id,
+    itensSold: body,
+  };
+};
+
+const deleteSale = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+
+  const deleteData = await connection().then((db) =>
+    db.collection('sales').deleteOne({ _id: ObjectId(id) }));
+  if (!deleteData) return null;
+  return deleteData;
 };
 
 module.exports = {
@@ -48,4 +57,5 @@ module.exports = {
   getSaleById,
   getAll,
   updateSale,
+  deleteSale,
 };
