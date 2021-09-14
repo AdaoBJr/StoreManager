@@ -1,3 +1,4 @@
+const { array } = require('joi');
 const { ObjectId } = require('mongodb');
 const mongoConnection = require('./connection');
 
@@ -23,11 +24,24 @@ const getSalesById = async (id) => {
   const resultQuery = await db.collection('sales').findOne(ObjectId(id));
   return resultQuery;
 };
+
+const update = async ({ id, arrayBody: { productId, quantity } }) => {
+  const db = await mongoConnection.connection();
+  await db.collection('sales').updateOne(
+    { _id: ObjectId(id) },
+    { $set: { itensSold: [productId, quantity] } },
+  );
+  
+  return {
+    _id: id,
+    itensSold: [{ productId, quantity }],
+  };
+};
 module.exports = {
   createSale,
   getSalesById,
   getAll,
   // getById,
-  // update,
+  update,
   // exclude,
 };

@@ -1,6 +1,7 @@
 // const { ObjectId } = require('mongodb');
 const salesModels = require('../models/salesModels');
-const { isValidQuantitySales, isValidIdForReqSix } = require('../middlewares/validations');
+const { 
+  isValidQuantitySales, isValidIdForReqSix } = require('../middlewares/validations');
 
 const createSale = async (body) => {
   const validQuantity = body.map((obj) => {
@@ -23,10 +24,18 @@ const getSalesById = async (id) => {
   return resultModel;
 };
 
+const update = async ({ id, arrayBody }) => {
+  // console.log(arrayBody);
+  const validQuantity = isValidQuantitySales(arrayBody.quantity);
+  if (validQuantity.err) return validQuantity;
+  const resultModel = await salesModels.update({ id, arrayBody });
+  return resultModel;
+};
+
 module.exports = {
   createSale,
   getAll,
   getSalesById,
-  // updateProduct,
+  update,
   // exclude,
 };
