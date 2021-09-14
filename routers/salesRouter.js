@@ -7,7 +7,7 @@ const { findId, validQuantity, validId } = require('../middlewares/middlewaresSa
 
 router.get('/sales', getAll);
 router.get('/sales/:id', findId, getAll);
-router.post('/sales', create);
+router.post('/sales', validQuantity, create);
 router.put('/sales/:id', validQuantity, update);
 router.delete('/sales/:id', validId, deleteProduct);
 
