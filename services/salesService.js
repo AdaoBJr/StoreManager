@@ -52,18 +52,18 @@ const getById = async (id) => {
   return sale;
 };
 
-// const update = async (id, name, quantity) => {
-//   // Buscamos um produto com o mesmo nome que desejamos criar
-//   const getProduct = await getById(id);
+const update = async (id, productArray) => {
+  // Buscamos um produto com o mesmo nome que desejamos criar
+  const getSale = await getById(id);
 
-//   if (getProduct.error) return getProduct;
+  if (getSale.error) return getSale;
   
-//   const isvalid = validations.isValidated({ name, quantity });
+  const isvalid = validations.validateSale(productArray);
 
-//   if (isvalid) return isvalid;
+  if (isvalid) return isvalid;
 
-//   return productsModel.update(id, name, quantity);
-// };
+  return salesModel.update(id, productArray);
+};
 
 // const deleteOne = async (id) => {
 //   const getProduct = await getById(id);
@@ -79,6 +79,6 @@ module.exports = {
   getAll,
   getById,
   create,
-  // update,
+  update,
   // deleteOne,
 };

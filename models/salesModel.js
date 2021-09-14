@@ -25,7 +25,7 @@ const getById = async (id) => {
   const saleData = await connection()
     .then((db) => db.collection('sales').findOne(new ObjectId(id)));
 
-  if (!saleData.length) return null;
+  if (!saleData) return null;
 
   return saleData;
 };
@@ -43,13 +43,14 @@ const productsExist = async (productArray) => {
   await db.collection('products')
     .find({ _id: { $in: productArray } }).toArray();
 };
-// const update = async (_id, name, quantity) => {
-//   const db = await connection();
-//   await db.collection('products')
-//     .updateOne({ _id: new ObjectId(_id) }, { $set: { name, quantity } });
 
-//       return { _id, name, quantity }; 
-// };
+const update = async (_id, productArray) => {
+  const db = await connection();
+  await db.collection('sales')
+    .updateOne({ _id: new ObjectId(_id) }, { $set: { itensSold: productArray } });
+
+      return { _id, itensSold: productArray }; 
+};
 
 // const deleteOne = async (id) => {
 //   const db = await connection();
@@ -73,6 +74,6 @@ module.exports = {
   create,
   productsExist,
   // findByName,
-  // update,
+  update,
   // deleteOne,
 };

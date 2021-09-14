@@ -38,18 +38,18 @@ const create = rescue(async (req, res, next) => {
   return res.status(200).json(newSale);
 });
 
-// const update = rescue(async (req, res, next) => {
-//   const { id } = req.params;
-//   const { name, quantity } = req.body;
+const update = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const productArray = req.body;
   
-//   const updatedProduct = await productsService.update(id, name, quantity);
-//   // Caso haja erro na criação do autor, iniciamos o fluxo de erro
-//   if (updatedProduct.error) return next(updatedProduct);
+  const updatedSale = await salesService.update(id, productArray);
+  // Caso haja erro na criação do autor, iniciamos o fluxo de erro
+  if (updatedSale.error) return next(updatedSale);
 
-//   // Caso esteja tudo certo, retornamos o status 201 Created, junto com as informações
-//   // do novo Produto
-//   return res.status(200).json(updatedProduct);
-// });
+  // Caso esteja tudo certo, retornamos o status 201 Created, junto com as informações
+  // do novo Produto
+  return res.status(200).json(updatedSale);
+});
 
 // const deleteOne = rescue(async (req, res, next) => {
 //   const { id } = req.params;
@@ -67,6 +67,6 @@ module.exports = {
   getAll,
   getById,
   create,
-  // update,
+  update,
   // deleteOne,
 };
