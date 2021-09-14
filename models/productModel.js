@@ -16,13 +16,15 @@ const add = async ({ name, quantity }) => {
 
 const getAll = async () => {
   const db = await connect();
-  return db.collection('products').find().toArray();
+  const products = await db.collection('products').find().toArray();
+  return { products };
 };
 
 const getById = async (id) => {
   if (!ObjectId.isValid(id)) return null;
   const db = await connect();
-  return db.collection('products').findOne({ _id: ObjectId(id) });
+  const productId = await db.collection('products').findOne({ _id: ObjectId(id) });
+  return productId;
 };
 
 module.exports = { add, productExists, getAll, getById };

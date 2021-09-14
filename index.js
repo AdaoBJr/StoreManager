@@ -7,7 +7,7 @@ app.use(bodyParser.json());
 
 app.post('/products', productController.add);
 app.get('/products', productController.getAll);
-app.get('/products', productController.getById);
+app.get('/products/:id', productController.getById);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
