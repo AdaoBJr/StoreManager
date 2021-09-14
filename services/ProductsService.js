@@ -2,16 +2,34 @@
 
 const ProductsModel = require('../models/ProductsModel');
 
-const postProducts = async (name, quantity) => {
-  const newProduct = await ProductsModel.postProducts(name, quantity);
+// ------------------------------------------------------------------
+// Requisito 1: SERVICE responsável por realizar as validações necessárias e fazer chamada ao MODEL de cadsatro produtos
 
-  if (!newProduct) {
-    return null; 
-  }
+const postProducts = async ({ name, quantity }) => {
+  if (typeof (name) !== 'string' || name.length <= 5) return { isError: true, code: 422, message: 'Nome deve ser uma string com mais de 5 caracteres' };
+  
+  const nameExists = await ProductsModel.findProductByName({ name });
+  
+  if (nameExists) return { isError: true, message: 'Produto já está cadastrado' };
 
-  return newProduct;
+  const newProduct = await ProductsModel.postProducts({ name, quantity });
+
+  if (!newProduct) return { isError: true, message: 'Produto não foi cadastrado' };
+  
+  return { code: 200, newProduct };
 };
+
+// ------------------------------------------------------------------
 
 module.exports = {
   postProducts,
 };
+
+// Validações são feitas no service
+// excessões são tratadas primeiro
+// if ( title !-- "string"){
+  // return { isError: }
+
+// No Controller
+// if (result === isError) return resizeBy.status(401).....
+// }
