@@ -1,6 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { addProduct, listAllProducts } = require('./Controllers/Products');
+const {
+  addProduct,
+  listAllProducts,
+  listProductById,
+  updateProductById,
+} = require('./Controllers/Products');
 
 const { validateName, validateQuantity } = require('./middlwares');
 
@@ -14,6 +19,10 @@ app.use(bodyParser.json());
 app.get('/', (_request, response) => {
   response.send();
 });
+
+app.put('/producst/:id', validateName, validateQuantity, updateProductById);
+
+app.get('/products/:id', listProductById);
 
 app.get('/products', listAllProducts);
 

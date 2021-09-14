@@ -1,4 +1,10 @@
-const { productExists, newProduct, getAllProducts } = require('../models/Products');
+const { 
+  productExists,
+  newProduct,
+  getAllProducts,
+  getProductById,
+  updateProductById,
+} = require('../models/Products');
 
 const createProduct = async (name, quantity) => {
   const product = await productExists(name);
@@ -16,7 +22,29 @@ const receiveProductsList = async () => {
   return productList;
 };
 
+const receiveProductById = async (id) => {
+  const productById = await getProductById(id);
+
+  if (productById) {
+    return productById;
+  }
+
+  return null;
+};
+
+const attProductById = async (id, name, quantity) => {
+  const updateProduct = await updateProductById(id, name, quantity);
+
+  if (updateProduct) {
+    return updateProduct;
+  }
+
+  return null;
+};
+
 module.exports = {
   createProduct,
   receiveProductsList,
+  receiveProductById,
+  attProductById,
 };
