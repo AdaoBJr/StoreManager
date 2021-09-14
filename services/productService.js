@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const productModel = require('../models/productModel');
 
 const validQuantityAndName = (quantity, name) => {
@@ -52,8 +53,18 @@ const updateById = async (id, body) => {
   return { _id: id, ...body };
 };
 
+const deleteId = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return { err: { message: 'Wrong id format', code: 'invalid_data' } };
+  }
+  const people = await productModel.getById(id);
+  await productModel.deleteId(id);
+  return people;
+};
+
 module.exports = {
   create,
   updateById,
+  deleteId,
   getById,
 };
