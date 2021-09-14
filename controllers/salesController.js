@@ -1,4 +1,5 @@
-const { create } = require('../services/salesServices');
+const { ObjectId } = require('mongodb');
+const { create, getAll, IdSales } = require('../services/salesServices');
 
 const createSales = async (req, res) => {
   const sale = req.body;
@@ -11,4 +12,24 @@ const createSales = async (req, res) => {
   return res.status(200).json(sales);
 };
 
-module.exports = { createSales };
+const allSales = async (req, res) => {
+  const sales = await getAll();
+  return res.status(200).json({ sales });
+};
+
+const soldById = async (req, res) => {
+  const { id } = req.params;
+  if (!ObjectId.isValid(id)) {
+    return res.status(404).json({
+      err: { code: 'not found', message: 'Sale not found' },
+    });
+  }
+  const sales = await IdSales(id);
+  if (sales.status === 404) {
+    const { err } = sales;
+    return res.status(sales.status).json({ err });
+  }
+  return res.status(sales.status).json(sales.venda);
+};
+
+module.exports = { createSales, allSales, soldById };

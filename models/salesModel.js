@@ -40,4 +40,20 @@ const newSale = async (res) => {
   };
 };
 
-module.exports = { newSale };
+const allSolds = async () => {
+  const db = await connection();
+  const sold = await db.collection('sales').find().toArray();
+  return sold;
+};
+
+const soldId = async (id) => {
+  const db = await connection();
+  if (!ObjectId.isValid(id)) return false;
+  const sold = await db.collection('sales').findOne(ObjectId(id));
+  if (sold) {
+    return { status: 200, sold };
+  }
+  return { status: 404, err: { code: 'not_found', message: 'Sale not found' } };
+};
+
+module.exports = { newSale, allSolds, soldId };
