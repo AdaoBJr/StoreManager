@@ -15,7 +15,8 @@ app.route('/products')
   .post(storeController.createProduct);
 
 app.route('/products/:id')
-  .get(storeController.getProduct);
+  .get(storeController.getProduct)
+  .put(storeController.updateProduct);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => { console.log(`Ouvindo a porta ${PORT}`); });

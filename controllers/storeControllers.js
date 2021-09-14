@@ -42,11 +42,12 @@ const updateProduct = async (req, res) => {
         const { name, quantity } = req.body;
         const { id } = req.params;
 
-        const result = await storeModel.update({ id, name, quantity });
-        // TODO: Implementar o uso do service
-        if (!result) return res.status(400).json({ message: 'Não foi possivel...' });
+        const result = await storeService.updateProduct({ id, name, quantity });
+        if (result.erro) {
+          return res.status(422).json({ err: { code: 'invalid_data', message: result.erro } });
+        }
 
-        return res.status(204).send();
+        return res.status(200).json({ id, name, quantity });
     } catch (error) {
         return res.status(500).json({ message: err });
     }
