@@ -1,5 +1,5 @@
 const express = require('express');
-// const rescue = require('express-rescue');
+const rescue = require('express-rescue');
 // const { checkProduct } = require('../middleware/checkProduct');
 const { isValidId } = require('../middlewareSales/validId');
 const { isValidIdSale } = require('../middlewareSales/validId');
@@ -10,24 +10,20 @@ const router = express.Router();
 
 router.get(
   '/:id',
-  isValidId,
   isValidIdSale,
-  async (req, res) => {
+  rescue(async (req, res) => {
     const { id } = req.params;
-    console.log('controllerId');
     const insertion = await sales.getById(id);
     res.status(200).json(insertion);
-  },
+  }),
 );
 
 router.get(
   '/',
-  async (req, res) => {
-    console.log('controler');
+  rescue(async (req, res) => {
     const insertion = await sales.getSales();
-    console.log(insertion);
     res.status(200).json({ sales: insertion });
-  },
+  }),
 );
 
 // router.put(
@@ -59,12 +55,12 @@ router.post(
   '/',
   isValidQuantity,
   isValidId,
-  async (req, res) => {
+  rescue(async (req, res) => {
     const insertion = await sales.create([req.body]);
     const [{ itensSold }] = insertion.ops;
     const { _id } = insertion.ops[0];
     res.status(200).json({ _id, itensSold });
-  },
+  }),
 );
 
 module.exports = router;

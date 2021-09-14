@@ -10,8 +10,7 @@ const getAllSales = async () => {
 const getSaleById = async (id) => {
   console.log('modelID');
   const db = await connection();
-  const data = db.collection('sales').findOne(ObjectId(id));
-  return data;
+  return db.collection('sales').findOne(ObjectId(id));
 };
 
 // const findProduct = async (name) => {
