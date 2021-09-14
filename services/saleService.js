@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const saleModel = require('../models/saleModel');
 
 const validQuantity = (quantity) => {
@@ -23,6 +24,17 @@ const createSale = async (items) => {
     _id: id,
     itensSold: items,
   };
+};
+
+const getById = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return { err: { message: 'Sale not found', code: 'not_found' } };
+  }
+  const findId = await saleModel.getById(id);
+  if (!findId) {
+    return { err: { message: 'Sale not found', code: 'not_found' } };
+  }
+  return findId;
 };
 
 module.exports = {
