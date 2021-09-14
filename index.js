@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.json());
 const productsController = require('./controllers/productController');
+const salesController = require('./controllers/salesController');
 
 const { 
   isValidProductName,
@@ -18,10 +19,12 @@ const {
   
 } = require('./services/productServices');
 
+const { salesWithAllProductValid } = require('./services/salesServices');
+
 app.get('/', (_request, response) => {
   response.send(); 
 });
-
+// Rotas do Product
 app.post('/products', 
 isValidProductName,
 isValidQuantity,
@@ -44,6 +47,12 @@ productsController.updateByIdController);
 app.delete('/products/:id', 
 ifProductIdNotExists,
 productsController.deleteByidController);
+
+// Rotas do Sales
+
+app.post('/sales', 
+salesWithAllProductValid,
+salesController.createNewSale);
 
 app.use((err, req, res, _next) => 
 res.status(500).send(`Algo deu errado! Mensagem: ${err.message}`));
