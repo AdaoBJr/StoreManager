@@ -24,6 +24,8 @@ app.get('/sales/:id', saleController.getById);
 app.use((err, _req, res, _next) => {
   if (err.code === 'invalid_data') {
     return res.status(422).json({ err });
+  } if (err.code === 'not_found') {
+    return res.status(404).json({ err });
   }
 });
 

@@ -16,6 +16,7 @@ const getAll = async (_req, res) => {
 const getById = async (req, res, next) => {
   const { id } = req.params;
   const findId = await saleService.getById(id);
+  console.log(findId);
   if (findId.err) {
     return next(findId.err);
   }

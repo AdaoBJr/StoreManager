@@ -12,14 +12,14 @@ const validQuantity = (quantity) => {
 
 const createSale = async (items) => {
   let condition = '';
-  await items.map((sale) => {
+  await items.forEach((sale) => {
     condition = validQuantity(sale.quantity);
     return condition;
   });
   if (condition.err) {
     return condition;
   }
-  const { insertedIds: id } = await saleModel.createSale(items);
+  const { insertedId: id } = await saleModel.createSale(items);
   return {
     _id: id,
     itensSold: items,
@@ -29,7 +29,6 @@ const createSale = async (items) => {
 const getAll = async () => {
   const findAll = await saleModel.getAll();
   const obj = { sales: [...findAll] };
-  console.log(obj);
   return obj;
 };
 
@@ -38,6 +37,7 @@ const getById = async (id) => {
     return { err: { message: 'Sale not found', code: 'not_found' } };
   }
   const findId = await saleModel.getById(id);
+  console.log(findId);
   if (!findId) {
     return { err: { message: 'Sale not found', code: 'not_found' } };
   }
