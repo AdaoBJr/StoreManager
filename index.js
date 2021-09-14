@@ -5,6 +5,7 @@ const {
   listAllProducts,
   listProductById,
   updateProductById,
+  deleteProductById,
 } = require('./Controllers/Products');
 
 const { validateName, validateQuantity } = require('./middlwares');
@@ -27,5 +28,7 @@ app.get('/products', listAllProducts);
 app.post('/products', validateName, validateQuantity, addProduct);
 
 app.put('/products/:id', validateName, validateQuantity, updateProductById);
+
+app.delete('/products/:id', deleteProductById);
 
 app.listen(PORT, () => console.log(`Online na porta ${PORT}`));

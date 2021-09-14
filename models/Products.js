@@ -21,10 +21,10 @@ const updateProductById = async (id, name, quantity) => {
   if (!ObjectId.isValid(id)) {
     return null;
   }
-  
+
   const db = await connection();
 
- await db.collection('products').updateOne(
+  await db.collection('products').updateOne(
     { _id: ObjectId(id) },
     { $set: { name, quantity } },
   );
@@ -51,11 +51,25 @@ const productExists = async (name) => {
   const db = await connection();
   let product = null;
 
-  product = await db.collection('products').findOne({ name });  
+  product = await db.collection('products').findOne({ name });
 
   if (product) {
     return true;
   }
+};
+
+const deleteProductById = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+
+  const db = await connection();
+
+  const { _id, name, quantity } = await db.collection('products').findOne(ObjectId(id));
+
+  await db.collection('products').deleteOne({ _id: ObjectId(id) });
+
+  return { _id, name, quantity };
 };
 
 module.exports = {
@@ -64,4 +78,5 @@ module.exports = {
   getAllProducts,
   getProductById,
   updateProductById,
+  deleteProductById,
 };
