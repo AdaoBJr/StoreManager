@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const productController = require('./controllers/productControllers');
+const saleController = require('./controllers/saleController');
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,6 +19,13 @@ app.route('/products/:id')
   .get(productController.getProduct)
   .put(productController.updateProduct)
   .delete(productController.deleteProduct);
+
+app.route('/sales')
+  .get(saleController.getAllSales)
+  .post(saleController.createSale);
+
+app.route('/sales/:id')
+  .get(saleController.getSale);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => { console.log(`Ouvindo a porta ${PORT}`); });
