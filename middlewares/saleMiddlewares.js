@@ -12,7 +12,12 @@ const ValidQuantity = async (req, res, next) => {
 };
 
 const ValidQuantityToUpdate = async (req, res, next) => {
-  if (!req.params.id || typeof req.body[0].quantity === 'string' || req.body[0].quantity <= 0) {
+  if (!req.params.id || typeof req.body[0].quantity === 'string') {
+    return res.status(422).json({
+      err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } });
+  }
+
+  if (req.body[0].quantity <= 0) {
     return res.status(422).json({
       err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } });
   }
