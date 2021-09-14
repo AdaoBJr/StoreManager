@@ -42,7 +42,18 @@ const getById = async (id) => {
   return data;
 };
 
+const updateById = async (id, body) => {
+  const { quantity, name } = body;
+  const valid = validQuantityAndName(quantity, name);
+  if (valid) {
+    return valid;
+  }
+  await productModel.updateId(id, body);
+  return { _id: id, ...body };
+};
+
 module.exports = {
   create,
+  updateById,
   getById,
 };

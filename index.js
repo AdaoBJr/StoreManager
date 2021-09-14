@@ -16,6 +16,8 @@ app.get('/products', productController.getAll);
 
 app.get('/products/:id', productController.getById);
 
+app.put('/products/:id', productController.updateById);
+
 app.use((err, _req, res, _next) => {
   if (err.code === 'invalid_data') {
     return res.status(422).json({ err });
