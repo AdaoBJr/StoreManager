@@ -9,7 +9,13 @@ const createSale = async (array) => {
 
 const getAll = async () => {
   const data = await connection().then((db) => db.collection('sales'));
-  const findAll = await data.find().toArray();
+  const findAll = await data
+  .aggregate([{ $project:
+      {
+        _id: '$_id', 
+        itensSold: { productId: '$productId', quantity: '$quantity' }, 
+      }, 
+  }]).toArray();
   return findAll;
 };
 

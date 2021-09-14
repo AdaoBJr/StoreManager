@@ -28,10 +28,7 @@ const createSale = async (items) => {
 
 const getAll = async () => {
   const findAll = await saleModel.getAll();
-  let obj = {};
-  findAll.forEach(({ _id, productId, quantity }) => {
-    obj = { sales: [{ _id, itensSols: [{ productId, quantity }] }] };
-  });
+  const obj = { sales: [...findAll] };
   console.log(obj);
   return obj;
 };
