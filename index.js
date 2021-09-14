@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const router = require('./routes/routes');
+const productRouter = require('./routes/ProductsRoutes');
+const salesRoutes = require('./routes/salesRoutes');
 
 const app = express();
 app.use(bodyParser.json());
@@ -10,7 +11,8 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.use(router);
+app.use(productRouter);
+app.use(salesRoutes);
 
 app.listen(3000, () => {
   console.log('Online');
