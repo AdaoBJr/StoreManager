@@ -6,6 +6,7 @@ const invalidDataError = (message) => (
   {
     error: {
       code: 'invalid_data',
+      status: 422,
       message,
     },
   }
@@ -21,15 +22,6 @@ const findById = async (id) => {
 
 const create = async (name, quantity) => {
   if (name.length < 5) return invalidDataError('"name" length must be at least 5 characters long');
-  // if (name.length < 5) {
-  //   console.log('name é menor que 5 caracteres');
-  //   return {
-  //     error: {
-  //       code: 'invalidData',
-  //       message: '"name" length must be at least 5 characters long',
-  //     },
-  //   };
-  // }
   if (!Number.isInteger(quantity)) return invalidDataError('"quantity" must be a number');
 
   if (quantity <= 0) return invalidDataError('"quantity" must be larger than or equal to 1');

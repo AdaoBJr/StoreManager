@@ -1,5 +1,4 @@
 const rescue = require('express-rescue');
-// const Joi = require('joi');
 const service = require('../services/Product');
 
 const getAll = rescue(async (_req, res) => {
@@ -19,15 +18,6 @@ const findById = rescue(async (req, res, next) => {
 });
 
 const create = rescue(async (req, res, next) => {
-  // const { error } = Joi.object({
-  //   name: Joi.string().not().empty().required(),
-  //   quantity: Joi.not().empty().required(),
-  // }).validate(req.body);
-
-  // if (error) {
-  //   return next(error);
-  // }
-
   const { name, quantity } = req.body;
 
   const newProduct = await service.create(name, quantity);
@@ -49,14 +39,6 @@ const update = rescue(async (req, res, next) => {
 });
 
 const remove = rescue(async (req, res, next) => {
-  // const { error } = Joi.object({
-  //   id: Joi.not().empty().required(),
-  // }).validate(req.params);
-
-  // if (error) {
-  //   return next(error);
-  // }
-
   const { id } = req.params;
 
   const removedProduct = await service.remove(id);
