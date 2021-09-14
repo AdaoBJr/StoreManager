@@ -33,9 +33,9 @@ const nameExists = await productModel.productExists(name);
 };
 
 const add = async ({ name, quantity }) => {
-  const callVerifyName = verifyName(name);
+  const callVerifyName = await verifyName(name);
   if (callVerifyName.err) return Promise.reject(callVerifyName);
-  const callVerifyQuantity = verifyQuantity(quantity);
+  const callVerifyQuantity = await verifyQuantity(quantity);
   if (callVerifyQuantity.err) return Promise.reject(callVerifyQuantity);
   const callverifyNameExists = await verifyNameExists(name);
   if (callverifyNameExists.err) return Promise.reject(callverifyNameExists);
