@@ -4,9 +4,13 @@ const bodyParser = require('body-parser');
 const {
   validateName,
   productExists,
-  validateQuantity } = require('./middlewares/productMiddlewares');
+  validateQuantity,
+  validateId } = require('./middlewares/productMiddlewares');
 
-const { createProduct } = require('./controllers/productsController'); 
+const {
+  createProduct,
+  getAllProducts,
+  getProductById } = require('./controllers/productsController'); 
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,6 +19,9 @@ app.use(bodyParser.json());
 app.get('/', (_request, response) => {
   response.send();
 });
+
+app.get('/products', getAllProducts);
+app.get('/products/:id', validateId, getProductById);
 
 app.post(
   '/products',
