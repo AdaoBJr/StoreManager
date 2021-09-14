@@ -16,6 +16,22 @@ const findId = async (request, response, next) => {
   next();
 };
 
+const validQuantity = async (request, response, next) => {
+  const returnRequest = request.body;
+  const quantity = returnRequest.every((value) => value.quantity > 0);
+
+  if (!quantity) {
+    return response.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong product ID or invalid quantity',
+      },
+    });
+  }
+  next();
+};
+
 module.exports = {
   findId,
+  validQuantity,
 };
