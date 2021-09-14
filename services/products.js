@@ -87,8 +87,14 @@ async function updateProduct(id, name, quantity) {
   nameValidation(name);
   quantityValidation(quantity);
   quantityIsNumber(quantity);
-  await model.updateProduct(id, name, quantity);
-  return { _id: id, name, quantity };
+  const result = await model.updateProduct(id, name, quantity);
+  return result;
+}
+
+async function deleteProduct(id) {
+  await idValidation(id);
+  const result = await model.deleteProduct(id);
+  return result;
 }
 
 module.exports = {
@@ -97,4 +103,5 @@ module.exports = {
   createProduct,
   fetchProducts,
   updateProduct,
+  deleteProduct,
 };

@@ -28,11 +28,16 @@ async function fetchProducts() {
 
 async function updateProduct(id, name, quantity) {
   const db = await connection();
-  const result = await db.collection('products').updateOne(
+  await db.collection('products').updateOne(
     { _id: ObjectId(id) },
     { $set: { name, quantity } },
   );
-  console.log(result);
+  return { _id: id, name, quantity };
+}
+
+async function deleteProduct(id) {
+  const db = await connection();
+  const result = await db.collection('products').deleteOne({ _id: ObjectId(id) });
   return result;
 }
 
@@ -42,4 +47,5 @@ module.exports = {
   createProduct,
   fetchProducts,
   updateProduct,
+  deleteProduct,
 };
