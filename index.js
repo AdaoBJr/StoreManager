@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const { 
   validateName,
   validateQuantity,
+  validateQuantitySales,
 } = require('./validate');
 
 const {
@@ -14,6 +15,7 @@ const {
   getAllProducts,
   updateProducts,
   deleteProductsId,
+  createSales,
 } = require('./models');
 
 app.use(bodyParser.json());
@@ -38,3 +40,5 @@ app.get('/products/:id', [productId]);
 app.put('/products/:id', [validateName, validateQuantity, updateProducts]);
 
 app.delete('/products/:id', [deleteProductsId]);
+
+app.post('/sales', [validateQuantitySales, createSales]);

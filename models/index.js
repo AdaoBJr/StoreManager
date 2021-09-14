@@ -1,9 +1,10 @@
 const { getAllProducts } = require('./product');
-const { create } = require('./productCreate');
+const { create } = require('./createProducs');
 const { getProductsId } = require('./product');
 const { productId } = require('./product');
 const { updateProducts } = require('./product');
 const { deleteProductsId } = require('./product');
+const { createSales } = require('./createSales');
 
 module.exports = {
     getAllProducts,
@@ -12,4 +13,5 @@ module.exports = {
     productId,
     updateProducts,
     deleteProductsId,
+    createSales,
 };
