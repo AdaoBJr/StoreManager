@@ -11,6 +11,5 @@ module.exports = (err, _req, res, _next) => {
   }
   };
   if (err.message) bdError();
-
   res.status(err.number).json({ err: err.error });
 };

@@ -9,33 +9,48 @@ const create = async (saleArray) => {
   await salesModel.productsExist(productsId);
 
   const isvalid = validations.validateSale(saleArray);
-  // console.log(saleArray);
 
   if (isvalid) return isvalid;
 
   return salesModel.create(saleArray);
 };
 
-// const getAll = async () => productsModel.getAll();
+const getAll = async () => {
+  // Solicitamos que o model realize a busca no banco
+  const sales = await salesModel.getAll();
+  // Caso nenhum autor seja encontrado, retornamos um objeto de erro.
+  if (!sales) {
+    return {
+      number: 404,
+      error: {
+        code: 'not_found',
+        message: 'Sale not found',
+      },
+    };
+  }
 
-// const getById = async (id) => {
-//   // Solicitamos que o model realize a busca no banco
-//   const product = await productsModel.getById(id);
+  // Caso haja um autor com o ID informado, retornamos esse autor
+  return sales;
+};
 
-//   // Caso nenhum autor seja encontrado, retornamos um objeto de erro.
-//   if (!product) {
-//     return {
-//       number: 422,
-//       error: {
-//         code: 'invalid_data',
-//         message: 'Wrong id format',
-//       },
-//     };
-//   }
+const getById = async (id) => {
+  // Solicitamos que o model realize a busca no banco
+  const sale = await salesModel.getById(id);
 
-//   // Caso haja um autor com o ID informado, retornamos esse autor
-//   return product;
-// };
+  // Caso nenhum autor seja encontrado, retornamos um objeto de erro.
+  if (!sale) {
+    return {
+      number: 404,
+      error: {
+        code: 'not_found',
+        message: 'Sale not found',
+      },
+    };
+  }
+
+  // Caso haja um autor com o ID informado, retornamos esse autor
+  return sale;
+};
 
 // const update = async (id, name, quantity) => {
 //   // Buscamos um produto com o mesmo nome que desejamos criar
@@ -61,8 +76,8 @@ const create = async (saleArray) => {
 // };
 
 module.exports = {
-  // getAll,
-  // getById,
+  getAll,
+  getById,
   create,
   // update,
   // deleteOne,

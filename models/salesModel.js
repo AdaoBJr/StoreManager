@@ -1,36 +1,40 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
 // Cria uma string com o nome completo do autor
 
 // Busca todos os autores do banco.
 
-// const getAll = async () => connection()
-//     .then((db) => db.collection('products').find().toArray())
-//     .then((products) => ({ products }));
+const getAll = async () => {
+  const db = await connection();
+  const sales = await db.collection('sales')
+    .find().toArray();
+  if (sales.length === 0) return null;
+  return { sales };
+};
 
 /*
 Busca um autor específico, a partir do seu ID
 @param {String} id ID do autor a ser recuperado
 */
-// const getById = async (id) => {
-//   if (!ObjectId.isValid(id)) {
-//     return null;
-//   }
+const getById = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
 
-//   const productData = await connection()
-//     .then((db) => db.collection('products').findOne(new ObjectId(id)));
+  const saleData = await connection()
+    .then((db) => db.collection('sales').findOne(new ObjectId(id)));
 
-//   if (!productData) return null;
+  if (!saleData.length) return null;
 
-//   return productData;
-// };
+  return saleData;
+};
 
 const create = async (productArray) => {
   const db = await connection();
-  const product = await db.collection('sales')
+  const sale = await db.collection('sales')
     .insertOne({ itensSold: productArray });
-    return { _id: product.insertedId, itensSold: productArray };
+    return { _id: sale.insertedId, itensSold: productArray };
 };
 
 // plantão amanha
@@ -64,8 +68,8 @@ const productsExist = async (productArray) => {
 // };
 
 module.exports = {
-  // getAll,
-  // getById,
+  getAll,
+  getById,
   create,
   productsExist,
   // findByName,

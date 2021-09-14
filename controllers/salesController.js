@@ -1,26 +1,31 @@
 const rescue = require('express-rescue');
 const salesService = require('../services/salesService');
 
-// const getById = rescue(async (req, res, next) => {
-//   // Extraímos o id da request
-//   const { id } = req.params;
+const getById = rescue(async (req, res, next) => {
+  // Extraímos o id da request
+  const { id } = req.params;
 
-//   // Pedimos para o service buscar o autor
-//   const product = await productsService.getById(id);
+  // Pedimos para o service buscar o autor
+  const sale = await salesService.getById(id);
 
-//   // Caso o service retorne um erro, interrompemos o processamento
-//   // e inicializamos o fluxo de erro
-//   if (product.error) return next(product);
+  // Caso o service retorne um erro, interrompemos o processamento
+  // e inicializamos o fluxo de erro
+  if (sale.error) return next(sale);
 
-//   // Caso não haja nenhum erro, retornamos o product encontrado
-//   res.status(200).json(product);
-// });
+  // Caso não haja nenhum erro, retornamos o product encontrado
+  res.status(200).json(sale);
+});
 
-// const getAll = rescue(async (_req, res, _next) => {
-//   const products = await productsService.getAll();
+const getAll = rescue(async (_req, res, next) => {
+  const products = await salesService.getAll();
 
-//   res.status(200).json(products);
-// });
+  // Caso o service retorne um erro, interrompemos o processamento
+  // e inicializamos o fluxo de erro
+  if (products.error) return next(products);
+
+  // Caso não haja nenhum erro, retornamos o product encontrado
+  res.status(200).json(products);
+});
 
 const create = rescue(async (req, res, next) => {
   const productArray = req.body;
@@ -59,8 +64,8 @@ const create = rescue(async (req, res, next) => {
 // });
 
 module.exports = {
-  // getAll,
-  // getById,
+  getAll,
+  getById,
   create,
   // update,
   // deleteOne,
