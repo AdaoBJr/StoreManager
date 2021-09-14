@@ -32,6 +32,8 @@ const modelListById = async (id) => {
 
   const db = await connection();
   const sales = await db.collection('sales').findOne(new ObjectId(id));
+  console.log(sales, 'sales');
+  if (!sales) return undefined;
   return { code: 200, itensSold: sales };
 };
 
