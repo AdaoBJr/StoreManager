@@ -37,6 +37,7 @@ const verifyStock = (stock) => {
 const updateProductQtts = async (sale) => {
   const sellPromises = sale.map(async (item) => {
     const verifyQtt = await model.sellQuantity(item.productId, item.quantity);
+    console.log(verifyQtt);
     verifyStock(verifyQtt);
     return verifyQtt;
   });
@@ -55,13 +56,13 @@ const newSale = async (sale) => {
   validateSale(sale);
   await updateProductQtts(sale);
   const result = await model.newSale(sale);
-  console.log(result);
   return result;
 };
 
 const updateSale = async (id, sale) => {
   validateSale(sale);
   const result = await model.updateSale(id, sale);
+  console.log(result);
   return result;
 };
 

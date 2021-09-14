@@ -5,6 +5,7 @@ const { getConnection } = require('./mongoMockConnection');
 
 const productsModel = require('../../models/Products');
 const salesModel = require('../../models/Sales');
+const { before } = require('mocha');
 
 
 describe('Exibe toda a lista de produtos', () => {
@@ -592,6 +593,216 @@ describe('Testa o cadastro de uma nova venda', () => {
       it('o objeto possui as chaves "productId" e "quantity"', async () => {
         const { itensSold } = await salesModel.newSale(newSale);
         expect(itensSold[0]).to.have.all.keys('productId', 'quantity');
+      });
+    });
+  });
+});
+
+describe('Testa a atualização de uma venda', () => {
+  describe('quando atualizado com sucesso', () => {
+    const payload = { name: 'Playstation 5', quantity: 100 };
+    let connectionMock;
+    let product;
+    let updatedSale;
+    describe('a resposta', () => {
+      before(async () => {
+        connectionMock = await getConnection();
+        sinon.stub(MongoClient, 'connect').resolves(connectionMock);
+        product = await connectionMock.db('StoreManager').collection('products').insertOne(payload);
+        updatedSale = [{ productId: product.insertedId, quantity: 100 }];
+      });
+
+      after(async () => {
+        await connectionMock.db('StoreManager').collection('sales').deleteMany({});
+        await connectionMock.db('StoreManager').collection('products').deleteMany({});
+        MongoClient.connect.restore();
+      });
+
+      it('é um objeto', async () => {
+        const response = await salesModel.updateSale(product.insertedId, updatedSale);
+        expect(response).to.be.an('object');
+      });
+
+      it('objeto contém as chaves "_id" e "itensSold"', async () => {
+        const response = await salesModel.updateSale(product.insertedId, updatedSale);
+        expect(response).to.have.all.keys('_id', 'itensSold');
+      });
+
+      it('a chave "itensSold" é um array', async () => {
+        const { itensSold } = await salesModel.updateSale(product.insertedId, updatedSale);
+        expect(itensSold).to.be.an('array');
+      });
+
+      it('o array da chave "itensSold" com tem um objeto', async () => {
+        const { itensSold } = await salesModel.updateSale(product.insertedId, updatedSale);
+        expect(itensSold[0]).to.be.an('object');
+      });
+
+      it('o objeto contém as chaves "productId" e "quantity"', async () => {
+        const { itensSold } = await salesModel.updateSale(product.insertedId, updatedSale);
+        expect(itensSold[0]).to.have.all.keys('productId', 'quantity');
+      });
+    });
+  });
+
+  describe('quando ID da venda for inválido', () => {
+    const INVALID_ID = '123456';
+    let connectionMock;
+
+    describe('a resposta', () => {
+      before(async () => {
+        connectionMock = await getConnection();
+        sinon.stub(MongoClient, 'connect').resolves(connectionMock);
+        sinon.stub(ObjectId, 'isValid').returns(false);
+      });
+
+      after(async() => {
+        ObjectId.isValid.restore();
+        MongoClient.connect.restore();
+      });
+
+      it('é null', async () => {
+        const result = await salesModel.updateSale(INVALID_ID);
+        expect(result).to.be.null;
+      });
+    });
+  });
+});
+
+describe('Testa a remoção de uma venda', () => {
+  describe('quando a venda é removida com sucesso', () => {
+    const payload = { name: 'Playstation 5', quantity: 100 };
+    let connectionMock;
+    let product;
+    let newSale;
+    describe('a resposta', () => {
+      beforeEach(async () => {
+        connectionMock = await getConnection();
+        sinon.stub(MongoClient, 'connect').resolves(connectionMock);
+        product = await connectionMock.db('StoreManager').collection('products').insertOne(payload);
+        const salePayload = [{ productId: product.insertedId, quantity: 100 }];
+        newSale = await connectionMock.db('StoreManager').collection('sales').insertOne({ sales: salePayload });
+      });
+
+      afterEach(async () => {
+        await connectionMock.db('StoreManager').collection('sales').deleteMany({});
+        await connectionMock.db('StoreManager').collection('products').deleteMany({});
+        MongoClient.connect.restore();
+      });
+
+      it('é um objeto', async () => {
+        const response = await salesModel.deleteSale(newSale.insertedId);
+        expect(response).to.be.an('object');
+      });
+
+      it('o objeto contém as chaves "_id" e "sales"', async () => {
+        const response = await salesModel.deleteSale(newSale.insertedId);
+        expect(response).to.have.all.keys('_id', 'sales');
+      });
+
+      it('"sales" é um array', async () => {
+        const { sales } = await salesModel.deleteSale(newSale.insertedId);
+        expect(sales).to.be.an('array');
+      });
+
+      it('array contém um objeto com as chaves "productId" e "quantity"', async () => {
+        const { sales } = await salesModel.deleteSale(newSale.insertedId);
+        expect(sales[0]).to.have.all.keys('productId', 'quantity');
+      });
+    });
+  });
+
+  describe('quando ID da venda for inválido', () => {
+    const INVALID_ID = '123456';
+    let connectionMock;
+
+    describe('a resposta', () => {
+      before(async () => {
+        connectionMock = await getConnection();
+        sinon.stub(MongoClient, 'connect').resolves(connectionMock);
+        sinon.stub(ObjectId, 'isValid').returns(false);
+      });
+
+      after(async() => {
+        ObjectId.isValid.restore();
+        MongoClient.connect.restore();
+      });
+
+      it('é null', async () => {
+        const result = await salesModel.deleteSale(INVALID_ID);
+        expect(result).to.be.null;
+      });
+    });
+  });
+});
+
+describe('Testa os retornos da funcao "sellQuantity"', () => {
+  describe('quando atualiza valores com sucesso', () => {
+    const payload = { name: 'Playstation 5', quantity: 100 };
+    let connectionMock;
+    let product;
+    let newSale;
+    let newSaleQuantity;
+    describe('a resposta', () => {
+      beforeEach(async () => {
+        connectionMock = await getConnection();
+        sinon.stub(MongoClient, 'connect').resolves(connectionMock);
+        product = await connectionMock.db('StoreManager').collection('products').insertOne(payload);
+        const salePayload = [{ productId: product.insertedId, quantity: 100 }];
+        newSale = await connectionMock.db('StoreManager').collection('sales').insertOne({ sales: salePayload });
+        newSaleQuantity = newSale.ops[0].sales[0].quantity;
+      });
+
+      afterEach(async () => {
+        await connectionMock.db('StoreManager').collection('sales').deleteMany({});
+        await connectionMock.db('StoreManager').collection('products').deleteMany({});
+        MongoClient.connect.restore();
+      });
+
+      it('é um objeto', async () => {
+        const result = await salesModel.sellQuantity(product.insertedId, newSaleQuantity);
+        expect(result).to.be.an('object');
+      });
+
+      it('objeto contém a chave "modifiedCount"', async () => {
+        const result = await salesModel.sellQuantity(product.insertedId, newSaleQuantity);
+        expect(result).to.have.property('modifiedCount');
+      });
+
+      it('"modifiedCount" possui o valor "1"', async () => {
+        const result = await salesModel.sellQuantity(product.insertedId, newSaleQuantity);
+        expect(result.modifiedCount).to.be.equal(1);
+      });
+    });
+  });
+
+  describe('quando há falha na atualização dos valores', () => {
+    describe('quando não há estoque', () => {
+      const payload = { name: 'Playstation 5', quantity: 100 };
+      let connectionMock;
+      let product;
+      let newSale;
+      let newSaleQuantity;
+      describe('a resposta', () => {
+        before(async () => {
+          connectionMock = await getConnection();
+          sinon.stub(MongoClient, 'connect').resolves(connectionMock);
+          product = await connectionMock.db('StoreManager').collection('products').insertOne(payload);
+          const salePayload = [{ productId: product.insertedId, quantity: 100 }];
+          newSale = await connectionMock.db('StoreManager').collection('sales').insertOne({ sales: salePayload });
+          newSaleQuantity = newSale.ops[0].sales[0].quantity;
+        });
+
+        after(async () => {
+          await connectionMock.db('StoreManager').collection('sales').deleteMany({});
+          await connectionMock.db('StoreManager').collection('products').deleteMany({});
+          MongoClient.connect.restore();
+        });
+
+        it('é null', async () => {
+          const result = await salesModel.sellQuantity(product.insertedId, 1000);
+          expect(result).to.be.null;
+        });
       });
     });
   });
