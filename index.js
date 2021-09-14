@@ -14,6 +14,8 @@ app.get('/products/:id', ProductsController.getProductById);
 app.delete('/products/:id', ProductsController.deleteData);
 app.put('/products/:id', ProductsController.updateProduct);
 app.post('/sales', SalesController.saveSale);
+app.get('/sales/:id', SalesController.getSaleById);
+app.get('/sales', SalesController.getAllSales);
 
 app.get('/', (_request, response) => {
   response.send();

@@ -9,10 +9,11 @@ module.exports = (err, _req, res, _next) => {
 
   const statusByErorCode = {
     INVALID_DATA: 422,
+    NOT_FOUND: 404,
   };
 
   const status = statusByErorCode[err.code] || 500;
-  // const { code } = err;
+ // const { code } = err;
   const code = err.code.toLowerCase();
 
   return res.status(status).json({ err: { code, message: err.message } });

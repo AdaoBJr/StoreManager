@@ -17,6 +17,22 @@ const saveSale = rescue(async (req, res, _next) => {
   res.status(200).json(newSale);
 });
 
+const getSaleById = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const getSale = await SalesService.getSaleById(id);
+  if (getSale.err) { return next(getSale.err); }
+  res.status(200).json(getSale);
+});
+
+const getAllSales = rescue(async (req, res, next) => {
+  const allSales = await SalesService.getAll();
+  if (allSales.err) return next(allSales.err);
+  console.log(allSales);
+  res.status(200).json({ sales: allSales });
+});
+
 module.exports = {
   saveSale,
+  getSaleById,
+  getAllSales,
 };
