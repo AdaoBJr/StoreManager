@@ -1,4 +1,3 @@
-const { array } = require('joi');
 const { ObjectId } = require('mongodb');
 const mongoConnection = require('./connection');
 
@@ -8,8 +7,7 @@ const createSale = async (body) => {
     .insertOne({ itensSold: [...body] });
 
   return {
-    _id: id,
-    itensSold: [...body],
+    _id: id, itensSold: [...body],
   };
 };
 
@@ -31,7 +29,6 @@ const update = async ({ id, arrayBody: { productId, quantity } }) => {
     { _id: ObjectId(id) },
     { $set: { itensSold: [productId, quantity] } },
   );
-  
   return {
     _id: id,
     itensSold: [{ productId, quantity }],
