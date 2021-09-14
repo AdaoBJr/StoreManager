@@ -1,7 +1,7 @@
 const connection = require('./connection');
 
 const createProduct = async ({ name, quantity }) => {
-  const result = connection.getConnection().then((db) =>
+  const result = await connection.getConnection().then((db) =>
     db.collection('produtos').insertOne({ name, quantity }));
   return { id: result.insertedId, name, quantity };
 };

@@ -4,7 +4,7 @@ const productsService = require('../services/productsService');
 
 const productsRouter = express.Router();
 
-productsRouter.post('', async (req, res) => {
+productsRouter.post('/', async (req, res) => {
   const { body } = req;
   const result = await productsService.createProduct(body);
   res.status(StatusCode.OK).json(result);
