@@ -8,6 +8,7 @@ const getNewproduct = async (id, name, quantity) =>
         name, 
         quantity,
     });
+    
 const findById = async (id) => {
     if (!ObjectId.isValid(id)) return null;
     const db = await mongoConnection();

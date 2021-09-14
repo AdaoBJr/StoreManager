@@ -1,11 +1,12 @@
 // hello-msc/middlewares/error.js
 module.exports = (err, req, res, _next) => {
-    if (err.isJoi) {
+  console.log(err, 'agra o joi', err.isJoi, 'acabous', err.original, req.body.name);
+  if (err.isJoi) {  
       return res.status(422)
         .json({ err: { 
             code: 'invalid_data',
             message: err.details[0].message } });
-    }
+  }
   
     const statusByErrorCode = {
       notFound: 404,
