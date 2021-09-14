@@ -1,12 +1,14 @@
 const salesModel = require('../models/salesModel');
-const { updateProductsDB } = require('../models/productsModel');
-
-// const updateProdQnt = async (arr, value) => {
-//   if()
-//   arr.forEach(({ productId, quantity }) => updateQntDB(productId, quantity * value));
-// };
+const { updateProductsDB, invAvailability } = require('../models/productsModel');
 
 const createSale = async (arr) => {
+  const promise = await arr.map(({ productId, quantity }) => 
+    invAvailability(productId, quantity)); // retorna uma promise
+  const availability = await Promise.all(promise);
+  const checkAvailability = availability.some((bool) => bool === false); // volta true se tiver um false no array
+  if (checkAvailability) {
+    return { err: { code: 'stock_problem', message: 'Such amount is not permitted to sell' } };
+  }
   arr.forEach(async ({ productId, quantity }) => updateProductsDB(productId, -quantity));
   return salesModel.createSale(arr);
 };
@@ -19,7 +21,6 @@ const updateSaleById = async (id, arr) => salesModel.updateSaleById(id, arr);
 
 const deleteSaleById = async (id) => {
   const { itensSold } = await getSaleById(id);
-  console.log(itensSold);
   itensSold.forEach(async ({ productId, quantity }) => { updateProductsDB(productId, quantity); });
   return salesModel.deleteSaleById(id);
 };

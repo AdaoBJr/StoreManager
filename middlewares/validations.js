@@ -59,13 +59,6 @@ const validProductId = async (req, res, next) => {
   next();
 };
 
-// const validSale = async (req, res, next) => {
-// const checkprodId = req.body.every(async ({ productId }) => 
-//   productsModel.getProductById(productId));
-// if (checkQnt || !checkprodId) return res.status(422).json(invData(errors.wrongIdOrQnt));
-// next();
-// };
-
 const saleExists = async (req, res, next) => {
   const { id } = req.params;
   if (id.length !== 24) return res.status(404).json(notFound(errors.saleNotFound));
@@ -79,7 +72,7 @@ const validSaleId = async (req, res, next) => {
   if (id.length !== 24) return res.status(422).json(invData(errors.wrongSaleIdFormat));
   next();
 };
-
+ 
 module.exports = {
   validNameLength,
   validQntType,

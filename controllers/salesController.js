@@ -3,6 +3,11 @@ const salesService = require('../services/salesService');
 const createSale = async (req, res) => {
   const arr = req.body;
   const newSale = await salesService.createSale(arr);
+  if (newSale.err) {
+ return res.status(404).json(
+    { err: { code: 'stock_problem', message: 'Such amount is not permitted to sell' } },
+  ); 
+}
   return res.status(200).json(newSale);
 };
 

@@ -50,6 +50,12 @@ const updateProductsDB = async (productId, quantity) => {
   .updateOne({ _id: ObjectId(productId) }, { $inc: { quantity } });
 };
 
+const invAvailability = async (productId, quantity) => {
+  const db = await mongoConnection();
+  const product = await db.collection('products').findOne({ _id: ObjectId(productId) });
+  return product.quantity > quantity;
+};
+
 module.exports = {
   findByName,
   createProduct,
@@ -58,4 +64,5 @@ module.exports = {
   updateProductById,
   deleteProductById,
   updateProductsDB,
+  invAvailability,
 };
