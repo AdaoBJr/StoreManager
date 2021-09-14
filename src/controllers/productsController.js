@@ -29,6 +29,8 @@ const getProductById = async (req, res, next) => {
   if (product.err) return next(product.err);
 
   res.status(ok).json(product);
+
+  next();
 };
 
 const updateProductById = async (req, res, next) => {
@@ -43,4 +45,11 @@ const updateProductById = async (req, res, next) => {
   res.status(ok).json(attProduct);
 };
 
-module.exports = { addProduct, getAllProducts, getProductById, updateProductById };
+const deleteProductById = async (req, _res, _next) => {
+  const { id } = req.params;
+
+  await productsService.deleteProductById(id);
+};
+
+module.exports = {
+  addProduct, getAllProducts, getProductById, updateProductById, deleteProductById };
