@@ -1,8 +1,7 @@
 const rescue = require('express-rescue');
 const SaleService = require('../services/SaleService');
 
-// const ProductController = require('./ProductController');
-const ProductModel = require('../models/ProductModel');
+const ProductService = require('../services/ProductService');
 
 const create = rescue(async (req, res, next) => {
   const sale = req.body;
@@ -10,7 +9,7 @@ const create = rescue(async (req, res, next) => {
 
   if (saleAdd.err) return next(saleAdd.err);
 
-  await ProductModel.updateFromSale(sale);
+  ProductService.updateFromSale(sale);
 
   return res.status(200).json(saleAdd);
 });
@@ -44,12 +43,13 @@ const findById = rescue(async (req, res, next) => {
 const exclude = rescue(async (req, res, next) => {
   const { id } = req.params;
 
+  const sale = await SaleService.findById(id);
+
+  if (!sale.err) ProductService.updateFromSale(sale.itensSold, true);
+
   const productExcluded = await SaleService.exclude(id);
 
   if (productExcluded.err) return next(productExcluded.err);
-
-  // const sale = await SaleService.findById(id);
-  // await ProductModel.updateFromSale(sale, true);
 
   return res.status(200).json(productExcluded);
 });

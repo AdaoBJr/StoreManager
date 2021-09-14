@@ -59,16 +59,14 @@ const exclude = async (id) => {
   return productExcluded;
 };
 
-const updateFromSale = async (sale, incresse = false) => {
+const updateFromSale = async (productId, quantity, incresse) => {
   const db = await connection();
-
-  sale.forEach(({ productId, quantity }) => {
-    const value = incresse ? quantity : -quantity;
-    db.collection('products').updateOne(
-      { _id: ObjectId(productId) },
-      { $inc: { quantity: value } },
-    );
-  });
+  const value = incresse ? quantity : -quantity;
+  
+  db.collection('products').updateOne(
+    { _id: ObjectId(productId) },
+    { $inc: { quantity: value } },
+  );
 };
 
 module.exports = {

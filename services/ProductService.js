@@ -48,7 +48,10 @@ const exclude = async (id) => {
   return ProductModel.exclude(id);
 };
 
-// const updateFromSale = (sale) => ProductModel.updateFromSale(sale);
+const updateFromSale = (sale, incresse) => {
+  sale.forEach(({ productId, quantity }) =>
+    ProductModel.updateFromSale(productId, quantity, incresse));
+};
 
 module.exports = {
   create,
@@ -56,5 +59,5 @@ module.exports = {
   exclude,
   findAll,
   findById,
-  // updateFromSale,
+  updateFromSale,
 };
