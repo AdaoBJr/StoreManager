@@ -30,11 +30,11 @@ const updateSaleById = async (saleId, updates) => {
     const { productId } = sale;
     await connection().then((db) => 
       db.collection(COLLECTION_NAME).updateOne({ _id: comparisonId }, {
-        pull: { itensSold: { productId } },
+        $pull: { itensSold: { productId } },
     }));
   });
   await connection().then((db) => db.collection(COLLECTION_NAME)
-    .updateOne({ _id: comparisonId }, { push: { itensSold: { each: updates } } }));
+    .updateOne({ _id: comparisonId }, { $push: { itensSold: { $each: updates } } }));
   const saleAfterUpdate = await connection().then((db) => 
     db.collection(COLLECTION_NAME).findOne({ _id: comparisonId }));
   return saleAfterUpdate;
