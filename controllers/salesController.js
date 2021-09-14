@@ -2,13 +2,13 @@ const express = require('express');
 
 const router = express.Router();
 
-const salesService = require('../services/productsService');
+const salesService = require('../services/salesService');
 
 const verifyQuantities = (req, res, next) => {
   const newSales = req.body;
   const badQuantities = salesService.verifyQuantities(newSales);
   const quantIsNotnumber = salesService.verifyQuantitiesString(newSales);
-  console.log('aqui', badQuantities, quantIsNotnumber);
+
   if (badQuantities.length !== 0 || quantIsNotnumber.length !== 0) {
  return res.status(422).json({ err: { 
     code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } }); 
@@ -37,10 +37,18 @@ const getById = (req, res) => {
   .catch(() => res.status(404).json({ err: { code: 'not_found', message: 'Sale not found' } }));
 };
 
+const editSale = (req, res) => {
+  const { id } = req.params;
+  const editedSale = req.body;
+  salesService.editSale(id, editedSale)
+  .then((result) => res.status(200).json(result));
+};
+
 module.exports = {
   router,
   createSales,
   verifyQuantities,
   getAll,
   getById,
+  editSale,
 };
