@@ -22,9 +22,10 @@ app.get('/', (_request, response) => {
 });
 
 app.use((err, _req, res, _next) => {
-  const { status } = err;
+  const { status, code, message } = err;
+
   return res.status(status)
-  .json({ err: { code: err.code, message: err.message } });
+  .json({ err: { code, message } });
 });
 
 app.listen(PORT, () => console.log(`Oline porta ${PORT}`));
