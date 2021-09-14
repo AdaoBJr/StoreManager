@@ -19,8 +19,14 @@ return getSale;
 };
 const getAll = async () => SalesModel.getAll();
 
+const updateSale = async (id, body) => {
+  const updateData = await SalesModel.updateSale(id, body);
+  return updateData;
+};
+
 module.exports = {
   saveSale,
   getSaleById,
   getAll,
+  updateSale,
 };

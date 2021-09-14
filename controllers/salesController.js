@@ -31,8 +31,28 @@ const getAllSales = rescue(async (req, res, next) => {
   res.status(200).json({ sales: allSales });
 });
 
+const updateSales = rescue(async (req, res, next) => {
+  const { body } = req;
+  const { error } = Joi.object({
+    productId: Joi.string().min(5).required(),
+    quantity: Joi.number().integer().min(1).required(),
+  }).validate(req.body[0]);
+  if (error) {
+    return res.status(422).json({
+      err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
+    });
+  }
+  const { id } = req.params;
+
+  const updateData = await SalesService.updateSale(id, body);
+  if (updateData.err) return next(updateData.err);
+  console.log(updateData);
+  res.status(200).json(updateData);
+});
+
 module.exports = {
   saveSale,
   getSaleById,
   getAllSales,
+  updateSales,
 };
