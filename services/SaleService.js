@@ -25,6 +25,11 @@ const createSale = async (body) => {
   return sale;
 };
 
+const getAllSales = async () => {
+  const sales = await SaleModel.getAllSales();
+  return sales;
+};
+
 const getSaleById = async (id) => {
   if (!ObjectId.isValid(id)) {
     return { code: 'not_found', message: 'Sale not found' };
@@ -36,5 +41,6 @@ const getSaleById = async (id) => {
 
 module.exports = {
   createSale,
+  getAllSales,
   getSaleById,
 };

@@ -14,18 +14,29 @@ const createSale = async (req, res) => {
 };
 
 const getAllSales = async (req, res) => {
-  const { id, quantity } = req.body;
-
-  const { code, message, sales } = await SaleModel.getAllSales();
-
-  if (message) {
-    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ err: { code, message } });
+  try {
+    const sales = await SaleService.getAllSales();
+    res.status(StatusCodes.OK).json({ sales });
+  } catch (err) {
+    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ err });
   }
+};
 
-  res.status(200).json({ sales });
+const getSaleById = async (req, res) => {
+  const { id } = req.params;
+  const sale = await SaleService.getSaleById(id);
+  const { message, code } = sale;
+  
+  if (message) {
+    return res.status(StatusCodes.NOT_FOUND).json({ err: { code, message, 
+    },
+  });
+  }
+  res.status(StatusCodes.OK).json({ sale });
 };
 
 module.exports = {
   createSale,
   getAllSales,
+  getSaleById,
 };
