@@ -53,4 +53,10 @@ const updateSale = async (id, itensSold) => {
     return false;
 };
 
-module.exports = { createSale, findAllSales, findSales, updateSale };
+const deleteSale = async (id, itensSold) => {
+    const valid = await findSales(id);
+    if (valid) return models.deleteSale(id, itensSold);
+    return false;
+};
+
+module.exports = { createSale, findAllSales, findSales, updateSale, deleteSale };

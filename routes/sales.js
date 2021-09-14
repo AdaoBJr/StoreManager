@@ -1,6 +1,6 @@
 const app = require('express');
 
-const { sell, getAll, findSale, updateSale } = require('../services/sales');
+const { sell, getAll, findSale, updateSale, deleteSale } = require('../services/sales');
 
 const router = app.Router();
 
@@ -18,6 +18,9 @@ router.route('/:id')
     )
     .put(
         updateSale,
+    )
+    .delete(
+        deleteSale,
     );
 
 module.exports = router;

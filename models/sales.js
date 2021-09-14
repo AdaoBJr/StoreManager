@@ -22,4 +22,8 @@ const update = async (id, itensSold) => connect()
     .updateOne({ _id: ObjectId(id) },
     { $set: { itensSold } }, { upsert: true })).then((out) => (out));
 
-module.exports = { create, findAll, findByID, update };
+const deleteSale = async (id) => connect()
+    .then((db) => db.collection('sales')
+    .deleteOne({ _id: ObjectId(id) })).then((out) => (out));
+
+module.exports = { create, findAll, findByID, update, deleteSale };
