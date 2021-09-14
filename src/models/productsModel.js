@@ -11,7 +11,12 @@ const addProduct = async (name, quantity) => productsConnection()
 const getProductById = async (id) => productsConnection()
   .then((db) => db.collection('products').findOne(ObjectId(id)));
 
+const updateProductById = async (id, name, quantity) => productsConnection()
+  .then((db) => db.collection('products')
+    .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } }))
+      .then(() => ({ _id: id, name, quantity })); 
+
 const checkName = async (name) => productsConnection()
   .then((db) => db.collection('products').findOne({ name }));
 
-module.exports = { addProduct, checkName, getAllProducts, getProductById };
+module.exports = { addProduct, checkName, getAllProducts, getProductById, updateProductById };
