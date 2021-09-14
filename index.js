@@ -6,7 +6,7 @@ app.use(bodyParser.json());
 
 const PORT = '3000';
 
-// não remova esse endpoint, e para o avaliador funcionar
+// não remova esse endpoint, e para o avaliador funcionar //
 app.get('/', (_request, response) => {
   response.send();
 });
