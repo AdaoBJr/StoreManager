@@ -37,12 +37,12 @@ const verifyId = async (id) => {
     return false;
   }
   const products = await productsModel.getProductById(id);
+  console.log(products);
   return products;
 };
 
 const getAllProducts = async () => {
   const products = await productsModel.getAll();
-  console.log(products, 'cheguei no service');
   if (!products) {
     return null;
   }
@@ -54,6 +54,15 @@ const verifyUpdateProduct = async (id, name, quantity) => {
   return updateProduct;
 };
 
+const verifyDeleteProduct = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+
+  const deleteProduct = await productsModel.deleteProduct(id);
+  if (deleteProduct.deletedCount === 1) return true;
+};
+
 module.exports = {
   validationName,
   verifyExistanceProduct,
@@ -63,4 +72,5 @@ module.exports = {
   verifyId,
   getAllProducts,
   verifyUpdateProduct,
+  verifyDeleteProduct,
 };

@@ -10,6 +10,8 @@ productsController.validQuantity,
 productsController.validTypeQuantity,
 productsController.editProduct);
 
+router.delete('/products/:id', productsController.deleteProduct);
+
 router.get('/products/:id', productsController.validId);
 
 router.get('/products', productsController.AllProducts);

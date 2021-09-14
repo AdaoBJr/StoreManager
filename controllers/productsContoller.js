@@ -73,7 +73,6 @@ const createProduct = async (req, res) => {
 const validId = async (req, res) => {
   const { id } = req.params;
   const product = await productsService.verifyId(id);
-  console.log(product, 'controller');
   if (!product) {
     return res.status(unprocessableEntity).json({
       err: {
@@ -104,7 +103,24 @@ const editProduct = async (req, res) => {
   const { name, quantity } = req.body;
   await productsService.verifyUpdateProduct(id, name, quantity);
 
-  return res.status(200).json({ id, name, quantity });
+  return res.status(ok).json({ id, name, quantity });
+};
+
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body; 
+  const product = await productsService.verifyDeleteProduct(id);
+
+  if (!product) {
+    return res.status(unprocessableEntity).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format', 
+      },
+    });
+  }
+
+  return res.status(ok).json({ id, name, quantity });
 };
 
 module.exports = {
@@ -116,4 +132,5 @@ module.exports = {
   validId,
   AllProducts,
   editProduct,
+  deleteProduct,
 };
