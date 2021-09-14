@@ -27,6 +27,15 @@ const createProductService = async ({ name, quantity }) => {
 
  return newProduct;
 };
+const getAll = async () => {
+  const allProducts = await productsModel.getAll();
+  return allProducts;
+};
+
+const getById = async (id) => {
+  const product = await productsModel.getById(id);
+  return product;
+};
 
 module.exports = {
   validNameService,
@@ -34,4 +43,6 @@ module.exports = {
   validQuantityNumberService,
   verifyExistanceService,
   createProductService,
+  getAll,
+  getById,
 };
