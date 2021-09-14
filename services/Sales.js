@@ -55,6 +55,7 @@ const newSale = async (sale) => {
   validateSale(sale);
   await updateProductQtts(sale);
   const result = await model.newSale(sale);
+  console.log(result);
   return result;
 };
 
