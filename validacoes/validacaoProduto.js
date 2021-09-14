@@ -11,17 +11,15 @@ const verificacaoMinimo = (numero, min) => (numero <= min);
 const isNumber = (valor) => (typeof valor !== 'number');
 
 const validacaoCadastramentoProduto = (name, quantity, produtoExiste) => {
-  const code = 422;
-
   switch (true) {
     case verificacaoNumeroCaracteres(name, 5):
-      return { code, message: errors.maisQueCincoCaracteres };
+      return { err: { code: 'invalid_data', message: errors.maisQueCincoCaracteres } };
     case produtoExiste !== false:
-      return { code, message: errors.produtoExistente };
+      return { err: { code: 'invalid_data', message: errors.produtoExistente } };
     case verificacaoMinimo(quantity, 0):
-      return { code, message: errors.quantidadeMenorOuIgualZero };
+      return { err: { code: 'invalid_data', message: errors.quantidadeMenorOuIgualZero } };
     case isNumber(quantity):
-      return { code, message: errors.quantidadeNumber };    
+      return { err: { code: 'invalid_data', message: errors.quantidadeNumber } };    
     default: return false;
   }
 };

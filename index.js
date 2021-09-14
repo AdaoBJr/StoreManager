@@ -6,7 +6,7 @@ const erroMiddleware = require('./ErroMiddleware/erroMiddleware');
 const app = express();
 app.use(bodyParser.json());
 
-// não remova esse endpoint, e para o avaliador funcionar!
+// não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.send();
 });
