@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const productsControler = require('./controller/productsController');
+const salesController = require('./controller/salesController');
 
 const PORT = 3000;
 
@@ -15,7 +16,11 @@ app.delete('/products/:id', productsControler.deleteProduct);
 
 app.get('/products', productsControler.getAllProducts);
 
+app.get('/sales', salesController.getAllSales);
+
 app.post('/products', productsControler.createProduct);
+
+app.post('/sales', salesController.createSale);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
