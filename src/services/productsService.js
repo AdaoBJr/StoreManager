@@ -100,4 +100,14 @@ const getProductById = async (id) => {
   return product;
 };
 
-module.exports = { addProduct, getAllProducts, getProductById, dictionary };
+const updateProductById = async (id, name, quantity) => {
+  if (validateNameLength(name)) return validateNameLength(name);
+  if (validateQuantityType(quantity)) return validateQuantityType(quantity);
+  if (validateQuantityAmount(quantity)) return validateQuantityAmount(quantity);
+
+  const attProduct = await productsModel.updateProductById(id, name, quantity);
+
+  return attProduct;
+};
+
+module.exports = { addProduct, getAllProducts, getProductById, dictionary, updateProductById };
