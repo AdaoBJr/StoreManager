@@ -36,4 +36,18 @@ const getById = async (req, res) => {
   }
 };
 
-module.exports = { add, getAll, getById };
+const update = async (req, res) => {
+  try {
+    const { name, quantity } = req.body;
+    const { id } = req.params.id;
+    const updateProduct = await service.update(id, name, quantity);
+    if (updateProduct.err) {
+      return res.status(422).json(updateProduct);
+    }
+  return res.status(200).json(updateProduct);
+  } catch (error) {
+    return res.status(422).json({ message: error.message });
+  }
+};
+
+module.exports = { add, getAll, getById, update };
