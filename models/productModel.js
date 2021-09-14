@@ -8,7 +8,7 @@ const findByName = async (name) => {
   return find;
 };
 
-const create = async ({ name, quantity }) => {
+const createProduct = async ({ name, quantity }) => {
   const data = await connection().then((db) => db.collection('products'));
   
   const newProduct = await data.insertOne({ name, quantity });
@@ -43,7 +43,7 @@ const deleteId = async (id) => {
 };
 
 module.exports = {
-  create,
+  createProduct,
   getAll,
   getById,
   updateId,

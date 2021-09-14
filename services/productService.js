@@ -17,7 +17,7 @@ const validQuantityAndName = (quantity, name) => {
   }
 };
 
-const create = async (obj) => {
+const createProduct = async (obj) => {
   const { quantity, name } = obj;
   const valid = validQuantityAndName(quantity, name);
   if (valid) {
@@ -63,7 +63,7 @@ const deleteId = async (id) => {
 };
 
 module.exports = {
-  create,
+  createProduct,
   updateById,
   deleteId,
   getById,

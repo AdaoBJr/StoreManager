@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const productController = require('./controllers/productController');
+const saleController = require('./controllers/saleController');
 
 const app = express();
 app.use(bodyParser.json());
@@ -11,12 +12,12 @@ app.get('/', (_request, response) => {
 });
 
 app.post('/products', productController.create);
-
 app.get('/products', productController.getAll);
-
 app.get('/products/:id', productController.getById)
   .put('/products/:id', productController.updateById)
   .delete('/products/:id', productController.deleteId);
+
+app.post('/sales', saleController.create);
 
 app.use((err, _req, res, _next) => {
   if (err.code === 'invalid_data') {
