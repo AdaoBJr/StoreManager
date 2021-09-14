@@ -14,9 +14,11 @@ const { checkQuantity } = require('../middlewares/salesMiddleware');
 
 // router.put();
 
-// router.get('/:id', salesController.getProductById);
+// router.get('/:id', salesController.getxProductById);
 
-// router.get('/', salesController.getProducts);
+router.get('/:id', salesController.getSaleById);
+
+router.get('/', salesController.getSales);
 
 router.post('/', checkQuantity, salesController.registerSale);
 
