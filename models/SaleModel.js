@@ -1,19 +1,20 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
+const findById = async (id) => {
+  if (!ObjectId.isValid(id)) return false;
+  
+  const db = await connection();
+  const sale = await db.collection('sales').findOne(ObjectId(id));
+
+  return sale;
+};
+
 const findAll = async () => {
   const db = await connection();
   const sales = await db.collection('sales').find().toArray();
 
   return sales;
-};
-
-const findById = async (id) => {
-  if (!ObjectId.isValid(id)) return false;
-  const db = await connection();
-  const sale = await db.collection('sales').findOne(ObjectId(id));
-
-  return sale;
 };
 
 const create = async (sale) => {
@@ -38,7 +39,9 @@ const update = async (id, sale) => {
 
 const exclude = async (id) => {
   const saleExcluded = await findById(id);
+
   if (!saleExcluded) return false;
+  
   const db = await connection();
 
   await db.collection('sales').deleteOne({ _id: ObjectId(id) });
@@ -46,4 +49,4 @@ const exclude = async (id) => {
   return saleExcluded;
 };
 
-module.exports = { create, findAll, findById, update, exclude };
+module.exports = { findById, findAll, create, update, exclude };

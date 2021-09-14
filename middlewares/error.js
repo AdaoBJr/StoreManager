@@ -18,9 +18,9 @@ const checkErrorCode = (code) => {
 module.exports = (err, _req, res, _next) => {
   if (err.isJoi) {
     return res.status(INVALID_DATA_CODE).json({
-      err: { code: 'invalid_data', message: err.details[0].message },
-    });
-  }
+          err: { code: 'invalid_data', message: err.details[0].message },
+        }); 
+    }
 
   // Verificamos se esse é um erro de domínio
   if (err.code) {

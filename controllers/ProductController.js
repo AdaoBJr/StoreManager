@@ -8,22 +8,34 @@ const NAME_MIN_LENGTH = 5;
 const validateProduct = (body) => {
   const { error } = Joi.object({
     name: Joi.string().not().empty().min(NAME_MIN_LENGTH)
-.required(),
+    .required(),
     quantity: Joi.number().integer().min(1),
   }).validate(body);
 
   return error;
 };
 
+const findById = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const product = await ProductService.findById(id);
+
+  if (product.err) return next(product.err);
+
+  res.status(200).json(product);
+});
+
+const findAll = rescue(async (_req, res, _next) => {
+  const products = await ProductService.findAll();
+
+  res.status(200).json({ products });
+});
+
 const create = rescue(async (req, res, next) => {
   const error = validateProduct(req.body);
 
-  if (error) {
-    return next(error);
-  }
+  if (error) return next(error);
 
   const { name, quantity } = req.body;
-
   const productAdd = await ProductService.create(name, quantity);
 
   if (productAdd.err) return next(productAdd.err);
@@ -34,13 +46,10 @@ const create = rescue(async (req, res, next) => {
 const update = rescue(async (req, res, next) => {
   const error = validateProduct(req.body);
 
-  if (error) {
-    return next(error);
-  }
+  if (error) return next(error);
 
   const { name, quantity } = req.body;
   const { id } = req.params;
-
   const productUpdated = await ProductService.update(id, name, quantity);
 
   return res.status(200).json(productUpdated);
@@ -48,7 +57,6 @@ const update = rescue(async (req, res, next) => {
 
 const exclude = rescue(async (req, res, next) => {
   const { id } = req.params;
-
   const productExcluded = await ProductService.exclude(id);
 
   if (productExcluded.err) return next(productExcluded.err);
@@ -56,29 +64,13 @@ const exclude = rescue(async (req, res, next) => {
   return res.status(200).json(productExcluded);
 });
 
-const findAll = rescue(async (_req, res, _next) => {
-  const products = await ProductService.findAll();
-
-  res.status(200).json({ products });
-});
-
-const findById = rescue(async (req, res, next) => {
-  const { id } = req.params;
-
-  const product = await ProductService.findById(id);
-
-  if (product.err) return next(product.err);
-
-  res.status(200).json(product);
-});
-
 // const updateFromSale = rescue((sale) => ProductService.updateFromSale(sale));
 
 module.exports = {
+  findById,
+  findAll,
   create,
   update,
   exclude,
-  findAll,
-  findById,
   // updateFromSale,
 };

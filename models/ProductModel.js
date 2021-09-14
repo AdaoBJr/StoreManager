@@ -1,5 +1,3 @@
-// { "name": "Produto Silva", "quantity": 10 }
-
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
@@ -12,32 +10,20 @@ const findByName = async (name) => {
   return productFound;
 };
 
-const findAll = async () => {
-  const db = await connection();
-  const products = await db.collection('products').find().toArray();
-
-  return products;
-};
-
 const findById = async (id) => {
   if (!ObjectId.isValid(id)) return false;
+  
   const db = await connection();
   const product = await db.collection('products').findOne(ObjectId(id));
 
   return product;
 };
 
-const update = async (id, name, quantity) => {
+const findAll = async () => {
   const db = await connection();
-  await db
-    .collection('products')
-    .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
+  const products = await db.collection('products').find().toArray();
 
-  const productUpdated = await findById(id);
-
-  if (!productUpdated) return false;
-
-  return productUpdated;
+  return products;
 };
 
 const create = async (name, quantity) => {
@@ -51,7 +37,9 @@ const create = async (name, quantity) => {
 
 const exclude = async (id) => {
   const productExcluded = await findById(id);
+  
   if (!productExcluded) return false;
+
   const db = await connection();
 
   await db.collection('products').deleteOne({ _id: ObjectId(id) });
@@ -59,11 +47,25 @@ const exclude = async (id) => {
   return productExcluded;
 };
 
+const update = async (id, name, quantity) => {
+  const db = await connection();
+  
+  await db
+    .collection('products')
+    .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
+
+  const productUpdated = await findById(id);
+
+  if (!productUpdated) return false;
+
+  return productUpdated;
+};
+
 const updateFromSale = async (productId, quantity, incresse) => {
   const db = await connection();
   const value = incresse ? quantity : -quantity;
   
-  db.collection('products').updateOne(
+  await db.collection('products').updateOne(
     { _id: ObjectId(productId) },
     { $inc: { quantity: value } },
   );
@@ -71,10 +73,10 @@ const updateFromSale = async (productId, quantity, incresse) => {
 
 module.exports = {
   findByName,
-  update,
-  create,
-  exclude,
-  findAll,
   findById,
+  findAll,
+  create,
+  update,
+  exclude,
   updateFromSale,
 };

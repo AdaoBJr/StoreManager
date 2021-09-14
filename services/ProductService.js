@@ -1,9 +1,8 @@
 const ProductModel = require('../models/ProductModel');
 
-const findAll = () => ProductModel.findAll();
-
 const findById = async (id) => {
   const product = await ProductModel.findById(id);
+
   if (!product) {
     return {
       err: {
@@ -15,6 +14,8 @@ const findById = async (id) => {
 
   return product;
 };
+
+const findAll = () => ProductModel.findAll();
 
 const create = async (name, quantity) => {
   const existingProduct = await ProductModel.findByName(name);
@@ -51,12 +52,16 @@ const exclude = async (id) => {
 const updateFromSale = async (sale, incresse) => {
   const results = sale.map(async ({ productId, quantity }) => {
     const product = await findById(productId);
+
     if (product.quantity < quantity) return false;
+
     await ProductModel.updateFromSale(productId, quantity, incresse);
+    
     return true;
   });
 
   const resolve = await Promise.all(results);
+  
   if (resolve.includes(false)) {
     return {
       err: {
@@ -70,10 +75,10 @@ const updateFromSale = async (sale, incresse) => {
 };
 
 module.exports = {
+  findById,
+  findAll,
   create,
   update,
   exclude,
-  findAll,
-  findById,
   updateFromSale,
 };

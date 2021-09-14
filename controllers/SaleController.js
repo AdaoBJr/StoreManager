@@ -3,6 +3,22 @@ const SaleService = require('../services/SaleService');
 
 const ProductService = require('../services/ProductService');
 
+const findById = rescue(async (req, res, next) => {
+  const { id } = req.params;
+
+  const sale = await SaleService.findById(id);
+
+  if (sale.err) return next(sale.err);
+
+  res.status(200).json(sale);
+});
+
+const findAll = rescue(async (_req, res, _next) => {
+  const sales = await SaleService.findAll();
+
+  res.status(200).json({ sales });
+});
+
 const create = rescue(async (req, res, next) => {
   const sale = req.body;
   const saleAdd = await SaleService.create(sale);
@@ -10,7 +26,7 @@ const create = rescue(async (req, res, next) => {
   if (saleAdd.err) return next(saleAdd.err);
 
   const updatedSale = await ProductService.updateFromSale(sale);
-  
+
   if (updatedSale.err) return next(updatedSale.err);
 
   return res.status(200).json(saleAdd);
@@ -24,22 +40,6 @@ const update = rescue(async (req, res, next) => {
   if (productUpdated.err) return next(productUpdated.err);
 
   return res.status(200).json(productUpdated);
-});
-
-const findAll = rescue(async (_req, res, _next) => {
-  const sales = await SaleService.findAll();
-
-  res.status(200).json({ sales });
-});
-
-const findById = rescue(async (req, res, next) => {
-  const { id } = req.params;
-
-  const sale = await SaleService.findById(id);
-
-  if (sale.err) return next(sale.err);
-
-  res.status(200).json(sale);
 });
 
 const exclude = rescue(async (req, res, next) => {
@@ -62,4 +62,4 @@ const exclude = rescue(async (req, res, next) => {
   return res.status(200).json(productExcluded);
 });
 
-module.exports = { create, findAll, findById, update, exclude };
+module.exports = { findById, findAll, create, update, exclude };

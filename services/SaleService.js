@@ -14,10 +14,9 @@ const validateProducts = (sale) => sale.map(({ productId, quantity }) => {
   return true;
 });
 
-const findAll = () => SaleModel.findAll();
-
 const findById = async (id) => {
   const sale = await SaleModel.findById(id);
+  
   if (!sale) {
     return {
       err: {
@@ -29,6 +28,8 @@ const findById = async (id) => {
 
   return sale;
 };
+
+const findAll = () => SaleModel.findAll();
 
 const create = async (sale) => {
   const checkProducts = validateProducts(sale);
@@ -63,4 +64,4 @@ const exclude = async (id) => {
   return SaleModel.exclude(id);
 };
 
-module.exports = { create, findAll, findById, update, exclude };
+module.exports = { findById, findAll, create, update, exclude };

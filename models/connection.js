@@ -16,6 +16,3 @@ const connection = () =>
     });
 
 module.exports = connection;
-
-// products : { "name": "Produto Silva", "quantity": 10 }
-// sales : { "itensSold": [{ "productId": "5f43cbf4c45ff5104986e81d", "quantity": 2 }] }
