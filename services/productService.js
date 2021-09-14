@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const productModel = require('../models/productModel');
 
 const lengthError = { err:
@@ -10,6 +11,14 @@ const mustBeANumbererror = { err:
 
 const productAlreadyExistsError = { err:
   { code: 'invalid_data', message: 'Product already exists' } };
+
+  const formatError = { err:
+    { code: 'invalid_data', message: 'Wrong id format' } };
+
+const getById = (id) => {
+  if (!ObjectId.isValid(id)) return formatError;
+  return productModel.getById(id);
+};
 
 /* const verifyName = (name) => {
   if (name.length < 5) return lengthError;
@@ -66,4 +75,4 @@ const add = async ({ name, quantity }) => {
   return productModel.add({ name, quantity });
 };
 
-module.exports = { add };
+module.exports = { add, getById };

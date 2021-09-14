@@ -19,17 +19,20 @@ const getAll = async (_req, res) => {
       const products = await model.getAll();
       return res.status(200).json(products);
   } catch (error) {
-      return res.status(422).json({ message: 'Wrong id format' });
+      return res.status(422).json({ message: error.message });
   }
 };
 
 const getById = async (req, res) => {
   try {
     const { id } = req.params.id;
-    const product = await model.getById(id);
+    const product = await service.getById(id);
+    if (product.err) {
+      return res.status(422).json(product);
+    }
   return res.status(200).json(product);
   } catch (error) {
-    return res.status(422).json({ message: 'Wrong id format' });
+    return res.status(422).json({ message: error.message });
   }
 };
 
