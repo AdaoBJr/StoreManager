@@ -15,7 +15,23 @@ const create = async (obj) =>
      saleModel.create(obj);
 
 const getAll = async () => saleModel.getAll();
+
+const findById = async (id) => {
+    const sale = await saleModel.findById(id);
+  
+    if (!sale) {
+      return {
+        err: {
+          code: 'invalid_data',
+          message: 'Wrong id format',
+        },
+      };
+    }
+  
+    return sale;
+};
 module.exports = {
       create,
       getAll,
+      findById,
   };
