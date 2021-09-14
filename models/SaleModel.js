@@ -24,7 +24,7 @@ const createSale = async (body) => {
   const getSaleById = async (id) => {
     const salesCollection = await Connection.getConnection();
     const sale = await salesCollection.collection('sales').findOne(ObjectId(id));
-    console.log(sale, 'sale no Model');
+    
     return sale;
   };
 
@@ -45,12 +45,10 @@ const createSale = async (body) => {
     if (!ObjectId.isValid(id)) return null;
 
     const salesCollection = await Connection.getConnection();
-    await salesCollection.collection('sales').deleteOne({
+    const sales = await salesCollection.collection('sales').deleteOne({
       _id: ObjectId(id),
     });
-    return {
-      _id: id,
-    };
+    return sales;
   };  
 
 module.exports = {

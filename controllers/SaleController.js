@@ -45,9 +45,21 @@ const updateSale = async (req, res) => {
   res.status(StatusCodes.OK).json({ _id: id, itensSold: body });
 };
 
+const deleteSale = async (req, res) => {
+  const { id } = req.params;
+
+  const { message, code } = await SaleService.deleteSale(id);
+
+  if (message) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ err: { code, message } });
+  }
+  res.status(StatusCodes.OK).json();
+};
+
 module.exports = {
   createSale,
   getAllSales,
   getSaleById,
   updateSale,
+  deleteSale,
 };

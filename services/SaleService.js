@@ -42,7 +42,9 @@ const getSaleById = async (id) => {
   }
 
   const sale = await SaleModel.getSaleById(id);
-  
+
+  if (!sale) return { code: 'not_found', message: 'Sale not found' };
+
   return sale;
 };
 
@@ -64,9 +66,23 @@ const updateSale = async (id, sale) => {
   
   return sales;
 };
+
+const deleteSale = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return { code: 'invalid_data', message: 'Wrong sale ID format' };
+  }
+  const { _id } = await getSaleById(id);
+  
+  if (!_id) return { code: 'not_found', message: 'Sale not found' };
+  
+  await SaleModel.deleteSale(id);
+  
+  return _id;
+};
  
   module.exports = {
   createSale,
   getSaleById,
-  updateSale,  
+  updateSale,
+  deleteSale,
 };
