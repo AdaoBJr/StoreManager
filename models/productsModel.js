@@ -58,5 +58,4 @@ module.exports = {
   updateProduct,
   removeProduct,
   updateDB,
-  
 };

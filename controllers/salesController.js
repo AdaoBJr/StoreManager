@@ -1,4 +1,9 @@
-const { StatusCodes: { OK, INTERNAL_SERVER_ERROR } } = require('http-status-codes');
+const { StatusCodes: {
+  OK,
+  INTERNAL_SERVER_ERROR,
+  UNPROCESSABLE_ENTITY,
+  NOT_FOUND,
+ } } = require('http-status-codes');
 const { include, getAll, getById, update, remove } = require('../services/salesService');
 
 const INTERNAL_SERVER_ERROR_MSG = 'Something went wrong :(';
@@ -6,6 +11,9 @@ const INTERNAL_SERVER_ERROR_MSG = 'Something went wrong :(';
 const addSales = async (req, res) => {
   try {
     const result = await include(req.body);
+
+    if (result.stockError) return res.status(NOT_FOUND).json(result.err);
+    if (result.err) return res.status(UNPROCESSABLE_ENTITY).json(result);
     
     return res.status(OK).json(result);
   } catch (error) {
@@ -27,7 +35,9 @@ const getAllSales = async (_req, res) => {
 const getSaleById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await getById(id);
+    const result = await getById(id, req.method);
+
+    if (result.err) return res.status(NOT_FOUND).json(result);
      
     return res.status(OK).json(result);
   } catch (error) {
@@ -41,6 +51,8 @@ const updateSale = async (req, res) => {
     const { id } = req.params;
     const result = await update(id, req.body);
      
+    if (result.err) return res.status(UNPROCESSABLE_ENTITY).json(result);
+
     return res.status(OK).json(result);
   } catch (error) {
     console.log(error.message);
@@ -51,8 +63,10 @@ const updateSale = async (req, res) => {
 const removeSale = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await remove(id);
+    const result = await remove(id, req.method);
    
+    if (result.err) return res.status(UNPROCESSABLE_ENTITY).json(result);
+
     return res.status(OK).json(result);
   } catch (error) {
     console.log(error.message);

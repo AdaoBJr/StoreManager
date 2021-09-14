@@ -20,8 +20,6 @@ const findById = async (id) => {
   return sale;
 };
 
-const isValidId = async (id) => ObjectId.isValid(id);
-
 const saleExists = async (id) => {
   const db = await connection();
   const wasFound = await db.collection('sales').findOne({ _id: ObjectId(id) });
@@ -57,7 +55,6 @@ module.exports = {
   getAllSales,
   findById,
   saleExists,
-  isValidId,
   updateSale,
   removeSale,
   checkAvailableQuantity,

@@ -1,5 +1,5 @@
-const { StatusCodes: { UNPROCESSABLE_ENTITY, NOT_FOUND } } = require('http-status-codes');
-const { isValidId, saleExists, checkAvailableQuantity } = require('../models/salesModel');
+const { ObjectId } = require('mongodb');
+const { saleExists, checkAvailableQuantity } = require('../models/salesModel');
 
 const errors = {
   invalidQuantity: 'Wrong product ID or invalid quantity',
@@ -8,59 +8,56 @@ const errors = {
   insufficientStock: 'Such amount is not permitted to sell',
 };
 
-const quantityValidations = (req, res, next) => {
-  const isValid = req.body.every(({ quantity }) => typeof quantity === 'number' && quantity >= 1);
+const quantityValidations = (sales) => {
+  const isValid = sales.every(({ quantity }) => typeof quantity === 'number' && quantity >= 1);
 
   if (!isValid) {
-    return res.status(UNPROCESSABLE_ENTITY).json({
+    return ({
       err: {
         code: 'invalid_data',
         message: errors.invalidQuantity,
       },
     });
   }
-  next();
+  return {};
 };
 
-const idValidation = async (req, res, next) => {
-  const { id } = req.params;
-  const result = await isValidId(id);
-
-  if (!result && req.method === 'GET') {
-    return res.status(NOT_FOUND).json({ err: {
-        code: 'not_found',
-        message: errors.notFound,
-      },
-    });
-  }
-  if (!result) {
-    return res.status(UNPROCESSABLE_ENTITY).json({ err: {
+const idValidation = (id, method) => {
+  const result = ObjectId.isValid(id);
+  if (!result && method === 'DELETE') {
+    return ({ err: {
         code: 'invalid_data',
         message: errors.invalidId,
       },
     });
   }
-  next();
-};
-
-const existenceValidation = async (req, res, next) => {
-  const { id } = req.params;
-  const result = await saleExists(id);
   if (!result) {
-    return res.status(NOT_FOUND).json({ err: {
+    return ({ err: {
         code: 'not_found',
         message: errors.notFound,
       },
     });
   }
-  next();
+  return {};
+};
+
+const existenceValidation = async (id) => {
+  const result = await saleExists(id);
+  if (!result) {
+    return ({ err: {
+        code: 'not_found',
+        message: errors.notFound,
+      },
+    });
+  }
+  return {};
 };
 
 const stockVerification = async (req, res, next) => {
   req.body.forEach(async ({ productId, quantity }) => {
     const isAvailable = await checkAvailableQuantity(productId, quantity);
     if (!isAvailable) {
-      return res.status(NOT_FOUND).json({
+      return res.status(404).json({
       err: {
         code: 'stock_problem',
         message: errors.insufficientStock,
@@ -78,3 +75,12 @@ module.exports = {
   existenceValidation,
   stockVerification,
 };
+
+// return ({
+//   stockError: 'Stock Insufficient',
+//   err: {
+//     code: 'stock_problem',
+//     message: errors.insufficientStock,
+//   },
+//  });
+// }

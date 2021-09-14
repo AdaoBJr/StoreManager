@@ -1,10 +1,5 @@
 const express = require('express');
-const {
-  quantityValidations,
-  existenceValidation,
-  idValidation,
-  stockVerification,
- } = require('../validations/salesValidations');
+
 const {
   addSales,
   getAllSales,
@@ -12,31 +7,20 @@ const {
   updateSale,
   removeSale,
 } = require('../controllers/salesController');
+const { stockVerification } = require('../validations/salesValidations');
 
 const router = express.Router();
 
 router.route('/')
   .post(
-    quantityValidations,
     stockVerification,
     addSales,
   )
   .get(getAllSales);
 
 router.route('/:id')
-    .get(
-      idValidation,
-      existenceValidation,
-      getSaleById,
-    )
-    .put(
-      quantityValidations,
-      updateSale,
-    )
-    .delete(
-      idValidation,
-      existenceValidation,
-      removeSale,
-    );
+    .get(getSaleById)
+    .put(updateSale)
+    .delete(removeSale);
 
 module.exports = router;
