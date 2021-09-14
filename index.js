@@ -1,7 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const productsController = require('./controllers/productsController');
+
 const errorMiddleware = require('./middlewares/error');
+const productsRouter = require('./routes/productsRouter');
+const salesRouter = require('./routes/salesRouter');
 
 const app = express();
 
@@ -12,11 +14,8 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.get('/products', productsController.getAll);
-app.get('/products/:id', productsController.getById);
-app.post('/products', productsController.create);
-app.put('/products/:id', productsController.update);
-app.delete('/products/:id', productsController.deleteOne);
+app.use('/products', productsRouter);
+app.use('/sales', salesRouter);
 
 app.use(errorMiddleware);
 

@@ -1,13 +1,16 @@
 // hello-msc/middlewares/error.js
-module.exports = (err, req, res, _next) => {
-  // Caso não seja um erro do Joi, pode ser um erro de domínio ou um erro inesperado.
-  // Construímos, então, um mapa que conecta um erro de domínio a um status HTTP.
+module.exports = (err, _req, res, _next) => {
+  const bdError = () => {
+    if (err.message.includes('Argument passed')) {
+    return res.status(422).json({ 
+      err: { 
+        code: 'invalid_data', 
+        message: 'Wrong product ID or invalid quantity', 
+      }, 
+    });
+  }
+  };
+  if (err.message) bdError();
 
-  // Buscamos o status adequado para o erro que estamos tratando.
-  // Caso não haja um status para esse código, assumimos que é
-  // um erro desconhecido e utilizamos o status 500 Internal Server Error
-  // const status = statusByErrorCode[err.code] || 500;
-
-  // Por último, retornamos o status e a mensagem de erro para o client
   res.status(err.number).json({ err: err.error });
 };

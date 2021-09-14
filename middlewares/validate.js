@@ -59,7 +59,22 @@ const isValidated = ({ name, quantity }) => {
   }
 };
 
+const validateSale = (saleArray) => {
+  for (let index = 0; index < saleArray.length; index += 1) {
+    if (saleArray[index].quantity <= 0 || typeof saleArray[index].quantity === 'string') {
+      return { 
+        number: 422,
+        error: { 
+          code: 'invalid_data', 
+          message: 'Wrong product ID or invalid quantity', 
+        }, 
+      };
+    }
+  }
+};
+
 module.exports = {
   productExists,
   isValidated,
+  validateSale,
 };

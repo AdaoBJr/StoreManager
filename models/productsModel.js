@@ -5,16 +5,6 @@ const connection = require('./connection');
 
 // Busca todos os autores do banco.
 
-// const getAll = async () => connection()
-//     .then((db) => db.collection('products').find().toArray())
-//     .then((produts) =>
-//     produts.map(({ _id, name, quantity }) =>
-//         getNewProduct({
-//           _id,
-//           name,
-//           quantity,
-//           })));
-
 const getAll = async () => connection()
     .then((db) => db.collection('products').find().toArray())
     .then((products) => ({ products }));
