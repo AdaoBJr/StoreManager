@@ -110,4 +110,7 @@ const updateProductById = async (id, name, quantity) => {
   return attProduct;
 };
 
-module.exports = { addProduct, getAllProducts, getProductById, dictionary, updateProductById };
+const deleteProductById = async (id) => productsModel.deleteProductById(id);
+
+module.exports = {
+  addProduct, getAllProducts, getProductById, dictionary, updateProductById, deleteProductById };
