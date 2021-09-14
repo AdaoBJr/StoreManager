@@ -14,9 +14,13 @@ const getProductById = async (id) => productsConnection()
 const updateProductById = async (id, name, quantity) => productsConnection()
   .then((db) => db.collection('products')
     .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } }))
-      .then(() => ({ _id: id, name, quantity })); 
+      .then(() => ({ _id: id, name, quantity }));
+
+const deleteProductById = async (id) => productsConnection()
+  .then((db) => db.collection('products').deleteOne({ _id: ObjectId(id) }));
 
 const checkName = async (name) => productsConnection()
   .then((db) => db.collection('products').findOne({ name }));
 
-module.exports = { addProduct, checkName, getAllProducts, getProductById, updateProductById };
+module.exports = {
+  addProduct, checkName, getAllProducts, getProductById, updateProductById, deleteProductById };
