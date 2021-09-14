@@ -2,7 +2,7 @@ const productsModel = require('../models/productsModel');
 
 const validNameService = (name) => {
   if (name.length < 5 || typeof (name) !== 'string') return false;
-
+    
   return true;
 };
 

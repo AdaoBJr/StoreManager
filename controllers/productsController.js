@@ -87,7 +87,7 @@ const getByIdBeforeDelete = (req, res, next) => {
 
 const deleteProduct = (req, _res) => {
   const { id } = req.params;
-  productsService.deleteProduct(id);
+  return productsService.deleteProduct(id);
 };
 
 module.exports = {
