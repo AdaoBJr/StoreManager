@@ -3,12 +3,17 @@ const { expect } = require("chai");
 const { MongoClient, ObjectID } = require("mongodb");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
-const { SalesSerializer, ProductSerializer } = require("../../models");
+const {
+  Sales,
+  Product,
+  SalesSerializer,
+  ProductSerializer,
+} = require("../models");
+
 const {
   updateFromPreviousValues,
   updateValuesFromDelete,
-} = require("../../models/helper/salesHelper");
-const { Sales, Product } = require("../../models");
+} = require("../models/helper/salesHelper");
 
 describe("checa interação do model product no BD", () => {
   const productPayloadOne = {
@@ -21,7 +26,7 @@ describe("checa interação do model product no BD", () => {
     quantity: 100,
   };
 
-  const invalidId = "613fcf1e94ae275bc2364555";
+  const INVALID_ID = "613fcf1e94ae275bc2364555";
 
   let connectionMock;
   let product;
@@ -138,7 +143,7 @@ describe("checa interação do model product no BD", () => {
 
     it("não deve ser possivel atualizar o produto que não existe.", async () => {
       await product.InsertOne(productPayloadOne);
-      const newValues = { id: invalidId, name: "popo", quantity: 30 };
+      const newValues = { id: INVALID_ID, name: "popo", quantity: 30 };
       await product.Update(newValues);
       const foundElement = await product.FindByName("popo");
 
@@ -190,7 +195,7 @@ describe("checa interação do model sales no BD", () => {
     },
   ];
 
-  const invalidId = "613fcf1e94ae275bc2364555";
+  const INVALID_ID = "613fcf1e94ae275bc2364555";
 
   let connectionMock;
   let sales;
@@ -296,7 +301,7 @@ describe("checa interação do model sales no BD", () => {
 
     // it("não deve ser possivel atualizar a venda que não existe.", async () => {
     //   await product.InsertOne(productPayloadOne);
-    //   const newValues = { id: invalidId, name: "popo", quantity: 30 };
+    //   const newValues = { id: INVALID_ID, name: "popo", quantity: 30 };
     //   await product.Update(newValues);
     //   const foundElement = await product.FindByName("popo");
 

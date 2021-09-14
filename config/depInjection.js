@@ -3,7 +3,7 @@ const { connection } = require('../infraestructure/database/connection');
 const { errorBuilder } = require('../middleware');
 const { Product, ProductSerializer, Sales, SalesSerializer } = require('../models');
 const { codes, messages } = require('../schemas');
-const { ProductService, SalesService } = require('../service');
+const { ProductService, SalesService } = require('../services');
 
 const injectDep = async () => {
   const db = await connection();

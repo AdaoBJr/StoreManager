@@ -1,5 +1,5 @@
 const express = require('express');
-const { productsRouter, salesRouter } = require('../controller');
+const { productsRouter, salesRouter } = require('../controllers');
 const { errorMiddleware } = require('../middleware/errorMiddleware');
 
 module.exports = () => {
