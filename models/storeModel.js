@@ -8,6 +8,13 @@ const productExists = async (name) => {
     return product !== null;
 };
 
+const productIdExists = async (id) => {
+    const db = await connection();
+    const product = await db.collection('products').findOne({ _id: ObjectId(id) });
+
+    if (product !== null) return product;
+};
+
 const getAll = async () => {
     const db = await connection();
     return db.collection('products').find().toArray();
@@ -37,4 +44,4 @@ const exclude = async (id) => {
     return db.collection('products').deleteOne({ _id: ObjectId(id) });
 };
 
-module.exports = { getAll, create, update, exclude, productExists };
+module.exports = { getAll, create, update, exclude, productExists, productIdExists };
