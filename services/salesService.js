@@ -1,6 +1,6 @@
 const { salesValidator } = require('../middleware/sales');
 const {
-  modelCreate, modelListAll, modelListById,
+  modelCreate, modelListAll, modelListById, modelUpdater,
 } = require('../models/salesModel');
 
 const servCreate = async (itens) => {
@@ -10,6 +10,14 @@ const servCreate = async (itens) => {
   }
   const a = await modelCreate(itens);
   return a;
+};
+
+const servUpdater = async ({ id, itensSold }) => {
+  const invalidator = await salesValidator(itensSold);
+  if (invalidator) {
+    return invalidator;
+  }
+  return modelUpdater({ id, itensSold });
 };
 
 const servListByID = async (id) => { 
@@ -24,4 +32,5 @@ module.exports = {
   servCreate,
   servListByID,
   servListAll,
+  servUpdater,
 };

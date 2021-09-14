@@ -7,6 +7,18 @@ const modelCreate = async (itensSold) => {
 return { code: 200, itensSold: { _id: sales.insertedId, itensSold } };
 };
 
+const modelUpdater = async ({ id, itensSold }) => {
+  const db = await connection();
+ await db.collection('sales').updateOne({
+     _id: new ObjectId(id),
+    },
+     {
+       $set: {
+              itensSold,
+              } });
+  return { code: 200, itensSold: { _id: id, itensSold } };
+};
+
 const modelListById = async (id) => {
   if (!ObjectId.isValid(id)) return null;
 
@@ -25,4 +37,5 @@ module.exports = {
   modelCreate,
   modelListById,
   modelListAll,
+  modelUpdater,
 };
