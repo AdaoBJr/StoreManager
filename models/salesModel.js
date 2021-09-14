@@ -23,7 +23,7 @@ const newSale = async (res) => {
     .some((item) => (item.quantity - product.quantity) <= 0)).length;
 
   if (sell === 0) {
-    const sold = await db.collection('sales').insertOne({ itenSold: res });
+    const sold = await db.collection('sales').insertOne({ itensSold: res });
     const { insertedId } = sold;
     const descSale = JSON.parse(sold);
     const completed = descSale.ops[0].itensSold;
