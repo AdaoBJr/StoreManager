@@ -50,27 +50,28 @@ const validateQuantity = (sales) => {
 const validateIdMongo = (id) => {
   if (!ObjectID.isValid(id)) {
     return {
-      code: NOTFOUND,
-      message: 'Sale not found',
+      code: INVALID_DATA,
+      message: 'Wrong id format',
     };
   }
 
   return true;
 };
 
-const validateIfSaleExists = async (id) => {
+const validateIfSaleExists = async (id, error) => {
   const allSales = await Sales.getAllSales();
   if (allSales.message) return { message: allSales.message };
 
-  const allIds = allSales.map(({ _id }) => _id);
-  console.log(allIds);
-
-  const saleExists = allIds.some((idOfSales) => idOfSales === id);
+  const saleExists = allSales.some(({ _id }) => _id.toString() === id);
   if (!saleExists) {
-    return {
-      code: NOTFOUND,
-      message: 'Sale not found',
-    };
+    switch (error) {
+      case NOTFOUND:
+        return { code: NOTFOUND, message: 'Sale not found' };
+      case INVALID_DATA:
+        return { code: INVALID_DATA, message: 'Wrong sale ID format' };
+      default:
+        break;
+    }
   }
 
   return true;
