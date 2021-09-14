@@ -21,9 +21,9 @@ const getSalesById = async (id) => {
   return sales;
 };
 
-const updateSale = async ({ id, update }) => {
+const calculateDifference = async (id, update) => {
   const oldSale = await getSalesById(id);
-  const difference = oldSale.itensSold.map((old) => {
+  return oldSale.itensSold.map((old) => {
     const locateProduct = update.find(({ productId }) => productId === old.productId);
     if (!locateProduct) return;
     return {
@@ -31,6 +31,10 @@ const updateSale = async ({ id, update }) => {
       quantity: locateProduct.quantity - old.quantity, 
     };
   });
+};
+
+const updateSale = async ({ id, update }) => {
+  const difference = await calculateDifference(id, update);
   await Promise.all(productModel.subtractProducts(difference));
   await mongodb.getConnection()
   .then((db) => db.collection('sales')
@@ -53,4 +57,5 @@ module.exports = {
   getSalesById,
   updateSale,
   deleteSale,
+  calculateDifference,
 };

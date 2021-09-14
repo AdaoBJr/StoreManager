@@ -4,7 +4,10 @@ const salesModel = require('../models/salesModel');
 const registerNewSale = async (req, res) => {
   const sales = req.body;
   const insertSales = await salesService.registerNewSale(sales);
-  if (insertSales.err) return res.status(422).json(insertSales);
+  if (insertSales.err) {
+    if (insertSales.err.code === 'stock_problem') return res.status(404).json(insertSales);
+    return res.status(422).json(insertSales);
+  }
   res.status(200).json(insertSales);
 };
 
@@ -27,6 +30,7 @@ const updateSale = async (req, res) => {
   const update = req.body;
   const sale = await salesService.updateSale({ id, update });
   if (sale.err) {
+    if (sale.err.code === 'stock_problem') return res.status(404).json(sale);
     return res.status(422).json(sale);
   }
   res.status(200).json(sale);
