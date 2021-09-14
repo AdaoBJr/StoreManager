@@ -24,9 +24,17 @@ const updateSaleById = async (saleId, updates) => {
   return updatedSale;
 };
 
+const deleteSaleById = async (saleId) => {
+  const validate = await salesSchema.validateIdAndQty(saleId);
+  if (validate.err) return false;
+  const saleDeleted = await model.deleteSaleById(saleId);
+  return saleDeleted;
+};
+
 module.exports = {
   insertNewSale,
   getAllSales,
   getSaleById,
   updateSaleById,
+  deleteSaleById,
 };
