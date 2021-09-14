@@ -10,6 +10,8 @@ app.use(bodyParser.json());
 
 app.get('/products/:id', productsControler.getProductById);
 
+app.get('/sales/:id', salesController.getSaleById);
+
 app.put('/products/:id', productsControler.updateProduct);
 
 app.delete('/products/:id', productsControler.deleteProduct);

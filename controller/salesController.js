@@ -16,11 +16,11 @@ const getSaleById = async (req, res) => {
       const result = await service.getSaleById(id);
 
       if (result.err) {
-          return res.status(422).json(result);
+          return res.status(404).json(result);
       }
       return res.status(200).json(result);
   } catch (error) {
-      return res.status(422).json({ message: error.message });
+      return res.status(404).json({ message: error.message });
   }
 };
 

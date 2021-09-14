@@ -1,4 +1,4 @@
-const { ObjectId } = require('mongodb');
+// const { ObjectId } = require('mongodb');
 const saleModel = require('../models/salesModel');
 
 const wrongIdFormat = {
@@ -7,15 +7,16 @@ const wrongIdFormat = {
     message: 'Wrong product ID or invalid quantity', 
   } };
 
-  // const saleNotFound = {
-  //   err: { 
-  //     code: 'invalid_data', 
-  //     message: 'Sale not found', 
-  //   } };
+  const saleNotFound = {
+    err: { 
+      code: 'not_found', 
+      message: 'Sale not found', 
+    } };
 
-const getSaleById = (id) => {
-  if (!ObjectId.isValid(id)) return wrongIdFormat;
-  return saleModel.productById(id);
+const getSaleById = async (id) => {
+  const verifySale = await saleModel.saleExists(id);
+  if (!verifySale) return saleNotFound;
+  return saleModel.saleById(id);
 };
 
 const createSale = (itensSold) => {
