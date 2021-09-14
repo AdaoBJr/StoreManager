@@ -23,10 +23,28 @@ const getProductsId = async (req, res) => {
         return res.status(422).json({ err });
       }
     const product = await productsCollection.findOne({ _id: ObjectId(id) });
+    return product;
+};
+
+const productId = async (req, res) => {
+    const product = await getProductsId(req, res);
+    return res.status(200).json(product);
+};
+
+const updateProducts = async (req, res) => {
+    const { id } = req.params;
+    const { name, quantity } = req.body;
+    const db = await getConnection();
+  await db.collection('products').updateOne(
+    { _id: ObjectId(id) }, { $set: { name, quantity } },
+  );
+    const product = await getProductsId(req, res);
     return res.status(200).json(product);
 };
 
 module.exports = {
     getAllProducts,
     getProductsId,
+    productId,
+    updateProducts,
 };

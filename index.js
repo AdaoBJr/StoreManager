@@ -10,12 +10,10 @@ const {
 
 const {
   create,
-} = require('./models/products');
-
-const {
+  productId,
   getAllProducts,
-  getProductsId,
-} = require('./models/getAllProducts');
+  updateProducts,
+} = require('./models');
 
 app.use(bodyParser.json());
 
@@ -34,6 +32,6 @@ app.post('/products', [validateName, validateQuantity, create]);
 
 app.get('/products', [getAllProducts]);
 
-app.get('/products/:id', [getProductsId]);
+app.get('/products/:id', [productId]);
 
-app.put('/products/:id', [validateName, validateQuantity]);
+app.put('/products/:id', [validateName, validateQuantity, updateProducts]);

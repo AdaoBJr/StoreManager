@@ -10,7 +10,6 @@ const create = async (req, res) => {
     const productsCollection = await getConnection()
     .then((db) => db.collection('products'));
     const { name, quantity } = req.body;
-
     const product = await productsCollection.findOne({ name });
     if (product) return res.status(422).json({ err });
 
