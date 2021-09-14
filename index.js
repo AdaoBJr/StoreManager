@@ -19,7 +19,8 @@ app.get('/products/:id', productController.getByIdProduct)
 
 app.post('/sales', saleController.create);
 app.get('/sales', saleController.getAll);
-app.get('/sales/:id', saleController.getById);
+app.get('/sales/:id', saleController.getById)
+.put('/sales/:id', saleController.updateId);
 
 app.use((err, _req, res, _next) => {
   if (err.code === 'invalid_data') {

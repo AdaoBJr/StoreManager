@@ -37,15 +37,28 @@ const getById = async (id) => {
     return { err: { message: 'Sale not found', code: 'not_found' } };
   }
   const findId = await saleModel.getById(id);
-  console.log(findId);
   if (!findId) {
     return { err: { message: 'Sale not found', code: 'not_found' } };
   }
   return findId;
 };
 
+const updateId = async (id, sale) => {
+  if (!ObjectId.isValid(id)) {
+    return { err: { message: 'Sale not found', code: 'not_found' } };
+  }
+  const valid = validQuantity(sale[0].quantity);
+  console.log(valid);
+  if (valid.err) {
+    return valid;
+  }
+  const update = await saleModel.updateId(id, sale);
+  return update;
+};
+
 module.exports = {
   createSale,
   getAll,
+  updateId,
   getById,
 };

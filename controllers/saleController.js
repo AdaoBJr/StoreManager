@@ -16,15 +16,24 @@ const getAll = async (_req, res) => {
 const getById = async (req, res, next) => {
   const { id } = req.params;
   const findId = await saleService.getById(id);
-  console.log(findId);
   if (findId.err) {
     return next(findId.err);
   }
   return res.status(200).json(findId);
 };
 
+const updateId = async (req, res, next) => {
+  const { id } = req.params;
+  const update = saleService.updateId(id, req.body);
+  if (update.err) {
+    return next(update.err);
+  }
+  return '';
+};
+
 module.exports = {
   create,
   getAll,
+  updateId,
   getById,
 };
