@@ -1,4 +1,6 @@
+const { ObjectId } = require('mongodb');
 const { getAll } = require('../model/modelProducts');
+const getConnecion = require('../model/connection');
 
 const code = 'invalid_data';
 
@@ -38,6 +40,16 @@ const quantityValid = (quantity) => {
   }
 };
 
+const productExists = async ({ id }) => {
+  const db = await getConnecion();
+  if (!id || id.length !== 24) {
+    return null;
+  }
+  const product = await db.collection('products').findOne(ObjectId(id));
+  console.log(product, 'schema');
+  return product;
+};
+
 const findByName = async (name) => {
   const productList = await getAll();
 
@@ -64,4 +76,4 @@ const isValid = async (name, quantity) => {
   return {};
 };
 
-module.exports = { isValid, findByName };
+module.exports = { isValid, findByName, productExists };

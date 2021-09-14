@@ -12,9 +12,8 @@ const findById = async (req, res) => {
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
   const productDeleted = await ServiceProduct.findById(id);
-  
-  const { name } = productDeleted;
-  const deleteOne = await ServiceProduct.deleteProduct(name);
+
+  const deleteOne = await ServiceProduct.deleteProduct(id);
 
   if (deleteOne.err) return res.status(422).json(deleteOne);
   return res.status(200).json(productDeleted);

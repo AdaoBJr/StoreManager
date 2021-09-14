@@ -1,27 +1,24 @@
 const ModelProducts = require('../model/modelProducts');
 
-const { isValid, findByName } = require('../schemas/schemasValidate');
+const { isValid, findByName, productExists } = require('../schemas/schemasValidate');
 
 const findById = async (id) => {
   const productFound = await ModelProducts.findById(id);
-  // console.log(productFound, 'product');
+  
   if (!productFound) return { err: { code: 'invalid_data', message: 'Wrong id format' } };
 
   return productFound;
 };
 
-const deleteProduct = async (name) => {
-  // const deleteOne = await ModelProducts.deleteProduct(id);
-  const list = await ModelProducts.getAll();
-  const productIndex = list.findIndex((el) => el.name === name);
+const deleteProduct = async (id) => {
+  const productFound = await productExists({ id });
+  
+  if (!productFound) return { err: { code: 'invalid_data', message: 'Wrong id format' } };
 
-  if (!list[productIndex]) return { err: { code: 'invalid_data', message: 'Wrong id format' } };
+  const { name, quantity, _id } = productFound;
+  await ModelProducts.deleteProduct({ id });
 
-  list.splice(productIndex, 1);
-  console.log(list, 'list');
-  return {};
-
-  // if (!deleteOne) return { err: { code: 'invalid_data', message: 'Wrong id format' } };
+  return { name, quantity, _id };
 };
 
 const update = async (id, newName, newQuantity) => {
