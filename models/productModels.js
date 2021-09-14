@@ -31,10 +31,18 @@ const findProductById = async (id) => {
   return product;
 };
 
+const deleteProduct = async (id) => {
+  const db = await connect();
+  const deleted = await db.collection('products').deleteOne({ _id: ObjectId(id) });
+  const { name, quantity } = deleted;
+  return { _id: id, name, quantity };
+};
+
 module.exports = {
   createProduct,
   findByName,
   findAllProducts,
   findProductById,
   updateProduct,
+  deleteProduct,
 };

@@ -73,9 +73,18 @@ const validateUpdate = async ({ id, name, quantity }) => {
   return updateProduct;
 };
 
+const validateDelete = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return { code: 'invalid_data', message: 'Wrong id format' }; 
+  }
+  const deleteProduct = await modelProducts.deleteProduct(id);
+  return deleteProduct;
+};
+
 module.exports = {
   validateCreate,
   validateFindAll,
   validateFindById,
   validateUpdate,
+  validateDelete,
 };

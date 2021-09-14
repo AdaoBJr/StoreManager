@@ -15,6 +15,8 @@ app.post('/products', productsController.createProduct);
 
 app.put('/products/:id', productsController.updateProduct);
 
+app.delete('/products/:id', productsController.deleteProduct);
+
 app.get('/', (_request, response) => {
   response.send();
 });
