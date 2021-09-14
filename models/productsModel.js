@@ -26,4 +26,17 @@ const getProductById = async (id) => {
   return result[0];
 };
 
-module.exports = { createProduct, getAllProducts, getProductByName, getProductById };
+const excludeProductById = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const result = await connection.getConnection().then((db) =>
+  db.collection('products').deleteOne({ _id: ObjectId(id) }));
+  return result;
+};
+
+module.exports = {
+  createProduct,
+  getAllProducts,
+  getProductByName,
+  getProductById,
+  excludeProductById,
+};

@@ -23,6 +23,12 @@ const getProductById = async (id) => {
   return productById;
 };
 
+const excludeProductById = async (id) => {
+  const excludedProduct = await getProductById(id);
+  await productsModel.excludeProductById(id);
+  return excludedProduct;
+};
+
 const createProduct = async ({ name, quantity }) => {
   const existsProduct = await getProductByName(name);
   if (name.length < 6) {
@@ -44,4 +50,9 @@ const createProduct = async ({ name, quantity }) => {
   return productsModel.createProduct({ name, quantity });
 };
 
-module.exports = { createProduct, getAllProducts, getProductById };
+module.exports = {
+  createProduct,
+  getAllProducts,
+  getProductById,
+  excludeProductById,
+};
