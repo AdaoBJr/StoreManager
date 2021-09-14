@@ -2,7 +2,6 @@ const { ObjectId } = require('mongodb');
 const mongoConnection = require('./connection');
 
 const getNewSale = async (idSale, obj) => 
-    // console.log(obj, 'aqio');
       ({
          _id: idSale, 
          itensSold: obj,
@@ -11,7 +10,6 @@ const findById = async (id) => {
     if (!ObjectId.isValid(id)) return null;
     const db = await mongoConnection();
     const response = await db.collection('sales').findOne(ObjectId(id));
-        // const { quantity, name } = response;
 
         return response;
 };
@@ -43,9 +41,17 @@ const updateSale = async (id, itensSold) => {
    return getNewSale(id, itensSold);
 };
 
+const removeSale = async (id) => {
+    const existingSale = await findById(id);
+    const db = await mongoConnection();
+     await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+    return existingSale;
+};
+
 module.exports = { 
     create,
     getAll,
     findById,
     updateSale,
+    removeSale,
 };

@@ -59,10 +59,25 @@ return res.status(422).json({
       code: 'invalid_data',
       message: 'Wrong product ID or invalid quantity' } }); 
 }
-const product = await saleService.updateSale(id, req.body);
-if (!product) return res.status(422).json(product);
+const sale = await saleService.updateSale(id, req.body);
+if (!sale) return res.status(422).json(sale);
 
-return res.status(200).json(product); 
+return res.status(200).json(sale); 
+};
+
+const removeSale = async (req, res) => {
+  const { id } = req.params;
+
+  const sale = await saleService
+  .removeSale(id);
+  if (sale.err) {
+ return res.status(422).json({
+    err: { 
+      code: 'invalid_data',
+      message: 'Wrong sale ID format' },
+  }); 
+}
+  return res.status(200).json(sale);
 };
 
 module.exports = {
@@ -70,4 +85,5 @@ module.exports = {
     getAll,
     findById,
     updateSale,
+    removeSale,
 };

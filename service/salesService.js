@@ -36,9 +36,16 @@ const updateSale = async (id, obj) => {
 
      return saleModel.updateSale(id, obj);
   };
+
+  const removeSale = async (id) => {
+        const existingProduct = await findById(id);
+        if (existingProduct.err) return existingProduct;
+         return saleModel.removeSale(id);
+  };
   module.exports = {
       create,
       getAll,
       findById,
       updateSale,
+      removeSale,
   };
