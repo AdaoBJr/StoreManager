@@ -1,9 +1,12 @@
 const express = require('./config/customExpress');
 
-const app = express();
+const start = async () => {
+    const app = await express();
   
-const PORT = '3000';
-
-app.listen(PORT, () => {
-    console.log(`listening on port ${PORT}`);
-});
+    const PORT = '3000';
+    
+    app.listen(PORT, () => {
+        console.log(`listening on port ${PORT}`);
+    });
+};
+start();

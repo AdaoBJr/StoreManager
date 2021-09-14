@@ -1,15 +1,14 @@
 const express = require('express');
-const { productsRouter, salesRouter } = require('../controllers');
+const { productsRoute, salesRoute } = require('../routes');
 const { errorMiddleware } = require('../middleware/errorMiddleware');
 
-module.exports = () => {
+module.exports = async () => {
   const app = express();
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-
-  app.use('/products', productsRouter);
-  app.use('/sales', salesRouter);
+  app.use('/products', await productsRoute);
+  app.use('/sales', await salesRoute);
 
   app.get('/', (_request, response) => {
     response.send();

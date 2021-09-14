@@ -11,13 +11,9 @@ class ProductService {
     return { status: this.codes.OK, message: { products: productList } };
   }
 
-  async FindBy(value, id = false) {
-    let product = null;
-    if (id) {
-      product = await this.Product.FindById(value);
-    } else {
-      product = await this.Product.FindByName(value);
-    }
+  async FindById(value) {
+    const product = await this.Product.FindById(value);
+
     if (!product) {
       return this.errorBuilder({
         status: this.codes.UNPROCESSABLE_ENTITY,
@@ -34,12 +30,12 @@ class ProductService {
     if (foundElement) {
       return this.errorBuilder({
         status: this.codes.UNPROCESSABLE_ENTITY,
-        code: this.codes.INVALID_DATA, 
-        message: this.messages.INVALID_NAME_ALREADY_EXISTS,   
+        code: this.codes.INVALID_DATA,
+        message: this.messages.INVALID_NAME_ALREADY_EXISTS,
       });
     }
-      const modelRes = await this.Product.InsertOne(product);
-      return { status: this.codes.CREATED, message: modelRes };
+    const modelRes = await this.Product.InsertOne(product);
+    return { status: this.codes.CREATED, message: modelRes };
   }
 
   async Update({ id, name, quantity }) {
