@@ -3,7 +3,7 @@ const service = require('../services/products');
 async function findById(req, res) {
   const { id } = req.params;
   const result = await service.findById(id);
-  return res.status(201).json(result);
+  return res.status(200).json(result);
 }
 
 async function createProduct(req, res) {

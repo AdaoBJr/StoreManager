@@ -64,28 +64,28 @@ async function idValidation(id) {
 
 async function findById(id) {
   const result = await model.findById(id);
+  console.log(result);
   productValidation(result);
   return result;
 }
 
 async function createProduct(name, quantity) {
-  nameValidation();
-  nameExists();
-  quantityValidation();
-  quantityIsNumber();
-  productValidation();
-  idValidation();
+  nameValidation(name);
+  await nameExists(name);
+  quantityValidation(quantity);
+  quantityIsNumber(quantity);
   const result = await model.createProduct(name, quantity);
   return result;
 }
 
 async function fetchProducts() {
   const result = await model.fetchProducts();
-  return result;
+  return { products: result };
 }
 
 module.exports = {
   findById,
+  idValidation,
   createProduct,
   fetchProducts,
 };
