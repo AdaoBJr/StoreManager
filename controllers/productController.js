@@ -52,6 +52,21 @@ const update = async (req, res) => {
   }
 };
 
+const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedProduct = await productService.deleteService({ id });
+    return res.status(StatusCodes.OK).json(deletedProduct);
+  } catch (error) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ 
+      err: { 
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    });
+  }
+};
+
 // const remove = async (req, res) => {};
 
 module.exports = {
@@ -59,5 +74,6 @@ module.exports = {
   getAll,
   getById,
   update,
+  deleteProduct,
   // remove,
 };
