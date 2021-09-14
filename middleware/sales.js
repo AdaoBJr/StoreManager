@@ -1,5 +1,4 @@
 const quantityValidator = (itens) => {
-  console.log(itens, 'sales');
 const test = itens.some((element) => element.quantity <= 0 || typeof element.quantity !== 'number');
     if (test) {
       return {

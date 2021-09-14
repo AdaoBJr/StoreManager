@@ -7,6 +7,14 @@ const modelCreate = async (itensSold) => {
 return { code: 200, itensSold: { _id: sales.insertedId, itensSold } };
 };
 
+const modelEraser = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await connection();
+  const sales = await db.collection('sales').findOne(new ObjectId(id));
+  await db.collection('sales').deleteOne({ _id: new ObjectId(id) });
+  return { code: 200, sales };
+};
+
 const modelUpdater = async ({ id, itensSold }) => {
   const db = await connection();
  await db.collection('sales').updateOne({
@@ -38,4 +46,5 @@ module.exports = {
   modelListById,
   modelListAll,
   modelUpdater,
+  modelEraser,
 };

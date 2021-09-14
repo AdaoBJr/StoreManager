@@ -3,6 +3,7 @@ const {
   servListAll,
   servListByID,
   servUpdater,
+  servEraser,
 } = require('../services/salesService');
 
 const contCreate = async (req, res) => {
@@ -14,12 +15,21 @@ const contCreate = async (req, res) => {
 return res.status(result.code).json(result.itensSold);
 };
 
+const contEraser = async (req, res) => {
+  const { id } = req.params;
+  const result = await servEraser(id);
+  if (result.err) {
+    return res.status(result.code).json({ ...result });
+  }
+  return res.status(result.code).json(result.itensSold);
+};
+
 const contUpdater = async (req, res) => {
   const itensSold = req.body;
   const { id } = req.params;
   const sales = { id, itensSold };
   const result = await servUpdater(sales);
-  console.log(result, 'result');
+
   if (result.err) {
     return res.status(result.code).json({ ...result });
   }
@@ -45,4 +55,5 @@ module.exports = {
   contListByID,
   contListAll,
   contUpdater,
+  contEraser,
 };

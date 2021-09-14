@@ -4,6 +4,7 @@ const {
   contListByID,
   contListAll,
   contUpdater,
+  contEraser,
  } = require('../controllers/salesController');
 
 const router = express.Router();
@@ -15,5 +16,7 @@ router.get('/:id', contListByID);
 router.get('/', contListAll);
 
 router.put('/:id', contUpdater);
+
+router.delete('/:id', contEraser);
 
 module.exports = router;
