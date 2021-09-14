@@ -29,6 +29,5 @@ module.exports = (err, req, res, _next) => {
       break;
   }
 
-  // Por último, retornamos o status e a mensagem de erro para o client
   res.status(status).json({ err: { code: err.code, message: err.message } });
 };

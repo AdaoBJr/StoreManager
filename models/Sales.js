@@ -44,8 +44,26 @@ const getSaleById = async (id) => {
   }
 };
 
+const updateSales = async (id, updatedItensSold) => {
+  try {
+    const updatedSales = await connection()
+      .then((db) => db.collection('sales')
+        .update({ _id: ObjectId(id) }, { itensSold: updatedItensSold }))
+      .then(() => ({
+          _id: id,
+          itensSold: updatedItensSold,
+        }));
+    return updatedSales;
+  } catch (error) {
+    return {
+      message: error,
+    };
+  }
+};
+
 module.exports = {
   registerNewSales,
   getAllSales,
   getSaleById,
+  updateSales,
 };
