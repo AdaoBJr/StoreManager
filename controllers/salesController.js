@@ -86,28 +86,30 @@ const updateSale = async (req, res) => {
                 err: { code: 'invalid_data', message: 'Product already exists' },
             });
         }
-        return res.status(200).json({ _id: result, itensSold: req.body });
+        return res.status(200).json({ _id: id, itensSold: req.body });
     } catch (error) {
         return res.status(500).json({ message: 'Ops, algo de errado :( ' });
     }
 };
 
-// const deleteProduct = async (req, res) => {
-//     const { id } = req.params;
+const deleteSale = async (req, res) => {
+    const { id } = req.params;
 
-//     try {
-//         const result = await productsService.deleteProduct(id);
-//         const { name, quantity } = result;
-//         if (!result) {
-//             return res.status(422).json({
-//                 err: { code: 'invalid_data', message: 'Wrong id format' },
-//             });
-//         }
-//         return res.status(200).json({ _id: id, name, quantity });
-//     } catch (error) {
-//         return res.status(500).json({ message: 'Ops, algo de errado :( ' });
-//     }
-// };
+    try {
+        const result = await salesService.deleteSale(id);
+       // const { _id, itensSolf } = result;
+   
+        if (!result) {
+            return res.status(422).json({
+                err: { code: 'invalid_data', message: 'Wrong ID format' },
+            });
+        }
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).json({ message: 'Ops, algo de errado :( ' });
+    }
+};
+
 module.exports = {
     getAllSales,
     createSale,
@@ -115,4 +117,5 @@ module.exports = {
     validProduct,
     getSaleById,
     updateSale,
+    deleteSale,
 };

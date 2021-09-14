@@ -53,17 +53,16 @@ const update = async (id, sale) => {
      return false;
     };
 
-// const deleteProduct = async (id) => {
+const deleteSale = async (id) => {
+    if (!ObjectId.isValid(id)) {
+        return null;
+    }
 
-//     if (!ObjectId.isValid(id)) {
-//         return null;
-//     }
+    const db = await connection();
+    const deleteP = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+    if (deleteP.deletedCount === 1) return true;
 
-//     const db = await connection();
-//     const deleteP = await db.collection('products').deleteOne({ _id: ObjectId(id) });
-//     if (deleteP.deletedCount === 1) return true;
+    return false;
+};
 
-//     return false;
-// };
-
-module.exports = { getAll, create, getById, saleExists, update, saleExists1 };
+module.exports = { getAll, create, getById, saleExists, update, saleExists1, deleteSale };

@@ -19,6 +19,6 @@ salesController.updateSale);
 // productsController.validQuantity,
 // productsController.validTypeQuantity,
 // productsController.updateProduct);
-// router.delete('/:id', productsController.deleteProduct);
+ router.delete('/:id', salesController.deleteSale);
 
 module.exports = router;

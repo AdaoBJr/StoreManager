@@ -56,15 +56,15 @@ const updateSale = async (id, sale) => {
     }
     return false;
 };
-// const deleteProduct = async (id) => {
-//     const productDeletado = await productsModel.getById(id);
-//     const product = await productsModel.deleteProduct(id);
+const deleteSale = async (id) => {
+    const productDeletado = await salesModel.getById(id);
+    const product = await salesModel.deleteSale(id);
 
-//     if (product) {
-//         return productDeletado;
-//     }
-//     return false;
-// };
+    if (product) {
+        return productDeletado;
+    }
+    return false;
+};
 
 module.exports = {
     getAllSales, 
@@ -74,4 +74,5 @@ module.exports = {
      validProduct,
      getSaleById,
      updateSale,
+     deleteSale,
 };
