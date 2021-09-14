@@ -42,9 +42,18 @@ const updateProducts = async (req, res) => {
     return res.status(200).json(product);
 };
 
+const deleteProductsId = async (req, res) => {
+    const { id } = req.params;
+    const db = await getConnection();
+    const product = await getProductsId(req, res);
+  await db.collection('products').deleteOne({ _id: ObjectId(id) });
+    return res.status(200).json(product);
+};
+
 module.exports = {
     getAllProducts,
     getProductsId,
     productId,
     updateProducts,
+    deleteProductsId,
 };

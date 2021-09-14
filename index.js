@@ -13,6 +13,7 @@ const {
   productId,
   getAllProducts,
   updateProducts,
+  deleteProductsId,
 } = require('./models');
 
 app.use(bodyParser.json());
@@ -35,3 +36,5 @@ app.get('/products', [getAllProducts]);
 app.get('/products/:id', [productId]);
 
 app.put('/products/:id', [validateName, validateQuantity, updateProducts]);
+
+app.delete('/products/:id', [deleteProductsId]);
