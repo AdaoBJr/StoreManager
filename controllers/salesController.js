@@ -3,46 +3,45 @@ const { createSale,
   findSaleById,
   updateSale,
   removeSale } = require('../services/salesService');
+const catchAsync = require('../utils/catchAsync');
 
 const STATUS_SUCCESS = 200;
 const NOT_FOUND = 404;
 
-const create = async (req, res) => {
+const create = catchAsync(async (req, res) => {
   const bodySales = req.body;
 
   const sales = await createSale(bodySales);
 
   if (sales.err) return res.status(NOT_FOUND).json(sales);
   res.status(STATUS_SUCCESS).json(sales);
-};
+});
 
-const getAll = async (req, res) => {
+const getAll = catchAsync(async (req, res) => {
   const sales = await getAllSales();
   res.status(STATUS_SUCCESS).json(sales);
-};
+});
 
-const getById = async (req, res) => {
+const getById = catchAsync(async (req, res) => {
   const { id } = req.params;
+  const meth = req.method;
 
-  const sales = await findSaleById(id);
+  const sales = await findSaleById(id, meth);
   res.status(STATUS_SUCCESS).json(sales);
-};
+});
 
-const update = async (req, res) => {
-  const body = req.body[0];
+const update = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { productId, quantity } = body;
-
-  const sales = await updateSale(id, productId, quantity);
+  const sales = await updateSale(id, req.body);
   return res.status(STATUS_SUCCESS).json(sales);
-};
+});
 
-const remove = async (req, res) => {
+const remove = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const sale = await removeSale(id);
-
+  const meth = req.method;
+  const sale = await removeSale(id, meth);
   res.status(STATUS_SUCCESS).json(sale);
-};
+});
 
 module.exports = {
   create,

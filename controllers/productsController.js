@@ -9,9 +9,8 @@ const catchAsync = require('../utils/catchAsync');
 
 const STATUS_CREATED_SUCCESS = 201;
 const STATUS_SUCCESS = 200;
-const BAD_REQUEST = 422;
 
-const create = catchAsync(async (req, res, next) => {
+const create = catchAsync(async (req, res) => {
   const { name, quantity } = req.body;
   const product = await createProduct(name, quantity);
   return res.status(STATUS_CREATED_SUCCESS).json({ ...product });
@@ -24,7 +23,6 @@ const getAll = catchAsync(async (req, res) => {
 
 const getById = catchAsync(async (req, res) => {
   const { id } = req.params;
-
   const product = await getProductById(id);
   return res.status(STATUS_SUCCESS).json(product);
 });

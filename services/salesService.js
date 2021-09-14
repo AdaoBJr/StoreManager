@@ -6,7 +6,10 @@ const {
   removeSaleData,
 } = require('../models/saleModel');
 
+const { validateSaleQuantity, validateSaleId } = require('./validations');
+
 const createSale = async (body) => {
+  await validateSaleQuantity(body);
   const sale = await createSaleData(body);
   return sale;
 };
@@ -16,17 +19,21 @@ const getAllSales = async () => {
   return sales;
 };
 
-const findSaleById = async (id) => {
+const findSaleById = async (id, meth) => {
+  await validateSaleId(id, meth);
   const sale = await findById(id);
   return sale;
 };
 
-const updateSale = async (id, productId, quantity) => {
+const updateSale = async (id, body) => {
+  await validateSaleQuantity(body);
+  const { productId, quantity } = body[0];
   const sale = await updateSaleData(id, productId, quantity);
   return sale;
 };
 
-const removeSale = async (id) => {
+const removeSale = async (id, meth) => {
+  await validateSaleId(id, meth);
   const sale = await removeSaleData(id);
   return sale;
 };

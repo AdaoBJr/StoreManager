@@ -6,7 +6,7 @@ const {
   // getProdByName,
   updateProd,
 } = require('../models/productModel');
-const { validateProduct } = require('./validations');
+const { validateProduct, validateProductId } = require('./validations');
 
 const createProduct = async (name, quantity) => {
   await validateProduct(name, quantity);
@@ -20,16 +20,20 @@ const getAllProducts = async () => {
 };
 
 const getProductById = async (id) => {
+  await validateProductId(id);
   const response = await getProdById(id);
   return response;
 };
 
 const updateProduct = async (id, name, quantity) => {
+  await validateProduct(name, quantity);
+  await validateProductId(id);
   const product = await updateProd(id, name, quantity);
   return product;
 };
 
 const removeProduct = async (id) => {
+  await validateProductId(id);
   const product = await deleteProduct(id);
   return product;
 };
