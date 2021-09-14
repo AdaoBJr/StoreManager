@@ -15,8 +15,11 @@ const findId = async (id) => {
   return sales;
 };
 
+const update = async (id, itensSold) => SalesModel.update(id, itensSold);
+
 module.exports = {
   create,
   getAll,
   findId,
+  update,
 };
