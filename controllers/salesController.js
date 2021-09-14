@@ -15,8 +15,8 @@ const create = rescue(async (request, response) => {
 
 const getById = rescue(async (request, response) => {
   const { id } = request.params;
-  const product = await Service.findId(id);
-  return response.status(StatusCodes.OK).json(product);
+  const sales = await Service.findId(id);
+  return response.status(StatusCodes.OK).json(sales);
 });
 
 const update = rescue(async (request, response) => {
