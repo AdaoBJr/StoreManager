@@ -1,5 +1,6 @@
 const express = require('express');
 const routesProducts = require('./routes/productRoute');
+const routesSales = require('./routes/salesRoute');
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.get('/', (_request, response) => {
 });
 
 app.use(routesProducts);
+app.use(routesSales);
 
 const PORT = process.env.PORT || 3000;
 
