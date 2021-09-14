@@ -42,9 +42,6 @@ const createProduct = async ({ name, quantity }) => {
 };
 
 const updateProduct = async ({ id, name, quantity }) => {
-    // const productExists = await storeModel.productExists(name);
-    
-    // if (productExists) return { erro: 'Product already exists' };
     if (name.length < 5) {
         return { erro: '"name" length must be at least 5 characters long' }; 
     }
@@ -55,4 +52,13 @@ const updateProduct = async ({ id, name, quantity }) => {
     return storeModel.update({ id, name, quantity });
 };
 
-module.exports = { createProduct, updateProduct };
+const exclude = async (id) => {
+    const product = await storeModel.productIdExists(id);
+    if (!product) return null;
+
+    const { name, quantity, _id } = product;
+    await storeModel.exclude(id);
+    return { name, quantity, _id };
+};
+
+module.exports = { createProduct, updateProduct, exclude };

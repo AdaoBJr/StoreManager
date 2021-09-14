@@ -3,9 +3,9 @@ const { MongoClient } = require('mongodb');
 const DB_NAME = 'StoreManager';
 
 // conexão com o banco local
-// const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
+const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
 // conexão com o avaliador
-const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
+// const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
 
 let schema = null;
 

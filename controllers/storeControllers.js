@@ -56,13 +56,12 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await storeModel.exclude(id);
+        const result = await storeService.exclude(id);
 
-        if (!result) return res.status(400).json({ message: 'Não foi possivel...' });
-
-        return res.status(204).send();
+        if (result) return res.status(200).json(result);
     } catch (error) {
-        return res.status(500).json({ message: err });
+      return res.status(422).json({
+       err: { code: 'invalid_data', message: 'Wrong id format' } }); 
     }
 };
 
