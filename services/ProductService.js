@@ -48,9 +48,25 @@ const exclude = async (id) => {
   return ProductModel.exclude(id);
 };
 
-const updateFromSale = (sale, incresse) => {
-  sale.forEach(({ productId, quantity }) =>
-    ProductModel.updateFromSale(productId, quantity, incresse));
+const updateFromSale = async (sale, incresse) => {
+  const results = sale.map(async ({ productId, quantity }) => {
+    const product = await findById(productId);
+    if (product.quantity < quantity) return false;
+    await ProductModel.updateFromSale(productId, quantity, incresse);
+    return true;
+  });
+
+  const resolve = await Promise.all(results);
+  if (resolve.includes(false)) {
+    return {
+      err: {
+        code: 'stock_problem',
+        message: 'Such amount is not permitted to sell',
+      },
+    };
+  }
+
+  return {};
 };
 
 module.exports = {

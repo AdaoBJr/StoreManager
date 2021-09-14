@@ -9,7 +9,9 @@ const create = rescue(async (req, res, next) => {
 
   if (saleAdd.err) return next(saleAdd.err);
 
-  ProductService.updateFromSale(sale);
+  const updatedSale = await ProductService.updateFromSale(sale);
+  
+  if (updatedSale.err) return next(updatedSale.err);
 
   return res.status(200).json(saleAdd);
 });
@@ -45,7 +47,13 @@ const exclude = rescue(async (req, res, next) => {
 
   const sale = await SaleService.findById(id);
 
-  if (!sale.err) ProductService.updateFromSale(sale.itensSold, true);
+  if (!sale.err) {
+    const updatedSale = await ProductService.updateFromSale(
+      sale.itensSold,
+      true,
+    );
+    if (updatedSale.err) return next(updatedSale.err);
+  }
 
   const productExcluded = await SaleService.exclude(id);
 

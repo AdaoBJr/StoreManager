@@ -4,6 +4,7 @@ const INTERNAL_SERVER_ERROR_CODE = 500;
 const checkErrorCode = (code) => {
   switch (code) {
     case 'not_found':
+    case 'stock_problem':
       return 404;
 
     case 'invalid_data':
