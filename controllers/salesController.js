@@ -24,8 +24,20 @@ const getSaleById = async (req, res) => {
   res.status(result.status).json(result.data);
 };
 
+const updateSaleById = async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+  const result = await service.updateSaleById(id, updates);
+  if (result.err) {
+    const { err } = result;
+    return res.status(result.status).json({ err });
+  }
+  res.status(200).json(result);
+};
+
 module.exports = {
   insertNewSale,
   getAllSales,
   getSaleById,
+  updateSaleById,
 };
