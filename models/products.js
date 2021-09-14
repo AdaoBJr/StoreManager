@@ -36,7 +36,7 @@ const update = async (id, product) => {
   return findId(id);
 };
 
-const deteteProduct = async (id) => {
+const deleteProduct = async (id) => {
   if (!ObjectId.isValid(id)) {
     return null;
   }
@@ -53,5 +53,5 @@ module.exports = {
   findName,
   findId,
   update,
-  deteteProduct,
+  deleteProduct,
 };

@@ -18,7 +18,7 @@ const findId = async (id) => {
 const update = async (id, product) => products.update(id, product);
 
 const deleteProduct = async (id) => {
-  const product = await products.deteteProduct(id);
+  const product = await products.deleteProduct(id);
   return product;
 };
 
