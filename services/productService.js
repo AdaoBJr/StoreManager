@@ -3,7 +3,6 @@ const {
   getAllProds,
   getProdById,
   deleteProduct,
-  // getProdByName,
   updateProd,
 } = require('../models/productModel');
 const { validateProduct, validateProductId } = require('./validations');
