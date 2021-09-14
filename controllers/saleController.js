@@ -34,6 +34,10 @@ const createSale = async (req, res) => {
       return res.status(422).json(messages.saleNumberQuantity);
     }
 
+    if (result === null) {
+      return res.status(404).json(messages.saleStockProblem);
+    }
+
     return res.status(200).json(result);
   } catch (err) {
     return res.status(500).json(messages.error);

@@ -1,5 +1,4 @@
 const SalesModel = require('../models/saleModel');
-// const ProductsModel = require('../models/productModel');
 
 const numberOfQuantity = (quantity) => {
   if (quantity <= 0 || typeof quantity !== 'number') return false;
@@ -24,7 +23,6 @@ const getById = async (id) => {
 const createSale = async (sale) => {
   const [{ quantity }] = sale;
   const numberQuantity = numberOfQuantity(quantity);
-  // const soldProduct = await ProductsModel.getById(productId);
 
   if (!numberQuantity) return false;
 

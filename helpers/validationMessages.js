@@ -22,6 +22,9 @@ const saleWrongFormat = {
 const saleNotFound = {
   err: { code: 'not_found', message: 'Sale not found' } };
 
+const saleStockProblem = {
+  err: { code: 'stock_problem', message: 'Such amount is not permitted to sell' } };  
+
 module.exports = {
   error,
   productWrongFormat,
@@ -32,4 +35,5 @@ module.exports = {
   saleNumberQuantity,
   saleNotFound,
   saleWrongFormat,
+  saleStockProblem,
 };

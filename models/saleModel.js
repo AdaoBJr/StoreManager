@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
+const ProductsModel = require('./productModel');
 
 const getAll = async () => {
   const db = await connection();
@@ -21,7 +22,11 @@ const getById = async (id) => {
 const create = async (sale) => {
   const db = await connection();
   const [{ productId, quantity }] = sale;
-  // const soldProduct = await ProductsModel.getById(productId);
+  const getProduct = await ProductsModel.getById(productId);
+
+  if (getProduct.quantity < quantity) {
+    return null;
+  }
   
   await db.collection('products')
     .updateOne({ _id: ObjectId(productId) }, { $inc: { quantity: quantity * (-1) } });  
