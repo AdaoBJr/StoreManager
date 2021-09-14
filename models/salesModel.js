@@ -19,14 +19,12 @@ const getById = async (id) => {
   if (!ObjectId.isValid(id)) return null;
   const db = await mongoConnection.getConnection();
   const saleId = await db.collection('sales').findOne({ _id: ObjectId(id) });
-  /* console.log(_id, 'aqui'); */
   return saleId;
 };
 
 const update = async (id, body) => {
   if (!ObjectId.isValid(id)) return null;
   const { itensSold } = await getById(id);
-  /* console.log(itensSold, 'aqui'); */
   const db = await mongoConnection.getConnection();
   await db.collection('sales').updateOne({ _id: ObjectId(id) }, 
   { $set: { itensSold: [...itensSold, body] } });
@@ -34,9 +32,11 @@ const update = async (id, body) => {
 };
 
 const exclude = async (id) => {
+  console.log(id);
   if (!ObjectId.isValid(id)) return null;
   const db = await mongoConnection.getConnection();
   const saleDel = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+  console.log(saleDel);
   return saleDel;
 };
 

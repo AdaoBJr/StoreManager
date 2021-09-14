@@ -57,6 +57,10 @@ const exclude = async (id) => {
   return productDel;
 };
 
+/* const updateQte = async (id) => {
+
+} */
+
 module.exports = {
   create,
   findByName,

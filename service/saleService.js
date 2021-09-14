@@ -28,17 +28,11 @@ const mapBody = (arrBody) => {
 };
 
 const create = async (body) => {
-   /*  const valideQte = body.map((sale) => {
-      const isProductQuantityValidZero = isValidQuantityZero(sale.quantity);
-      const isProductQuantityNotNumber = isValidQuantityNotNumber(sale.quantity);
-      if (!isProductQuantityValidZero || !isProductQuantityNotNumber) return false;
-      return true;
-    }); */
-    if (mapBody(body) === false) {
-      return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
-    }
-    const resultModel = await salesModel.create(body);
-    return resultModel;
+  if (mapBody(body) === false) {
+    return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
+  }
+  const resultModel = await salesModel.create(body);
+  return resultModel;
 };
 
 const getById = async (id) => {
@@ -47,22 +41,14 @@ const getById = async (id) => {
   }
   const saleId = await salesModel.getById(id);
   if (!saleId) return { code: 'not_found', message: 'Sale not found' }; 
-  /* console.log(saleId); */
   return saleId;
 };
 
 const update = async (id, body) => {
- /*  const valideQteUpdate = body.map((sale) => {
-    const isProductQuantityValidZero = isValidQuantityZero(sale.quantity);
-    const isProductQuantityNotNumber = isValidQuantityNotNumber(sale.quantity);
-    if (!isProductQuantityValidZero || !isProductQuantityNotNumber) return false;
-    return true;
-  }); */
   if (mapBody(body) === false) {
     return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }; 
   }
   const saleUpdate = await salesModel.update(id, body);
-/*  console.log(saleUpdate);  */
   return saleUpdate;
 };
 
