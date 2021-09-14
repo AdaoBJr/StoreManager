@@ -12,6 +12,8 @@ const PORT = 3000;
 app.use(bodyParser.json());
 
 app.get('/products', productController.getAll);
+app.get('/products/:id', productController.getById);
+
 app.post('/products', productExists,
 validateName,
 validateQuantity, productController.create);

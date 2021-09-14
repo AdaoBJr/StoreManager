@@ -11,11 +11,29 @@ const getAll = async (_req, res) => {
   }
 };
 
+const getById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const productId = await productService.getByIdService(id);
+    console.log(productId, 'produto que chega no controller');
+    if (productId === false) {
+      return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ 
+        err: { 
+          code: 'invalid_data',
+          message: 'Wrong id format',
+        },
+      });
+    }
+    return res.status(StatusCodes.OK).json(productId);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const create = async (req, res) => {
   try {
     const { name, quantity } = req.body;
     const createProduct = await productService.createService({ name, quantity });
-    console.log(createProduct);
     return res.status(StatusCodes.CREATED).json(createProduct);
   } catch (error) {
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
@@ -29,6 +47,7 @@ const create = async (req, res) => {
 module.exports = {
   create,
   getAll,
+  getById,
   // update,
   // remove,
 };

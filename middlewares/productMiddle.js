@@ -11,7 +11,6 @@ const productExists = async (req, res, next) => {
       },
     });
   }
-  console.log(product, 'model');
   next();
 };
 
