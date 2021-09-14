@@ -5,6 +5,7 @@ class SalesService {
     this.messages = messages;
     this.codes = codes;
     this.errorBuilder = errorBuilder;
+    this.findProductsFromList = this.findProductsFromList.bind(this);
   }
 
   async GetAll() {
@@ -19,7 +20,7 @@ class SalesService {
         status: this.codes.NOT_FOUND,
         code: this.codes.INVALID_NOT_FOUND,
         message: this.messages.SALES_NOT_FOUND,
-      }); 
+      });
     }
 
     return { status: this.codes.OK, message: foundSale };
@@ -35,7 +36,7 @@ class SalesService {
         message: this.messages.INVALID_ID_FORMAT,
       });
     }
-    
+
     const updateRes = await this.Sales.Update({ id, newValues }, foundSale);
     if (updateRes && updateRes.code) {
       return this.errorBuilder({
@@ -43,31 +44,31 @@ class SalesService {
         code: this.codes.STOCK_PROBLEM,
         message: this.messages.INVALID_STOCK_QTY,
       });
-    } 
+    }
     const newValuesSale = await this.Sales.FindById(id);
     return { status: this.codes.OK, message: newValuesSale };
   }
 
   async InsertOne(itensSold) {
-      const ids = await this.findProductsFromList(itensSold);  
+    const ids = await this.findProductsFromList(itensSold);
 
-      if (ids.some((id) => id === null)) {
-        return this.errorBuilder({
-          status: this.codes.UNPROCESSABLE_ENTITY,
-          code: this.codes.INVALID_DATA,
-          message: this.messages.INVALID_PRODUCT_ID_QUANTITY,
-        });
-      }
+    if (ids.some((id) => id === null)) {
+      return this.errorBuilder({
+        status: this.codes.UNPROCESSABLE_ENTITY,
+        code: this.codes.INVALID_DATA,
+        message: this.messages.INVALID_PRODUCT_ID_QUANTITY,
+      });
+    }
 
-      const insertedElements = await this.Sales.InsertOne(itensSold);
-      if (insertedElements.code) {
-        return this.errorBuilder({
-          status: this.codes.NOT_FOUND,
-          code: this.codes.STOCK_PROBLEM,
-          message: this.messages.INVALID_STOCK_QTY,
-        });
-      } 
-      return ({ status: this.codes.OK, message: insertedElements });
+    const insertedElements = await this.Sales.InsertOne(itensSold);
+    if (insertedElements.code) {
+      return this.errorBuilder({
+        status: this.codes.NOT_FOUND,
+        code: this.codes.STOCK_PROBLEM,
+        message: this.messages.INVALID_STOCK_QTY,
+      });
+    }
+    return { status: this.codes.OK, message: insertedElements };
   }
 
   async Delete(id) {
@@ -83,7 +84,7 @@ class SalesService {
 
     await this.Sales.Delete(id, foundSale);
 
-    return ({ status: this.codes.OK, message: foundSale });
+    return { status: this.codes.OK, message: foundSale };
   }
 
   async findProductsFromList(itensSold) {
