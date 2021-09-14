@@ -23,8 +23,19 @@ const create = async (itensSold) => {
   };
 };
 
+const update = async (id, itensSold) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+  const responseConnection = await connection();
+  await responseConnection
+    .collection('sales').updateOne({ _id: ObjectId(id) }, { $set: { itensSold } });
+  return findId(id);
+};
+
 module.exports = {
   getAll,
   create,
   findId,
+  update,
 };
