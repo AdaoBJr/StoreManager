@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const salesModels = require('../models/saleModels');
 
 const validateNotString = (quantity) => {
@@ -40,7 +41,16 @@ const validateFindAllSales = async () => {
   return findAllSales;
 };
 
+const validateFindSalesById = async (id) => {
+  if (!ObjectId(id)) {
+    return { code: 'not_found', message: 'Sale not found' };
+  }
+  const findSalesById = await salesModels.findSalesById();
+  return findSalesById;
+};
+
 module.exports = {
   validateCreateSale,
   validateFindAllSales,
+  validateFindSalesById,
 };
