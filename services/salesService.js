@@ -23,8 +23,19 @@ const createSales = async (newSales) => {
   return sales;
 };
 
+const verifyAllSales = async () => {
+  const allSales = salesModel.getAll();
+  console.log(allSales, 'service');
+
+  if (!allSales) {
+    return null;
+  }
+  return allSales;
+};
+
 module.exports = {
   verifyTypeQuantity,
   verifyQuantity,
   createSales,
+  verifyAllSales,
 };
