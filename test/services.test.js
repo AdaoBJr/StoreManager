@@ -11,7 +11,6 @@ const {
 const { ProductService, SalesService } = require("../services");
 const { errorBuilder } = require("../middleware");
 const { codes, messages } = require("../schemas");
-const { list } = require("mongodb/lib/gridfs/grid_store");
 
 describe("checa interação do Product Service com o Model Product", () => {
   let connectionMock;

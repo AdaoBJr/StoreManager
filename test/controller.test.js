@@ -1,48 +1,15 @@
 const sinon = require("sinon");
 const { expect } = require("chai");
-const BaseController = require("../../controllers/Base");
-const ProductService = require('../../services/ProductService')
-const {ProductsController, SalesController} = require("../../controllers");
-
-describe("testa a ProductController", () => {
-  let productsController;
-  const response = {};
-  const request = {};
-
-  before(() => {
-
-    request.body = {name: 'teste', quantity: 400};
-    request.params = {id: 20}
-
-    response.status = sinon.stub()
-      .returns(response);
-    response.json = sinon.stub()
-      .returns();
-
-    const findAllRes = { status: 200, message: { products: 'sou um teste' } }
-    const product = new ProductsController(new ProductService())
-    sinon.stub(product.service, "Update").callsFake(() => findAllRes)
-    productsController = product
-  })
-
-  after(() => {
-    product.service.Update.restore;
-  })
-
-  it("testa o retorno do RootUpdateById quando há nome, quantidade e id", async () => {
-    await productsController.RootUpdateById(request, response)
-    expect(response.status.calledWith(200)).to.be.equal(true)
-    expect(response.json.calledWith({products: 'sou um teste'}))
-      .to.be.equal(true)
-  })
-})
+const BaseController = require("../controllers/Base");
+const ProductService = require('../services/ProductService');
+const {ProductsController, SalesController} = require("../controllers");
 
 describe("testa a BaseController", () => {
   let baseController;
   const response = {};
   const request = {};
 
-  before(() => {
+  beforeAll(() => {
 
     request.body = {};
 
@@ -60,7 +27,7 @@ describe("testa a BaseController", () => {
     baseController = baseC
   })
 
-  after(() => {
+  afterAll(() => {
     baseC.service.FindAll.restore;
     baseC.service.FindById.restore;
     baseC.service.Delete.restore;
@@ -76,7 +43,7 @@ describe("testa a BaseController", () => {
 
   describe("quando passado um id", () => {
     
-    before(() => {
+    beforeAll(() => {
       request.params = {id: '300'}
     })
 
@@ -102,6 +69,40 @@ describe("testa a BaseController", () => {
     })
 
   })
+
+})
+
+describe("testa a ProductController", () => {
+  let productsController;
+  const response = {};
+  const request = {};
+
+  beforeAll(() => {
+
+    request.body = {name: 'teste', quantity: 400};
+    request.params = {id: 20}
+
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+
+    const findAllRes = { status: 200, message: { products: 'sou um teste' } }
+    const product = new ProductsController(new ProductService())
+    sinon.stub(product.service, "Update").callsFake(() => findAllRes)
+    productsController = product
+  })
+
+  afterAll(() => {
+    product.service.Update.restore;
+  })
+
+  it("testa o retorno do RootUpdateById quando há nome, quantidade e id", async () => {
+    await productsController.RootUpdateById(request, response)
+    expect(response.status.calledWith(200)).to.be.equal(true)
+    expect(response.json.calledWith({products: 'sou um teste'}))
+      .to.be.equal(true)
+  })
 })
 
 describe("testa a SalesController", () => {
@@ -109,7 +110,7 @@ describe("testa a SalesController", () => {
   const response = {};
   const request = {};
 
-  before(() => {
+  beforeAll(() => {
 
     request.body = {algo: 400};
     request.params = {id: 20}
@@ -125,7 +126,7 @@ describe("testa a SalesController", () => {
     salesController = sales
   })
 
-  after(() => {
+  afterAll(() => {
     sales.service.Update.restore;
   })
 

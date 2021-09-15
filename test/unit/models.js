@@ -306,11 +306,9 @@ describe("checa interação do model sales no BD", () => {
     it("deve ser possivel deletar uma venda.", async () => {
       const { _id } = await sales.InsertOne(salesPayloadOne);
       const products = await product.FindAll();
-      console.log(products);
       const elements = await sales.GetAll();
 
       expect(elements.length).to.be.eq(1);
-      console.log(salesPayloadOne);
       await sales.Delete(_id, { itensSold: salesPayloadOne });
 
       const noElements = await sales.GetAll();
