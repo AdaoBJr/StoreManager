@@ -17,7 +17,7 @@ const create = async (sales) => {
   const db = await getConnection();
   
   const salesMade = await db.collection('sales').insertOne(sales);
-  // console.log(salesMade, 'model');
+
   return salesMade;
 };
 

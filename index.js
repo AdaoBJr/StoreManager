@@ -18,13 +18,13 @@ app.get('/products', Product.getAll);
 app.post('/products', Product.create);
 
 // Sales
-// app.get('/sales/:id', Sales.findById);
+// app.delete('/sales/:id', Sales.deleteSale);
 
 // app.put('/sales/:id', Sales.update);
 
-// app.delete('/sales/:id', Sales.deleteSale);
+app.get('/sales/:id', Sales.getById);
 
-// app.get('/sales' Sales.getAll)
+app.get('/sales', Sales.getAll);
 
 app.post('/sales', Sales.create);
 

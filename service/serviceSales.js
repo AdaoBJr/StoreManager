@@ -2,12 +2,26 @@ const SalesModels = require('../model/modelSales');
 const ProductModels = require('../model/modelProducts');
 const { quantitySalesValid, format } = require('../schemas/schemasValidate');
 
+const getById = async (id) => {
+  const saleFound = await SalesModels.getById(id);
+  
+  if (!saleFound) return { err: { code: 'not_found', message: 'Sale not found' } };
+
+  return saleFound;
+};
+
+const getAll = async () => {
+  const salesList = {
+    sales: await SalesModels.getAll(),
+  };
+  return salesList;
+};
+
 const decProducts = async (id, quantity) => {
   await ProductModels.decProducts(id, quantity);
 };
 
 // font: https://github.com/tryber/sd-010-b-store-manager/tree/denis-rossati-sd-010-b-store-manager
-
 // verifica se há produtos o bastante p/ venda
 const checkUpdate = async (sales) => {
   const quantity = await sales.map(async (sale) => {
@@ -44,4 +58,4 @@ const create = async (sales) => {
   return { _id: salesMade.insertedId, itensSold: sales };
 };
 
-module.exports = { create };
+module.exports = { create, getAll, getById };

@@ -44,10 +44,10 @@ const notString = (value) => (typeof value !== 'string');
 const notNumber = (value) => (typeof value !== 'number');
 const largerThanOne = (value) => (value < 1);
 
-const quantityValid = async (quantity) => {
+const quantityValid = (quantity) => {
   switch (true) {
-    case await largerThanOne(quantity): return errors.invalidQuantity;
-    case await notNumber(quantity): return errors.isNotNumber;
+    case largerThanOne(quantity): return errors.invalidQuantity;
+    case notNumber(quantity): return errors.isNotNumber;
     default: return {};
   }
 };

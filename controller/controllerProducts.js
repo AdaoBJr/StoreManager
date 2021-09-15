@@ -22,7 +22,7 @@ const deleteProduct = async (req, res) => {
 const update = async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
-
+  
   const updateProduct = await ServiceProduct.update(id, name, quantity);
 
   if (updateProduct.err) return res.status(422).json(updateProduct);
