@@ -7,6 +7,13 @@ const createSales = async (body) => {
   return { _id: id, itensSold: [...body] };
 };
 
+const updateSale = async (id, body) => {
+  const db = await connect();
+  await db.collection('sales').updateOne({ _id: ObjectId(id) },
+  { $set: { itensSold: [body] } });
+  return { _id: id, itensSold: body };
+};
+
 const findAllSales = async () => {
   const db = await connect();
   const allSales = await db.collection('sales').find().toArray();
@@ -23,4 +30,5 @@ module.exports = {
   createSales,
   findAllSales,
   findSalesById,
+  updateSale,
 };
