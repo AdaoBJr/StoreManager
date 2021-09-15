@@ -1,4 +1,5 @@
 const SalesModel = require('../models/SalesModel');
+const ProductsModel = require('../models/ProductsModel');
 
 // validações sales
 const validQuantity = (sale) => {
@@ -9,11 +10,22 @@ const num = 0;
   return isValidMinNumber;
 };
 
-// const incrementSales = async (sale) => {
+const incrementSales = async ({ itensSold }) => {
+  console.log(itensSold);
+  if (!itensSold) return null;
+  const result = itensSold.map(({ productId, quantity }) =>
+   ProductsModel.incrementProducts(productId, quantity));
+   const promisesResolv = await Promise.all(result);
+   return promisesResolv.every((promises) => promises);
+};
 
-// };
-
-// const decrementaSales = async (sale) => {};
+const decrementaSales = async (sale) => {
+  if (!sale) return null;
+  const result = sale.map(({ productId, quantity }) =>
+  ProductsModel.decrementProducts(productId, quantity));
+  const promisesResolv = await Promise.all(result);
+   return promisesResolv.every((promises) => promises);
+};
 
 // função
 
@@ -26,6 +38,8 @@ const addSale = async (sale) => {
       message: 'Wrong product ID or invalid quantity',
       };
     }
+    console.log(`dec ${sale}`);
+    decrementaSales(sale);
     return SalesModel.addSale(sale);
 };
 
@@ -59,11 +73,13 @@ const putSales = async (id, sale) => {
 };
 
 const deleteSales = async (id) => {
-  const result = await SalesModel.deleteSales(id);
-  if (!result) {
+  const sale = await SalesModel.deleteSales(id);
+  if (!sale) {
     return false;
   }
-  return result;
+  // console.log(`inc ${result}`);
+  incrementSales(sale);
+  return sale;
 };
 
 module.exports = {

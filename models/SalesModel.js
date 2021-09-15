@@ -39,8 +39,7 @@ const deleteSales = async (id) => {
   }
   const db = await connection();
   const result = await db.collection('sales').findOneAndDelete({ _id: ObjectId(id) });
-
-  return result;
+  return result.value;
 };
 
 module.exports = {
