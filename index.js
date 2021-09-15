@@ -10,6 +10,7 @@ const {
 const {
   createProduct,
   getAllProducts,
+  updateProduct,
   getProductById } = require('./controllers/productsController'); 
 
 const app = express();
@@ -29,6 +30,13 @@ app.post(
   productExists,
   validateQuantity,
   createProduct,
+  );
+
+app.put(
+  '/products/:id',
+  validateName,
+  validateQuantity,
+  updateProduct,
   );
 
 app.listen(3000, () => console.log('online na porta 3000'));
