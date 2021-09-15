@@ -10,6 +10,21 @@ const getById = async (id) => {
   return saleFound;
 };
 
+const update = async (id, updateSales) => {
+  const editedSale = await SalesModels.update(id, updateSales)
+    .then(() => getById(id));
+
+  // console.log(editedSale, 'dale');
+  const result = await quantitySalesValid(editedSale.quantity);
+  if (result.err) return result;
+  
+  return editedSale;
+
+  // const saleUpdated = getById(id);
+
+  // return saleUpdated;
+};
+
 const getAll = async () => {
   const salesList = {
     sales: await SalesModels.getAll(),
@@ -17,11 +32,10 @@ const getAll = async () => {
   return salesList;
 };
 
+// font: https://github.com/tryber/sd-010-b-store-manager/tree/denis-rossati-sd-010-b-store-manager
 const decProducts = async (id, quantity) => {
   await ProductModels.decProducts(id, quantity);
 };
-
-// font: https://github.com/tryber/sd-010-b-store-manager/tree/denis-rossati-sd-010-b-store-manager
 // verifica se há produtos o bastante p/ venda
 const checkUpdate = async (sales) => {
   const quantity = await sales.map(async (sale) => {
@@ -44,10 +58,8 @@ const checkUpdate = async (sales) => {
 };
 
 const create = async (sales) => {
-  const verify = await checkUpdate(sales);
-
-  if (verify.err) return verify;
-  if (verify) return { outStock: true };
+  const check = await checkUpdate(sales);
+  if (check) return { outStock: true };
 
   const sale = format(sales);
   // cria venda no db
@@ -58,4 +70,4 @@ const create = async (sales) => {
   return { _id: salesMade.insertedId, itensSold: sales };
 };
 
-module.exports = { create, getAll, getById };
+module.exports = { create, getAll, getById, update };

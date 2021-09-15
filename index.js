@@ -20,7 +20,7 @@ app.post('/products', Product.create);
 // Sales
 // app.delete('/sales/:id', Sales.deleteSale);
 
-// app.put('/sales/:id', Sales.update);
+app.put('/sales/:id', Sales.update);
 
 app.get('/sales/:id', Sales.getById);
 
