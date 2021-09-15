@@ -5,7 +5,7 @@ const {
   updateProducts,
   deleteProducts,
 } = require('../2controllers/products_controllers');
-const { createsales } = require('../2controllers/sales_controllers');
+const { createsales, showsales } = require('../2controllers/sales_controllers');
 
 const DB = new Router();
 
@@ -16,5 +16,7 @@ DB.put('/products/:id', updateProducts);
 DB.delete('/products/:id', deleteProducts);
 
 DB.post('/sales', createsales);
+DB.get('/sales/:id', showsales);
+DB.get('/sales', showsales);
 
 module.exports = DB;

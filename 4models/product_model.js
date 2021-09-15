@@ -16,7 +16,7 @@ const findByName = async (name) => connection()
 const findByID = async (id) => {
   if (!ObjectId.isValid(id)) { return 422; }
   return connection()
-    .then((DB) => DB.collection('products').findOne(new ObjectId(id))); 
+    .then((DB) => DB.collection('products').findOne(ObjectId(id))); 
 };
 
 const update = async (id, name, quantity) => {
@@ -26,12 +26,12 @@ const update = async (id, name, quantity) => {
     .updateOne({ _id: ObjectId(id) }, 
       { $set: { name, quantity } }));
   return connection()
-    .then((DB) => DB.collection('products').findOne(new ObjectId(id)));
+    .then((DB) => DB.collection('products').findOne(ObjectId(id)));
 };
 
 const deleteItem = async (id) => {
   if (!ObjectId.isValid(id)) { return 422; }
-  const item = connection().then((DB) => DB.collection('products').findOne(new ObjectId(id)));
+  const item = connection().then((DB) => DB.collection('products').findOne(ObjectId(id)));
   connection().then((DB) => DB.collection('products')
     .deleteOne({ _id: ObjectId(id) })); 
   return item;

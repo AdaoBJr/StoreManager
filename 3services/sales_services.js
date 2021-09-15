@@ -1,4 +1,8 @@
-const { createSalesModel } = require('../4models/sales_model');
+const {
+  createSalesModel,
+  showAllsalesModel,
+  showByIdsalesModel,
+} = require('../4models/sales_model');
 
 // const validaName = (name) => (name.length < 6);
 const validaQuantity = (quantity) => (quantity <= 0);
@@ -28,6 +32,14 @@ const createSalesServices = async (sales) => {
   return createSalesModel(sales);
 };
 
+const showsalesService = async (id) => {
+  if (id) {
+    return showByIdsalesModel(id);
+  }
+  return { sales: await showAllsalesModel() };
+};
+
 module.exports = {
   createSalesServices,
+  showsalesService,
 };
