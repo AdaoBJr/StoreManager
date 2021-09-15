@@ -49,8 +49,14 @@ const validateFindSalesById = async (id) => {
   return findSalesById;
 };
 
+const validateUpdateSale = (id, body) => {
+  const updateSale = salesModels.updateSale(ObjectId(id), body);
+  return updateSale;
+};
+
 module.exports = {
   validateCreateSale,
   validateFindAllSales,
   validateFindSalesById,
+  validateUpdateSale,
 };
