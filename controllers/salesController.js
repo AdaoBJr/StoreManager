@@ -60,9 +60,18 @@ const validId = async (req, res) => {
   return res.status(OK).json(sale);
 };
 
+const editSale = async (req, res) => {
+  const { id } = req.params;
+  const { body } = req;
+
+  await salesService.verifyUpdateSale(id, body);
+  return res.status(OK).json({ id, body });
+};
+
 module.exports = {
   validQuantity,
   creteSales,
   AllSales,
   validId,
+  editSale,
 };
