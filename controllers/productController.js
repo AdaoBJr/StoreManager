@@ -1,12 +1,29 @@
-const { getAll, update, exclude } = require('../models/productModel');
+const model = require('../models/productModel');
 const service = require('../services/productService');
 
 const getAllProducts = async (_req, res) => {
   try {
-    const dados = await getAll();
-    return res.status(200).json({ dados });
+    const products = await model.getAll();
+    return res.status(200).json({ products });
   } catch (err) {
-    return res.status(500).json({ err });
+      return res.status(422).json({ err: { code: 'invalid_data', 
+    message: 'Wrong id format' } });
+  }
+};
+
+const getProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const exists = service.readProduct(id);
+    if (exists === null) {
+      return res.status(422).json({ err: { code: 'invalid_data', 
+      message: 'Wrong id format' } });
+    }
+    const product = await model.getOne(id);
+    return res.status(200).json(product);
+  } catch (err) {
+    return res.status(422).json({ err: { code: 'invalid_data', 
+    message: 'Wrong id format' } });
   }
 };
 
@@ -40,7 +57,7 @@ const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, quantity } = req.body;
-    const updatedProduct = await update({ id, name, quantity });
+    const updatedProduct = await model.update({ id, name, quantity });
 
     if (!updatedProduct) return res.status(400).json({ message: 'Erro' });
 
@@ -53,7 +70,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await exclude(id);
+    const product = await model.exclude(id);
 
     if (!product) return res.status(400).json({ message: 'Erro' });
 
@@ -68,4 +85,5 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  getProduct,
 };

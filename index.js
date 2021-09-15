@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { getAllProducts, createProduct, 
-  updateProduct, deleteProduct } = require('./controllers/productController');
+  updateProduct, deleteProduct, getProduct } = require('./controllers/productController');
 
 const app = express();
 
@@ -19,6 +19,7 @@ app.get('/', (_req, res) => {
 });
 
 app.get('/products', getAllProducts);
+app.get('/products/:id', getProduct);
 app.post('/products', createProduct);
 app.put('/products/:id', updateProduct);
 app.delete('/products/:id', deleteProduct);

@@ -13,8 +13,7 @@ const add = async ({ name, quantity }) => {
   return { _id: createProduct.insertedId, name, quantity };
 };
 
-const getById = async (id) => {
-  if (!ObjectId.isValid(id)) return null;
+const getOne = async (id) => {
   const db = await connection();
   return db.collection('products').findOne({ _id: ObjectId(id) });
 };
@@ -45,8 +44,8 @@ const productExists = async (name) => {
 module.exports = {
   getAll,
   add,
-  getById,
   update,
   exclude,
   productExists,
+  getOne,
 };
