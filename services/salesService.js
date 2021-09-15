@@ -1,5 +1,5 @@
+const { ObjectId } = require('mongodb');
 const salesModel = require('../models/salesModel');
-// const productsModel = require('../models/productsModel');
 
 const verifyTypeQuantity = (sales) => {
   console.log(sales, 'sales');
@@ -33,9 +33,21 @@ const verifyAllSales = async () => {
   return allSales;
 };
 
+const verifyId = async (id) => {
+  const getId = await salesModel.getById(id);
+  console.log(getId, 'getId');
+  if (!ObjectId.isValid(id)) {
+    return false;
+  }
+  const sale = await salesModel.getById(id);
+  console.log(sale, 'sale service');
+  return sale;
+};
+
 module.exports = {
   verifyTypeQuantity,
   verifyQuantity,
   createSales,
   verifyAllSales,
+  verifyId,
 };
