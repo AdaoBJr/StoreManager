@@ -30,10 +30,21 @@ const getProductById = async (id) => connection()
     .then((result) => result);
 
 // ------------------------------------------------------------------
+// Requisito 3: MODEL responsável por atualizar e retornar produto atualizado por ID na BASE DE DADOS
+
+const putProductById = async ({ id, name, quantity }) => connection()
+    .then((db) => db.collection('products').updateOne(
+      { _id: ObjectId(id) },
+      { $set: { name, quantity } },
+    ))
+    .then(() => ({ _id: id, name, quantity }));
+
+// ------------------------------------------------------------------
 
 module.exports = {
   postProducts,
   findProductByName,
   getProducts,
   getProductById,
+  putProductById,
 };

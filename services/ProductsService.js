@@ -3,7 +3,7 @@
 const ProductsModel = require('../models/ProductsModel');
 
 // ------------------------------------------------------------------
-// Requisito 1: SERVICE responsável por fazer a chamada ao MODEL de cadsatro produtos(Validação via middleware)
+// Requisito 1: SERVICE responsável por fazer a chamada ao MODEL de cadsatro produtos(Validações via middleware)
 
 const postProducts = async ({ name, quantity }) => {
   const newProduct = await ProductsModel.postProducts({ name, quantity });
@@ -12,7 +12,7 @@ const postProducts = async ({ name, quantity }) => {
 };
 
 // ------------------------------------------------------------------
-// Requisito 2: SERVICEs responsáveis por fazerem a chamada aos MODELs de busca de produtos ou de produto específico, filtrado por ID
+// Requisito 2: SERVICEs responsáveis por fazerem a chamada aos MODELs de busca de produtos ou de produto específico, filtrado por ID(Validações via middleware)
 
 const getProducts = async () => {
   const products = await ProductsModel.getProducts();
@@ -27,10 +27,19 @@ const getProductById = async (id) => {
 };
 
 // ------------------------------------------------------------------
+// Requisito 3: SERVICE responsável por fazer a chamada ao MODEL de atualização de produtos(Validações via middleware)
+
+const putProductById = async ({ id, name, quantity }) => {
+  const product = await ProductsModel.putProductById({ id, name, quantity });
+
+  return product;
+};
+
+// ------------------------------------------------------------------
 
 module.exports = {
   postProducts,
   getProducts,
   getProductById,
-
+  putProductById,
 };

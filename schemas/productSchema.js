@@ -6,7 +6,7 @@ const errors = {
   quantityTypeNumber: '"quantity" must be a number',
 };
 
-const validateNameQuantity = ({ name, quantity }) => {
+const validateNameQuantitySchema = ({ name, quantity }) => {
   const code = 422;
 
   if (name.length < 5) return { code, message: errors.nameMinimunSizeFive };
@@ -18,4 +18,4 @@ const validateNameQuantity = ({ name, quantity }) => {
   return {};
 };
 
-module.exports = { validateNameQuantity };
+module.exports = { validateNameQuantitySchema };
