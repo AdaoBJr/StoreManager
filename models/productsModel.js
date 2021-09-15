@@ -22,7 +22,7 @@ const getProdId = async (id) => {
   const product = await db.collection('products').findOne(ObjectId(id));
   if (product) return { status: 200, product };
   return {
-    status: 422, err: { code: 'invalid_data', message: 'Wrong id format', }
+    status: 422, err: { code: 'invalid_data', message: 'Wrong id format' },
   };
 };
 const updateProd = async ({ id, name, quantity }) => {

@@ -8,7 +8,7 @@ const nameLength = async (req, res, next) => {
       err: {
         code: 'invalid_data',
         message: '"name" length must be at least 5 characters long',
-      }
+      },
     });
   }
   next();
@@ -22,7 +22,7 @@ const nameExist = async (req, res, next) => {
       .json({ err: {
         code: 'invalid_data',
         message: 'Product already exists',
-          }
+          },
       });
   }
   next();
@@ -34,7 +34,7 @@ const productQuantity = async (req, res, next) => {
       .json({ err: {
         code: 'invalid_data',
         message: '"quantity" must be larger than or equal to 1',
-      }
+      },
     });
   }
   if (typeof quantity !== 'number') {
@@ -42,7 +42,7 @@ const productQuantity = async (req, res, next) => {
       .json({ err: {
         code: 'invalid_data',
         message: '"quantity" must be a number',
-      }
+      },
     });
   }
   next();
@@ -60,7 +60,7 @@ const validId = async (req, res, next) => {
       err: {
         code: 'invalid_data',
         message: 'Wrong id format',
-      }
+      },
     });
   }
   next();
@@ -71,5 +71,5 @@ module.exports = {
   nameExist,
   productQuantity,
   getId,
-  validId
+  validId,
 };
