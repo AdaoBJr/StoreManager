@@ -535,3 +535,262 @@ describe('Retorna todos as Vendas cadastradas', () => {
     });
   });
 });
+
+describe('Retorna um produto pelo ID', () => {
+  describe('quando o produto é encontrado', () => {
+    describe('a resposta', () => {
+      const resposta = {
+        _id: '614160b4109145ec555b8426',
+        itensSold: [
+          {
+            productId: '614160ab109145ec555b8425',
+            quantity: 10,
+          },
+        ],
+      };
+
+      beforeEach(() => {
+        sinon.stub(salesModel, 'getById').resolves(resposta)
+      });
+
+      afterEach(() => {
+        salesModel.getById.restore();
+      });
+
+      it('é um objeto', async () => {
+        const result = await salesService.getById('14160b4109145ec555b8426');
+        expect(result).to.be.an('object');
+      });
+
+      it('o objeto contém a venda encontrado', async () => {
+        const result = await salesService.getById('14160b4109145ec555b8426');
+        expect(result).to.be.equal(resposta);
+      });
+
+      it('o produto contém as chaves "_id" e "itensSold"', async () => {
+        const result = await salesService.getById('14160b4109145ec555b8426');
+        expect(result).to.have.all.keys('_id', 'itensSold');
+      });
+
+      it('"itensSold" é um array', async () => {
+        const { itensSold } = await salesService.getById('14160b4109145ec555b8426');
+        expect(itensSold).to.be.an('array');
+      });
+
+      it('"itensSold" possui as chaves "productId" e "quantity"', async () => {
+        const { itensSold } = await salesService.getById('14160b4109145ec555b8426');
+        expect(itensSold[0]).to.have.all.keys('productId', 'quantity');
+      });
+    });
+  });
+
+  describe('quando o ID não é válido', () => {
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(ObjectId, 'isValid').returns(false);
+      });
+
+      afterEach(() => {
+        ObjectId.isValid.restore();
+      });
+
+      it('é um erro', async () => {
+        const result = await salesService.getById('123').catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const result = await salesService.getById('123').catch((err) => err);
+        expect(result).to.have.property('statusCode');
+      });
+
+      it('a propriedade "statusCode" possui o valor "saleNotFound', async () => {
+        const { statusCode } = await salesService.getById('123').catch((err) => err);
+        expect(statusCode).to.be.equal('saleNotFound')
+      });
+    });
+  });
+});
+
+describe('Testes da função "newSale"', () => {
+  describe('quando uma venda é criada com sucesso', () => {
+    const newSale = [
+      {
+        productId: '614160ab109145ec555b8425',
+        quantity: 10,
+      },
+    ];
+
+    const resposta = {
+      itensSold: [
+        {
+          productId: '614160ab109145ec555b8425',
+          quantity: 10,
+        },
+      ],
+      _id: '614162f012c7a6f7795bc5d1',
+    };
+
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(salesModel, 'newSale').resolves(resposta);
+        sinon.stub(salesModel, 'sellQuantity').returns({})
+      });
+
+      afterEach(() => {
+        salesModel.sellQuantity.restore();
+        salesModel.newSale.restore();
+      });
+
+      it('retorna um objeto', async () => {
+        const result = await salesService.newSale(newSale);
+        expect(result).to.be.an('object');
+      });
+
+      it('o objeto é a venda cadastrada', async () => {
+        const result = await salesService.newSale(newSale);
+        expect(result).to.equal(resposta);
+      });
+
+      it('o objeto contém as chaves "itensSold" e "_id"', async () => {
+        const result = await salesService.newSale(newSale);
+        expect(result).to.have.all.keys('_id', 'itensSold');
+      });
+
+      it('"itensSold é um array"', async () => {
+        const { itensSold } = await salesService.newSale(newSale);
+        expect(itensSold).to.be.an('array');
+      });
+
+      it('o array possui um objeto', async () => {
+        const { itensSold } = await salesService.newSale(newSale);
+        expect(itensSold[0]).to.be.an('object');
+      });
+
+      it('o objeto possui as chaves "productId" e "quantity"', async () => {
+        const { itensSold } = await salesService.newSale(newSale);
+        expect(itensSold[0]).to.have.all.keys('productId', 'quantity');
+      });
+    });
+  });
+
+  describe('a venda atualiza a quantidade dos produtos', () => {
+    const newSale = [
+      {
+        productId: '614160ab109145ec555b8425',
+        quantity: 10,
+      },
+    ];
+
+    const resposta = {
+      itensSold: [
+        {
+          productId: '614160ab109145ec555b8425',
+          quantity: 10,
+        },
+      ],
+      _id: '614162f012c7a6f7795bc5d1',
+    };
+
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(salesModel, 'sellQuantity').resolves({ modifiedCount: 1 })
+        sinon.stub(salesModel, 'newSale').resolves(resposta);
+      });
+
+      afterEach(() => {
+        salesModel.newSale.restore();
+        salesModel.sellQuantity.restore();
+      });
+
+      it('é um objeto', async () => {
+        const result = await salesService.newSale(newSale);
+        expect(result).to.be.an('object');
+      });
+
+      it('o objeto é a venda cadastrada1', async () => {
+        const result = await salesService.newSale(newSale);
+        expect(result).to.be.equal(resposta);
+      });
+
+      it('o objeto contém as chaves "itensSold" e "_id"', async () => {
+        const result = await salesService.newSale(newSale);
+        expect(result).to.have.all.keys('_id', 'itensSold');
+      });
+
+      it('"itensSold é um array"', async () => {
+        const { itensSold } = await salesService.newSale(newSale);
+        expect(itensSold).to.be.an('array');
+      });
+
+      it('o array possui um objeto', async () => {
+        const { itensSold } = await salesService.newSale(newSale);
+        expect(itensSold[0]).to.be.an('object');
+      });
+
+      it('o objeto possui as chaves "productId" e "quantity"', async () => {
+        const { itensSold } = await salesService.newSale(newSale);
+        expect(itensSold[0]).to.have.all.keys('productId', 'quantity');
+      });
+    });
+  });
+
+  describe('quando não há estoque', () => {
+    const newSale = [
+      {
+        productId: '614160ab109145ec555b8425',
+        quantity: 10,
+      },
+    ];
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(salesModel, 'sellQuantity').resolves(null)
+      });
+
+      afterEach(() => {
+        salesModel.sellQuantity.restore();
+      });
+      it('é um erro', async () => {
+        const result = await salesService.newSale(newSale).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const { statusCode } = await salesService.newSale(newSale).catch((err) => err);
+        expect(statusCode).to.exist;
+      });
+
+      it('"statusCode" possui o valor "stockProblem"', async () => {
+        const { statusCode } = await salesService.newSale(newSale).catch((err) => err);
+        expect(statusCode).to.equal('stockProblem');
+      });
+    });
+  });
+
+  describe('quando a venda possui uma quantidade inválida', () => {
+    const newSale = [
+      {
+        productId: '614160ab109145ec555b8425',
+        quantity: 0,
+      },
+    ];
+
+    describe('a resposta', () => {
+      it('é um erro', async () => {
+        const result = await salesService.newSale(newSale).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const { statusCode } = await salesService.newSale(newSale).catch((err) => err);
+        expect(statusCode).to.exist;
+      });
+
+      it('"statusCode" possui o valor "invalidSale"', async () => {
+        const { statusCode } = await salesService.newSale(newSale).catch((err) => err);
+        expect(statusCode).to.equal('invalidSale');
+      });
+    });
+  });
+});
+

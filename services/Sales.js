@@ -52,9 +52,11 @@ const getById = async (id) => {
 };
 
 const newSale = async (sale) => {
+  console.log(sale);
   validateSale(sale);
   await updateProductQtts(sale);
   const result = await model.newSale(sale);
+  console.log(result);
   return result;
 };
 
