@@ -14,13 +14,21 @@ const validateSaleQuantity = (quantity) => {
   return true;
 };
 
+// função feita com ajuda de Felippe Correia
+const mapSales = (body) => {
+  const salemap = body.map((s) => {
+    const validQuantNotString = validateNotString(s.quantity);
+    const validSaleQuantity = validateSaleQuantity(s.quantity);
+    if (!validQuantNotString || !validSaleQuantity) {
+      return false;
+    }
+    return true;
+  });
+  return salemap[0];
+};
+
 const validateCreateSale = async (body) => {
-  const validQuantNotString = validateNotString(body.quantity);
-  const validSaleQuantity = validateSaleQuantity(body.quantity);
-  if (!validQuantNotString) {
-    return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
-  }
-  if (!validSaleQuantity) {
+  if (mapSales(body) === false) {
     return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
   }
   const createSale = await salesModels.createSales(body);
