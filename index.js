@@ -5,6 +5,8 @@ const { productExists,
   validateName,
   validateQuantity,
 } = require('./middlewares/productMiddle');
+const saleController = require('./controllers/saleController');
+const { saleQuantity } = require('./middlewares/saleMiddle');
 
 const app = express();
 const PORT = 3000;
@@ -13,10 +15,13 @@ app.use(bodyParser.json());
 
 app.get('/products', productController.getAll);
 app.get('/products/:id', productController.getById);
+app.get('/sales', saleController.getAll);
 
 app.post('/products', productExists,
 validateName,
 validateQuantity, productController.create);
+
+app.post('/sales', saleQuantity, saleController.create);
 
 app.put('/products/:id',
 validateName,
