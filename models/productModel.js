@@ -1,6 +1,22 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
+const create = async ({ name, quantity }) => {
+  const db = await connection();
+  let result = await db.collection('products').findOne({ name });
+  if (!result) {
+    result = await db.collection('products').insertOne({ name, quantity });
+    return { _id: result.insertedId,
+      name,
+      quantity,
+    };
+  }
+  return { err: {
+    code: 'invalid_data',
+    message: 'Product already exists',
+  } };
+};
+
 const getAll = async () => {
   const db = await connection();
   return db.collection('products').find().toArray();
@@ -14,4 +30,5 @@ const getById = async (id) => {
 module.exports = {
   getAll,
   getById,
+  create,
 };

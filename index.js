@@ -7,6 +7,7 @@ app.use(bodyParser.json());
 
 const PORT = '3000';
 
+app.post('/products', productConstrollers.create);
 app.get('/products', productConstrollers.getAll);
 app.get('/products/:id', productConstrollers.getById);
 

@@ -1,5 +1,14 @@
 const productService = require('../services/productService');
 
+const create = async (req, res) => {
+  const { name, quantity } = req.body;
+  const newProduct = await productService.create({ name, quantity });
+if (newProduct.err) {
+  return res.status(422).json(newProduct);
+}
+return res.status(201).json(newProduct);
+};
+
 const getAll = async (req, res) => {
   try {
     const products = await productService.getAll();
@@ -30,4 +39,5 @@ const getById = async (req, res) => {
 module.exports = {
   getAll,
   getById,
+  create,
 };
