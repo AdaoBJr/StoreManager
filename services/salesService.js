@@ -24,7 +24,7 @@ const createSales = async (newSales) => {
 };
 
 const verifyAllSales = async () => {
-  const allSales = salesModel.getAll();
+  const allSales = await salesModel.getAll();
   console.log(allSales, 'service');
 
   if (!allSales) {
@@ -34,14 +34,15 @@ const verifyAllSales = async () => {
 };
 
 const verifyId = async (id) => {
-  const getId = await salesModel.getById(id);
+  const getId = salesModel.getById(id);
   console.log(getId, 'getId');
   if (!ObjectId.isValid(id)) {
     return false;
   }
-  const sale = await salesModel.getById(id);
-  console.log(sale, 'sale service');
-  return sale;
+
+  if (!getId) return null;
+  console.log(getId, 'sale service');
+  return getId;
 };
 
 module.exports = {
