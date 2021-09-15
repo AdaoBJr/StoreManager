@@ -22,9 +22,9 @@ const update = async ({ id, name, quantity }) => {
   if (!ObjectId.isValid(id)) return null;
 
   const db = await connection();
-  const product = await db.collection('products')
+  await db.collection('products')
     .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
-  return product;
+  return { _id: id, name, quantity };
 };
 
 const exclude = async (id) => {

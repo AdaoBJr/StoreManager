@@ -54,17 +54,24 @@ const createProduct = async (req, res) => {
   }; 
 
 const updateProduct = async (req, res) => {
-  try {
     const { id } = req.params;
     const { name, quantity } = req.body;
     const updatedProduct = await model.update({ id, name, quantity });
-
-    if (!updatedProduct) return res.status(400).json({ message: 'Erro' });
-
-    return res.status(201).json(updatedProduct);
-  } catch (err) {
-    return res.status(500).json({ err });
-  }
+    if (name.length < 5) res.status(422).json(nameError); 
+     
+    if (updatedProduct === null) {
+      return res.status(422).json({ err: { code: 'invalid_data', 
+      message: 'Product already exists' } });
+    }
+    if (quantity <= 0) {
+      return res.status(422).json({ err: { code: 'invalid_data', 
+      message: '"quantity" must be larger than or equal to 1' } });
+    }
+    if (!isNumber(quantity)) {
+      return res.status(422).json({ err: { code: 'invalid_data', 
+      message: '"quantity" must be a number' } });
+    }
+    return res.status(200).json(updatedProduct);
 };
 
 const deleteProduct = async (req, res) => {
