@@ -1,7 +1,10 @@
 // const express = require('express');
 // const router = express.Router();
 const { validateIfAlreadyExistsAndLength,
-    validateQuantity, addProduct } = require('../services/ProductsService');
+    validateQuantity,
+    addProduct,
+    getAllProducts,
+    getProductById } = require('../services/ProductsService');
 
 const addNewProduct = async (req, res) => {
     const { name, quantity } = req.body;
@@ -17,11 +20,25 @@ const addNewProduct = async (req, res) => {
     }
 
     const result = await addProduct(name, quantity);
-    console.log(result);
     return res.status(201).json(result);
 };
 
+const getProducts = async (req, res) => {
+    const products = await getAllProducts();
+    return res.status(200).json(products);
+};
+
+const getProductId = async (req, res) => {
+    const { id } = req.params;
+    const productOrError = await getProductById(id);
+    if (productOrError.err) {
+        return res.status(422).json(productOrError);
+    }
+    return res.status(200).json(productOrError);
+};
+
 module.exports = {
-    addNewProduct
-    ,
+    addNewProduct,
+    getProducts,
+    getProductId,
 };

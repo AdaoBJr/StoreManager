@@ -11,6 +11,10 @@ app.get('/', (_request, response) => {
 
 app.post('/products', productsController.addNewProduct);
 
+app.get('/products/:id', productsController.getProductId);
+
+app.get('/products', productsController.getProducts);
+
 app.listen(3000, () => {
   console.log('Online now!');
 });
