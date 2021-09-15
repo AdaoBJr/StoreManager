@@ -941,15 +941,3 @@ describe('Testes da função "deleteSale"', () => {
     });
   });
 });
-
-
-
-//   it('o erro possui uma propriedade "statusCode"', async () => {
-//     const result = await productsService.deleteProduct('123').catch((err) => err);
-//     expect(result).to.have.property('statusCode');
-//   });
-
-// it('o "statusCode" possui o valor "invalidQuantity"', async () => {
-//     const { statusCode } = await productsService.deleteProduct('123').catch((err) => err);
-//     expect(statusCode).to.be.equal('invalidIdFormat');
-//   });
