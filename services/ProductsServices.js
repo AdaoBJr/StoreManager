@@ -83,9 +83,16 @@ const updateProduct = async (id, name, quantity) => {
   return productUpdate;
 };
 
+const excludeProduct = async (id) => {
+  const deleteProduct = await model.excludeProduct(id);
+  if (!deleteProduct) return idFormatError;
+  return deleteProduct;
+};
+
 module.exports = {
   createProducts,
   getAllProducts,
   findById,
   updateProduct,
+  excludeProduct,
 };
