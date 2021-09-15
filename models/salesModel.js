@@ -54,7 +54,7 @@ const promises = [];
       .findOneAndDelete({ _id: ObjectId(id) }));
     }));
 };
-
+// 
 module.exports = { 
   createSale,
   getAll,
