@@ -405,4 +405,108 @@ describe('Controllers de Sales', () => {
       });
     });
   });
+
+  describe('Testes do controller "updateSale', () => {
+    describe('quando a função retorna com sucesso', () => {
+      const response = {};
+      const request = {};
+      const updateMockResponse = {
+        _id: '614222e61b9b0fa943983c70',
+        itensSold: [
+          {
+            productId: '614222d61b9b0fa943983c6f',
+            quantity: 10,
+          },
+        ],
+      };
+
+      describe('a resposta', () => {
+        beforeEach(() => {
+          request.body = [
+            {
+              productId: '614177c3759bd24939c2059b',
+              quantity: 10,
+            },
+          ];
+
+          request.params = { id: "614222e61b9b0fa943983c70" }
+          response.status = sinon.stub()
+            .returns(response);
+          response.json = sinon.stub()
+            .returns();
+          sinon.stub(salesService, 'updateSale').resolves(updateMockResponse);
+        });
+
+        afterEach(() => {
+          salesService.updateSale.restore();
+        });
+
+        it('retorna o status 200', async () => {
+          await salesControllers.updateSale(request, response);
+          expect(response.status.calledWith(200)).to.be.equal(true);
+        });
+
+        it('retorna um json com o produto atualizadp', async () => {
+          await salesControllers.updateSale(request, response);
+          expect(response.json.calledWith(updateMockResponse)).to.be.equal(true);
+        });
+
+        it('o body deve conter as chaves "productId" e "quantity"', async () => {
+          await salesControllers.updateSale(request, response);
+          expect(request.body[0]).to.have.all.keys('productId', 'quantity');
+        });
+
+        it('o params deve conter a chave "id"', async () => {
+          await salesControllers.updateSale(request, response);
+          expect(request.params).to.have.property('id');
+        });
+      });
+    });
+  });
+
+  describe('Testes do controller "deleteSale', () => {
+    describe('quando a função retorna com sucesso', () => {
+      const response = {};
+      const request = {};
+      const deleteMockResponse = {
+        _id: '614222e61b9b0fa943983c70',
+        itensSold: [
+          {
+            productId: '614222d61b9b0fa943983c6f',
+            quantity: 10,
+          },
+        ],
+      };
+
+      describe('a resposta', () => {
+        beforeEach(() => {
+          request.params = { id: "61418aa32e836090602e61a3" }
+          response.status = sinon.stub()
+            .returns(response);
+          response.json = sinon.stub()
+            .returns();
+          sinon.stub(salesService, 'deleteSale').resolves(deleteMockResponse);
+        });
+
+        afterEach(() => {
+          salesService.deleteSale.restore();
+        });
+
+        it('retorna o status 200', async () => {
+          await salesControllers.deleteSale(request, response);
+          expect(response.status.calledWith(200)).to.be.equal(true);
+        });
+
+        it('retorna um json com a venda deletada', async () => {
+          await salesControllers.deleteSale(request, response);
+          expect(response.json.calledWith(deleteMockResponse)).to.be.equal(true);
+        });
+
+        it('o params deve conter a chave "id"', async () => {
+          await salesControllers.deleteSale(request, response);
+          expect(request.params).to.have.property('id');
+        });
+      });
+    });
+  });
 });
