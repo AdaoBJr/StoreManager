@@ -8,7 +8,7 @@ const salesController = require('./controllers/saleController');
 const app = express();
 app.use(bodyParser.json());
 
-// Products Models
+// Products Routers
 app.get('/products', productsController.findAllProducts);
 
 app.get('/products/:id', productsController.findProductById);
@@ -19,7 +19,7 @@ app.put('/products/:id', productsController.updateProduct);
 
 app.delete('/products/:id', productsController.deleteProduct);
 
-// Sales Models
+// Sales Routers
 app.get('/sales', salesController.findAllSales);
 
 app.get('/sales/:id', salesController.findSalesById);
@@ -27,6 +27,8 @@ app.get('/sales/:id', salesController.findSalesById);
 app.post('/sales', salesController.createSale);
 
 app.put('/sales/:id', salesController.updateSale);
+
+app.delete('/sales/:id', salesController.deleteSale);
 
 app.get('/', (_request, response) => {
   response.send();
