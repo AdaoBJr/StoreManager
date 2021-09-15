@@ -12,7 +12,7 @@ return res.status(201).json(newProduct);
 const getAll = async (req, res) => {
   try {
     const products = await productService.getAll();
-    return res.status(200).json(products);
+    return res.status(200).json({ products });
   } catch (error) {
     return res.status(422).json({
       err: {
