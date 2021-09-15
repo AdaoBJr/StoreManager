@@ -23,11 +23,24 @@ const buscarProdutoPorIDModel = async (id) => {
   return todosProdutos !== null ? todosProdutos : false;
 };
 
-const cadastrarProdutoModel = async ({ name, quantity }) => {
+const cadastrarProdutoModel = async (name, quantity) => {
   const db = await connection();
   const produtoInserido = await db.collection('products').insertOne({ name, quantity });
 
   return { _id: produtoInserido.insertedId, name, quantity };
+};
+
+const atualizarProdutoModel = async (id, name, quantity) => {
+  if (!ObjectId.isValid(id)) return false;
+  
+  const db = await connection();
+
+  const produtoInserido = await db.collection('products').update(
+    { _id: new ObjectId(id) }, { $set: { name, quantity } },
+  );
+  console.log(`produtoInserido: ${produtoInserido}`);
+
+  return { id, name, quantity };
 };
 
 module.exports = { 
@@ -35,4 +48,5 @@ cadastrarProdutoModel,
 buscaProdutoPorNome, 
 buscarTodosProdutoModel,
 buscarProdutoPorIDModel,
+atualizarProdutoModel,
 };

@@ -1,7 +1,7 @@
 const produtoModel = require('../Models/produtoModel');
 const validacoes = require('../validacoes/validacaoProduto');
 
-const cadastrarProdutoServices = async ({ name, quantity }) => {
+const cadastrarProdutoServices = async (name, quantity) => {
   const produtoExiste = await produtoModel.buscaProdutoPorNome(name);
   const verificacao = validacoes.validacaoCadastramentoProduto(name, quantity, produtoExiste);
 
@@ -9,7 +9,7 @@ const cadastrarProdutoServices = async ({ name, quantity }) => {
     return verificacao;
   }
 
-  const result = await produtoModel.cadastrarProdutoModel({ name, quantity });
+  const result = await produtoModel.cadastrarProdutoModel(name, quantity);
   return result;
 };
 
@@ -29,8 +29,23 @@ const buscarProdutoPorIDServices = async (id) => {
   return result;
 };
 
+const atualizarProdutoServices = async (id, name, quantity) => {
+  const FALSE = false;
+
+  const verificacao = validacoes.validacaoCadastramentoProduto(name, quantity, FALSE);
+  
+  if (verificacao) {
+    return verificacao;
+  }
+
+  const result = await produtoModel.atualizarProdutoModel(id, name, quantity);
+
+  return result;
+};
+
 module.exports = { 
 cadastrarProdutoServices, 
 buscarTodosProdutoServices,
 buscarProdutoPorIDServices,
+atualizarProdutoServices,
 };
