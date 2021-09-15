@@ -40,6 +40,14 @@ const putProductById = async ({ id, name, quantity }) => connection()
     .then(() => ({ _id: id, name, quantity }));
 
 // ------------------------------------------------------------------
+// Requisito 4: MODEL responsável por deletar produto por ID na BASE DE DADOS
+
+// Source: https://docs.mongodb.com/manual/reference/method/db.collection.findOneAndDelete/
+const deleteProductById = async (id) => connection()
+    .then((db) => db.collection('products').findOneAndDelete({ _id: ObjectId(id) }))
+    .then(({ value: { name, quantity } }) => ({ _id: id, name, quantity }));
+
+// ------------------------------------------------------------------
 
 module.exports = {
   postProducts,
@@ -47,4 +55,5 @@ module.exports = {
   getProducts,
   getProductById,
   putProductById,
+  deleteProductById,
 };

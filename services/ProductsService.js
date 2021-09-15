@@ -36,10 +36,20 @@ const putProductById = async ({ id, name, quantity }) => {
 };
 
 // ------------------------------------------------------------------
+// Requisito 4: SERVICE responsável por fazer a chamada ao MODEL de deleção de produto por ID(Validações via middleware)
+
+const deleteProductById = async (id) => {
+  const product = await ProductsModel.deleteProductById(id);
+
+  return product;
+};
+
+// ------------------------------------------------------------------
 
 module.exports = {
   postProducts,
   getProducts,
   getProductById,
   putProductById,
+  deleteProductById,
 };
