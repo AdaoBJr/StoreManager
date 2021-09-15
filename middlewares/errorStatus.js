@@ -1,5 +1,4 @@
 module.exports = (error, _req, res, _next) => {
-  console.log(error);
   if (error.isError) {
    return res.status(422).json({
       err: {
