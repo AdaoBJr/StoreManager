@@ -31,5 +31,5 @@ module.exports = {
   deleteP,
   getAllP,
   getProId,
-  updateP
+  updateP,
 };

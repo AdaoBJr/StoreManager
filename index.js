@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(bodyParser.json());
 
-app.post('/products', nameExist, nameLength, productQuantity,  createProd);
+app.post('/products', nameExist, nameLength, productQuantity, createProd);
 app.put('/products/:id', nameLength, productQuantity, updateProd);
 app.get('/products/:id', getProdId);
 app.get('/products', getAllProd);
@@ -22,4 +22,4 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.listen(PORT, () => { console.log(`Ouvindo na porta ${PORT}`) });
+app.listen(PORT, () => { console.log(`Ouvindo na porta ${PORT}`); });
