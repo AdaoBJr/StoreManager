@@ -36,8 +36,13 @@ const getById = async (req, res) => {
       },
   });
 };
+
+const update = async (req, res) => {
+  
+};
 module.exports = {
   getAll,
   getById,
   create,
+  update,
 };
