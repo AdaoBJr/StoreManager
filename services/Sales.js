@@ -40,7 +40,7 @@ const updateProductQtts = async (sale) => {
     verifyStock(verifyQtt);
     return verifyQtt;
   });
-  await Promise.all(sellPromises);
+  return Promise.all(sellPromises);
 };
 
 const getAll = () => model.getAll();
@@ -69,7 +69,7 @@ const deleteSale = async (id) => {
   validateDeletion(sale);
   const { itensSold } = sale;
   const item = [{ productId: itensSold[0].productId, quantity: itensSold[0].quantity * -1 }];
-  if (itensSold) await updateProductQtts(item);
+  await updateProductQtts(item);
   const result = await model.deleteSale(id);
   return result;
 };
@@ -80,4 +80,5 @@ module.exports = {
   newSale,
   updateSale,
   deleteSale,
+  updateProductQtts,
 };

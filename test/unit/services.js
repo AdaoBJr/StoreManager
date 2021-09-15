@@ -881,6 +881,45 @@ describe('Testes da função "updateSale"', () => {
       });
     });
   });
+
+  describe('Testa a funcao "updateProductQtts"', () => {
+    describe('quando sucesso', () => {
+      describe('a resposta', () => {
+        beforeEach(() => {
+          sinon.stub(salesModel, 'sellQuantity').resolves({ _id: '123', name: 'Teste', quantity: 100 });
+        });
+
+        afterEach(() => {
+          salesModel.sellQuantity.restore();
+        });
+
+        it('é uma Promise', async () => {
+          const result = await salesService.updateProductQtts([{ productId: '614160ab109145ec555b8425' , quantity: 100 }]);
+          expect(result).to.be.an('array');
+        });
+      });
+    });
+
+    describe('quando falha', () => {
+      describe('a resposta', () => {
+        beforeEach(() => {
+          sinon.stub(salesModel, 'sellQuantity').resolves(false);
+        });
+
+        afterEach(() => {
+          salesModel.sellQuantity.restore();
+        });
+
+        it('é um erro', async () => {
+          const result = await salesService
+            .updateProductQtts(
+              [{ productId: '614160ab109145ec555b8425' , quantity: 100 }]
+            ).catch((err) => err);
+          expect(result).to.be.an('error');
+        });
+      });
+    });
+  });
 });
 
 describe('Testes da função "deleteSale"', () => {
@@ -927,10 +966,12 @@ describe('Testes da função "deleteSale"', () => {
   describe('quando o ID é inválido', () => {
     describe('a resposta', () => {
       beforeEach(() => {
+        sinon.stub(salesModel, 'getById').resolves(false);
         sinon.stub(ObjectId, 'isValid').returns(false);
       });
 
       afterEach(() => {
+        salesModel.getById.restore();
         ObjectId.isValid.restore();
       });
 

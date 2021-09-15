@@ -3,6 +3,7 @@ const { expect } = require('chai');
 const { MongoClient, ObjectId } = require('mongodb');
 const { getConnection } = require('./mongoMockConnection');
 
+const mongoConnection = require('../../models/connection');
 const productsModel = require('../../models/Products');
 const salesModel = require('../../models/Sales');
 
@@ -802,6 +803,38 @@ describe('Testa os retornos da funcao "sellQuantity"', () => {
           const result = await salesModel.sellQuantity(product.insertedId, 1000);
           expect(result).to.be.null;
         });
+      });
+    });
+  });
+});
+
+describe('Testa a conexão com o MongoDB', () => {
+  describe('quando há sucesso', () => {
+    describe('a resposta', () => {
+
+      it('é uma Promise', () => {
+        const result = mongoConnection();
+        expect(result).to.be.a('Promise');
+      });
+    });
+  });
+
+  describe('quando há um erro', () => {
+    describe('a resposta', () => {
+      beforeEach(async () => {
+
+        sinon.stub(MongoClient, 'connect').throws()
+      });
+
+      afterEach(() => {
+        MongoClient.connect.restore();
+
+      });
+
+      it('é um erro', async () => {
+        const result = await mongoConnection();
+        expect(() => result.catch((err) => err)).to.be.a('function');
+        console.log(result);
       });
     });
   });
