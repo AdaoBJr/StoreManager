@@ -45,10 +45,16 @@ const verifyId = async (id) => {
   return getId;
 };
 
+const verifyUpdateSale = async (productId, itensSold) => {
+  const updateSale = await salesModel.updateSale(productId, itensSold);
+  return updateSale;
+};
+
 module.exports = {
   verifyTypeQuantity,
   verifyQuantity,
   createSales,
   verifyAllSales,
   verifyId,
+  verifyUpdateSale,
 };
