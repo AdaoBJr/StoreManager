@@ -13,6 +13,10 @@ app.get('/', (_request, response) => {
 
 app.post('/products', produtoController.cadastrarProdutoController);
 
+app.get('/products/:id', produtoController.buscarProdutoPorIDController);
+
+app.get('/products', produtoController.buscarTodosProdutoController);
+
 app.use(erroMiddleware);
 
 app.listen(3000, () => { console.log('Api rodando na porta 3000'); });

@@ -12,4 +12,25 @@ const cadastrarProdutoController = rescue(async (req, res, next) => {
   return res.status(201).json(result);
 });
 
-module.exports = { cadastrarProdutoController };
+const buscarTodosProdutoController = rescue(async (req, res, _next) => {
+  const result = await produtoServices.buscarTodosProdutoServices();
+
+  return res.status(200).json(result);
+});
+
+const buscarProdutoPorIDController = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const result = await produtoServices.buscarProdutoPorIDServices(id);
+
+  if ('err' in result) {
+    return next(result);
+  }
+
+  return res.status(200).json(result);
+});
+
+module.exports = { 
+cadastrarProdutoController,
+buscarTodosProdutoController,
+buscarProdutoPorIDController,
+};
