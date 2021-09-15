@@ -51,6 +51,7 @@ const exclude = async (id) => {
   const { _id } = await getSalesById(id);
   if (_id) return { err: { code: 'not_found', message: 'Sale not found' } };
   await salesModels.exclude(id);
+// criação do update req 9 
   return { _id };
 };
 
