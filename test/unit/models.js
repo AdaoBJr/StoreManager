@@ -806,25 +806,3 @@ describe('Testa os retornos da funcao "sellQuantity"', () => {
     });
   });
 });
-
-
-
-
-// describe('Insere um novo filme no DB', () => {
-//   const moviePayload = {
-//     title: 'Bastardos Inglórios',
-//     directedBy: 'Quentin Tarantino',
-//     releaseYear: 2009,
-//   };
-
-//   describe('quando é inserido com sucesso', () => {
-//     it('retorna um Objeto', async () => {
-//       const result = await MoviesModel.create(moviePayload);
-//       expect(result).to.be.an('object');
-//     });
-//     it('possui a propriedade "id" do novo filme inserido', async () => {
-//       const result = await MoviesModel.create(moviePayload);
-//       expect(result).to.have.a.property('id')
-//     });
-//   });
-// })
