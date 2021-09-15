@@ -15,6 +15,7 @@ const PORT = '3000';
 app.post('/products', controller.createProducts);
 app.get('/products', controller.getAllProducts);
 app.get('/products/:id', controller.findById);
+app.put('/products/:id', controller.updateProduct);
 
 app.listen(PORT, () => {
   console.log(`Conectado a porta ${PORT}`);
