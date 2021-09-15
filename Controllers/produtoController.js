@@ -41,9 +41,21 @@ const atualizarProdutoController = rescue(async (req, res, next) => {
   return res.status(200).json(result);
 });
 
+const deleteProdutoController = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const result = await produtoServices.deleteProdutoServices(id);
+
+  if ('err' in result) {
+    return next(result);
+  }
+
+  return res.status(200).json(result);
+});
+
 module.exports = { 
 cadastrarProdutoController,
 buscarTodosProdutoController,
 buscarProdutoPorIDController,
 atualizarProdutoController,
+deleteProdutoController,
 };

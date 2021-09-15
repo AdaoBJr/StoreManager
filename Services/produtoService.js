@@ -43,9 +43,22 @@ const atualizarProdutoServices = async (id, name, quantity) => {
   return result;
 };
 
+const deleteProdutoServices = async (id) => {
+  const produto = await produtoModel.buscarProdutoPorIDModel(id);
+
+  if (!produto) {
+    return { err: { code: 'invalid_data', message: 'Wrong id format' } };
+  }
+
+  await produtoModel.deleteProdutoModel(id);
+
+  return produto;
+};
+
 module.exports = { 
 cadastrarProdutoServices, 
 buscarTodosProdutoServices,
 buscarProdutoPorIDServices,
 atualizarProdutoServices,
+deleteProdutoServices,
 };

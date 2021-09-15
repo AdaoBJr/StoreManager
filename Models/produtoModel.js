@@ -18,9 +18,9 @@ const buscarTodosProdutoModel = async () => {
 const buscarProdutoPorIDModel = async (id) => {
   if (!ObjectId.isValid(id)) return false;
   const db = await connection();
-  const todosProdutos = await db.collection('products').findOne({ _id: ObjectId(id) });
+  const produto = await db.collection('products').findOne({ _id: ObjectId(id) });
   
-  return todosProdutos !== null ? todosProdutos : false;
+  return produto !== null ? produto : false;
 };
 
 const cadastrarProdutoModel = async (name, quantity) => {
@@ -43,10 +43,20 @@ const atualizarProdutoModel = async (id, name, quantity) => {
   return { id, name, quantity };
 };
 
+const deleteProdutoModel = async (id) => {
+  if (!ObjectId.isValid(id)) return false;
+  const db = await connection();
+  const produtoDeletado = await db.collection('products').deleteOne({ _id: ObjectId(id) });
+  console.log(`produtoDeletado: ${produtoDeletado}`);
+  
+  return produtoDeletado;
+};
+
 module.exports = { 
 cadastrarProdutoModel, 
 buscaProdutoPorNome, 
 buscarTodosProdutoModel,
 buscarProdutoPorIDModel,
 atualizarProdutoModel,
+deleteProdutoModel,
 };
