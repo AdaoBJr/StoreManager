@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const { getAllProd, getProdId, createProd } = require('./controllers/productsController');
-const { nameExist, nameLength, productQuantity } = require('./middlewares/productsMiddleware');
+const { nameExist, nameLength, productQuantity, validId } = require('./middlewares/productsMiddleware');
 const { updateProd, deleteProd } = require('./controllers/productsController');
 
 require('dotenv').config();
@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 app.post('/products', nameExist, nameLength, productQuantity, createProd);
 app.put('/products/:id', nameLength, productQuantity, updateProd);
-app.get('/products/:id', getProdId);
+app.get('/products/:id', validId, getProdId);
 app.get('/products', getAllProd);
 app.delete('/products/:id', deleteProd);
 
