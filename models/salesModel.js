@@ -9,6 +9,14 @@ const createSale = async (array) => {
   return create.ops[0];
 };
 
+const getAll = async () => {
+  const db = await connection();
+  const allSales = await db.collection(COLLECTION).find().toArray();
+
+  return allSales;
+};
+
 module.exports = {
   createSale,
+  getAll,
 };
