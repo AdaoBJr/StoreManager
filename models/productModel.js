@@ -41,11 +41,19 @@ const productExists = async (name) => {
   return product !== null;
 };
 
+const productExistsbyId = async (id) => {
+  const db = await connection();
+  const product = await db.collection('products').findOne({ id });
+
+  return product !== null;
+};
+
 module.exports = {
   getAll,
   add,
   update,
   exclude,
   productExists,
+  productExistsbyId,
   getOne,
 };

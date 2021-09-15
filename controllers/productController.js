@@ -1,13 +1,21 @@
 const model = require('../models/productModel');
 const service = require('../services/productService');
 
+const idError = { err: { code: 'invalid_data', 
+message: 'Wrong id format' } };
+
+const nameError = { err: { code: 'invalid_data', 
+message: '"name" length must be at least 5 characters long' } };
+
+const numberError = { err: { code: 'invalid_data', 
+message: '"quantity" must be a number' } };
+
 const getAllProducts = async (_req, res) => {
   try {
     const products = await model.getAll();
     return res.status(200).json({ products });
   } catch (err) {
-      return res.status(422).json({ err: { code: 'invalid_data', 
-    message: 'Wrong id format' } });
+      return res.status(422).json(idError);
   }
 };
 
@@ -16,19 +24,14 @@ const getProduct = async (req, res) => {
     const { id } = req.params;
     const exists = service.readProduct(id);
     if (exists === null) {
-      return res.status(422).json({ err: { code: 'invalid_data', 
-      message: 'Wrong id format' } });
+      return res.status(422).json(idError);
     }
     const product = await model.getOne(id);
     return res.status(200).json(product);
   } catch (err) {
-    return res.status(422).json({ err: { code: 'invalid_data', 
-    message: 'Wrong id format' } });
+    return res.status(422).json(idError);
   }
 };
-
-const nameError = { err: { code: 'invalid_data', 
-message: '"name" length must be at least 5 characters long' } };
 
 const isNumber = (value) => !Number.isNaN(Number(value));
 
@@ -47,8 +50,7 @@ const createProduct = async (req, res) => {
       message: '"quantity" must be larger than or equal to 1' } });
     }
     if (!isNumber(quantity)) {
-      return res.status(422).json({ err: { code: 'invalid_data', 
-      message: '"quantity" must be a number' } });
+      return res.status(422).json(numberError);
     }
     return res.status(201).json(createdProduct);
   }; 
@@ -68,8 +70,7 @@ const updateProduct = async (req, res) => {
       message: '"quantity" must be larger than or equal to 1' } });
     }
     if (!isNumber(quantity)) {
-      return res.status(422).json({ err: { code: 'invalid_data', 
-      message: '"quantity" must be a number' } });
+      return res.status(422).json(numberError);
     }
     return res.status(200).json(updatedProduct);
 };
@@ -77,13 +78,17 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await model.exclude(id);
+    const exists = await service.readProduct(id);
 
-    if (!product) return res.status(400).json({ message: 'Erro' });
+    if (exists === null) {
+      return res.status(422).json(idError); 
+}
 
-    return res.status(204).send();
+    await model.exclude(id);
+
+    res.status(200).json(exists);
   } catch (err) {
-    return res.status(500).json({ err });
+    return res.status(422).json(idError);
   }
  };
 
