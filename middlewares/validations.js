@@ -2,6 +2,12 @@ const { ObjectId } = require('mongodb');
 
 const isValidNameProduct = (name) => {
   const requiredNameSize = 5;
+  // if (!name) { 
+  //   return { err: {
+  //       code: 'invalid_data',
+  //       message: 'undefined "name"' },
+  //   };
+  // };
 
   if (name.length < requiredNameSize) {
     return { err: {

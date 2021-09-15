@@ -6,9 +6,7 @@ const createSale = async (body) => {
   const { insertedId: id } = await db.collection('sales')
     .insertOne({ itensSold: [...body] });
 
-  return {
-    _id: id, itensSold: [...body],
-  };
+  return { _id: id, itensSold: [...body] };
 };
 
 const getAll = async () => {

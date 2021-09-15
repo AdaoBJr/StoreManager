@@ -46,7 +46,7 @@ const updateProduct = async (id, name, quantity) => {
   if (isValidQuantity.err) return isValidQuantity;
   if (isValidId.err) return isValidId;
 
-  const productAdd = await productModels.update(id, name, quantity, 'products');
+  const productAdd = await productModels.update({ id, name, quantity, collection: 'products' });
   return productAdd;
 };
 
