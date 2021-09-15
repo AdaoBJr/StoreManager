@@ -283,7 +283,6 @@ describe('Testes da função "deleteProduct"', () => {
       it('retorna um objeto', async () => {
         const result = await productsService.deleteProduct('614154f052108ab370e85b77');
         expect(result).to.be.an('object');
-        console.log(result);
       });
 
       it('o objeto é o produto removido', async () => {
@@ -708,7 +707,7 @@ describe('Testes da função "newSale"', () => {
         expect(result).to.be.an('object');
       });
 
-      it('o objeto é a venda cadastrada1', async () => {
+      it('o objeto é a venda cadastrada', async () => {
         const result = await salesService.newSale(newSale);
         expect(result).to.be.equal(resposta);
       });
@@ -794,3 +793,163 @@ describe('Testes da função "newSale"', () => {
   });
 });
 
+describe('Testes da função "updateSale"', () => {
+  describe('quando a venda é atualizada com sucesso', () => {
+    describe('a resposta', () => {
+      const newSale = [{
+        productId: '6140bb9cb466da93c6393d5f',
+        quantity: 100,
+      }];
+
+      const resposta = {
+        _id: '614160b4109145ec555b8426',
+        itensSold: [
+          {
+            productId: '6140fd5080d16d1aed89az',
+            quantity: 100,
+          },
+        ],
+      };
+
+      beforeEach(() => {
+        sinon.stub(salesModel, 'updateSale').resolves(resposta);
+      });
+
+      afterEach(() => {
+        salesModel.updateSale.restore();
+      });
+
+      it('retorna um objeto', async () => {
+        const result = await salesService.updateSale('id', newSale);
+        expect(result).to.be.an('object');
+      });
+
+      it('o objeto possui as chaves "_id" e "itensSold"', async () => {
+        const result = await salesService.updateSale('id', newSale);
+        expect(result).to.have.all.keys('_id', 'itensSold');
+      });
+
+      it('objeto é o produto atualizado', async () => {
+        const result = await salesService.updateSale('id', newSale);
+        expect(result).to.be.equal(resposta);
+      });
+    });
+  });
+
+  describe('quando o ID é inválido', () => {
+    describe('a resposta', () => {
+      const newSale = [{
+        productId: '6140bb9cb466da93c6393d5f',
+        quantity: 100,
+      }];
+
+      beforeEach(() => {
+        sinon.stub(ObjectId, 'isValid').returns(false);
+      });
+
+      afterEach(() => {
+        ObjectId.isValid.restore();
+      });
+
+      it('é null', async () => {
+        const result = await salesService.updateSale('id', newSale);
+        expect(result).to.be.null;
+      });
+    });
+  });
+
+  describe('quando a venda possui uma quantidade inválida', () => {
+    describe('a resposta', () => {
+      const newSale = [{
+        productId: '6140bb9cb466da93c6393d5f',
+        quantity: 0,
+      }];
+
+      it('é um erro', async () => {
+        const result = await salesService.updateSale('id', newSale).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const result = await salesService.updateSale('id', newSale).catch((err) => err);
+        expect(result).to.have.property('statusCode');
+      });
+
+      it('o "statusCode" possui o valor "invalidSale"', async () => {
+        const { statusCode } = await salesService.updateSale('id', newSale).catch((err) => err);
+        expect(statusCode).to.be.equal('invalidSale');
+      });
+    });
+  });
+});
+
+describe('Testes da função "deleteSale"', () => {
+  describe('quando uma venda é excluída com sucesso', () => {
+    const resposta = {
+      _id: '614177d2759bd24939c2059c',
+      itensSold: [
+        {
+          productId: '614177c3759bd24939c2059b',
+          quantity: 10,
+        },
+      ],
+    };
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(salesModel, 'deleteSale').resolves(resposta);
+        sinon.stub(salesModel, 'getById').returns(resposta);
+        sinon.stub(salesModel, 'sellQuantity').resolves(true)
+      });
+
+      afterEach(() => {
+        salesModel.sellQuantity.restore();
+        salesModel.getById.restore();
+        salesModel.deleteSale.restore();
+      });
+
+      it('retorna um objeto', async () => {
+        const result = await salesService.deleteSale('614177d2759bd24939c2059c');
+        expect(result).to.be.an('object');
+      });
+
+      it('o objeto é a venda removida', async () => {
+        const result = await salesService.deleteSale('614177d2759bd24939c2059c');
+        expect(result).to.be.equal(resposta);
+      });
+
+      it('o objeto possui as chaves "_id" e "itensSold"', async () => {
+        const result = await salesService.deleteSale('614177d2759bd24939c2059c');
+        expect(result).to.have.all.keys('_id', 'itensSold');
+      });
+    });
+  });
+
+  describe('quando o ID é inválido', () => {
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(ObjectId, 'isValid').returns(false);
+      });
+
+      afterEach(() => {
+        ObjectId.isValid.restore();
+      });
+
+      it('retorna um erro', async () => {
+        const result = await salesService.deleteSale('614177d2759bd24939c2059c').catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+    });
+  });
+});
+
+
+
+//   it('o erro possui uma propriedade "statusCode"', async () => {
+//     const result = await productsService.deleteProduct('123').catch((err) => err);
+//     expect(result).to.have.property('statusCode');
+//   });
+
+// it('o "statusCode" possui o valor "invalidQuantity"', async () => {
+//     const { statusCode } = await productsService.deleteProduct('123').catch((err) => err);
+//     expect(statusCode).to.be.equal('invalidIdFormat');
+//   });
