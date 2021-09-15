@@ -16,8 +16,19 @@ const validateName = async (name) => {
   return message;
 };
 
+const validateQuantity = (quantity) => {
+  let message = null;
+
+  if (quantity < 1) {
+    message = '"quantity" must be larger than or equal to 1';
+    return message;
+  }
+
+  return message;
+};
+
 const createProduct = async ({ name, quantity }) => {
-  const message = await validateName(name);
+  const message = await validateName(name) || validateQuantity(quantity);
   if (message) {
    return {
     status: 422,
