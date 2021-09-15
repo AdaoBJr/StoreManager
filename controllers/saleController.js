@@ -1,4 +1,3 @@
-const { json } = require('body-parser');
 const salesValidations = require('../services/salesValidations');
 
 const createSale = async (req, res) => {
@@ -21,8 +20,9 @@ const findSalesById = async (req, res) => {
   const salesById = await salesValidations.validateFindSalesById(id);
   const { code, message } = salesById;
   if (message) {
-    res.status(404).json({ err: { code, message } });
+    return res.status(404).json({ err: { code, message } });
   }
+  return res.status(200).json(salesById);
 };
 
 module.exports = {

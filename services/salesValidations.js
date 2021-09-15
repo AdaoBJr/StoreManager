@@ -42,10 +42,10 @@ const validateFindAllSales = async () => {
 };
 
 const validateFindSalesById = async (id) => {
-  if (!ObjectId(id)) {
+  if (!ObjectId.isValid(id)) {
     return { code: 'not_found', message: 'Sale not found' };
   }
-  const findSalesById = await salesModels.findSalesById();
+  const findSalesById = await salesModels.findSalesById(id);
   return findSalesById;
 };
 

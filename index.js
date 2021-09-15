@@ -22,6 +22,8 @@ app.delete('/products/:id', productsController.deleteProduct);
 // Sales Models
 app.get('/sales', salesController.findAllSales);
 
+app.get('/sales/:id', salesController.findSalesById);
+
 app.post('/sales', salesController.createSale);
 
 app.get('/', (_request, response) => {
