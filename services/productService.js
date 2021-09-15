@@ -19,6 +19,11 @@ const validateName = async (name) => {
 const validateQuantity = (quantity) => {
   let message = null;
 
+  if (typeof quantity !== 'number') {
+    message = '"quantity" must be a number';
+    return message;
+  }
+
   if (quantity < 1) {
     message = '"quantity" must be larger than or equal to 1';
     return message;
