@@ -37,7 +37,6 @@ const verifyStock = (stock) => {
 const updateProductQtts = async (sale) => {
   const sellPromises = sale.map(async (item) => {
     const verifyQtt = await model.sellQuantity(item.productId, item.quantity);
-    console.log(verifyQtt);
     verifyStock(verifyQtt);
     return verifyQtt;
   });

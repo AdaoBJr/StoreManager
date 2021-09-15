@@ -50,7 +50,7 @@ const createProduct = async ({ name, quantity }) => {
 const getAll = () => model.getAll();
 
 const getById = async (id) => {
-  const result = await model.findById(id);
+  const result = await model.getById(id);
   checkProductId(result);
   return result;
 };

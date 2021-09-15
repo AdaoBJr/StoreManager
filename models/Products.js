@@ -20,7 +20,7 @@ const getAll = async () =>
     .then((db) => db.collection('products').find().toArray())
     .then((result) => ({ products: result }));
 
-const findById = async (id) => {
+const getById = async (id) => {
   if (!ObjectId.isValid(id)) return null;
   return connection()
     .then((db) => db.collection('products').findOne({ _id: ObjectId(id) }));
@@ -47,7 +47,7 @@ module.exports = {
   createProduct,
   findByName,
   getAll,
-  findById,
+  getById,
   updateProduct,
   deleteProduct,
 };

@@ -5,7 +5,6 @@ const { getConnection } = require('./mongoMockConnection');
 
 const productsModel = require('../../models/Products');
 const salesModel = require('../../models/Sales');
-const { before } = require('mocha');
 
 
 describe('Exibe toda a lista de produtos', () => {
@@ -150,12 +149,12 @@ describe('Procura um produto pelo id', () => {
       });
 
       it('retorna um objeto', async () => {
-        const result = await productsModel.findById(response.insertedId);
+        const result = await productsModel.getById(response.insertedId);
         expect(result).to.be.an('object');
       });
 
       it('o objeto contém as chaves "_id", "name", "quantity"', async () => {
-        const result = await productsModel.findById(response.insertedId);
+        const result = await productsModel.getById(response.insertedId);
         expect(result).to.have.all.keys('_id', 'name', 'quantity');
       });
     });
@@ -178,7 +177,7 @@ describe('Procura um produto pelo id', () => {
       });
 
       it('retorna "null"', async () => {
-        const result = await productsModel.findById(ID_EXAMPLE);
+        const result = await productsModel.getById(ID_EXAMPLE);
         expect(result).to.be.null;
       });
     });
@@ -200,7 +199,7 @@ describe('Procura um produto pelo id', () => {
       });
 
       it('retorna "null"', async () => {
-        const result = await productsModel.findById(ID_EXAMPLE);
+        const result = await productsModel.getById(ID_EXAMPLE);
         expect(result).to.be.null;
       });
     });
