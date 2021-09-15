@@ -38,6 +38,24 @@ const quantityNotNumber = {
   },
 };
 
+const idFormatError = {
+  err: { 
+    code: 'invalid_data',
+    message: 'Wrong id format',
+  },
+};
+
+const getAllProducts = async () => {
+  const product = await model.getAllProducts();
+  return product;
+};
+
+const findById = async (id) => {
+  const productId = await model.findById(id);
+  if (!productId) return idFormatError;
+  return productId;
+};
+
 const createProducts = async (name, quantity) => {
   const nameValidate = nameIsValid(name);
   const quantityValidate = quantityIsValidate(quantity);
@@ -55,4 +73,6 @@ const createProducts = async (name, quantity) => {
 
 module.exports = {
   createProducts,
+  getAllProducts,
+  findById,
 };

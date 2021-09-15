@@ -13,6 +13,8 @@ app.get('/', (_request, response) => {
 const PORT = '3000';
 
 app.post('/products', controller.createProducts);
+app.get('/products', controller.getAllProducts);
+app.get('/products/:id', controller.findById);
 
 app.listen(PORT, () => {
   console.log(`Conectado a porta ${PORT}`);
