@@ -10,6 +10,12 @@ const createSale = async (req, res) => {
   return res.status(200).json({ _id, itensSold: [...req.body] });
 };
 
+const findAllSales = async (_req, res) => {
+  const allSales = await salesValidations.validateFindAllSales();
+  res.status(200).json(allSales);
+};
+
 module.exports = {
   createSale,
+  findAllSales,
 };

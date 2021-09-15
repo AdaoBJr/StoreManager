@@ -7,6 +7,13 @@ const createSales = async (body) => {
   return { _id: id, itensSold: [...body] };
 };
 
+const findAllSales = async () => {
+  const db = await connect();
+  const allSales = await db.collection('sales').find();
+  return allSales;
+};
+
 module.exports = {
   createSales,
+  findAllSales,
 };

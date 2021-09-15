@@ -35,6 +35,12 @@ const validateCreateSale = async (body) => {
   return createSale;
 };
 
+const validateFindAllSales = async () => {
+  const findAllSales = await salesModels.findAllSales();
+  return findAllSales;
+};
+
 module.exports = {
   validateCreateSale,
+  validateFindAllSales,
 };
