@@ -15,6 +15,11 @@ const validateName = (name) => {
     result.messageResult.err.message = '"name" length must be at least 5 characters long';
     return result;
   }
+
+  if (productModel.productExists) {
+    result.messageResult.err.message = 'Product already exists';
+    return result;
+  }
   
   return null;
 };
