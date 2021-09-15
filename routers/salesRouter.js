@@ -4,17 +4,10 @@ const router = express.Router();
 
 const salesController = require('../controllers/salesController');
 const { checkQuantity } = require('../middlewares/salesMiddleware');
-// const {
-//   checkQuantity,
-//   checkNameLength,
-//   checkProductExist,
-// } = require('../middlewares/productMiddleware');
 
 // router.delete('/:id', salesController.deleteProduct);
 
-// router.put();
-
-// router.get('/:id', salesController.getxProductById);
+router.put('/:id', checkQuantity, salesController.updateSale);
 
 router.get('/:id', salesController.getSaleById);
 

@@ -36,8 +36,20 @@ const getSaleById = async (req, res) => {
   }
 };
 
+const updateSale = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const item = req.body;
+    const updatedSale = await model.updateSale(id, item);
+    return res.status(StatusCodes.OK).json(updatedSale);
+  } catch (error) {
+    return res.status(StatusCodes.BAD_REQUEST).send();
+  }
+};
+
 module.exports = {
   registerSale,
   getSales,
   getSaleById,
+  updateSale,
 };
