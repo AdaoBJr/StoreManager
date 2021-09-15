@@ -44,8 +44,25 @@ const AllSales = async (req, res) => {
   return res.status(OK).json({ sales: getAllSales });
 };
 
+const validId = async (req, res) => {
+  const { id } = req.params;
+  const sale = await salesService.verifyId(id);
+  console.log(sale, 'sale controller');
+
+  if (!sale) {
+    return res.status(NOT_FOUND).json({
+      err: {
+        code: 'not_found',
+        message: 'Sale not found',
+      },
+    });
+  }
+  return res.status(OK).json(sale);
+};
+
 module.exports = {
   validQuantity,
   creteSales,
   AllSales,
+  validId,
 };
