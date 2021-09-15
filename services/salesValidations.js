@@ -49,12 +49,17 @@ const validateFindSalesById = async (id) => {
   return findSalesById;
 };
 
-const validateUpdateSale = (id, body) => {
+const validateUpdateSale = async (id, body) => {
   if (mapSales(body) === false) {
     return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
   }
-  const updateSale = salesModels.updateSale(ObjectId(id), body);
+  const updateSale = await salesModels.updateSale(ObjectId(id), body);
   return updateSale;
+};
+
+const validateDeleteSale = async (id) => {
+  const deleteSale = await salesModels.deleteSale(ObjectId(id));
+  return deleteSale;
 };
 
 module.exports = {
@@ -62,4 +67,5 @@ module.exports = {
   validateFindAllSales,
   validateFindSalesById,
   validateUpdateSale,
+  validateDeleteSale,
 };
