@@ -50,6 +50,9 @@ const validateFindSalesById = async (id) => {
 };
 
 const validateUpdateSale = (id, body) => {
+  if (mapSales(body) === false) {
+    return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
+  }
   const updateSale = salesModels.updateSale(ObjectId(id), body);
   return updateSale;
 };

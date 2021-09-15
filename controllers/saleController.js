@@ -29,6 +29,10 @@ const updateSale = async (req, res) => {
   const { id } = req.params;
   const { body } = req;
   const update = await salesValidations.validateUpdateSale(id, body);
+  const { code, message } = update;
+  if (message) {
+    return res.status(422).json({ err: { code, message } });
+  }
   return res.status(200).json(update);
 };
 
