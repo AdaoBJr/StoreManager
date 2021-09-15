@@ -10,6 +10,12 @@ message: '"name" length must be at least 5 characters long' } };
 const numberError = { err: { code: 'invalid_data', 
 message: '"quantity" must be a number' } };
 
+const existsError = { err: { code: 'invalid_data', 
+message: 'Product already exists' } };
+
+const quantityError = { err: { code: 'invalid_data', 
+message: '"quantity" must be larger than or equal to 1' } };
+
 const getAllProducts = async (_req, res) => {
   try {
     const products = await model.getAll();
@@ -42,12 +48,10 @@ const createProduct = async (req, res) => {
       return res.status(422).json(nameError); 
      }
     if (createdProduct === null) {
-      return res.status(422).json({ err: { code: 'invalid_data', 
-      message: 'Product already exists' } });
+      return res.status(422).json(existsError);
     }
     if (quantity <= 0) {
-      return res.status(422).json({ err: { code: 'invalid_data', 
-      message: '"quantity" must be larger than or equal to 1' } });
+      return res.status(422).json(quantityError);
     }
     if (!isNumber(quantity)) {
       return res.status(422).json(numberError);
@@ -62,12 +66,10 @@ const updateProduct = async (req, res) => {
     if (name.length < 5) res.status(422).json(nameError); 
      
     if (updatedProduct === null) {
-      return res.status(422).json({ err: { code: 'invalid_data', 
-      message: 'Product already exists' } });
+      return res.status(422).json(existsError);
     }
     if (quantity <= 0) {
-      return res.status(422).json({ err: { code: 'invalid_data', 
-      message: '"quantity" must be larger than or equal to 1' } });
+      return res.status(422).json(quantityError);
     }
     if (!isNumber(quantity)) {
       return res.status(422).json(numberError);
