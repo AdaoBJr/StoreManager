@@ -30,7 +30,6 @@ const getById = async (id) => {
 const update = async ({ name, quantity, id }) => {
   const db = await connection();
   let result = await db.collection('products').findOne({ _id: ObjectId(id) });
-  console.log(id);
   if (result === null) {
     return { err: {
       code: 'invalid_data',
