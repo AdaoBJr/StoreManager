@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const { getAllProd, getProdId, createProd } = require('./controllers/productsController');
-const { nameExist, nameLength, productQuantity, validId } = require('./middlewares/productsMiddleware');
+const { nameExist, nameLength, productQuantity,
+  validId } = require('./middlewares/productsMiddleware');
 const { updateProd, deleteProd } = require('./controllers/productsController');
 
 require('dotenv').config();
