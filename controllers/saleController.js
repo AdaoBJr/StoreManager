@@ -25,8 +25,16 @@ const findSalesById = async (req, res) => {
   return res.status(200).json(salesById);
 };
 
+const updateSale = async (req, res) => {
+  const { id } = req.params;
+  const { body } = req;
+  const update = await salesValidations.validateUpdateSale(id, body);
+  return res.status(200).json(update);
+};
+
 module.exports = {
   createSale,
   findAllSales,
   findSalesById,
+  updateSale,
 };

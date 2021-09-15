@@ -26,6 +26,8 @@ app.get('/sales/:id', salesController.findSalesById);
 
 app.post('/sales', salesController.createSale);
 
+app.put('/sales/:id', salesController.updateSale);
+
 app.get('/', (_request, response) => {
   response.send();
 });
