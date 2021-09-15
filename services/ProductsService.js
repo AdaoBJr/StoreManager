@@ -3,18 +3,34 @@
 const ProductsModel = require('../models/ProductsModel');
 
 // ------------------------------------------------------------------
-// Requisito 1: SERVICE responsável por validar se o NOME do produto já existe, e se não existir fazer a chamada ao MODEL de cadsatro produtos
+// Requisito 1: SERVICE responsável por fazer a chamada ao MODEL de cadsatro produtos(Validação via middleware)
 
 const postProducts = async ({ name, quantity }) => {
   const newProduct = await ProductsModel.postProducts({ name, quantity });
 
-  if (!newProduct) return { code: 422, message: 'Product was not created' };
-  
-  return { code: 201, newProduct };
+  return newProduct;
+};
+
+// ------------------------------------------------------------------
+// Requisito 2: SERVICEs responsáveis por fazerem a chamada aos MODELs de busca de produtos ou de produto específico, filtrado por ID
+
+const getProducts = async () => {
+  const products = await ProductsModel.getProducts();
+
+  return products;
+};
+
+const getProductById = async (id) => {
+  const product = await ProductsModel.getProductById(id);
+
+  return product;
 };
 
 // ------------------------------------------------------------------
 
 module.exports = {
   postProducts,
+  getProducts,
+  getProductById,
+
 };
