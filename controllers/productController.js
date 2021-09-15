@@ -5,11 +5,9 @@ const productRouter = express.Router();
 
 productRouter.post('/', async (req, res) => {
   const { name, quantity } = req.body;
-  const result = await productService.createProduct({ name, quantity });
-  
-  res
-    .status(200)
-    .json({ id: result.insertedId, name, quantity });
+  const { status, messageResult } = await productService.createProduct({ name, quantity });
+
+  return res.status(status).json(messageResult);
 });
 
 module.exports = {
