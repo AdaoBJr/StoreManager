@@ -1,5 +1,9 @@
 const salesService = require('../services/salesService');
 
+const NOT_FOUND = 404;
+// const UNPROCESSABLE_ENTITY = 422;
+const OK = 200;
+
 const validQuantity = (req, res, next) => {
   console.log(req.body, 'body');
   const { body } = req;
@@ -25,7 +29,23 @@ const creteSales = async (req, res) => {
   return res.status(200).json(created);
 };
 
+const AllSales = async (req, res) => {
+  const getAllSales = await salesService.verifyAllSales();
+  console.log(getAllSales, 'controller');
+
+  if (!getAllSales) {
+    return res.status(NOT_FOUND).json({
+      err: {
+        code: 'not_found',
+        message: 'Sale not found',
+      },
+    });
+  }
+  return res.status(OK).json({ sales: getAllSales });
+};
+
 module.exports = {
   validQuantity,
   creteSales,
+  AllSales,
 };
