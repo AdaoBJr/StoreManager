@@ -8,8 +8,8 @@ const checkName = async (name, quantity) => {
    return errorBusines('Product already exists');
   }
 
-  const productAdd = await addProduct(name, quantity);
-  return productAdd;
+  const addedProduct = await addProduct(name, quantity);
+  return addedProduct;
 };
 
 module.exports = {
