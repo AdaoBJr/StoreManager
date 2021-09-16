@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const controller = require('./controllers/ProductsController');
+const controllerProducts = require('./controllers/ProductsController');
+const controllerSales = require('./controllers/SalesController');
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,11 +13,12 @@ app.get('/', (_request, response) => {
 
 const PORT = '3000';
 
-app.post('/products', controller.createProducts);
-app.get('/products', controller.getAllProducts);
-app.get('/products/:id', controller.findById);
-app.put('/products/:id', controller.updateProduct);
-app.delete('/products/:id', controller.excludeProduct);
+app.post('/products', controllerProducts.createProducts);
+app.post('/sales', controllerSales.createSales);
+app.get('/products', controllerProducts.getAllProducts);
+app.get('/products/:id', controllerProducts.findById);
+app.put('/products/:id', controllerProducts.updateProduct);
+app.delete('/products/:id', controllerProducts.excludeProduct);
 
 app.listen(PORT, () => {
   console.log(`Conectado a porta ${PORT}`);
