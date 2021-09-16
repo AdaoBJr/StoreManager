@@ -95,7 +95,24 @@ const getProductById = async (id) => {
 };
 
 const updateProduct = async ({ id, name, quantity }) => {
-
+  const message = validateNameLength(name) || validateQuantity(quantity);
+  if (message) {
+   return {
+    status: 422,
+    messageResult: {
+      err: {
+        code: 'invalid_data',
+        message, 
+      },
+    },
+   };
+  }
+  const messageResult = await productModel.updateProduct({ id, name, quantity });
+  if (!messageResult) {
+    return { 
+      status: 200, 
+      messageResult };
+  }
 };
 
 module.exports = {
