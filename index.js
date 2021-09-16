@@ -12,9 +12,14 @@ const {
   requestSalesList,
   requestSaleById,
   requestDeleteSaleById,
+  requestNewSales,
 } = require('./Controllers/Sales');
 
-const { validateName, validateQuantity } = require('./middlwares');
+const {
+  validateName,
+  validateQuantity,
+  validateProductId,
+  validateProductQuantity } = require('./middlwares');
 
 const PORT = 3000;
 
@@ -37,7 +42,7 @@ app.put('/products/:id', validateName, validateQuantity, updateProductById);
 
 app.delete('/products/:id', deleteProductById);
 
-// app.post('/sales', requestNewSales);
+app.post('/sales', validateProductId, validateProductQuantity, requestNewSales);
 
 app.get('/sales/:id', requestSaleById);
 

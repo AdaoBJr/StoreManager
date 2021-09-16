@@ -1,6 +1,14 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
+const createSales = async (products) => {
+  const db = await connection();
+
+  const sale = await db.collection('sales').insertMany({ products });
+
+  return sale;
+};
+
 const getAllSalesList = async () => {
   const db = await connection();
 

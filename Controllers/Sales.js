@@ -1,21 +1,23 @@
 const { getSalesList, saleById, delSaleById } = require('../Services/Sales');
 
-// const requestNewSales = async (req, res) => {
-//   const { name, quantity } = req.body;
+const requestNewSales = async (req, res) => {
+  // const { body } = req;
 
-//   const verifiedSale = await verifySales(name, quantity);
+  // const products = body;
 
-//   if (!newSale) {
-//     return res.status(422).json({
-//       err: {
-//         code: 'invalid_data',
-//         message: 'Wrong product ID or quantity',
-//       },
-//     });
-//   }
+  // const productVerify = await verifyProducts(products);
 
-//   return res.status(200).json(newSale);
-// };
+  // if (!productVerify) {
+  //   return res.status(422).json({
+  //     err: {
+  //       code: 'invalid_data',
+  //       message: 'Wrong product ID or quantity',
+  //     },
+  //   });
+  // }
+
+  return res.status(200).json({ message: 'cheguei' });
+};
 
 const requestSalesList = async (req, res) => {
   const salesList = await getSalesList();
@@ -61,4 +63,5 @@ module.exports = {
   requestSalesList,
   requestSaleById,
   requestDeleteSaleById,
+  requestNewSales,
 };
