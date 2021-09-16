@@ -8,7 +8,7 @@ const ProductsModel = require('../models/ProductsModel');
 const validateName = async (req, res, next) => {
   const { name } = req.body;
 
-  const { code, message } = validateNameSchema({ name });
+  const { code, message } = validateNameSchema(name);
 
   if (message) return res.status(code).json({ err: { code: 'invalid_data', message } });
 
@@ -18,7 +18,7 @@ const validateName = async (req, res, next) => {
 const validateQuantity = async (req, res, next) => {
   const { quantity } = req.body;
 
-  const { code, message } = validateQuantitySchema({ quantity });
+  const { code, message } = validateQuantitySchema(quantity);
 
   if (message) return res.status(code).json({ err: { code: 'invalid_data', message } });
 
@@ -29,7 +29,7 @@ const validateQuantity = async (req, res, next) => {
 const validateNameExists = async (req, res, next) => {
   const { name } = req.body;
 
-  const nameExists = await ProductsModel.findProductByName({ name });
+  const nameExists = await ProductsModel.findProductByName(name);
   
   if (nameExists) {
     return res.status(422).json(
@@ -60,16 +60,32 @@ const validateIdParams = async (req, res, next) => {
 const validateIdProductExists = async (req, res, next) => {
   const saleItems = req.body;
 
-  // saleItems.forEach((element) => {
-  //   if (!ObjectId.isValid(element.productId)) {
-  //     return res.status(422).json(
-  //       { err:
-  //         { code: 'invalid_data', message: 'Wrong id format' },
-  //       },
-  //     ); 
-  //   }
-  // });
   saleItems.forEach(async (element) => {
+    const product = await ProductsModel.getProductById(element.productId);
+    
+    if (!product) {
+      return res.status(422).json(
+        { err:
+          { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
+        },
+      ); 
+    }
+  });
+  
+  next();
+};
+const validateProductSaleQuantity = async (req, res, next) => {
+  const saleItems = req.body;
+
+  saleItems.forEach(async (element) => {
+    const { code, message } = validateQuantitySchema(element.quantity);
+
+    if (message) {
+      return res.status(code).json(
+        { err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } },
+      );
+    }
+
     const product = await ProductsModel.getProductById(element.productId);
     
     if (!product) {
@@ -89,5 +105,6 @@ module.exports = {
   validateQuantity,
   validateNameExists,
   validateIdParams,
-  validateIdProductExists,  
+  validateIdProductExists,
+  validateProductSaleQuantity,
 };

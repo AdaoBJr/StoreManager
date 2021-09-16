@@ -13,7 +13,7 @@ salesRouter.post('/', validateIdProductExists, async (req, res) => {
 
   const newSale = await SalesService.postSales(saleItems);
 
-  return res.status(201).json(newSale);
+  return res.status(200).json(newSale);
 });
 
 // ------------------------------------------------------------------

@@ -7,7 +7,7 @@ const { connection } = require('./connection');
 // Requisito 1: MODEL responsável por verificar a existência de um produto de NAME específico na BASE DE DADOS
 
 // Ajuda: Matheus Gois
-const findProductByName = async ({ name }) => connection()
+const findProductByName = async (name) => connection()
     .then((db) => db.collection('products').findOne({ name }));
 
 // Requisito 1: MODEL responsável pelo cadastro de produtos na BASE DE DADOS e realizar o retorno do item cadastrado
