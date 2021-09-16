@@ -7,12 +7,16 @@ const {
   validateQuantity,
   validateId } = require('./middlewares/productMiddlewares');
 
+const salesMiddleware = require('./middlewares/saleMiddlewares');
+
 const {
   createProduct,
   getAllProducts,
   updateProduct,
   excludeProduct,
   getProductById } = require('./controllers/productsController'); 
+
+const { createSale } = require('./controllers/salesController');
 
 const app = express();
 app.use(bodyParser.json());
@@ -32,6 +36,8 @@ app.post(
   validateQuantity,
   createProduct,
   );
+
+app.post('/sales', salesMiddleware.validateQuantity, createSale);
 
 app.put(
   '/products/:id',
