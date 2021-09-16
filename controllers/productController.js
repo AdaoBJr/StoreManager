@@ -55,9 +55,24 @@ const update = async (req, res) => {
     });
   }
 };
+
+const exclude = async (req, res) => {
+  const { id } = req.params;
+  const result = await productService.exclude(id);
+  if (result === null) {
+    return res.status(422).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    });
+  }
+  return res.status(200).json(result);
+};
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  exclude,
 };

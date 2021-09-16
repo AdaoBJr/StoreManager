@@ -11,10 +11,16 @@ const getById = async (id) => {
 };
 
 const update = async ({ name, quantity, id }) => productModel.update({ name, quantity, id });
-// console.log(typeof id);
+
+const exclude = async (id) => {
+  if (!ObjectId.isValid(id)) { return null; }
+  return productModel.exclude(id);
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  exclude,
 };
