@@ -24,11 +24,11 @@ const getById = async (req, res, next) => {
 
 const updateId = async (req, res, next) => {
   const { id } = req.params;
-  const update = saleService.updateId(id, req.body);
+  const update = await saleService.updateId(id, req.body);
   if (update.err) {
     return next(update.err);
   }
-  return '';
+  return res.status(200).json(update);
 };
 
 module.exports = {

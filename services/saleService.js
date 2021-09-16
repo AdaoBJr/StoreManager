@@ -44,11 +44,7 @@ const getById = async (id) => {
 };
 
 const updateId = async (id, sale) => {
-  if (!ObjectId.isValid(id)) {
-    return { err: { message: 'Sale not found', code: 'not_found' } };
-  }
   const valid = validQuantity(sale[0].quantity);
-  console.log(valid);
   if (valid.err) {
     return valid;
   }
