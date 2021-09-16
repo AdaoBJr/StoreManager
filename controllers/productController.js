@@ -1,25 +1,27 @@
 const express = require('express');
 
 const productsRouter = express.Router();
+const rescue = require('express-rescue');
 
 const { checkName } = require('../services/productService');
-const errorProducts = require('../middlewares/errorProducts');
+const { validateProductInput } = require('../middlewares/errorProducts');
 
-productsRouter.post('/', errorProducts, async (req, res, next) => {
+productsRouter.post('/', validateProductInput, rescue(async (req, res, next) => {
   const { name, quantity } = req.body;
-  const statusProduct = await checkName(name, quantity);
+  
+  const product = await checkName(name, quantity);
 
-  if (statusProduct.isError) {
-    return next(statusProduct);
+  if (product.isError) {
+    return next(product);
   }
-
-  const productRegistered = {
-    _id: statusProduct.insertedId,
+  
+  const newProduct = {
+    _id: product.insertedId,
     name,
     quantity,
   };
-
- return res.status(201).json(productRegistered);
-});
+  
+  return res.status(201).json(newProduct);
+}));
 
 module.exports = productsRouter;

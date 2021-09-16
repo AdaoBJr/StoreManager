@@ -1,20 +1,20 @@
-module.exports = (error, _req, res, _next) => {
-  console.log(error);
-  if (error.isError) {
-   return res.status(422).json({
-      err: {
-        code: error.code,
-        message: error.message,
-      },
-    });
+const STATUS_CODE_ANAUTORAZED = 422;
+const STATUS_CODE_NOT_FOUND = 404;
+
+const errorMiddleProducts = (err, _req, res, _next) => {
+  if (err.isError) {
+    if (err.message === 'Sale not found'
+    || err.message === 'Such amount is not permitted to sell') {
+      const errorFoud = { code: err.code, message: err.message };
+      return res.status(STATUS_CODE_NOT_FOUND).json({ err: errorFoud });
+    }
+    
+    const errorBussines = { code: err.code, message: err.message };
+    return res.status(STATUS_CODE_ANAUTORAZED).json({ err: errorBussines });
   }
 
-  if (error) {
-    return res.status(422).json({
-      err: {
-        code: 'invalid_data',
-        message: error.details[0].message,
-      },
-    });
-  }
+  const newError = { code: 'invalid_data', message: err.details[0].message };
+  return res.status(STATUS_CODE_ANAUTORAZED).json({ err: newError });
 };
+
+module.exports = { errorMiddleProducts };

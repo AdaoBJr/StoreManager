@@ -2,7 +2,6 @@ const { MongoClient } = require('mongodb');
 
 require('dotenv').config();
 
-// Conexão feita com a ajuda do Henrique Clementino 
 const OPTIONS = {
 useNewUrlParser: true,
 useUnifiedTopology: true,
@@ -19,4 +18,4 @@ db = conn.db(process.env.DB_NAME);
 return db;
 }));
 
-module.exports = connection;
+module.exports = connection; 
