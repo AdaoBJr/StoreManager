@@ -6,16 +6,16 @@ const dictionary = () => ({
     alreadyExists: 'Product already exists',
     wrongID: 'Wrong id format',
     quantityTypeAndAmountValidation: 'Wrong product ID or invalid quantity',
+    notFoundMessage: 'Sale not found',
   },
   status: {
     ok: 200,
     created: 201,
+    notFoundStatus: 404,
     unprocessableEntity: 422,
     internalServerError: 500,
   },
-  code: {
-    invalidData: 'invalid_data',
-  },
+  code: { invalidData: 'invalid_data', notFoundCode: 'not_found' },
 });
 
 module.exports = { dictionary };
