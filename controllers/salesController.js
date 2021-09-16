@@ -1,6 +1,6 @@
 const express = require('express');
 const {
-  validateIdProductExists,
+  // validateIdProductExists,
   validateProductSaleQuantity,
 } = require('../middlewares/productsMiddlewares');
 
@@ -11,7 +11,7 @@ const salesRouter = express.Router();
 // ------------------------------------------------------------------
 // Requisito 5: CONTROLLER responsável por receber a requisição de cadastro de vendas, fazer chamada ao SERVICE, e retornar vendas cadastradas
 
-salesRouter.post('/', validateProductSaleQuantity, validateIdProductExists, async (req, res) => {
+salesRouter.post('/', validateProductSaleQuantity, async (req, res) => {
   const saleItems = req.body;
 
   const newSale = await SalesService.postSales(saleItems);
@@ -20,10 +20,10 @@ salesRouter.post('/', validateProductSaleQuantity, validateIdProductExists, asyn
 });
 
 // ------------------------------------------------------------------
-// Requisito 6: CONTROLLERS responsáveis por receber a requisição de listagem geral de produtos ou por ID, fazer chamada ao SERVICE, e retornar os produtos ou o produto específico filtrado por ID, já cadastrador na base.
+// Requisito 6: CONTROLLERS responsáveis por receber a requisição de listagem geral de vendas ou por ID, fazer chamada ao SERVICE, e retornar todas as vendas ou venda específica filtrado por ID.
 
-// productRouter.get('/', async (req, res) => {
-//   const products = await ProductsService.getProducts();
+// salesRouter.get('/', async (req, res) => {
+//   const products = await salesService.getProducts();
 
 //   return res.status(200).json({ products });
 // });

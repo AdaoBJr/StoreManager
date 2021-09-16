@@ -60,17 +60,32 @@ const validateIdParams = async (req, res, next) => {
 const validateIdProductExists = async (req, res, next) => {
   const saleItems = req.body;
 
-  saleItems.forEach(async (element) => {
-    const product = await ProductsModel.getProductById(element.productId);
-    
-    if (!product) {
+  const products = await ProductsModel.getProducts();
+
+  for (let index = 0; index < saleItems.length; index += 1) {
+    const element = saleItems[index];
+
+    const containId = products.find((product) => product.id === element.productId);
+    console.log(containId);
+
+    if (containId) {
       return res.status(422).json(
         { err:
           { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
         },
-      ); 
+      );
     }
-  });
+
+    // const product = ProductsModel.getProductById(element.productId);
+    
+    // if (!product) {
+    //   return res.status(422).json(
+    //     { err:
+    //       { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
+    //     },
+    //   );
+    // }
+  }
   
   next();
 };
