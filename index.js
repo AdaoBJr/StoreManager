@@ -66,6 +66,11 @@ ifSaleIdNotExists,
 salesController.updateById);
 // app.get('/products/:id', ifProductIdNotExists,
 // productsController.getById);
+
+app.delete('/sales/:id',
+ifSaleIdNotExists,
+salesController.deleteById);
+
 app.use((err, req, res, _next) => 
 res.status(500).send(`Algo deu errado! Mensagem: ${err.message}`));
 
