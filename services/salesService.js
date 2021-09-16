@@ -50,6 +50,19 @@ const verifyUpdateSale = async (productId, itensSold) => {
   return updateSale;
 };
 
+const verifyDeleteSale = async (id) => {
+  const deleteProduct = await salesModel.deleteSale(id);
+  return deleteProduct;
+};
+
+const verifyIdDelete = async (id) => {
+  const getId = salesModel.getById(id);
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+  return getId;
+};
+
 module.exports = {
   verifyTypeQuantity,
   verifyQuantity,
@@ -57,4 +70,6 @@ module.exports = {
   verifyAllSales,
   verifyId,
   verifyUpdateSale,
+  verifyDeleteSale,
+  verifyIdDelete,
 };
