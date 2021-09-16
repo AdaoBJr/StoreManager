@@ -1,17 +1,18 @@
-const joi = require('@hapi/joi');
+const Joi = require('@hapi/joi');
 
-const errorProducts = (req, _res, next) => {
- const { error } = joi.object({
-    name: joi.string().min(5).not().empty()
-.required(),
-    quantity: joi.number().min(1).not().empty()
-.required(),
+const validateProductInput = (req, _res, next) => {
+  const minNameLength = 5;
+
+  const { error } = Joi.object({
+    name: Joi.string().min(minNameLength).not().empty()
+  .required(),
+    quantity: Joi.number().min(1).not().empty()
+  .required(),
   }).validate(req.body);
-  if (error) {
-   return next(error);
-  }
+  
+  if (error) return next(error);
 
-   return next();
+  next();
 };
 
-module.exports = errorProducts;
+module.exports = { validateProductInput };

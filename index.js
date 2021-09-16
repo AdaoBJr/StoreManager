@@ -5,7 +5,7 @@ require('dotenv').config();
 const app = express();
 const bodyParser = require('body-parser');
 const routers = require('./routes/productsRouters');
-const error = require('./middlewares/errorStatus');
+const { errorMiddleProducts } = require('./middlewares/errorStatus');
 
 app.use(bodyParser.json());
 
@@ -15,7 +15,7 @@ app.get('/', (_request, response) => {
 });
 
 app.use(routers);
-app.use(error);
+app.use(errorMiddleProducts);
 
 app.listen(process.env.PORT, () =>
     console.log(`Servidor rodando na porta ${process.env.PORT}`));

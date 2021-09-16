@@ -1,15 +1,17 @@
 const connect = require('./connection');
 
-const addProduct = async (name, quantity) => {
-  const db = await connect();
-  const insertProduct = await db.collection(process.env.COLLECTION).insertOne({ name, quantity });
-  return insertProduct;
-};
+require('dotenv').config();
 
 const findProduct = async (name) => {
-  const db = await connect();
-  const product = await db.collection(process.env.COLLECTION).findOne({ name });
-  return product;
+  const conect = await connect();
+  const db = await conect.collection(process.env.COLLECTION).findOne({ name });
+  return db;
+};
+
+const addProduct = async (name, quantity) => {
+  const conect = await connect();
+  const db = await conect.collection(process.env.COLLECTION).insertOne({ name, quantity });
+  return db;
 };
 
 module.exports = {

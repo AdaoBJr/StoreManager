@@ -1,15 +1,14 @@
 const { addProduct, findProduct } = require('../models/productsModel');
-const { errorBusines } = require('../errors/errorAPI');
+const { errorBusiness } = require('../errors/errorAPI');
 
 const checkName = async (name, quantity) => {
-  const product = await findProduct(name);
-
-  if (product) {
-   return errorBusines('Product already exists');
+  const fliterName = await findProduct(name);
+  if (fliterName) {
+    return errorBusiness('Product already exists'); 
   }
 
-  const addedProduct = await addProduct(name, quantity);
-  return addedProduct;
+  const createProduct = await addProduct(name, quantity);
+  return createProduct;
 };
 
 module.exports = {
