@@ -1,6 +1,13 @@
 const { ObjectId } = require('mongodb');
 const getConnection = require('./connection');
-// const getAll = require('./modelProducts');
+
+const deleteSale = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const sales = await getConnection()
+    .then((db) => db.collection('sales').deleteOne({ _id: ObjectId(id) }));
+  
+  return sales;
+};
 
 const update = async (id, updateSales) => {
   const db = await getConnection();
@@ -17,7 +24,6 @@ const getById = async (id) => {
   
   const sales = await getConnection()
   .then((db) => db.collection('sales').findOne({ _id: ObjectId(id) }));
-  // console.log(sales, 'sales');
   return sales;
 };
 
@@ -32,4 +38,4 @@ const create = async (sales) => {
   return salesMade;
 };
 
-module.exports = { create, getAll, getById, update };
+module.exports = { create, getAll, getById, update, deleteSale };
