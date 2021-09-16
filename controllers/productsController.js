@@ -12,7 +12,7 @@ productsRouter.post('/', async (req, res) => {
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(result);
   }
   
-  res.status(StatusCodes.CREATED).json(result);
+  return res.status(StatusCodes.CREATED).json(result);
 });
 
 productsRouter.get('/:id', async (req, res) => {
