@@ -76,7 +76,6 @@ const deleteSale = async (id) => {
   await saleFound.itensSold
     .forEach(async (el) => incProducts(el.productId, el.quantity));
 
-  // console.log(saleFound, 'depois');
   return saleFound;
 };
 
