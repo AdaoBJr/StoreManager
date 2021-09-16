@@ -1,7 +1,15 @@
+const { ObjectId } = require('mongodb');
 const salesService = require('../services/salesService');
 
+const error = {
+    err: {
+      code: 'invalid_data',
+      message: 'Wrong sale ID format',
+    },
+  };
+
 const NOT_FOUND = 404;
-// const UNPROCESSABLE_ENTITY = 422;
+const UNPROCESSABLE_ENTITY = 422;
 const OK = 200;
 
 const validQuantity = (req, res, next) => {
@@ -69,10 +77,23 @@ const editSale = async (req, res) => {
   return res.status(OK).json({ _id: id, itensSold });
 };
 
+const deleteSale = (req, res) => {
+  const { id } = req.params;
+  if (!ObjectId.isValid(id)) {
+    return res.status(UNPROCESSABLE_ENTITY).json(error);
+  }
+  const verifyDelete = salesService.verifyDeleteSale(id);
+  if (!verifyDelete) {
+    return res.status(UNPROCESSABLE_ENTITY).json(error);
+  }
+  return res.status(OK).json(verifyDelete);
+};
+
 module.exports = {
   validQuantity,
   creteSales,
   AllSales,
   validId,
   editSale,
+  deleteSale,
 };
