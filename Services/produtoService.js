@@ -57,13 +57,28 @@ const deleteProdutoServices = async (id) => {
 
 const cadastrarVendaServices = async (arrayVendas) => {
   const verificacao = validacoes.validacaoCadastramentoVenda(arrayVendas);
-  console.log(verificacao);
 
   if (verificacao.every((i) => i !== false)) {
     return verificacao.find((i) => 'err' in i);
   }
 
   const result = await produtoModel.cadastrarVendaModel({ itensSold: arrayVendas });
+  return result;
+};
+
+const buscarVendaIDServices = async (id) => {
+  const result = await produtoModel.buscarVendaIDModel(id);
+
+  if (!result) {
+    return { err: { code: 'not_found', message: 'Sale not found' } };
+  }
+
+  return result;
+};
+
+const buscarTodasVendaServices = async () => {
+  const result = await produtoModel.buscarTodasVendaModel();
+
   return result;
 };
 
@@ -74,4 +89,6 @@ buscarProdutoPorIDServices,
 atualizarProdutoServices,
 deleteProdutoServices,
 cadastrarVendaServices,
+buscarVendaIDServices,
+buscarTodasVendaServices,
 };

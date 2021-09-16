@@ -2,6 +2,10 @@ const codeNumber = (param) => {
   if (param === 'invalid_data') {
     return 422;
   }
+
+  if (param === 'not_found') {
+    return 404;
+  }
 };
 
 module.exports = (erroMiddleware, _req, res, _next) => {

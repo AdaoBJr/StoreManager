@@ -59,6 +59,21 @@ const cadastrarVendaModel = async ({ itensSold: arrayVendas }) => {
   return { _id: vendaInserida.insertedId, itensSold: arrayVendas };
 };
 
+const buscarVendaIDModel = async (id) => {
+  if (!ObjectId.isValid(id)) return false;
+  const db = await connection();
+  const venda = await db.collection('sales').findOne({ _id: ObjectId(id) });
+  
+  return venda !== null ? venda : false;
+};
+
+const buscarTodasVendaModel = async () => {
+  const db = await connection();
+  const todosProdutos = await db.collection('sales').find().toArray();
+  
+  return { sales: todosProdutos };
+};
+
 module.exports = { 
 cadastrarProdutoModel, 
 buscaProdutoPorNome, 
@@ -67,4 +82,6 @@ buscarProdutoPorIDModel,
 atualizarProdutoModel,
 deleteProdutoModel,
 cadastrarVendaModel,
+buscarVendaIDModel,
+buscarTodasVendaModel,
 };

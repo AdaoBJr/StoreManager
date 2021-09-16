@@ -63,6 +63,23 @@ const cadastrarVendaController = rescue(async (req, res, next) => {
   return res.status(200).json(result);
 });
 
+const buscarVendaIDController = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const result = await produtoServices.buscarVendaIDServices(id);
+
+  if ('err' in result) {
+    return next(result);
+  }
+
+  return res.status(200).json(result);
+});
+
+const buscarTodasVendaController = rescue(async (req, res, _next) => {
+  const result = await produtoServices.buscarTodasVendaServices();
+
+  return res.status(200).json(result);
+});
+
 module.exports = { 
 cadastrarProdutoController,
 buscarTodosProdutoController,
@@ -70,4 +87,6 @@ buscarProdutoPorIDController,
 atualizarProdutoController,
 deleteProdutoController,
 cadastrarVendaController,
+buscarVendaIDController,
+buscarTodasVendaController,
 };
