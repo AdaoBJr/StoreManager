@@ -108,7 +108,7 @@ const updateProduct = async ({ id, name, quantity }) => {
    };
   }
   const messageResult = await productModel.updateProduct({ id, name, quantity });
-  if (!messageResult) {
+  if (messageResult) {
     return { 
       status: 200, 
       messageResult };
