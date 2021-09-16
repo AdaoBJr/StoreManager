@@ -10,8 +10,15 @@ const getById = async (id) => {
   return salesModel.getById(id);
 };
 
+const update = async ({ body, id }) => {
+  if (!ObjectId.isValid(id)) { return null; }
+const result = await salesModel.update({ body, id });
+return result;
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };

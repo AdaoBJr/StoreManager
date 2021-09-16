@@ -1,10 +1,9 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
-const validateProduct = async ({ productId }) => {
+const validateProduct = async (productId) => {
   const db = await connection();
   const result = await db.collection('products').findOne({ _id: ObjectId(productId) });
-  console.log(result);
   if (result === null) {
     return false;
   }
@@ -12,14 +11,12 @@ const validateProduct = async ({ productId }) => {
 };
 
 const create = async (sales) => {
-  const invalidIds = await sales.every(validateProduct);
-  console.log(invalidIds);
+  const invalidIds = await sales.every((sale) => validateProduct(sale.productId));
   if (!invalidIds) {
     return null;
   }
   const db = await connection();
   const result = await db.collection('sales').insertOne({ itensSold: [...sales] });
-  console.log('peido');
   return {
     _id: result.insertedId,
     itensSold: [...sales],
@@ -36,8 +33,22 @@ const getById = async (id) => {
   return db.collection('sales').findOne(ObjectId(id));
 };
 
+const update = async ({ body, id }) => {
+  const db = await connection();
+  const result = await db.collection('sales').findOne({ _id: ObjectId(id) });
+  if (result === null) return null;
+  const { itensSold } = result;
+  // result = await validateProduct(productId);
+  // if (!result) return null;
+  await db.collection('sales').updateOne({ _id: ObjectId(id) },
+  { $set: { itensSold: [...itensSold, body] } });
+  console.log(itensSold);
+  return { _id: id, itensSold: body };  
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };

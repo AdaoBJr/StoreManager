@@ -18,6 +18,7 @@ app.delete('/products/:id', productControllers.exclude);
 app.post('/sales', validateSalesQuantities, salesControllers.create);
 app.get('/sales', salesControllers.getAll);
 app.get('/sales/:id', salesControllers.getById);
+app.put('/sales/:id', validateSalesQuantities, salesControllers.update);
 
 app.listen(PORT, () => console.log(`Online ${PORT}`));
 // não remova esse endpoint, e para o avaliador funcionar
