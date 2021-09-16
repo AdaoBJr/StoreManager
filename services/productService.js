@@ -1,12 +1,18 @@
 const productModel = require('../models/productModel');
 
-const validateName = async (name) => {
+const validateNameLength = (name) => {
   let message = null;
 
   if (name.length < 5) {
     message = '"name" length must be at least 5 characters long';
     return message;
   }
+  
+  return message;
+};
+
+const validateNameExists = async (name) => {
+  let message = null;
  
   const productExists = await productModel.productExists(name);
   if (productExists) {
@@ -34,7 +40,9 @@ const validateQuantity = (quantity) => {
 };
 
 const createProduct = async ({ name, quantity }) => {
-  const message = await validateName(name) || validateQuantity(quantity);
+  const message = validateNameLength(name) 
+    || await validateNameExists(name) || validateQuantity(quantity);
+  
   if (message) {
    return {
     status: 422,
@@ -86,8 +94,13 @@ const getProductById = async (id) => {
   };
 };
 
+const updateProduct = async ({ id, name, quantity }) => {
+
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
+  updateProduct,
 };
