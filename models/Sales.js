@@ -17,29 +17,22 @@ const getSaleById = async (id) => {
   return db.collection('sales').findOne(ObjectId(id));
 };
 
-// const createSales = async (name, quantity) => {
+const deleteSaleById = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
 
-//   const db = await connection();
+  const db = await connection();
 
-//   const newSales = await db.collection('sales').insertMany
+  const { _id, name, quantity } = await db.collection('sales').findOne(ObjectId(id));
 
-// };
+  await db.collection('sales').deleteOne({ _id: ObjectId(id) });
 
-// const isProductValid = async (...name) => {
-//   const productsName = [...name];
-
-//   const db = await connection();
-
-//   const products = await db.collection('products').find({ name: { $in: [...name] } });
-
-//   if (!products || products.length !== productsName.length) {
-//     return null;
-//   }
-
-//   return products;
-// };
+  return { _id, name, quantity };
+};
 
 module.exports = {
   getAllSalesList,
   getSaleById,
+  deleteSaleById,
 };

@@ -1,4 +1,4 @@
-const { getAllSalesList, getSaleById } = require('../models/Sales');
+const { getAllSalesList, getSaleById, deleteSaleById } = require('../models/Sales');
 
 const getSalesList = async () => {
   const allSales = await getAllSalesList();
@@ -14,7 +14,18 @@ const saleById = async (id) => {
   return sale;
 };
 
+const delSaleById = async (id) => {
+  const deletedeSale = await deleteSaleById(id);
+
+  if (deletedeSale) {
+    return deletedeSale;
+  }
+
+  return null;
+};
+
 module.exports = {
   getSalesList,
   saleById,
+  delSaleById,
 };

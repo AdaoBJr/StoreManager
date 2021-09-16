@@ -11,6 +11,7 @@ const {
 const {
   requestSalesList,
   requestSaleById,
+  requestDeleteSaleById,
 } = require('./Controllers/Sales');
 
 const { validateName, validateQuantity } = require('./middlwares');
@@ -39,6 +40,8 @@ app.delete('/products/:id', deleteProductById);
 // app.post('/sales', requestNewSales);
 
 app.get('/sales/:id', requestSaleById);
+
+app.delete('/sales/:id', requestDeleteSaleById);
 
 app.get('/sales', requestSalesList);
 

@@ -1,4 +1,4 @@
-const { getSalesList, saleById } = require('../Services/Sales');
+const { getSalesList, saleById, delSaleById } = require('../Services/Sales');
 
 // const requestNewSales = async (req, res) => {
 //   const { name, quantity } = req.body;
@@ -40,7 +40,25 @@ const requestSaleById = async (req, res) => {
   return res.status(200).json(sale);
 };
 
+const requestDeleteSaleById = async (req, res) => {
+  const { id } = req.params;
+
+  const deletedSale = await delSaleById(id);
+
+  if (deletedSale) {
+    return res.status(200).json(deletedSale);
+  }
+
+  return res.status(422).json({
+    err: {
+      code: 'invalid_data',
+      message: 'Wrong sale ID format',
+    },
+  }); 
+};
+
 module.exports = {
   requestSalesList,
   requestSaleById,
+  requestDeleteSaleById,
 };
