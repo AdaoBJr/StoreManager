@@ -8,7 +8,8 @@ const validateName = async (name) => {
     return message;
   }
  
-  if (await productModel.productExists(name)) {
+  const productExists = await productModel.productExists(name);
+  if (productExists) {
     message = 'Product already exists';
     return message;
   }
@@ -46,10 +47,10 @@ const createProduct = async ({ name, quantity }) => {
    };
   }
 
-  const { ops } = await productModel.createProduct({ name, quantity });
+  const messageResult = await productModel.createProduct({ name, quantity });
   return {
     status: 201,
-    messageResult: ops[0],
+    messageResult,
   };
 };
 

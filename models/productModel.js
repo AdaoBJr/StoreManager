@@ -9,8 +9,8 @@ const productExists = async (name) => {
 
 const createProduct = async ({ name, quantity }) => connection
 .getConnection()
-.then((db) => 
-  db.collection('products').insertOne({ name, quantity }));
+.then((db) => db.collection('products').insertOne({ name, quantity }))
+.then((result) => result.ops[0]);
 
 const getAllProducts = async () => connection
 .getConnection()
