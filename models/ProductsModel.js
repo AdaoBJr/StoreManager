@@ -11,6 +11,17 @@ const verifyIsAlreadyExists = async (name) =>
             return false;
         });
 
+const verifyIfIdAlreadyExists = async (id) =>
+    connection()
+        .then((db) => db.collection('products').findOne(ObjectId(id)))
+        .then((re) => {
+            console.log(re);
+            if (re) {
+                return true;
+            }
+            return false;
+        });
+
 const addNewProduct = async (name, quantity) => 
     connection()
         .then((db) => db.collection('products').insertOne({ name, quantity }))
@@ -21,7 +32,7 @@ const getAllProducts = async () =>
         .then((db) => db.collection('products').find().toArray())
         .then((result) => result);
 
-const getProductById = (id) =>
+const getProductById = async (id) =>
     connection()
         .then((db) => db.collection('products').findOne(ObjectId(id)))
         .then((result) => result);
@@ -31,4 +42,5 @@ module.exports = {
     verifyIsAlreadyExists,
     getAllProducts,
     getProductById,
+    verifyIfIdAlreadyExists,
 };

@@ -4,7 +4,8 @@ const { validateIfAlreadyExistsAndLength,
     validateQuantity,
     addProduct,
     getAllProducts,
-    getProductById } = require('../services/ProductsService');
+    getProductById,
+    validateIfIdAlreadyExists } = require('../services/ProductsService');
 
 const addNewProduct = async (req, res) => {
     const { name, quantity } = req.body;
@@ -24,17 +25,18 @@ const addNewProduct = async (req, res) => {
 };
 
 const getProducts = async (req, res) => {
-    const products = await getAllProducts();
-    return res.status(200).json(products);
+    const allProducts = await getAllProducts();
+    return res.status(200).json({ products: allProducts });
 };
 
 const getProductId = async (req, res) => {
     const { id } = req.params;
-    const productOrError = await getProductById(id);
-    if (productOrError.err) {
-        return res.status(422).json(productOrError);
+    if (await validateIfIdAlreadyExists(id)) {
+        const error = await validateIfIdAlreadyExists(id);
+        return res.status(422).json(error);
     }
-    return res.status(200).json(productOrError);
+    const product = await getProductById(id);
+    return res.status(200).json(product);
 };
 
 module.exports = {

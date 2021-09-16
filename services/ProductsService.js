@@ -50,9 +50,10 @@ const getAllProducts = async () => {
     return getProducts;
 };
 
-const getProductById = async (id) => {
-    const product = await productsModel.getProductById(id);
-    if (!product) {
+const validateIfIdAlreadyExists = async (id) => {
+    const result = await productsModel.verifyIfIdAlreadyExists(id);
+    console.log(result);
+    if (result === false) {
         return {
             err: {
                 code: 'invalid_data',
@@ -60,6 +61,10 @@ const getProductById = async (id) => {
             },
         };
     }
+};
+
+const getProductById = async (id) => {
+    const product = await productsModel.getProductById(id);
     console.log(product);
     return product;
 };
@@ -70,4 +75,5 @@ module.exports = {
     addProduct,
     getAllProducts,
     getProductById,
+    validateIfIdAlreadyExists,
 };
