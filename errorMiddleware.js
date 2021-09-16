@@ -1,4 +1,4 @@
-const { dictionary } = require('./src/services/productsService');
+const { dictionary } = require('./src/helpers/dictionary');
 
 const errorMiddleware = (err, _req, res, _next) => {
   const { internalServerError } = dictionary().status;
