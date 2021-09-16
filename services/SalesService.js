@@ -16,7 +16,7 @@ const saleQuatityCheck = async (req, res, next) => {
     return res.status(STATUS_ERROR_CLIENT).json({
       err: {
         code: 'invalid_data',
-        message: 'Invalid product ID or quantity',
+        message: 'Wrong product ID or invalid quantity',
       },
     });
   }
