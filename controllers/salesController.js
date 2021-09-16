@@ -13,7 +13,6 @@ const UNPROCESSABLE_ENTITY = 422;
 const OK = 200;
 
 const validQuantity = (req, res, next) => {
-  console.log(req.body, 'body');
   const { body } = req;
   const verifyTypeQuantity = salesService.verifyTypeQuantity(body);
   const verifyQuantity = salesService.verifyQuantity(body);
@@ -33,13 +32,11 @@ const creteSales = async (req, res) => {
   const { body } = req;
   const created = await salesService.createSales(body);
 
-  // console.log(created, 'controller');
   return res.status(200).json(created);
 };
 
 const AllSales = async (req, res) => {
   const getAllSales = await salesService.verifyAllSales();
-  console.log(getAllSales, 'controller');
 
   if (!getAllSales) {
     return res.status(NOT_FOUND).json({
@@ -55,7 +52,6 @@ const AllSales = async (req, res) => {
 const validId = async (req, res) => {
   const { id } = req.params;
   const sale = await salesService.verifyId(id);
-  console.log(sale, 'sale controller');
 
   if (!sale) {
     return res.status(NOT_FOUND).json({
@@ -71,7 +67,6 @@ const validId = async (req, res) => {
 const editSale = async (req, res) => {
   const { id } = req.params;
   const itensSold = req.body;
-  console.log(itensSold, 'controller');
 
   await salesService.verifyUpdateSale(id, itensSold);
   return res.status(OK).json({ _id: id, itensSold });

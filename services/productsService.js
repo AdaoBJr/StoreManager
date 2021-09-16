@@ -37,7 +37,6 @@ const verifyId = async (id) => {
     return false;
   }
   const products = await productsModel.getProductById(id);
-  console.log(products);
   return products;
 };
 
