@@ -6,8 +6,6 @@ const getConnection = require('./testConnection');
 const productsModel = require('../../models/productsModel');
 const { after, before } = require('mocha');
 
-const payload = { name: 'Caixa de Bananas', quantity: 50 };
-
 describe('Testa produtos', () => {
   let connectionMock;
 
@@ -120,10 +118,9 @@ describe('Testa produtos', () => {
         });
       });
       describe('Testa a atualizacão de produtos', async () => {
-        let productsUpdate;
-
+        const fakeProduct = {_id, name: 'Bananas', quantity: 10 };
         before(async () => {
-          productsUpdate = await productsModel.create('Produto', 100);
+          productsUpdate = await productsModel.create(fakeProduct);
         });
 
         after(async () => {
@@ -132,15 +129,45 @@ describe('Testa produtos', () => {
 
         describe('Quando atualização é realizada com sucesso', () => {
           it('O retorno deve ser o esperado', async () => {
-            await productsModel.update(productsUpdate._id, 'Atulizado!', 999);
-            const updatedProduct = await productsModel.getById(productsUpdate._id);
+            await productsModel.update(fakeProduct);
+            const updatedProduct = await productsModel.getById(fakeProduct._id);
 
-            expect(updatedProduct.name).to.be.equal('Atualizado!');
-            expect(updatedProduct.quantity).to.be.equal(200);
+            expect(updatedProduct.name).to.be.equal('Bananas');
+            expect(updatedProduct.quantity).to.be.equal(10);
+          });
+        });
+        describe('Quando há erro na atualização', () => {
+          it('Deve-se retornar null', async () => {
+            const invalidId = '111';
+            const updatedProduct = await productsModel.update(invalidId, '', 0);
+    
+            expect(updatedProduct).to.be.null;
+          });
+        });
+      });
+
+      describe('Testa a deleção de produtos', () => {
+        describe('Quando a deleção é realizada com sucesso', () => {
+          const fakeProduct = { name: 'Bananas', quantity: 10 };
+          before(async () => {
+            productToBeDeleted = await productsModel.create(fakeProduct);
+          });
+
+          it('Deve retornar um array', async () => {
+    
+            const products = await productsModel.getAll();
+    
+            expect(products).to.be.a('array');
+          });
+    
+          it('O array nao deve conter o produto', async () => {
+            await productsModel.excluse(fakeProduct._id);
+    
+            const products = await productsModel.getById(fakeProduct._id);
+            expect(products).to.be.null;
           });
         });
       });
     });
   });
-
-})
+});
