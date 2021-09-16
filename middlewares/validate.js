@@ -18,6 +18,26 @@ const validateNameAndQuantity = (req, res, next) => {
   next();
 };
 
+const badResult = {
+  err: {
+    code: 'invalid_data',
+    message: 'Wrong product ID or invalid quantity',
+  },
+};
+const validateSalesQuantities = (req, res, next) => {
+  const sales = req.body;
+  const result = sales.some((sale) => {
+    if (sale.quantity < 1 || typeof sale.quantity === 'string') {
+       return true;
+    }
+    return false;
+  });
+  if (result === true) {
+    return res.status(422).json(badResult);
+  }
+  next();
+};
 module.exports = {
   validateNameAndQuantity,
+  validateSalesQuantities,
 };

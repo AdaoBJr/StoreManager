@@ -1,18 +1,21 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const productConstrollers = require('./controllers/productController');
-const { validateNameAndQuantity } = require('./middlewares/validateProduct');
+const productControllers = require('./controllers/productController');
+const salesControllers = require('./controllers/salesController');
+const { validateNameAndQuantity, validateSalesQuantities } = require('./middlewares/validate');
 
 const app = express();
 app.use(bodyParser.json());
 
 const PORT = '3000';
 
-app.post('/products', validateNameAndQuantity, productConstrollers.create);
-app.get('/products', productConstrollers.getAll);
-app.get('/products/:id', productConstrollers.getById);
-app.put('/products/:id', validateNameAndQuantity, productConstrollers.update);
-app.delete('/products/:id', productConstrollers.exclude);
+app.post('/products', validateNameAndQuantity, productControllers.create);
+app.get('/products', productControllers.getAll);
+app.get('/products/:id', productControllers.getById);
+app.put('/products/:id', validateNameAndQuantity, productControllers.update);
+app.delete('/products/:id', productControllers.exclude);
+
+app.post('/sales', validateSalesQuantities, salesControllers.create);
 
 app.listen(PORT, () => console.log(`Online ${PORT}`));
 // não remova esse endpoint, e para o avaliador funcionar
