@@ -12,4 +12,12 @@ const addSale = async (req, res, next) => {
   res.status(ok).json(newSale);
 };
 
-module.exports = { addSale };
+const getAllSales = async (_req, res) => {
+  const { ok } = dictionary().status;
+
+  const allSales = await salesService.getAllSales();
+
+  res.status(ok).json(allSales);
+};
+
+module.exports = { addSale, getAllSales };
