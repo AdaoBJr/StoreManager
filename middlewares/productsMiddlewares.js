@@ -1,14 +1,24 @@
 // Source: https://app.betrybe.com/course/back-end/nodejs-camada-de-servico-e-arquitetura-rest-e-restful/arquitetura-de-software-camada-de-controller-e-service/f8eeda7e-dd20-4a59-a0d9-3d4ec20729bc/conteudos/bd3d8143-f691-4f3b-ae29-40f6f469db8b/praticando/7e59b4b5-e629-41e3-8df4-7228a9b9581e?use_case=side_bar
 
 const { ObjectId } = require('mongodb');
-const { validateNameQuantitySchema } = require('../schemas/productSchema');
+const { validateNameSchema, validateQuantitySchema } = require('../schemas/productSchema');
 const ProductsModel = require('../models/ProductsModel');
 
 // Comments: Valida os argumentos passados como parâmetros e então se produto existe na base de dados 
-const validateNameQuantity = async (req, res, next) => {
-  const { name, quantity } = req.body;
+const validateName = async (req, res, next) => {
+  const { name } = req.body;
 
-  const { code, message } = validateNameQuantitySchema({ name, quantity });
+  const { code, message } = validateNameSchema({ name });
+
+  if (message) return res.status(code).json({ err: { code: 'invalid_data', message } });
+
+  next();
+};
+
+const validateQuantity = async (req, res, next) => {
+  const { quantity } = req.body;
+
+  const { code, message } = validateQuantitySchema({ quantity });
 
   if (message) return res.status(code).json({ err: { code: 'invalid_data', message } });
 
@@ -16,7 +26,7 @@ const validateNameQuantity = async (req, res, next) => {
 };
 
 // Comments: Valida os argumentos passados como parâmetros e então se produto existe na base de dados 
-const validateExists = async (req, res, next) => {
+const validateNameExists = async (req, res, next) => {
   const { name } = req.body;
 
   const nameExists = await ProductsModel.findProductByName({ name });
@@ -33,7 +43,7 @@ const validateExists = async (req, res, next) => {
 };
 
 // Comments: Valida se o ID (MongoDB) informado é válido 
-const validateId = async (req, res, next) => {
+const validateIdParams = async (req, res, next) => {
   const { id } = req.params;
 
   if (!ObjectId.isValid(id)) {
@@ -47,8 +57,37 @@ const validateId = async (req, res, next) => {
   next();
 };
 
+const validateIdProductExists = async (req, res, next) => {
+  const saleItems = req.body;
+
+  // saleItems.forEach((element) => {
+  //   if (!ObjectId.isValid(element.productId)) {
+  //     return res.status(422).json(
+  //       { err:
+  //         { code: 'invalid_data', message: 'Wrong id format' },
+  //       },
+  //     ); 
+  //   }
+  // });
+  saleItems.forEach(async (element) => {
+    const product = await ProductsModel.getProductById(element.productId);
+    
+    if (!product) {
+      return res.status(422).json(
+        { err:
+          { code: 'invalid_data', message: 'Product not found' },
+        },
+      ); 
+    }
+  });
+  
+  next();
+};
+
 module.exports = {
-  validateNameQuantity,
-  validateExists,
-  validateId,
+  validateName,
+  validateQuantity,
+  validateNameExists,
+  validateIdParams,
+  validateIdProductExists,  
 };

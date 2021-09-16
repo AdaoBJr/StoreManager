@@ -2,9 +2,10 @@
 
 const express = require('express');
 const {
-  validateNameQuantity,
-  validateExists,
-  validateId,
+  validateName,
+  validateQuantity,
+  validateNameExists,
+  validateIdParams,
 } = require('../middlewares/productsMiddlewares');
 const ProductsService = require('../services/ProductsService');
 
@@ -14,7 +15,7 @@ const productRouter = express.Router();
 // ------------------------------------------------------------------
 // Requisito 1: CONTROLLER responsável por receber a requisição de cadastro de produto, fazer chamada ao SERVICE, e retornar produto cadastrado
 
-productRouter.post('/', validateExists, validateNameQuantity, async (req, res) => {
+productRouter.post('/', validateName, validateQuantity, validateNameExists, async (req, res) => {
   const { name, quantity } = req.body;
 
   const newProduct = await ProductsService.postProducts({ name, quantity });
@@ -31,7 +32,7 @@ productRouter.get('/', async (req, res) => {
   return res.status(200).json({ products });
 });
 
-productRouter.get('/:id', validateId, async (req, res) => {
+productRouter.get('/:id', validateIdParams, async (req, res) => {
   const { id } = req.params;
 
   const product = await ProductsService.getProductById(id);
@@ -42,7 +43,7 @@ productRouter.get('/:id', validateId, async (req, res) => {
 // ------------------------------------------------------------------
 // Requisito 3: CONTROLLER responsável por receber a requisição de atualização de produtos por ID, fazer chamada ao SERVICE, e retornar o produto atualizado
 
-productRouter.put('/:id', validateId, validateNameQuantity, async (req, res) => {
+productRouter.put('/:id', validateIdParams, validateName, validateQuantity, async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
 
@@ -54,7 +55,7 @@ productRouter.put('/:id', validateId, validateNameQuantity, async (req, res) => 
 // ------------------------------------------------------------------
 // Requisito 4: CONTROLLER responsável por receber a requisição de deletar de produtos por ID, fazer chamada ao SERVICE, e retornar msg de confirmação
 
-productRouter.delete('/:id', validateId, async (req, res) => {
+productRouter.delete('/:id', validateIdParams, async (req, res) => {
   const { id } = req.params;
 
   const product = await ProductsService.deleteProductById(id);
