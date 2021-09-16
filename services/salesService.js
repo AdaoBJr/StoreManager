@@ -47,14 +47,8 @@ async function exclude(id) {
   return sale;
 }
 
-async function updateInventory({ id, quantity }) {
+async function updateInventory(id, quantity) {
   const updateProduct = await salesModel.updateInventory(id, -quantity);
-
-  updateProduct.forEach((product) => {
-    if (product.quantity < 0 || product.quantity < quantity) {
-      return false;
-    }
-  });
 
   return updateProduct;
 }

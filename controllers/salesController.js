@@ -38,19 +38,24 @@ async function validateId(req, res, next) {
   next();
 }
 
-function updateInventory(req, res, next) {
+function updateInventory(req, _res, next) {
   const sales = req.body;
 
-  sales.forEach((sale) => {
-    if (!salesService.updateInventory(sale)) {
-      return res.status(404).json({
-        err: { 
-          code: 'stock_problem', 
-          message: 'Such amount is not permitted to sell', 
-        } });
-      }
-      salesService.updateInventory(sale);
+  sales.forEach(async ({ productId, quantity }) => {
+      await salesService.updateInventory(productId, quantity);
     });
+
+  next();
+}
+
+async function updateInventoryWhenDelete(req, _res, next) {
+  const { id } = req.params;
+  
+  const sale = await salesService.getById(id);
+
+  sale.itensSold.forEach(async ({ productId, quantity }) => {
+    await salesService.updateInventory(productId, quantity - 4); // quantity - 4 passa
+  });
 
   next();
 }
@@ -108,6 +113,7 @@ async function exclude(req, _res) {
 module.exports = {
   validateQuantity,
   updateInventory,
+  updateInventoryWhenDelete,
   validateId,
   create,
   getAll,

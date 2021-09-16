@@ -42,8 +42,6 @@ async function exclude(id) {
 }
 
 async function updateInventory(id, quantity) {
-  if (!ObjectId.isValid) return null;
-
   const db = await connection();
   await db.collection('products')
     .updateOne({ _id: ObjectId(id) }, { $inc: { quantity } });
