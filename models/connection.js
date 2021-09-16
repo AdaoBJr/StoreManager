@@ -2,6 +2,7 @@ const { MongoClient } = require('mongodb');
 
 require('dotenv').config();
 
+// Conexão feita com a ajuda do Henrique Clementino 
 const OPTIONS = {
 useNewUrlParser: true,
 useUnifiedTopology: true,
