@@ -1,5 +1,8 @@
 const express = require('express');
-const { validateIdProductExists } = require('../middlewares/productsMiddlewares');
+const {
+  validateIdProductExists,
+  validateProductSaleQuantity,
+} = require('../middlewares/productsMiddlewares');
 
 const SalesService = require('../services/SalesService');
 
@@ -8,7 +11,7 @@ const salesRouter = express.Router();
 // ------------------------------------------------------------------
 // Requisito 5: CONTROLLER responsável por receber a requisição de cadastro de vendas, fazer chamada ao SERVICE, e retornar vendas cadastradas
 
-salesRouter.post('/', validateIdProductExists, async (req, res) => {
+salesRouter.post('/', validateProductSaleQuantity, validateIdProductExists, async (req, res) => {
   const saleItems = req.body;
 
   const newSale = await SalesService.postSales(saleItems);

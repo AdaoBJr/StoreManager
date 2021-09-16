@@ -77,7 +77,8 @@ const validateIdProductExists = async (req, res, next) => {
 const validateProductSaleQuantity = async (req, res, next) => {
   const saleItems = req.body;
 
-  saleItems.forEach(async (element) => {
+  for (let index = 0; index < saleItems.length; index += 1) {
+    const element = saleItems[index];
     const { code, message } = validateQuantitySchema(element.quantity);
 
     if (message) {
@@ -85,18 +86,8 @@ const validateProductSaleQuantity = async (req, res, next) => {
         { err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } },
       );
     }
+  }
 
-    const product = await ProductsModel.getProductById(element.productId);
-    
-    if (!product) {
-      return res.status(422).json(
-        { err:
-          { code: 'invalid_data', message: 'Product not found' },
-        },
-      ); 
-    }
-  });
-  
   next();
 };
 
