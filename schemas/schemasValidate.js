@@ -1,4 +1,5 @@
 const { ObjectId } = require('mongodb');
+const Joi = require('joi');
 const { getAll } = require('../model/modelProducts');
 const getConnecion = require('../model/connection');
 
@@ -35,6 +36,10 @@ const errors = {
     code,
     message: '"quantity" must be a number',
   } },
+  wrongOrInvalidId: { err: {
+    code,
+    message: 'Wrong product ID or invalid quantity',
+  } },
 };
 
 const format = (sale) => ({ itensSold: sale });
@@ -66,7 +71,7 @@ const productExists = async ({ id }) => {
     return null;
   }
   const product = await db.collection('products').findOne(ObjectId(id));
-  console.log(product, 'schema');
+  // console.log(product, 'schema');
   return product;
 };
 
@@ -96,4 +101,14 @@ const isValid = async (name, quantity) => {
   return {};
 };
 
-module.exports = { isValid, findByName, productExists, format, quantitySalesValid };
+const quantityArray = (req, res, next) => {
+  const sales = req.body;
+  const onlyQuantity = sales.map((sale) => sale.quantity || false);
+  const schema = Joi.array().items(Joi.number().strict().min(0).required()).validate(onlyQuantity);
+    
+  if (schema.error) return res.status(422).json(errors.wrongOrInvalidId);
+
+  next();
+};
+
+module.exports = { isValid, findByName, productExists, format, quantitySalesValid, quantityArray };
