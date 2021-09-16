@@ -38,8 +38,23 @@ const createSales = async (arr) => {
   return addSales;
 };
 
+const updateSales = async (id, arr) => {
+  const verifyQuantity = arr.map(({ quantity }) => {
+    if (typeof quantity !== 'number' || quantity <= 0) return false;
+    return true;
+  });
+
+  const verifyQuantityValid = verifyQuantity.filter((sales) => sales === false);
+  if (verifyQuantityValid.length > 0) return ErrorQuantity;
+
+  const saleUpdate = await model.updateSales(id, arr);
+  if (!saleUpdate) return ErrorId;
+  return saleUpdate;
+};
+
 module.exports = {
   createSales,
   getAllSales,
   findById,
+  updateSales,
 };
