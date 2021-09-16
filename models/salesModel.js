@@ -26,6 +26,18 @@ const create = async (sales) => {
   };
 };
 
+const getAll = async () => {
+  const db = await connection();
+  return db.collection('sales').find().toArray();
+};
+
+const getById = async (id) => {
+  const db = await connection();
+  return db.collection('sales').findOne(ObjectId(id));
+};
+
 module.exports = {
   create,
+  getAll,
+  getById,
 };
