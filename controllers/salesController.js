@@ -62,10 +62,11 @@ const validId = async (req, res) => {
 
 const editSale = async (req, res) => {
   const { id } = req.params;
-  const { body } = req;
+  const itensSold = req.body;
+  console.log(itensSold, 'controller');
 
-  await salesService.verifyUpdateSale(id, body);
-  return res.status(OK).json({ id, body });
+  await salesService.verifyUpdateSale(id, itensSold);
+  return res.status(OK).json({ _id: id, itensSold });
 };
 
 module.exports = {
