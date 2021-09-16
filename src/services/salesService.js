@@ -1,4 +1,5 @@
 const salesModel = require('../models/salesModel');
+const { dictionary } = require('../helpers/dictionary');
 
 const { validateQuantityTypeAndAmount } = require('../validations/validation');
 
@@ -25,4 +26,20 @@ const getAllSales = async () => {
   return allSalesFormatted;
 };
 
-module.exports = { addSale, getAllSales };
+const getSaleById = async (id) => {
+  const { notFoundMessage } = dictionary().messages;
+  const { notFoundCode } = dictionary().code;
+  const { notFoundStatus } = dictionary().status;
+
+  if (id.length !== 24 || !await salesModel.getSaleById(id)) {
+    return {
+      err: { message: notFoundMessage, code: notFoundCode, status: notFoundStatus },
+    };
+  }
+
+  const sale = await salesModel.getSaleById(id);
+
+  return sale;
+};
+
+module.exports = { addSale, getAllSales, getSaleById };
