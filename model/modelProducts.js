@@ -42,7 +42,7 @@ const decProducts = async (id, decQuantity) => {
 // aumenta stock de produtos
 const incProducts = async (id, incQuantity) => {
   const db = await getConnection();
-  await db.collection('producst').updateOne(
+  await db.collection('products').updateOne(
     { _id: ObjectId(id) },
     { $inc: {
       quantity: incQuantity,
