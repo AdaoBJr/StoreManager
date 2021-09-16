@@ -834,7 +834,6 @@ describe('Testa a conexão com o MongoDB', () => {
       it('é um erro', async () => {
         const result = await mongoConnection();
         expect(() => result.catch((err) => err)).to.be.a('function');
-        console.log(result);
       });
     });
   });
