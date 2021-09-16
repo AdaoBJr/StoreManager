@@ -16,6 +16,14 @@ productRouter.post('/', async (req, res) => {
   return res.status(status).json(messageResult);
 });
 
+productRouter.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  const { status, messageResult } = await productService.getProductById(id);
+
+  return res.status(status).json(messageResult);
+});
+
 module.exports = {
   productRouter,
 };
