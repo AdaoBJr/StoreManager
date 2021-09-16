@@ -55,10 +55,23 @@ const deleteProdutoServices = async (id) => {
   return produto;
 };
 
+const cadastrarVendaServices = async (arrayVendas) => {
+  const verificacao = validacoes.validacaoCadastramentoVenda(arrayVendas);
+  console.log(verificacao);
+
+  if (verificacao.every((i) => i !== false)) {
+    return verificacao.find((i) => 'err' in i);
+  }
+
+  const result = await produtoModel.cadastrarVendaModel({ itensSold: arrayVendas });
+  return result;
+};
+
 module.exports = { 
 cadastrarProdutoServices, 
 buscarTodosProdutoServices,
 buscarProdutoPorIDServices,
 atualizarProdutoServices,
 deleteProdutoServices,
+cadastrarVendaServices,
 };

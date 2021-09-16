@@ -21,6 +21,8 @@ app.put('/products/:id', produtoController.atualizarProdutoController);
 
 app.delete('/products/:id', produtoController.deleteProdutoController);
 
+app.post('/sales', produtoController.cadastrarVendaController);
+
 app.use(erroMiddleware);
 
 app.listen(3000, () => { console.log('Api rodando na porta 3000'); });

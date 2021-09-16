@@ -24,4 +24,17 @@ const validacaoCadastramentoProduto = (name, quantity, produtoExiste) => {
   }
 };
 
-module.exports = { validacaoCadastramentoProduto };
+const validacaoDadosVenda = (quantity) => {
+  switch (true) {
+    case verificacaoMinimo(quantity, 0):
+      return { err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } };
+    case isNumber(quantity):
+      return { err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } };    
+    default: return false;
+  }
+};
+
+const validacaoCadastramentoVenda = (array) => 
+  array.map((i) => validacaoDadosVenda(i.quantity));
+
+module.exports = { validacaoCadastramentoProduto, validacaoCadastramentoVenda };

@@ -52,10 +52,22 @@ const deleteProdutoController = rescue(async (req, res, next) => {
   return res.status(200).json(result);
 });
 
+const cadastrarVendaController = rescue(async (req, res, next) => {
+  const arrayVendas = req.body;
+  const result = await produtoServices.cadastrarVendaServices(arrayVendas);
+
+  if ('err' in result) {
+    return next(result);
+  }
+
+  return res.status(200).json(result);
+});
+
 module.exports = { 
 cadastrarProdutoController,
 buscarTodosProdutoController,
 buscarProdutoPorIDController,
 atualizarProdutoController,
 deleteProdutoController,
+cadastrarVendaController,
 };

@@ -52,6 +52,13 @@ const deleteProdutoModel = async (id) => {
   return produtoDeletado;
 };
 
+const cadastrarVendaModel = async ({ itensSold: arrayVendas }) => {
+  const db = await connection();
+  const vendaInserida = await db.collection('sales').insertOne({ itensSold: arrayVendas });
+
+  return { _id: vendaInserida.insertedId, itensSold: arrayVendas };
+};
+
 module.exports = { 
 cadastrarProdutoModel, 
 buscaProdutoPorNome, 
@@ -59,4 +66,5 @@ buscarTodosProdutoModel,
 buscarProdutoPorIDModel,
 atualizarProdutoModel,
 deleteProdutoModel,
+cadastrarVendaModel,
 };
