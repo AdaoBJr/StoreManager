@@ -16,9 +16,15 @@ const result = await salesModel.update({ body, id });
 return result;
 };
 
+const exclude = async (id) => {
+  if (!ObjectId.isValid(id)) { return null; }
+  return salesModel.exclude(id);
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   update,
+  exclude,
 };
