@@ -19,4 +19,10 @@ const addSale = async (saleArray) => {
   return newSale;
 };
 
-module.exports = { addSale };
+const getAllSales = async () => {
+  const allSales = await salesModel.getAllSales();
+  const allSalesFormatted = { sales: allSales };
+  return allSalesFormatted;
+};
+
+module.exports = { addSale, getAllSales };
