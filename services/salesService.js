@@ -14,8 +14,8 @@ const getIdS = async (id) => {
   return idSales;
 };
 const updateS = async ({ id, productId, quantity }) => {
-  const updateSale = await updateSale({ id, productId, quantity });
-  return updateSale;
+  const upSale = await updateSale({ id, productId, quantity });
+  return upSale;
 };
 const deleteS = async ({ id }) => {
   const deletedS = await deleteSale({ id });
