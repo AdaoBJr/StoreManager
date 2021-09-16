@@ -20,4 +20,17 @@ const getAllSales = async (_req, res) => {
   res.status(ok).json(allSales);
 };
 
-module.exports = { addSale, getAllSales };
+const getSaleById = async (req, res, next) => {
+  const { id } = req.params;
+  const { ok } = dictionary().status;
+
+  const sale = await salesService.getSaleById(id);
+
+  if (sale.err) return next(sale.err);
+
+  res.status(ok).json(sale);
+
+  next();
+};
+
+module.exports = { addSale, getAllSales, getSaleById };
