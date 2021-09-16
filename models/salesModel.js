@@ -76,7 +76,8 @@ const updateSale = async ({ id, productId, quantity }) => {
   });
   await db.collection('sales').updateOne(
     { _id: ObjectId(id) },
-    { $set: { itensSold } });
+    { $set: { itensSold },
+  });
   return { _id: ObjectId(id), itensSold };
 };
 

@@ -8,7 +8,7 @@ const { updateProd, deleteProd } = require('./controllers/productsController');
 const { createSale, getAllSale, getSaleId,
   updateSale, deleteSale } = require('./controllers/salesController');
 const { saleQuantity, saleInvalid, validIdSale, 
-  isValidSale} = require('./middlewares/salesMiddleware');
+  isValidSale } = require('./middlewares/salesMiddleware');
 
 require('dotenv').config();
 

@@ -1,8 +1,9 @@
-const { saleAdd, getAllsales, getSalesId, updateSale, deleteSale } = require('../models/salesModel');
+const { saleAdd, getAllsales, getSalesId, updateSale,
+  deleteSale } = require('../models/salesModel');
 
 const createS = async (result) => {
-  const createS = await saleAdd(result);
-  return createS;
+  const creatSale = await saleAdd(result);
+  return creatSale;
 };
 const getAllS = async () => {
   const allSales = await getAllsales();
@@ -13,8 +14,8 @@ const getIdS = async (id) => {
   return idSales;
 };
 const updateS = async ({ id, productId, quantity }) => {
-  const updateS = await updateSale({ id, productId, quantity });
-  return updateS;
+  const updateSale = await updateSale({ id, productId, quantity });
+  return updateSale;
 };
 const deleteS = async ({ id }) => {
   const deletedS = await deleteSale({ id });
