@@ -1,13 +1,13 @@
-const Joi = require('joi');
+// const Joi = require('joi');
 // const { quantitySalesValid } = require('../schemas/schemasValidate');
 const ServiceSales = require('../service/serviceSales');
 
-const errData = {
-  err: {
-    code: 'invalid_data',
-    message: 'Wrong product ID or invalid quantity',
-  },
-};
+// const errData = {
+//   err: {
+//     code: 'invalid_data',
+//     message: 'Wrong product ID or invalid quantity',
+//   },
+// };
 
 const errStock = { 
   err: { 
@@ -16,9 +16,24 @@ const errStock = {
   },
 };
 
+const deleteSale = async (req, res) => {
+  const { id } = req.params;
+
+  const saleDeleted = await ServiceSales.getById(id);
+  const deleteOne = await ServiceSales.deleteSale(id);
+
+  if (deleteOne.err) return res.status(422).json(deleteOne);
+  return res.status(200).json(saleDeleted);
+};
+
 const update = async (req, res) => {
   const { id } = req.params;
   const saleUpdate = req.body;
+
+  // const onlyQuantity = itensSold.map((sale) => sale.quantity || false);
+  // const schema = Joi.array().items(Joi.number().strict().min(0).required()).validate(onlyQuantity);
+    
+  // if (schema.error) return res.status(422).json(errData);
 
   const saleUpdated = await ServiceSales.update(id, saleUpdate);
   if (!saleUpdated || saleUpdated.err) {
@@ -49,10 +64,10 @@ const getAll = async (_req, res) => {
 const create = async (req, res) => {
   const itensSold = req.body;
   
-  const onlyQuantity = itensSold.map((sale) => sale.quantity || false);
-  const schema = Joi.array().items(Joi.number().strict().min(0).required()).validate(onlyQuantity);
+  // const onlyQuantity = itensSold.map((sale) => sale.quantity || false);
+  // const schema = Joi.array().items(Joi.number().strict().min(0).required()).validate(onlyQuantity);
     
-  if (schema.error) return res.status(422).json(errData);
+  // if (schema.error) return res.status(422).json(errData);
 
   const salesMade = await ServiceSales.create(itensSold);
   if (salesMade.outStock) return res.status(404).json(errStock);
@@ -60,4 +75,4 @@ const create = async (req, res) => {
   return res.status(200).json(salesMade);
 };
 
-module.exports = { create, getAll, getById, update };
+module.exports = { create, getAll, getById, update, deleteSale };
