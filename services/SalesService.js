@@ -12,25 +12,25 @@ const postSales = async (saleItems) => {
 };
 
 // ------------------------------------------------------------------
-// Requisito 2: SERVICEs responsáveis por fazerem a chamada aos MODELs de busca de produtos ou de produto específico, filtrado por ID(Validações via middleware)
+// Requisito 6: SERVICEs responsáveis por fazerem a chamada aos MODELs de busca de todas as vendas ou venda específica, filtrada por ID(Validações via middleware)
 
-// const getProducts = async () => {
-//   const products = await ProductsModel.getProducts();
+const getSales = async () => {
+  const sales = await SalesModel.getSales();
 
-//   return products;
-// };
+  return sales;
+};
 
-// const getProductById = async (id) => {
-//   const product = await ProductsModel.getProductById(id);
+const getSalesById = async (id) => {
+  const product = await SalesModel.getSalesById(id);
 
-//   return product;
-// };
+  return product;
+};
 
 // ------------------------------------------------------------------
-// Requisito 3: SERVICE responsável por fazer a chamada ao MODEL de atualização de produtos(Validações via middleware)
+// Requisito 7: SERVICE responsável por fazer a chamada ao MODEL de atualização de produtos(Validações via middleware)
 
 // const putProductById = async ({ id, name, quantity }) => {
-//   const product = await ProductsModel.putProductById({ id, name, quantity });
+//   const product = await SalesModel.putProductById({ id, name, quantity });
 
 //   return product;
 // };
@@ -39,7 +39,7 @@ const postSales = async (saleItems) => {
 // // Requisito 4: SERVICE responsável por fazer a chamada ao MODEL de deleção de produto por ID(Validações via middleware)
 
 // const deleteProductById = async (id) => {
-//   const product = await ProductsModel.deleteProductById(id);
+//   const product = await SalesModel.deleteProductById(id);
 
 //   return product;
 // };
@@ -48,4 +48,6 @@ const postSales = async (saleItems) => {
 
 module.exports = {
   postSales,
+  getSales,
+  getSalesById,
 };

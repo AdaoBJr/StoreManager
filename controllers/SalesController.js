@@ -1,8 +1,8 @@
 const express = require('express');
 const {
-  // validateIdProductExists,
   validateProductSaleQuantity,
-} = require('../middlewares/productsMiddlewares');
+  validateIdSales,
+} = require('../middlewares/salesMiddlewares');
 
 const SalesService = require('../services/SalesService');
 
@@ -22,22 +22,22 @@ salesRouter.post('/', validateProductSaleQuantity, async (req, res) => {
 // ------------------------------------------------------------------
 // Requisito 6: CONTROLLERS responsáveis por receber a requisição de listagem geral de vendas ou por ID, fazer chamada ao SERVICE, e retornar todas as vendas ou venda específica filtrado por ID.
 
-// salesRouter.get('/', async (req, res) => {
-//   const products = await salesService.getProducts();
+salesRouter.get('/', async (req, res) => {
+  const products = await SalesService.getSales();
 
-//   return res.status(200).json({ products });
-// });
+  return res.status(200).json({ products });
+});
 
-// productRouter.get('/:id', validateId, async (req, res) => {
-//   const { id } = req.params;
+salesRouter.get('/:id', validateIdSales, async (req, res) => {
+  const { id } = req.params;
 
-//   const product = await ProductsService.getProductById(id);
+  const product = await SalesService.getSalesById(id);
 
-//   return res.status(200).json(product);
-// });
+  return res.status(200).json(product);
+});
 
 // ------------------------------------------------------------------
-// Requisito 3: CONTROLLER responsável por receber a requisição de atualização de produtos por ID, fazer chamada ao SERVICE, e retornar o produto atualizado
+// Requisito 7: CONTROLLER responsável por receber a requisição de atualização de produtos por ID, fazer chamada ao SERVICE, e retornar o produto atualizado
 
 // productRouter.put('/:id', validateId, validateNameQuantity, async (req, res) => {
 //   const { id } = req.params;

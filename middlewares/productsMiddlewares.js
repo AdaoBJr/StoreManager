@@ -43,7 +43,7 @@ const validateNameExists = async (req, res, next) => {
 };
 
 // Comments: Valida se o ID (MongoDB) informado é válido 
-const validateIdParams = async (req, res, next) => {
+const validateIdProducts = async (req, res, next) => {
   const { id } = req.params;
 
   if (!ObjectId.isValid(id)) {
@@ -57,60 +57,9 @@ const validateIdParams = async (req, res, next) => {
   next();
 };
 
-const validateIdProductExists = async (req, res, next) => {
-  const saleItems = req.body;
-
-  const products = await ProductsModel.getProducts();
-
-  for (let index = 0; index < saleItems.length; index += 1) {
-    const element = saleItems[index];
-
-    const containId = products.find((product) => product.id === element.productId);
-    console.log(containId);
-
-    if (containId) {
-      return res.status(422).json(
-        { err:
-          { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
-        },
-      );
-    }
-
-    // const product = ProductsModel.getProductById(element.productId);
-    
-    // if (!product) {
-    //   return res.status(422).json(
-    //     { err:
-    //       { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
-    //     },
-    //   );
-    // }
-  }
-  
-  next();
-};
-const validateProductSaleQuantity = async (req, res, next) => {
-  const saleItems = req.body;
-
-  for (let index = 0; index < saleItems.length; index += 1) {
-    const element = saleItems[index];
-    const { code, message } = validateQuantitySchema(element.quantity);
-
-    if (message) {
-      return res.status(code).json(
-        { err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } },
-      );
-    }
-  }
-
-  next();
-};
-
 module.exports = {
   validateName,
   validateQuantity,
   validateNameExists,
-  validateIdParams,
-  validateIdProductExists,
-  validateProductSaleQuantity,
+  validateIdProducts,
 };

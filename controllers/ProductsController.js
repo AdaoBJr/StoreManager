@@ -5,7 +5,7 @@ const {
   validateName,
   validateQuantity,
   validateNameExists,
-  validateIdParams,
+  validateIdProducts,
 } = require('../middlewares/productsMiddlewares');
 const ProductsService = require('../services/ProductsService');
 
@@ -32,7 +32,7 @@ productRouter.get('/', async (req, res) => {
   return res.status(200).json({ products });
 });
 
-productRouter.get('/:id', validateIdParams, async (req, res) => {
+productRouter.get('/:id', validateIdProducts, async (req, res) => {
   const { id } = req.params;
 
   const product = await ProductsService.getProductById(id);
@@ -43,7 +43,7 @@ productRouter.get('/:id', validateIdParams, async (req, res) => {
 // ------------------------------------------------------------------
 // Requisito 3: CONTROLLER responsável por receber a requisição de atualização de produtos por ID, fazer chamada ao SERVICE, e retornar o produto atualizado
 
-productRouter.put('/:id', validateIdParams, validateName, validateQuantity, async (req, res) => {
+productRouter.put('/:id', validateIdProducts, validateName, validateQuantity, async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
 
@@ -55,7 +55,7 @@ productRouter.put('/:id', validateIdParams, validateName, validateQuantity, asyn
 // ------------------------------------------------------------------
 // Requisito 4: CONTROLLER responsável por receber a requisição de deletar de produtos por ID, fazer chamada ao SERVICE, e retornar msg de confirmação
 
-productRouter.delete('/:id', validateIdParams, async (req, res) => {
+productRouter.delete('/:id', validateIdProducts, async (req, res) => {
   const { id } = req.params;
 
   const product = await ProductsService.deleteProductById(id);
