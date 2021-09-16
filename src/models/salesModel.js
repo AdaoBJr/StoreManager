@@ -4,4 +4,7 @@ const addSale = async (saleArray) => connection()
     .then((db) => db.collection('sales').insertOne({ itensSold: saleArray }))
       .then((result) => ({ _id: result.insertedId, itensSold: saleArray }));
 
-module.exports = { addSale };
+const getAllSales = async () => connection()
+  .then((db) => db.collection('sales').find().toArray());
+
+module.exports = { addSale, getAllSales };
