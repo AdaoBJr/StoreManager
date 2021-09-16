@@ -12,7 +12,13 @@ const createProduct = async ({ name, quantity }) => connection
 .then((db) => 
   db.collection('products').insertOne({ name, quantity }));
 
+const getAllProducts = async () => connection
+.getConnection()
+.then((db) =>
+  db.collection('products').find().toArray());
+
 module.exports = {
   createProduct,
   productExists,
+  getAllProducts,
 };
