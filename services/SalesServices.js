@@ -7,6 +7,24 @@ const ErrorQuantity = {
   },
 };
 
+const ErrorId = {
+  err: { 
+    message: 'Sale not found',
+    code: 'not_found',
+  },
+};
+
+const getAllSales = async () => {
+  const sales = await model.getAllSales();
+  return sales;
+};
+
+const findById = async (id) => {
+  const saleId = await model.findById(id);
+  if (!saleId) return ErrorId;
+  return saleId;
+};
+
 const createSales = async (arr) => {
   const verifyQuantity = arr.map(({ quantity }) => {
     if (typeof quantity !== 'number' || quantity <= 0) return false;
@@ -22,4 +40,6 @@ const createSales = async (arr) => {
 
 module.exports = {
   createSales,
+  getAllSales,
+  findById,
 };
