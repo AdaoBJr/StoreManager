@@ -14,6 +14,13 @@ const ErrorId = {
   },
 };
 
+const wrongIdErr = {
+  err: { 
+    message: 'Wrong sale ID format',
+    code: 'invalid_data',
+  },
+};
+
 const getAllSales = async () => {
   const sales = await model.getAllSales();
   return sales;
@@ -52,9 +59,16 @@ const updateSales = async (id, arr) => {
   return saleUpdate;
 };
 
+const excludeSales = async (id) => {
+  const deleteProduct = await model.excludeSales(id);
+  if (!deleteProduct) return wrongIdErr;
+  return deleteProduct;
+};
+
 module.exports = {
   createSales,
   getAllSales,
   findById,
   updateSales,
+  excludeSales,
 };

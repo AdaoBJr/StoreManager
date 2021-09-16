@@ -40,9 +40,21 @@ const updateSales = async (req, res) => {
   res.status(200).json(saleUpdate);
 };
 
+const excludeSales = async (req, res) => {
+  const { id } = req.params;
+  const deleteSale = await service.excludeSales(id);
+
+  if (deleteSale.err) {
+    return res.status(422).json({ err: deleteSale.err });
+  }
+
+  return res.status(200).json({ message: 'excluded product' });
+};
+
 module.exports = {
   createSales,
   getAllSales,
   findById,
   updateSales,
+  excludeSales,
 };
