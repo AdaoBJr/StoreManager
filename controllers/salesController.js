@@ -8,7 +8,7 @@ const registerSale = async (req, res) => {
     const result = await model.registerSale(itemsSold);
     return res.status(StatusCodes.OK).json(result);
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).send();
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
   }
 };
 
@@ -17,7 +17,7 @@ const getSales = async (_req, res) => {
     const sales = await model.getSales();
     return res.status(StatusCodes.OK).json({ sales });
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).send();
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
   }
 };
 
@@ -25,6 +25,11 @@ const getSaleById = async (req, res) => {
   try {
     const { id } = req.params;
     const sale = await model.getSaleById(id);
+    if (!sale) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        err: { code: 'not_found', message: 'Sale not found' },
+      });
+    }
     return res.status(StatusCodes.OK).json({ sale });
   } catch (error) {
     return res.status(StatusCodes.NOT_FOUND).json({
@@ -43,7 +48,25 @@ const updateSale = async (req, res) => {
     const updatedSale = await model.updateSale(id, item);
     return res.status(StatusCodes.OK).json(updatedSale);
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).send();
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
+  }
+};
+
+const deleteSale = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await model.deleteSale(id);
+    if (result) {
+      console.log('result', result);
+      return res.status(StatusCodes.OK).json(result);
+    }
+  } catch (error) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong sale ID format',
+      },
+    });
   }
 };
 
@@ -52,4 +75,5 @@ module.exports = {
   getSales,
   getSaleById,
   updateSale,
+  deleteSale,
 };

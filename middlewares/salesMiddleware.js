@@ -1,4 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
+const { ObjectId } = require('mongodb');
 
 const validateQuantity = async (quantity) => {
   if (quantity < 1 || typeof quantity !== 'number') {
@@ -23,6 +24,18 @@ const checkQuantity = (req, res, next) => {
   next();
 };
 
-module.exports = {
-  checkQuantity,
+const checkValidId = async (req, res, next) => {
+  const { id } = req.params;
+  if (!ObjectId.isValid(id)) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong sale ID format',
+      },
+    });
+}
+
+  next();
 };
+
+module.exports = { checkQuantity, checkValidId };

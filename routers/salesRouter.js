@@ -3,9 +3,9 @@ const express = require('express');
 const router = express.Router();
 
 const salesController = require('../controllers/salesController');
-const { checkQuantity } = require('../middlewares/salesMiddleware');
+const { checkQuantity, checkValidId } = require('../middlewares/salesMiddleware');
 
-// router.delete('/:id', salesController.deleteProduct);
+router.delete('/:id', checkValidId, salesController.deleteSale);
 
 router.put('/:id', checkQuantity, salesController.updateSale);
 

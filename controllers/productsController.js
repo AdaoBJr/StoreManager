@@ -7,7 +7,7 @@ const registerProduct = async (req, res) => {
     const result = await model.registerProduct(name, quantity);
     return res.status(StatusCodes.CREATED).json(result);
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Ops' });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
   }
 };
 
@@ -16,7 +16,7 @@ const getProducts = async (req, res) => {
     const products = await model.getProducts();
     return res.status(StatusCodes.OK).json({ products });
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Ops' });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
   }
 };
 
