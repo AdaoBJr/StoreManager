@@ -11,7 +11,6 @@ const num = 0;
 };
 
 const incrementSales = async ({ itensSold }) => {
-  console.log(itensSold);
   if (!itensSold) return null;
   const result = itensSold.map(({ productId, quantity }) =>
    ProductsModel.incrementProducts(productId, quantity));
@@ -27,6 +26,27 @@ const decrementaSales = async (sale) => {
    return promisesResolv.every((promises) => promises);
 };
 
+const validmap = async (sale) => {
+  const getQuaProdDB = await sale.map(async ({ productId, quantity }) => {
+    const cadaitem = await ProductsModel.getProductsById(productId);
+    const Quantity = cadaitem.quantity - quantity;
+
+    return Quantity;
+  });
+  const promisses = await Promise.all(getQuaProdDB).then((result) => result);
+
+    return promisses.some((item) => item < 0);
+};
+
+// const validQuanProdSales = async () => {
+//   const id = sale[0].productId;
+//   const bodyQuanSale = sale[0].quantity;
+//   const result = await ProductsModel.getProductsById(id);
+//   const quantBD = result.quantity;
+
+//   return quantBD > bodyQuanSale;
+// };
+
 // função
 
 const addSale = async (sale) => {
@@ -38,7 +58,14 @@ const addSale = async (sale) => {
       message: 'Wrong product ID or invalid quantity',
       };
     }
-    console.log(`dec ${sale}`);
+    const isValidQantity = await validmap(sale);
+    if (isValidQantity) {
+      return {
+        status: 404,
+        code: 'stock_problem',
+        message: 'Such amount is not permitted to sell',
+        };
+    }
     decrementaSales(sale);
     return SalesModel.addSale(sale);
 };

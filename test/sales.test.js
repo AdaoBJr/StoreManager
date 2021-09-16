@@ -663,7 +663,7 @@ describe('8 - Crie um endpoint para deletar uma venda', () => {
   });
 });
 
-describe.only('9 - Atualize a quantidade de produtos', () => {
+describe('9 - Atualize a quantidade de produtos', () => {
   let connection;
   let db;
 
@@ -773,7 +773,7 @@ describe.only('9 - Atualize a quantidade de produtos', () => {
   });
 });
 
-describe('10 - Valide a quantidade de produtos', () => {
+describe.only('10 - Valide a quantidade de produtos', () => {
   let connection;
   let db;
 
