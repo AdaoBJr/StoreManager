@@ -54,6 +54,18 @@ const createProduct = async ({ name, quantity }) => {
   };
 };
 
+const getAllProducts = async () => {
+  const products = await productModel.getAllProducts();
+  
+  return {
+    status: 200,
+    messageResult: {
+      products,
+    },
+  };
+};
+
 module.exports = {
   createProduct,
+  getAllProducts,
 };
