@@ -46,7 +46,7 @@ const validateProductId = (req, res, next) => {
     return res.status(422).json({
       err: {
         code: 'invalid_data',
-        message: 'Wrong product ID or quantity',
+        message: 'Wrong product ID or invalid quantity',
       },
     });
   }
@@ -57,11 +57,12 @@ const validateProductId = (req, res, next) => {
 const validateProductQuantity = (req, res, next) => {
   const { body } = req;
 
-  if (body.some(({ quantity }) => quantity <= 0)) {
+  if (body.some(({ quantity }) => quantity <= 0) 
+  || body.some(({ quantity }) => typeof quantity !== 'number')) {
     return res.status(422).json({
       err: {
         code: 'invalid_data',
-        message: 'Wrong product ID or quantity',
+        message: 'Wrong product ID or invalid quantity',
       },
     });
   }

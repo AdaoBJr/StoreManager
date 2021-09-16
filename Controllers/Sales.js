@@ -1,22 +1,13 @@
-const { getSalesList, saleById, delSaleById } = require('../Services/Sales');
+const { getSalesList, saleById, delSaleById, createNewSales } = require('../Services/Sales');
 
 const requestNewSales = async (req, res) => {
-  // const { body } = req;
+  const { body } = req;
 
-  // const products = body;
+  const products = body;
 
-  // const productVerify = await verifyProducts(products);
+  const newSalesRequested = await createNewSales(products);
 
-  // if (!productVerify) {
-  //   return res.status(422).json({
-  //     err: {
-  //       code: 'invalid_data',
-  //       message: 'Wrong product ID or quantity',
-  //     },
-  //   });
-  // }
-
-  return res.status(200).json({ message: 'cheguei' });
+  return res.status(200).json(newSalesRequested);
 };
 
 const requestSalesList = async (req, res) => {

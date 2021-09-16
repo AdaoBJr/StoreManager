@@ -1,13 +1,9 @@
-const { ObjectId } = require('mongodb');
-const { getAllSalesList, getSaleById, deleteSaleById } = require('../models/Sales');
+const { getAllSalesList, getSaleById, deleteSaleById, insertNewSales } = require('../models/Sales');
 
-const verifyProducts = async (products) => {
-  console.log(products);
-  if (products.some(({ productId }) => !ObjectId.isValid(productId))) {
-    return null;
-  }
+const createNewSales = async (products) => {  
+  const insertedNewSales = await insertNewSales(products);
 
-  return { message: 'cheguei' };
+  return insertedNewSales;
 };
 
 const getSalesList = async () => {
@@ -38,5 +34,5 @@ module.exports = {
   getSalesList,
   saleById,
   delSaleById,
-  verifyProducts,
+  createNewSales,
 };
