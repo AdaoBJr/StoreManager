@@ -16,7 +16,7 @@ const {
   excludeProduct,
   getProductById } = require('./controllers/productsController'); 
 
-const { createSale } = require('./controllers/salesController');
+const salesController = require('./controllers/salesController');
 
 const app = express();
 app.use(bodyParser.json());
@@ -28,6 +28,8 @@ app.get('/', (_request, response) => {
 
 app.get('/products', getAllProducts);
 app.get('/products/:id', validateId, getProductById);
+app.get('/sales', salesController.getAll);
+app.get('/sales/:id', salesMiddleware.saleExists, salesController.findSaleById);
 
 app.post(
   '/products',
@@ -37,7 +39,7 @@ app.post(
   createProduct,
   );
 
-app.post('/sales', salesMiddleware.validateQuantity, createSale);
+app.post('/sales', salesMiddleware.validateQuantity, salesController.createSale);
 
 app.put(
   '/products/:id',
