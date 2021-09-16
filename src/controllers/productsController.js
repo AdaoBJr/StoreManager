@@ -1,5 +1,5 @@
 const productsService = require('../services/productsService');
-const { dictionary } = require('../services/productsService');
+const { dictionary } = require('../helpers/dictionary');
 
 const addProduct = async (req, res, next) => {
   const { name, quantity } = req.body;
