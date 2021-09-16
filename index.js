@@ -48,9 +48,13 @@ app.put(
   updateProduct,
   );
 
+app.put('/sales/:id', salesMiddleware.validateQuantity, salesController.updateSale);
+
 app.delete(
   '/products/:id',
   excludeProduct,
   );
+
+app.delete('/sales/:id', salesMiddleware.validateId, salesController.deleteSale);
 
 app.listen(3000, () => console.log('online na porta 3000'));
