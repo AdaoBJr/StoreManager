@@ -13,16 +13,8 @@ const getById = async (id) => {
 const update = async (id, updateSales) => {
   const editedSale = await SalesModels.update(id, updateSales)
     .then(() => getById(id));
-
-  // console.log(editedSale, 'dale');
-  const result = await quantitySalesValid(editedSale.quantity);
-  if (result.err) return result;
   
   return editedSale;
-
-  // const saleUpdated = getById(id);
-
-  // return saleUpdated;
 };
 
 const getAll = async () => {
@@ -36,6 +28,11 @@ const getAll = async () => {
 const decProducts = async (id, quantity) => {
   await ProductModels.decProducts(id, quantity);
 };
+
+const incProducts = async (id, quantity) => {
+  await ProductModels.incProducts(id, quantity);
+};
+
 // verifica se há produtos o bastante p/ venda
 const checkUpdate = async (sales) => {
   const quantity = await sales.map(async (sale) => {
@@ -70,4 +67,17 @@ const create = async (sales) => {
   return { _id: salesMade.insertedId, itensSold: sales };
 };
 
-module.exports = { create, getAll, getById, update };
+const deleteSale = async (id) => {
+  const saleFound = await SalesModels.getById(id);
+  await SalesModels.deleteSale(id);
+
+  if (!saleFound) return { err: { code: 'invalid_data', message: 'Wrong sale ID format' } };
+
+  await saleFound.itensSold
+    .forEach(async (el) => incProducts(el.productId, el.quantity));
+
+  // console.log(saleFound, 'depois');
+  return saleFound;
+};
+
+module.exports = { create, getAll, getById, update, deleteSale };
