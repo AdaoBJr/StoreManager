@@ -1,5 +1,20 @@
-const { addProduct, findProduct } = require('../models/productsModel');
+const { addProduct, findProduct, findAllProducts, findById } = require('../models/productsModel');
 const { errorBusiness } = require('../errors/errorAPI');
+
+const checkAllProducts = async () => {
+  const allProducts = await findAllProducts();
+  return allProducts;
+};
+
+const checkProductById = async (id) => {
+  const productById = await findById(id);
+
+  if (!productById) {
+    return errorBusiness('Wrong id format ');
+  }
+
+  return productById;
+};
 
 const checkName = async (name, quantity) => {
   const fliterName = await findProduct(name);
@@ -13,4 +28,6 @@ const checkName = async (name, quantity) => {
 
 module.exports = {
   checkName,
+  checkAllProducts,
+  checkProductById,
 };
