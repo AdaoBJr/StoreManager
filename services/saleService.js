@@ -52,9 +52,19 @@ const updateId = async (id, sale) => {
   return update;
 };
 
+const deleteId = async (id) => {
+  const findId = await saleModel.getById(id);
+  if (!findId) {
+    return { err: { message: 'Wrong product ID or invalid quantity', code: 'invalid_data' } };
+  }
+  await saleModel.deleteId(id);
+  return findId;
+};
+
 module.exports = {
   createSale,
   getAll,
   updateId,
+  deleteId,
   getById,
 };
