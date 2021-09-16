@@ -1,71 +1,11 @@
 const productsModel = require('../models/productsModel');
+const { dictionary } = require('../helpers/dictionary');
 
-const dictionary = () => ({
-  messages: {
-    nameLengthValidation: '"name" length must be at least 5 characters long',
-    quantityAmountValidation: '"quantity" must be larger than or equal to 1',
-    quantityTypeValidation: '"quantity" must be a number',
-    alreadyExists: 'Product already exists',
-    wrongID: 'Wrong id format',
-  },
-  status: {
-    ok: 200,
-    created: 201,
-    unprocessableEntity: 422,
-    internalServerError: 500,
-  },
-  code: {
-    invalidData: 'invalid_data',
-  },
-});
-
-const validateNameLength = (name) => {
-  const { nameLengthValidation } = dictionary().messages;
-  const { unprocessableEntity } = dictionary().status;
-  const { invalidData } = dictionary().code;
-
-  if (name.length < 5) {
-    return {
-      err: { message: nameLengthValidation, code: invalidData, status: unprocessableEntity },
-    };
- }
-};
-
-const checkDoubleName = async (name) => {
-  const { unprocessableEntity } = dictionary().status;
-  const { alreadyExists } = dictionary().messages;
-  const { invalidData } = dictionary().code;
-
-  const checkedName = await productsModel.checkName(name);
-
-  if (checkedName) {
-    return { err: { message: alreadyExists, code: invalidData, status: unprocessableEntity } };
-  }
-};
-
-const validateQuantityType = (quantity) => {
-  const { quantityTypeValidation } = dictionary().messages;
-  const { unprocessableEntity } = dictionary().status;
-  const { invalidData } = dictionary().code;
-
-    if (typeof quantity !== 'number') {
-      return {
-        err: { message: quantityTypeValidation, code: invalidData, status: unprocessableEntity },
-      };
-    }
-};
-
-const validateQuantityAmount = (quantity) => {
-  const { unprocessableEntity } = dictionary().status;
-  const { quantityAmountValidation } = dictionary().messages;
-  const { invalidData } = dictionary().code;
-
-  if (quantity <= 0) {
-    return {
-      err: { message: quantityAmountValidation, code: invalidData, status: unprocessableEntity },
-    };
-  }
-};
+const {
+  validateNameLength,
+  validateQuantityType,
+  validateQuantityAmount,
+  checkDoubleName } = require('../validations/validation');
 
 const addProduct = async (name, quantity) => {
   if (validateNameLength(name)) return validateNameLength(name);
@@ -113,4 +53,4 @@ const updateProductById = async (id, name, quantity) => {
 const deleteProductById = async (id) => productsModel.deleteProductById(id);
 
 module.exports = {
-  addProduct, getAllProducts, getProductById, dictionary, updateProductById, deleteProductById };
+  addProduct, getAllProducts, getProductById, updateProductById, deleteProductById };
