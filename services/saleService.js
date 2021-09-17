@@ -24,6 +24,18 @@ const createSale = async ({ itensSold }) => {
   };
 };
 
+const getAllSales = async () => {
+  const sales = await saleModel.getAllSales();
+  
+  return {
+    status: 200,
+    messageResult: {
+      sales,
+    },
+  };
+};
+
 module.exports = {
   createSale,
+  getAllSales,
 };
