@@ -53,15 +53,15 @@ const updateId = async (id, sale) => {
 };
 
 const deleteId = async (id) => {
+  console.log(id, 'id');
+  if (!ObjectId.isValid(id)) {
+    return { err: { message: 'Wrong sale ID format', code: 'invalid_data' } };
+  }
   const existId = await saleModel.getById(id);
   if (!existId) {
-    return { err: { message: 'Sale not found', code: 'not_found' } };
-  }
-  await saleModel.deleteId(id);
-  const findId = await saleModel.getById(id);
-  if (findId) {
     return { err: { message: 'Wrong product ID or invalid quantity', code: 'invalid_data' } };
   }
+  await saleModel.deleteId(id);
   return existId;
 };
 

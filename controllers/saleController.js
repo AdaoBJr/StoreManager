@@ -34,6 +34,7 @@ const updateId = async (req, res, next) => {
 const deleteId = async (req, res, next) => {
   const { id } = req.params;
   const deleteItem = await saleService.deleteId(id);
+  console.log(deleteItem);
   if (deleteItem.err) {
     return next(deleteItem.err);
   }
