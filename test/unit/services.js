@@ -130,7 +130,6 @@ describe('Retorna um produto pelo ID', () => {
 
       it('a propriedade "statusCode" possui o valor "invalidIdFormat', async () => {
         const { statusCode } = await productsService.getById().catch((err) => err);
-        console.log(statusCode);
         expect(statusCode).to.be.equal('invalidIdFormat')
       });
     });

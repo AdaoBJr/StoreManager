@@ -3,9 +3,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
-const productRoutes = require('./Routes/ProductRoutes');
-const salesRoutes = require('./Routes/SalesRoutes');
-
+const route = require('./Routes');
 const error = require('./middlewares/error');
 
 const PORT = 3000;
@@ -16,8 +14,8 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-productRoutes(app);
-salesRoutes(app);
+route.product(app);
+route.sales(app);
 
 app.use(error);
 

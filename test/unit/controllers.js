@@ -737,6 +737,75 @@ describe('Controllers de Sales', () => {
         });
       });
     });
+
+    describe('quando a venda não é válida', () => {
+      const error = new Error();
+      const request = {};
+      const response = {};
+      let next = {};
+
+      describe('o ID é inválido', () => {
+
+        const expectError = {
+          err: {
+            code: 'invalid_data',
+            message: 'Wrong product ID or invalid quantity',
+          }
+        };
+
+        beforeEach(() => {
+          error.statusCode = 'invalidSale';
+          response.status = sinon.stub().returns(response);
+          response.json = sinon.stub().returns();
+          sinon.stub(salesService, 'newSale').throws(error);
+        });
+
+        afterEach(() => {
+          salesService.newSale.restore();
+        });
+
+        it('responde com o status 422', async () => {
+          await mwError(error, request, response, next);
+          expect(response.status.calledWith(422)).to.be.equal(true);
+        });
+
+        it('retorna um json com o erro esperado', async () => {
+          await mwError(error, request, response, next);
+          expect(response.json.calledWith(expectError)).to.be.equal(true);
+        });
+      });
+
+      describe('quando não há estoque do produto', () => {
+        const expectError = {
+          err: {
+            code: 'stock_problem',
+            message: 'Such amount is not permitted to sell',
+          },
+        };
+
+        beforeEach(() => {
+          error.statusCode = 'stockProblem';
+          response.status = sinon.stub().returns(response);
+          response.json = sinon.stub().returns();
+          sinon.stub(salesService, 'newSale').throws(error);
+        });
+
+        afterEach(() => {
+          salesService.newSale.restore();
+        });
+
+        it('retorna o status 404', async () => {
+          await mwError(error, request, response, next);
+          expect(response.status.calledWith(404)).to.be.equal(true);
+        });
+
+        it('retorna um json com o erro esperado', async () => {
+          await mwError(error, request, response, next);
+          expect(response.json.calledWith(expectError)).to.be.equal(true);
+        });
+      });
+
+    });
   });
 
   describe('Testes do controller "updateSale', () => {
@@ -795,6 +864,41 @@ describe('Controllers de Sales', () => {
         });
       });
     });
+
+    describe('quando não é possivel atualizar uma venda', () => {
+      const error = new Error();
+      const request = {};
+      const response = {};
+      let next = {};
+
+      const expectError = {
+        err: {
+          code: 'invalid_data',
+          message: 'Wrong product ID or invalid quantity',
+        }
+      };
+
+      beforeEach(() => {
+        error.statusCode = 'invalidSale';
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns();
+        sinon.stub(salesService, 'updateSale').throws(error);
+      });
+
+      afterEach(() => {
+        salesService.updateSale.restore();
+      });
+
+      it('responde com o status 422', async () => {
+        await mwError(error, request, response, next);
+        expect(response.status.calledWith(422)).to.be.equal(true);
+      });
+
+      it('retorna um json com o erro esperado', async () => {
+        await mwError(error, request, response, next);
+        expect(response.json.calledWith(expectError)).to.be.equal(true);
+      });
+    })
   });
 
   describe('Testes do controller "deleteSale', () => {
@@ -838,6 +942,74 @@ describe('Controllers de Sales', () => {
         it('o params deve conter a chave "id"', async () => {
           await salesControllers.deleteSale(request, response);
           expect(request.params).to.have.property('id');
+        });
+      });
+    });
+
+    describe('quando há um erro', () => {
+      const error = new Error();
+      const request = {};
+      const response = {};
+      let next = {};
+
+      describe('a venda não existe', () => {
+
+        const expectError = {
+          err: {
+            code: 'invalid_data',
+            message: 'Wrong sale ID format',
+          },
+        };
+
+        beforeEach(() => {
+          error.statusCode = 'unprocessable';
+          response.status = sinon.stub().returns(response);
+          response.json = sinon.stub().returns();
+          sinon.stub(salesService, 'deleteSale').throws(error);
+        });
+
+        afterEach(() => {
+          salesService.deleteSale.restore();
+        });
+
+        it('responde com o status 422', async () => {
+          await mwError(error, request, response, next);
+          expect(response.status.calledWith(422)).to.be.equal(true);
+        });
+
+        it('retorna um json com o erro esperado', async () => {
+          await mwError(error, request, response, next);
+          expect(response.json.calledWith(expectError)).to.be.equal(true);
+        });
+      });
+
+      describe('quando não há estoque do produto', () => {
+        const expectError = {
+          err: {
+            code: 'stock_problem',
+            message: 'Such amount is not permitted to sell',
+          },
+        };
+
+        beforeEach(() => {
+          error.statusCode = 'stockProblem';
+          response.status = sinon.stub().returns(response);
+          response.json = sinon.stub().returns();
+          sinon.stub(salesService, 'newSale').throws(error);
+        });
+
+        afterEach(() => {
+          salesService.newSale.restore();
+        });
+
+        it('retorna o status 404', async () => {
+          await mwError(error, request, response, next);
+          expect(response.status.calledWith(404)).to.be.equal(true);
+        });
+
+        it('retorna um json com o erro esperado', async () => {
+          await mwError(error, request, response, next);
+          expect(response.json.calledWith(expectError)).to.be.equal(true);
         });
       });
     });
