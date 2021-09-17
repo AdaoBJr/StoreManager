@@ -4,7 +4,7 @@ const { ObjectId } = require('mongodb');
 const { validateNameSchema, validateQuantitySchema } = require('../schemas/productSchema');
 const ProductsModel = require('../models/ProductsModel');
 
-// Comments: Valida os argumentos passados como parâmetros e então se produto existe na base de dados 
+// Comments: Valida o argumento NAME passado no body
 const validateName = async (req, res, next) => {
   const { name } = req.body;
 
@@ -15,6 +15,7 @@ const validateName = async (req, res, next) => {
   next();
 };
 
+// Comments: Valida o argumento QUANTITY passado no body
 const validateQuantity = async (req, res, next) => {
   const { quantity } = req.body;
 

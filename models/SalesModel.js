@@ -23,17 +23,17 @@ const getSalesById = async (id) => connection()
     .then((result) => result);
 
 // // ------------------------------------------------------------------
-// // Requisito 7: MODEL responsável por atualizar e retornar produto atualizado por ID na BASE DE DADOS
+// // Requisito 7: MODEL responsável por atualizar e retornar a venda atualizada por ID na BASE DE DADOS
 
-// const putProductById = async ({ id, name, quantity }) => connection()
-//     .then((db) => db.collection('products').updateOne(
-//       { _id: ObjectId(id) },
-//       { $set: { name, quantity } },
-//     ))
-//     .then(() => ({ _id: id, name, quantity }));
+const putSaleById = async ({ id, updateItem }) => connection()
+    .then((db) => db.collection('sales').updateOne(
+      { _id: ObjectId(id) },
+      { $set: { itensSold: updateItem } },
+    ))
+    .then(() => ({ _id: id, itensSold: updateItem }));
 
 // ------------------------------------------------------------------
-// Requisito 4: MODEL responsável por deletar produto por ID na BASE DE DADOS
+// Requisito 8: MODEL responsável por deletar produto por ID na BASE DE DADOS
 
 // // Source: https://docs.mongodb.com/manual/reference/method/db.collection.findOneAndDelete/
 // const deleteProductById = async (id) => connection()
@@ -46,4 +46,5 @@ module.exports = {
   postSales,
   getSales,
   getSalesById,
+  putSaleById,
 };

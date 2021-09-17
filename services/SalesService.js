@@ -29,14 +29,14 @@ const getSalesById = async (id) => {
 // ------------------------------------------------------------------
 // Requisito 7: SERVICE responsável por fazer a chamada ao MODEL de atualização de produtos(Validações via middleware)
 
-// const putProductById = async ({ id, name, quantity }) => {
-//   const product = await SalesModel.putProductById({ id, name, quantity });
+const putSaleById = async ({ id, updateItem }) => {
+  const sale = await SalesModel.putSaleById({ id, updateItem });
 
-//   return product;
-// };
+  return sale;
+};
 
 // // ------------------------------------------------------------------
-// // Requisito 4: SERVICE responsável por fazer a chamada ao MODEL de deleção de produto por ID(Validações via middleware)
+// // Requisito 8: SERVICE responsável por fazer a chamada ao MODEL de deleção de produto por ID(Validações via middleware)
 
 // const deleteProductById = async (id) => {
 //   const product = await SalesModel.deleteProductById(id);
@@ -50,4 +50,5 @@ module.exports = {
   postSales,
   getSales,
   getSalesById,
+  putSaleById,
 };

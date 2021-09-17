@@ -37,19 +37,19 @@ salesRouter.get('/:id', validateIdSales, async (req, res) => {
 });
 
 // ------------------------------------------------------------------
-// Requisito 7: CONTROLLER responsável por receber a requisição de atualização de produtos por ID, fazer chamada ao SERVICE, e retornar o produto atualizado
+// Requisito 7: CONTROLLER responsável por receber a requisição de atualização de venda por ID, fazer chamada ao SERVICE, e retornar a venda atualizada
 
-// productRouter.put('/:id', validateId, validateNameQuantity, async (req, res) => {
-//   const { id } = req.params;
-//   const { name, quantity } = req.body;
+salesRouter.put('/:id', validateIdSales, validateProductSaleQuantity, async (req, res) => {
+  const { id } = req.params;
+  const updateItem = req.body;
 
-//   const product = await ProductsService.putProductById({ id, name, quantity });
+  const sale = await SalesService.putSaleById({ id, updateItem });
 
-//   return res.status(200).json(product);
-// });
+  return res.status(200).json(sale);
+});
 
 // ------------------------------------------------------------------
-// Requisito 4: CONTROLLER responsável por receber a requisição de deletar de produtos por ID, fazer chamada ao SERVICE, e retornar msg de confirmação
+// Requisito 8: CONTROLLER responsável por receber a requisição de deletar de produtos por ID, fazer chamada ao SERVICE, e retornar msg de confirmação
 
 // productRouter.delete('/:id', validateId, async (req, res) => {
 //   const { id } = req.params;

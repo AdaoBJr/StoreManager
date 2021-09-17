@@ -4,7 +4,7 @@ const { ObjectId } = require('mongodb');
 const { validateQuantitySchema } = require('../schemas/productSchema');
 const ProductsModel = require('../models/ProductsModel');
 
-// Comments: Valida se o ID (MongoDB) informado é válido 
+// Comments: Valida se o ID (MongoDB) da VENDA é válido 
 const validateIdSales = async (req, res, next) => {
   const { id } = req.params;
 
@@ -19,6 +19,7 @@ const validateIdSales = async (req, res, next) => {
   next();
 };
 
+// Comments: Valida se o campo QUANTITY do produto, dentro da VENDA, é válido
 const validateProductSaleQuantity = async (req, res, next) => {
   const saleItems = req.body;
 
