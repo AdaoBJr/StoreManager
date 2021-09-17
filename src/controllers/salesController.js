@@ -33,4 +33,16 @@ const getSaleById = async (req, res, next) => {
   next();
 };
 
-module.exports = { addSale, getAllSales, getSaleById };
+const updateSaleById = async (req, res, next) => {
+  const { id } = req.params;
+  const productIdAndquantity = req.body;
+  const { ok } = dictionary().status;
+
+  const saleUpdated = await salesService.updateSaleById(id, productIdAndquantity);
+
+  if (saleUpdated.err) return next(saleUpdated.err);
+
+  res.status(ok).json(saleUpdated);
+};
+
+module.exports = { addSale, getAllSales, getSaleById, updateSaleById };
