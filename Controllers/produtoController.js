@@ -93,6 +93,17 @@ const atualizarVendaController = rescue(async (req, res, next) => {
   return res.status(200).json(result);
 });
 
+const deletarVendaController = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const result = await produtoServices.deletarVendaServices(id);
+
+  if ('err' in result) {
+    return next(result);
+  }
+
+  return res.status(200).json(result);
+});
+
 module.exports = { 
 cadastrarProdutoController,
 buscarTodosProdutoController,
@@ -103,4 +114,5 @@ cadastrarVendaController,
 buscarVendaIDController,
 buscarTodasVendaController,
 atualizarVendaController,
+deletarVendaController,
 };

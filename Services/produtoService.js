@@ -94,6 +94,18 @@ const atualizarVendaServices = async (id, itensSold) => {
   return result;
 };
 
+const deletarVendaServices = async (id) => {
+  const produto = await produtoModel.buscarVendaIDModel(id);
+
+  if (!produto) {
+    return { err: { code: 'invalid_data', message: 'Wrong sale ID format' } };
+  }
+
+  await produtoModel.deletarVendaModel(id);
+
+  return produto;
+};
+
 module.exports = { 
 cadastrarProdutoServices, 
 buscarTodosProdutoServices,
@@ -104,4 +116,5 @@ cadastrarVendaServices,
 buscarVendaIDServices,
 buscarTodasVendaServices,
 atualizarVendaServices,
+deletarVendaServices,
 };

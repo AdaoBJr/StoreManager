@@ -89,6 +89,15 @@ const atualizarVendaModel = async (id, itensSold) => {
   return { _id: id, itensSold };
 };
 
+const deletarVendaModel = async (id) => {
+  if (!ObjectId.isValid(id)) return false;
+  const db = await connection();
+  const produtoDeletado = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+  console.log(`produtoDeletado: ${produtoDeletado}`);
+  
+  return produtoDeletado;
+};
+
 module.exports = { 
 cadastrarProdutoModel, 
 buscaProdutoPorNome, 
@@ -100,4 +109,5 @@ cadastrarVendaModel,
 buscarVendaIDModel,
 buscarTodasVendaModel,
 atualizarVendaModel,
+deletarVendaModel,
 };
