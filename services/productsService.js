@@ -79,8 +79,18 @@ const getProductById = async (id) => {
   return product;
 };
 
+const updateProduct = async (id, name, quantity) => {
+  if (chekName(name)) return chekName(name);
+  if (chekQuantity(quantity)) return chekQuantity(quantity);
+  if (validateToType(quantity)) return validateToType(quantity);
+
+  const newProduct = await productsModel.updateProduct(id, name, quantity);
+  return newProduct;
+};
+
 module.exports = {
   registerProducts,
   getAllProducts,
   getProductById,
+  updateProduct,
 };

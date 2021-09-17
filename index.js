@@ -16,6 +16,9 @@ app.get('/', (_request, response) => {
 app.post('/products', productsController.registerProducts);
 
 app.get('/products', productsController.getAllProducts);
+
 app.get('/products/:id', productsController.getProductById);
+
+app.put('/products/:id', productsController.updateProduct);
 
 app.listen(PORT, () => console.log(`Aplicação rodando na porta ${PORT}`));
