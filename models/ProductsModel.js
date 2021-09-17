@@ -11,16 +11,10 @@ const verifyIsAlreadyExists = async (name) =>
             return false;
         });
 
-const verifyIfIdAlreadyExists = async (id) =>
-    connection()
-        .then((db) => db.collection('products').findOne(ObjectId(id)))
-        .then((re) => {
-            console.log(re);
-            if (re) {
-                return true;
-            }
-            return false;
-        });
+// const verifyIfIdAlreadyExists = async (id) =>
+//     connection()
+//         .then((db) => db.collection('products').findOne(ObjectId(id)))
+//         .then((re) => re !== null);
 
 const addNewProduct = async (name, quantity) => 
     connection()
@@ -29,18 +23,18 @@ const addNewProduct = async (name, quantity) =>
 
 const getAllProducts = async () =>
     connection()
-        .then((db) => db.collection('products').find().toArray())
-        .then((result) => result);
+        .then((db) => db.collection('products').find().toArray());
+        // .then((result) => result);
 
 const getProductById = async (id) =>
     connection()
-        .then((db) => db.collection('products').findOne(ObjectId(id)))
-        .then((result) => result);
-
+        .then((db) => db.collection('products').findOne({ _id: ObjectId(id) }));
+        // .then((result) => result);
+// getProductById('6143dbba9253ace1e8209029').then((result) => console.log(result));
 module.exports = {
     addNewProduct,
     verifyIsAlreadyExists,
     getAllProducts,
     getProductById,
-    verifyIfIdAlreadyExists,
+    // verifyIfIdAlreadyExists,
 };

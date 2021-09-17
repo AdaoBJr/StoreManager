@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const productsModel = require('../models/ProductsModel');
 
 const validateIfAlreadyExistsAndLength = async (name) => {
@@ -50,10 +51,21 @@ const getAllProducts = async () => {
     return getProducts;
 };
 
-const validateIfIdAlreadyExists = async (id) => {
-    const result = await productsModel.verifyIfIdAlreadyExists(id);
-    console.log(result);
-    if (result === false) {
+// const validateIfIdAlreadyExists = async (id) => {
+//     const result = await productsModel.verifyIfIdAlreadyExists(id);
+//     if (result === false) {
+//         return {
+//             err: {
+//                 code: 'invalid_data',
+//                 message: 'Wrong id format',
+//             },
+//         };
+//     }
+//     return null;
+// };
+
+const getProductById = async (id) => {
+    if (!ObjectId.isValid(id)) {
         return {
             err: {
                 code: 'invalid_data',
@@ -61,11 +73,15 @@ const validateIfIdAlreadyExists = async (id) => {
             },
         };
     }
-};
-
-const getProductById = async (id) => {
     const product = await productsModel.getProductById(id);
-    console.log(product);
+    if (product === null) {
+        return {
+            err: {
+                code: 'invalid_data',
+                message: 'Wrong id format',
+            },
+        };
+    }
     return product;
 };
 
@@ -75,5 +91,5 @@ module.exports = {
     addProduct,
     getAllProducts,
     getProductById,
-    validateIfIdAlreadyExists,
+    // validateIfIdAlreadyExists,
 };

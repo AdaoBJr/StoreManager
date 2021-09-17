@@ -5,7 +5,8 @@ const { validateIfAlreadyExistsAndLength,
     addProduct,
     getAllProducts,
     getProductById,
-    validateIfIdAlreadyExists } = require('../services/ProductsService');
+    // validateIfIdAlreadyExists
+} = require('../services/ProductsService');
 
 const addNewProduct = async (req, res) => {
     const { name, quantity } = req.body;
@@ -31,11 +32,11 @@ const getProducts = async (req, res) => {
 
 const getProductId = async (req, res) => {
     const { id } = req.params;
-    if (await validateIfIdAlreadyExists(id)) {
-        const error = await validateIfIdAlreadyExists(id);
-        return res.status(422).json(error);
-    }
+    // const error = await validateIfIdAlreadyExists(id);
     const product = await getProductById(id);
+    if (product.err) {
+        return res.status(422).json(product);
+    }
     return res.status(200).json(product);
 };
 
