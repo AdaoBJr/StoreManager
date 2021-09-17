@@ -9,6 +9,11 @@ const getAllSales = async () => connection()
   .then((db) => db.collection('sales').find().toArray());
 
 const getSaleById = async (id) => connection()
-  .then((db) => db.collection('products').findOne(ObjectId(id)));
+  .then((db) => db.collection('sales').findOne(ObjectId(id)));
 
-module.exports = { addSale, getAllSales, getSaleById };
+const updateSaleById = async (id, productIdAndquantity) => connection()
+.then((db) => db.collection('sales')
+  .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: productIdAndquantity } }))
+    .then(() => ({ _id: id, itensSold: productIdAndquantity }));
+
+module.exports = { addSale, getAllSales, getSaleById, updateSaleById };
