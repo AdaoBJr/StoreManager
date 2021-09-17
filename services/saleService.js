@@ -1,4 +1,4 @@
-const { add } = require('../models/saleModel');
+const { add, getOne } = require('../models/saleModel');
 
 const isNumber = (value) => !Number.isNaN(Number(value));
 
@@ -12,6 +12,13 @@ const quantityCheck = (productsSold) => {
   return testPass;
 };
 
+const readSale = async (id) => {
+  const sale = await getOne(id);
+    if (!sale) return null;
+    
+  return sale;
+};
+
 const createSale = async (productsSold) => {
   if (!quantityCheck(productsSold)) return null;
 
@@ -20,4 +27,5 @@ const createSale = async (productsSold) => {
 
 module.exports = {
   createSale,
+  readSale,
 };

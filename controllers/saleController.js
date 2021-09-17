@@ -8,23 +8,48 @@ const idError = {
   },
 };
 
+const existsError = {
+  err: {
+    code: 'not_found',
+    message: 'Sale not found',
+  },
+};
+
 const getAllSales = async (_req, res) => {
   try {
-    const products = await model.getAll();
-    return res.status(200).json(products);
+    const sales = await model.getAll();
+    return res.status(200).json({ sales });
   } catch (err) {
-    return res.status(422).json(idError);
+    return res.status(404).json(existsError);
+  }
+};
+
+const getSale = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const exists = await service.readSale(id);
+
+    if (exists === null) {
+      return res.status(404).json(existsError);
+    }
+    const sale = await model.getOne(id);
+    return res.status(200).json(sale);
+  } catch (err) {
+    return res.status(404).json(existsError);
   }
 };
 
 const createSale = async (req, res) => {
-  const productsList = req.body;
-  const createdSale = await service.createSale(productsList);
+  const salesList = req.body;
+  const createdSale = await service.createSale(salesList);
   if (createdSale === null) return res.status(422).json(idError);
 
   return res.status(200).json(createdSale);
 };
 
 module.exports = {
-  getAllSales, createSale,
+  getAllSales,
+  createSale,
+  getSale,
 };
