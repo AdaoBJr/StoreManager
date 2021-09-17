@@ -2,6 +2,7 @@ const {
   createSalesServices,
   showsalesService,
   updatesalesService,
+  deletesalesService,
 } = require('../3services/sales_services');
 
 const STATUS_OK = 200;
@@ -31,8 +32,19 @@ const updatesales = async (req, res) => {
   return res.status(STATUS_OK).json(answer);
 };
 
+const deleteSales = async (req, res) => {
+  const { id } = req.params;
+  const answer = await deletesalesService(id);
+  if (answer === 422) {
+    return res.status(answer)
+       .json({ err: { code: 'invalid_data', message: 'Wrong sale ID format' } }); 
+   }
+     return res.status(200).json(answer);
+};
+
 module.exports = {
   createsales,
   showsales,
   updatesales,
+  deleteSales,
 };

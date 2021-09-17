@@ -25,9 +25,18 @@ const updatesalesModel = async (itensSold, id) => {
   .then((DB) => DB.collection('sales').findOne(ObjectId(id)));
 };
 
+const deleteSalesModel = async (id) => {
+  if (!ObjectId.isValid(id)) { return 422; }
+  const item = connection().then((DB) => DB.collection('sales').findOne(ObjectId(id)));
+  connection().then((DB) => DB.collection('sales')
+    .deleteOne({ _id: ObjectId(id) })); 
+  return item;
+};
+
 module.exports = {
   createSalesModel,
   showAllsalesModel,
   showByIdsalesModel,
   updatesalesModel,
+  deleteSalesModel,
 };

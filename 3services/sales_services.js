@@ -3,6 +3,7 @@ const {
   showAllsalesModel,
   showByIdsalesModel,
   updatesalesModel,
+  deleteSalesModel,
 } = require('../4models/sales_model');
 
 // const validaName = (name) => (name.length < 6);
@@ -59,8 +60,11 @@ const updatesalesService = async (data, id) => {
   return updatesalesModel(data, id);
 };
 
+const deletesalesService = async (id) => deleteSalesModel(id);
+
 module.exports = {
   createSalesServices,
   showsalesService,
   updatesalesService,
+  deletesalesService,
 };
