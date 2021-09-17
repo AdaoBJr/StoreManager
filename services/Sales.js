@@ -1,43 +1,10 @@
 const model = require('../models/Sales');
-
-const validateSale = (sale) => {
-  sale.forEach((item) => {
-    if (item.quantity < 1 || typeof item.quantity !== 'number') {
-      const error = new Error();
-      error.statusCode = 'invalidSale';
-      throw error;
-    }
-  });
-};
-
-const isValidSale = (sale) => {
-  if (!sale) {
-    const error = new Error();
-    error.statusCode = 'saleNotFound';
-    throw error;
-  }
-};
-
-const validateDeletion = (sale) => {
-  if (!sale) {
-    const error = new Error();
-    error.statusCode = 'unprocessable';
-    throw error;
-  }
-};
-
-const verifyStock = (stock) => {
-  if (!stock) {
-    const error = new Error();
-    error.statusCode = 'stockProblem';
-    throw error;
-  }
-};
+const valid = require('../validations/salesValidations');
 
 const updateProductQtts = async (sale) => {
   const sellPromises = sale.map(async (item) => {
     const verifyQtt = await model.sellQuantity(item.productId, item.quantity);
-    verifyStock(verifyQtt);
+    valid.verifyStock(verifyQtt);
     return verifyQtt;
   });
   return Promise.all(sellPromises);
@@ -47,26 +14,26 @@ const getAll = () => model.getAll();
 
 const getById = async (id) => {
   const result = await model.getById(id);
-  isValidSale(result);
+  valid.isValidSale(result);
   return result;
 };
 
 const newSale = async (sale) => {
-  validateSale(sale);
+  valid.validateSale(sale);
   await updateProductQtts(sale);
   const result = await model.newSale(sale);
   return result;
 };
 
 const updateSale = async (id, sale) => {
-  validateSale(sale);
+  valid.validateSale(sale);
   const result = await model.updateSale(id, sale);
   return result;
 };
 
 const deleteSale = async (id) => {
   const sale = await model.getById(id);
-  validateDeletion(sale);
+  valid.validateDeletion(sale);
   const { itensSold } = sale;
   const item = [{ productId: itensSold[0].productId, quantity: itensSold[0].quantity * -1 }];
   await updateProductQtts(item);

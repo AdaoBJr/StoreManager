@@ -654,6 +654,41 @@ describe('Controllers de Sales', () => {
         });
       });
     });
+
+    describe('quando Id não é encontrado', () => {
+      const error = new Error();
+      const request = {};
+      const response = {};
+      let next = {};
+
+      const expectError = {
+        err: {
+          code: 'not_found',
+          message: 'Sale not found',
+        },
+      };
+
+      beforeEach(() => {
+        error.statusCode = 'saleNotFound';
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns();
+        sinon.stub(salesService, 'getById').throws(error);
+      });
+
+      afterEach(() => {
+        salesService.getById.restore();
+      });
+
+      it('responde com o status 422', async () => {
+        await mwError(error, request, response, next);
+        expect(response.status.calledWith(404)).to.be.equal(true);
+      });
+
+      it('retorna um json com o erro esperado', async () => {
+        await mwError(error, request, response, next);
+        expect(response.json.calledWith(expectError)).to.be.equal(true);
+      });
+    })
   });
 
   describe('testa o controller "newSale"', () => {
