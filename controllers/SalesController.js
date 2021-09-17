@@ -23,17 +23,17 @@ salesRouter.post('/', validateProductSaleQuantity, async (req, res) => {
 // Requisito 6: CONTROLLERS responsáveis por receber a requisição de listagem geral de vendas ou por ID, fazer chamada ao SERVICE, e retornar todas as vendas ou venda específica filtrado por ID.
 
 salesRouter.get('/', async (req, res) => {
-  const products = await SalesService.getSales();
-
-  return res.status(200).json({ products });
+  const salesAll = await SalesService.getSales();
+  
+  return res.status(200).json({ sales: salesAll });
 });
 
 salesRouter.get('/:id', validateIdSales, async (req, res) => {
   const { id } = req.params;
 
-  const product = await SalesService.getSalesById(id);
+  const sale = await SalesService.getSalesById(id);
 
-  return res.status(200).json(product);
+  return res.status(200).json(sale);
 });
 
 // ------------------------------------------------------------------
