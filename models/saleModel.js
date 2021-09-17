@@ -18,10 +18,18 @@ const add = async (productsList) => {
   return { _id: sales.insertedId, itensSold: productsList };
 };
 
+const update = async (id, productId, quantity) => {
+  const db = await connection();
+  await db.collection('sales')
+    .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: { productId, quantity } } });
+
+    return { _id: id, itensSold: [{ productId, quantity }] };
+};
+
 module.exports = {
 
   add,
   getAll,
   getOne,
-
+  update,
 };
