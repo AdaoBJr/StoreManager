@@ -29,7 +29,7 @@ const updateSaleById = async (id, saleProductsList) => {
   if (!ObjectId.isValid(id)) return null;
 
   await connection.getConnection().then((db) => db.collection('sales')
-    .update({ _id: ObjectId(id) }, { $set: { itensSold: saleProductsList } }));
+    .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: saleProductsList } }));
 
   return { _id: id, itensSold: saleProductsList };
 };

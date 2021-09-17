@@ -5,13 +5,22 @@ const productError = {
   err: {
     code: 'invalid_data',
     message: 'Wrong product ID or invalid quantity',
-} };
+  },
+};
 
 const saleError = {
   err: {
     code: 'not_found',
     message: 'Sale not found',
-} };
+  },
+};
+
+const stockError = { 
+  err: {
+    code: 'stock_problem',
+    message: 'Such amount is not permitted to sell',
+  },
+};
 
 const validateSale = (productsList) => {
   const validations = productsList.map((product) => {
@@ -22,18 +31,36 @@ const validateSale = (productsList) => {
   return validations;
 };
 
+const validateStockQuantity = (newSale, productsList) => {
+  const validations = productsList.map((product, index) => {
+    if (newSale[index].quantity > product.quantity) return stockError;
+    return product;
+  });
+
+  return validations[0];
+};
+
 const createSale = async (newSale) => {
   const validationResult = validateSale(newSale);
   if (validationResult[0].err) return productError;
 
   const getNewSaleProductsFromDB = await Promise.all(
-    newSale.map((product) => productsModel.getProductById(product.productId)),
+    newSale.map(({ productId }) => productsModel.getProductById(productId)),
   );
+
   const notExistsAllProducts = getNewSaleProductsFromDB.some((product) => !product);
-  
   if (notExistsAllProducts) return productError;
 
+  const stockSupportsSalesAmount = validateStockQuantity(newSale, getNewSaleProductsFromDB);
+  if (stockSupportsSalesAmount.err) return stockError;
+
   const createdSale = await salesModel.createSale(newSale);
+  await Promise.all(
+    newSale.map((product, index) => productsModel.removeFromStockQuantity(
+      product, getNewSaleProductsFromDB[index].quantity,
+    )),
+  );
+
   return createdSale;
 };
 
@@ -64,6 +91,16 @@ const excludeSaleById = async (id) => {
     saleError.err = { code: 'invalid_data', message: 'Wrong sale ID format' };
     return saleError;
   }
+
+  const getNewSaleProductsFromDB = await Promise.all(
+    excludedSale.itensSold.map(({ productId }) => productsModel.getProductById(productId)),
+  );
+
+  await Promise.all(
+    excludedSale.itensSold.map((product, index) => productsModel.addToStockQuantity(
+      product, getNewSaleProductsFromDB[index].quantity,
+    )),
+  );
 
   return excludedSale;
 };

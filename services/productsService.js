@@ -4,7 +4,8 @@ const error = {
     err: {
       code: 'invalid_data',
       message: null,
-} };
+  },
+};
 
 const getProductByName = async (name) => {
   const productByName = await productsModel.getProductByName(name);

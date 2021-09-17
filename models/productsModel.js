@@ -33,9 +33,23 @@ const getProductById = async (id) => {
 
 const updateProductById = async ({ id, name, quantity }) => {
   await connection.getConnection().then((db) =>
-    db.collection('products').update({ _id: ObjectId(id) }, { $set: { name, quantity } }));
+    db.collection('products').updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } }));
 
   return { id, name, quantity };
+};
+
+const removeFromStockQuantity = async ({ productId, quantity }, stockQuantity) => {
+  await connection.getConnection().then((db) => db.collection('products')
+    .updateOne({ _id: ObjectId(productId) }, { $set: { quantity: stockQuantity - quantity } }));
+
+  return null;
+};
+
+const addToStockQuantity = async ({ productId, quantity }, stockQuantity) => {
+  await connection.getConnection().then((db) => db.collection('products')
+    .updateOne({ _id: ObjectId(productId) }, { $set: { quantity: stockQuantity + quantity } }));
+
+  return null;
 };
 
 const excludeProductById = async (id) => {
@@ -54,4 +68,6 @@ module.exports = {
   getProductById,
   excludeProductById,
   updateProductById,
+  removeFromStockQuantity,
+  addToStockQuantity,
 };

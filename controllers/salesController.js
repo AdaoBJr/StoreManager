@@ -9,6 +9,10 @@ salesRouter.post('/', async (req, res) => {
   const result = await salesService.createSale(body);
 
   if (result.err) {
+    if (result.err.code === 'stock_problem') {
+      return res.status(StatusCodes.NOT_FOUND).json(result);
+    }
+
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(result);
   }
   
