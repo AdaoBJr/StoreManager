@@ -31,15 +31,14 @@ const verifyQuantity = (quantity) => {
 
 const createSale = async (newSale) => {
   // const products = await productModel.getAllProducts();
-  let salesNotIsValid = true;
+  let salesNotIsValid = false;
 
   newSale.forEach(({ productId, quantity }) => {
     const idNotIsValid = verifyId(productId);
     const quantityNotIsValid = verifyQuantity(quantity);
 
-    if (idNotIsValid) return idNotIsValid;
-    if (quantityNotIsValid) return quantityNotIsValid;
-    salesNotIsValid = false;
+    if (idNotIsValid.err) salesNotIsValid = true;
+    if (quantityNotIsValid.err) salesNotIsValid = true;
   });
 
   if (salesNotIsValid === false) return salesModel.addSale(newSale);
