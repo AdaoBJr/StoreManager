@@ -12,8 +12,9 @@ const getAll = async (_req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { itensSold } = req.body;
-    const createSale = await saleService.createService(itensSold);
+    const itensSold = req.body;
+    console.log(itensSold, 'controller');
+    const createSale = await saleService.createService({ itensSold });
     return res.status(StatusCodes.OK).json(createSale);
   } catch (error) {
     console.log(error);

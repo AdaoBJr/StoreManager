@@ -5,7 +5,8 @@ const getAllService = async () => {
   return allSales;
 };
 
-const createService = async (itensSold) => {
+const createService = async ({ itensSold }) => {
+  console.log(itensSold, 'service');
   const sale = await saleModel.create(itensSold);
   return sale;
 };

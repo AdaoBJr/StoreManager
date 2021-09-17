@@ -1,20 +1,19 @@
-const saleQuantity = async (req, res, next) => {
-  const { quantity } = req.body;
-  if (quantity <= 0) {
-    return res.status(422).json({
-      err: { 
-        code: 'invalid_data',
-        message: 'Wrong product ID or invalid quantity',
-      },
-    });
+const error = {
+  err: { 
+    code: 'invalid_data',
+    message: 'Wrong product ID or invalid quantity',
+  },
+};
+
+const saleQuantity = (req, res, next) => {
+  const sale = req.body; // array
+  if (sale.length === 0) {
+    return res.status(422).json(error);
   }
-  if (typeof quantity !== 'number') {
-    return res.status(422).json({
-      err: { 
-        code: 'invalid_data',
-        message: 'Wrong product ID or invalid quantity',
-      },
-    });
+  for (let i = 0; i < sale.length; i += 1) {
+    if (sale[i].quantity <= 0 || typeof sale[i].quantity !== 'number') {
+      return res.status(422).json(error);
+    }
   }
   next();
 };
