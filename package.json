@@ -4,6 +4,7 @@
   "description": "Simple CRUD to sales and products",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon index.js",
     "test": "jest --runInBand",
     "test:mocha": "nyc --all --include models --include services --include controllers mocha test/unit/*.js --exit",
     "start": "nodemon index.js",
@@ -29,8 +30,8 @@
     "faker": "^4.1.0",
     "frisby": "^2.1.2",
     "jest": "^26.4.1",
-    "mongodb": "^3.5.9",
-    "nodemon": "^2.0.4"
+    "mongodb": "^3.7.1",
+    "nodemon": "^2.0.12"
   },
   "devDependencies": {
     "chai": "^4.3.4",
