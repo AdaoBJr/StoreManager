@@ -50,13 +50,22 @@ const getSaleById = async (id) => {
 };
 
 const updateSaleById = async (id, saleProductsList) => {
-  // console.log(saleProductsList, 'productsLIST');
   const validationResult = validateSale(saleProductsList);
-  // console.log('validationResult', validationResult);
   if (validationResult[0].err) return productError;
 
   const updatedSale = await salesModel.updateSaleById(id, saleProductsList);
   return updatedSale;
+};
+
+const excludeSaleById = async (id) => {
+  const excludedSale = await getSaleById(id);
+
+  if (!await salesModel.excludeSaleById(id)) {
+    saleError.err = { code: 'invalid_data', message: 'Wrong sale ID format' };
+    return saleError;
+  }
+
+  return excludedSale;
 };
 
 module.exports = {
@@ -64,4 +73,5 @@ module.exports = {
   getAllSales,
   getSaleById,
   updateSaleById,
+  excludeSaleById,
 };

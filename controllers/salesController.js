@@ -42,4 +42,15 @@ salesRouter.put('/:id', async (req, res) => {
   return res.status(StatusCodes.OK).json(result);
 });
 
+salesRouter.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  const result = await salesService.excludeSaleById(id);
+
+  if (result.err) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(result);
+  }
+
+  return res.status(StatusCodes.OK).json(result);
+});
+
 module.exports = salesRouter;
