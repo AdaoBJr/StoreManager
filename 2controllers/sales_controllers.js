@@ -1,4 +1,8 @@
-const { createSalesServices, showsalesService } = require('../3services/sales_services');
+const {
+  createSalesServices,
+  showsalesService,
+  updatesalesService,
+} = require('../3services/sales_services');
 
 const STATUS_OK = 200;
 const VALIDATE_ERROR = 422;
@@ -20,7 +24,15 @@ const showsales = async (req, res) => {
   return res.status(200).json(answer);
 };
 
+const updatesales = async (req, res) => {
+  const { id } = req.params;
+  const answer = await updatesalesService(req.body, id);
+  if (answer.err) { return res.status(VALIDATE_ERROR).json(answer); }
+  return res.status(STATUS_OK).json(answer);
+};
+
 module.exports = {
   createsales,
   showsales,
+  updatesales,
 };

@@ -17,8 +17,17 @@ const showByIdsalesModel = async (id) => {
   return DB.collection('sales').findOne(ObjectId(id));
 };
 
+const updatesalesModel = async (itensSold, id) => {
+  if (!ObjectId.isValid(id)) { return 422; }
+  connection().then((DB) => DB.collection('sales').updateOne({ _id: ObjectId(id) }, 
+    { $set: { itensSold } }));
+  return connection()
+  .then((DB) => DB.collection('sales').findOne(ObjectId(id)));
+};
+
 module.exports = {
   createSalesModel,
   showAllsalesModel,
   showByIdsalesModel,
+  updatesalesModel,
 };
