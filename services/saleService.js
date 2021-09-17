@@ -14,8 +14,8 @@ const quantityCheck = (productsSold) => {
 
 const readSale = async (id) => {
   const sale = await getOne(id);
-    if (!sale) return null;
-    
+  if (!sale) return null;
+
   return sale;
 };
 

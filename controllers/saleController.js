@@ -8,6 +8,13 @@ const idError = {
   },
 };
 
+const formatError = {
+  err: {
+    code: 'invalid_data',
+    message: 'Wrong sale ID format',
+  },
+};
+
 const existsError = {
   err: {
     code: 'not_found',
@@ -61,9 +68,27 @@ const updateSale = async (req, res) => {
   }
 };
 
+const deleteSale = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const exists = await service.readSale(id);
+
+    if (exists === null) {
+      return res.status(422).json(formatError);
+    }
+
+    await model.exclude(id);
+
+    res.status(200).json(exists);
+  } catch (err) {
+    return res.status(422).json(formatError);
+  }
+};
+
 module.exports = {
   getAllSales,
   createSale,
   getSale,
   updateSale,
+  deleteSale,
 };

@@ -23,7 +23,15 @@ const update = async (id, productId, quantity) => {
   await db.collection('sales')
     .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: { productId, quantity } } });
 
-    return { _id: id, itensSold: [{ productId, quantity }] };
+  return { _id: id, itensSold: [{ productId, quantity }] };
+};
+
+const exclude = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await connection();
+
+  return db.collection('sales')
+    .deleteOne({ _id: ObjectId(id) });
 };
 
 module.exports = {
@@ -32,4 +40,5 @@ module.exports = {
   getAll,
   getOne,
   update,
+  exclude,
 };
