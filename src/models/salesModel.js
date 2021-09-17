@@ -16,4 +16,7 @@ const updateSaleById = async (id, productIdAndquantity) => connection()
   .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: productIdAndquantity } }))
     .then(() => ({ _id: id, itensSold: productIdAndquantity }));
 
-module.exports = { addSale, getAllSales, getSaleById, updateSaleById };
+const deleteSaleById = async (id) => connection()
+    .then((db) => db.collection('sales').deleteOne({ _id: ObjectId(id) }));
+
+module.exports = { addSale, getAllSales, getSaleById, updateSaleById, deleteSaleById };
