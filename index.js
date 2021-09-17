@@ -1,5 +1,6 @@
 const express = require('express');
 const { productRouter } = require('./controllers/productController');
+const { saleRouter } = require('./controllers/saleController');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
@@ -14,6 +15,8 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/products', productRouter);
+
+app.use('/sales', saleRouter);
 
 app.listen(PORT, () => 
   console.log(`Server listening on port ${PORT}`));
