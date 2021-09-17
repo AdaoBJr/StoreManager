@@ -1,10 +1,11 @@
 const express = require('express');
+const rescue = require('express-rescue');
 const { insertName, auxGetAll, getId } = require('../services/services');
 const { validateProductInput } = require('../middleError/validProduct');
 
 const route = express.Router();
 
-route.post('/', validateProductInput, async (req, res, next) => {
+route.post('/', validateProductInput, rescue(async (req, res, next) => {
   const { name, quantity } = req.body;
   
   const auxServices = await insertName(name, quantity);
@@ -17,7 +18,7 @@ route.post('/', validateProductInput, async (req, res, next) => {
     quantity,
   };
   return res.status(201).json(opa);
-});
+}));
 
 route.get('/', async (_req, res) => {
   const getAll = await auxGetAll();
