@@ -1,7 +1,8 @@
 const salesModel = require('../models/salesModel');
 const { dictionary } = require('../helpers/dictionary');
 
-const { validateQuantityTypeAndAmount } = require('../validations/validation');
+const { validateQuantityTypeAndAmount, /* validateQuantityAmount, validateQuantityType, */
+} = require('../validations/validation');
 
 const addSale = async (saleArray) => {
   const verifiedSales = saleArray.map((sale) => {
@@ -42,4 +43,21 @@ const getSaleById = async (id) => {
   return sale;
 };
 
-module.exports = { addSale, getAllSales, getSaleById };
+const updateSaleById = async (id, productIdAndquantity) => {
+  const verifiedSale = productIdAndquantity.map((sale) => {
+    if (validateQuantityTypeAndAmount(sale.quantity)) {
+      return validateQuantityTypeAndAmount(sale.quantity);
+    }
+    return undefined;
+  });
+
+  const errorUpdate = verifiedSale.find((b) => b);
+
+  if (errorUpdate) return errorUpdate;
+
+  const saleUpdated = await salesModel.updateSaleById(id, productIdAndquantity);
+
+  return saleUpdated;
+};
+
+module.exports = { addSale, getAllSales, getSaleById, updateSaleById };
