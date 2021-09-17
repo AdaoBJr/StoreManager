@@ -31,4 +31,15 @@ salesRouter.get('/:id', async (req, res) => {
   return res.status(StatusCodes.OK).json(result);
 });
 
+salesRouter.put('/:id', async (req, res) => {
+  const { params: { id }, body } = req;
+  const result = await salesService.updateSaleById(id, body);
+
+  if (result.err) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(result);
+  }
+
+  return res.status(StatusCodes.OK).json(result);
+});
+
 module.exports = salesRouter;

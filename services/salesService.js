@@ -13,8 +13,8 @@ const saleError = {
     message: 'Sale not found',
 } };
 
-const validateNewSale = (newSale) => {
-  const validations = newSale.map((product) => {
+const validateSale = (productsList) => {
+  const validations = productsList.map((product) => {
     if (product.quantity < 1) return productError;
     if (typeof product.quantity !== 'number') return productError;
     return product;
@@ -23,7 +23,7 @@ const validateNewSale = (newSale) => {
 };
 
 const createSale = async (newSale) => {
-  const validationResult = validateNewSale(newSale);
+  const validationResult = validateSale(newSale);
   if (validationResult[0].err) return productError;
 
   const getNewSaleProductsFromDB = await Promise.all(
@@ -49,8 +49,19 @@ const getSaleById = async (id) => {
   return saleById;
 };
 
+const updateSaleById = async (id, saleProductsList) => {
+  // console.log(saleProductsList, 'productsLIST');
+  const validationResult = validateSale(saleProductsList);
+  // console.log('validationResult', validationResult);
+  if (validationResult[0].err) return productError;
+
+  const updatedSale = await salesModel.updateSaleById(id, saleProductsList);
+  return updatedSale;
+};
+
 module.exports = {
   createSale,
   getAllSales,
   getSaleById,
+  updateSaleById,
 };

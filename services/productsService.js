@@ -45,8 +45,6 @@ const getProductById = async (id) => {
 };
 
 const updateProductById = async ({ id, name, quantity }) => {
-  const updatedProduct = await productsModel.updateProductById({ id, name, quantity });
-
   if (name.length < 6) {
     error.err.message = '"name" length must be at least 5 characters long';
     return error;
@@ -60,6 +58,7 @@ const updateProductById = async ({ id, name, quantity }) => {
     return error;
   }
 
+  const updatedProduct = await productsModel.updateProductById({ id, name, quantity });
   return updatedProduct;
 };
 
