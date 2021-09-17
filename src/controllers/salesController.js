@@ -45,4 +45,15 @@ const updateSaleById = async (req, res, next) => {
   res.status(ok).json(saleUpdated);
 };
 
-module.exports = { addSale, getAllSales, getSaleById, updateSaleById };
+const deleteSaleById = async (req, res, next) => {
+  const { id } = req.params;
+  const { ok } = dictionary().status;
+
+  const saleToDelete = await salesService.deleteSaleById(id);
+
+  if (saleToDelete.err) return next(saleToDelete.err);
+
+  return res.status(ok).json(saleToDelete);
+};
+
+module.exports = { addSale, getAllSales, getSaleById, updateSaleById, deleteSaleById };
