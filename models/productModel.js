@@ -1,6 +1,5 @@
 const { ObjectId } = require('mongodb');
 const connection = require('../connection');
-const { errorBusines } = require('../estruturaErro/estruturaErro');
 
 const getName = async (name) => {
   const auxConnection = await connection();
@@ -23,23 +22,35 @@ const getAll = async () => {
 
 const getId = async (id) => {
   if (!ObjectId.isValid(id)) {
-    return errorBusines('Wrong id format');
+    return null;
   }
   const auxConnection = await connection();
   const result = await auxConnection.collection('products').findOne(ObjectId(id));
-  if (!result) {
-    return errorBusines('Wrong id format');
-  }
   return result;
 };
 
 const updateOne = async (id, name, quantity) => {
   if (!ObjectId.isValid(id)) {
-    return errorBusines('Wrong id format');
+    return null;
   }
   const auxConnection = await connection();
   await auxConnection.collection('products')
   .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
 };
 
-module.exports = { getName, insertOne, getAll, getId, updateOne };
+const deleteOne = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+  const auxConnection = await connection();
+  const auxGetId = await getId(id);
+  console.log(auxGetId);
+  await auxConnection.collection('products')
+  .deleteOne({ _id: ObjectId(id) });
+  if (auxGetId) {
+    return auxGetId;
+  }
+  return null;
+};
+
+module.exports = { getName, insertOne, getAll, getId, updateOne, deleteOne };

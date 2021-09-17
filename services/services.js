@@ -1,4 +1,5 @@
-const { getName, insertOne, getAll, getId, updateOne } = require('../models/productModel');
+const { getName,
+  insertOne, getAll, getId, updateOne, deleteOne } = require('../models/productModel');
 const { errorBusines } = require('../estruturaErro/estruturaErro');
 
 const insertName = async (name, quantity) => {
@@ -10,8 +11,22 @@ const insertName = async (name, quantity) => {
   return create;
 };
 
+const auxGetId = async (id) => {
+  const result = await getId(id);
+  if (!result) {
+    return errorBusines('Wrong id format');
+  }
+  return result;
+};
+
+const auxDeleteOne = async (id) => {
+  const result = await deleteOne(id);
+  if (!result) {
+    return errorBusines('Wrong id format');
+  }
+  return result;
+};
+
 const auxGetAll = async () => getAll();
 
-const auxUpdate = async () => updateOne();
-
-module.exports = { insertName, auxGetAll, getId, auxUpdate };
+module.exports = { insertName, auxGetAll, auxGetId, updateOne, auxDeleteOne };
