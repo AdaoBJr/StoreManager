@@ -5,11 +5,8 @@ const createSale = async ({ itensSold }) => connection.getConnection()
   .then((db) => db.collection('sales').insertOne({ itensSold }))
   .then((result) => result.ops[0]);
 
-const getAllSales = async () => {
-  const result = await connection.getConnection()
+const getAllSales = async () => connection.getConnection()
   .then((db) => db.collection('sales').find().toArray());
-  return { sales: result };
-};
 
 module.exports = {
   createSale,
