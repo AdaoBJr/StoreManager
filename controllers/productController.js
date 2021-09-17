@@ -32,6 +32,14 @@ productRouter.put('/:id', async (req, res) => {
   return res.status(status).json(messageResult);
 });
 
+productRouter.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  const { status, messageResult } = await productService.removeProduct(id);
+
+  return res.status(status).json(messageResult);
+});
+
 module.exports = {
   productRouter,
 };
