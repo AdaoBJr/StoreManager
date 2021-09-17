@@ -8,6 +8,13 @@ const productExists = async (name) => {
   return product !== null;
 };
 
+const productIdExists = async (id) => {
+  const product = await connection.getConnection()
+    .then((db) => db.collection('products').findOne({ _id: ObjectId(id) }));
+  
+  return product !== null;
+};
+
 const createProduct = async ({ name, quantity }) => connection
 .getConnection()
 .then((db) => db.collection('products').insertOne({ name, quantity }))
@@ -63,4 +70,5 @@ module.exports = {
   getProductById,
   updateProduct,
   removeProduct,
+  productIdExists,
 };
