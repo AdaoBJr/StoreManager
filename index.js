@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { getAllProducts, createProduct, 
   updateProduct, deleteProduct, getProduct } = require('./controllers/productController');
+  const { getAllSales, createSale } = require('./controllers/saleController');
 
 const app = express();
 
@@ -23,3 +24,9 @@ app.get('/products/:id', getProduct);
 app.post('/products', createProduct);
 app.put('/products/:id', updateProduct);
 app.delete('/products/:id', deleteProduct);
+
+app.get('/sales', getAllSales);
+// app.get('/sales/:id', getSale);
+app.post('/sales', createSale);
+// app.put('/sales/:id', updateSale);
+// app.delete('/sales/:id', deleteSale);
