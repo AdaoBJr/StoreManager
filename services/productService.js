@@ -1,33 +1,36 @@
-const { addProduct, findProduct, findAllProducts, findById } = require('../models/productsModel');
-const { errorBusiness } = require('../errors/errorAPI');
+const { create,
+  getByName, getAll, getById, update, exclude } = require('../models/productModel');
+const { errorBusiness } = require('../errors/errors');
 
-const checkAllProducts = async () => {
-  const allProducts = await findAllProducts();
-  return allProducts;
-};
-
-const checkProductById = async (id) => {
-  const productById = await findById(id);
-
-  if (!productById) {
-    return errorBusiness('Wrong id format ');
+const filterById = async (id) => {
+  const products = await getById(id);
+  if (!products) {
+    return errorBusiness('Wrong id format');
   }
 
-  return productById;
+  return products;
 };
 
-const checkName = async (name, quantity) => {
-  const fliterName = await findProduct(name);
+const createService = async (name, quantity) => {
+  const fliterName = await getByName(name);
   if (fliterName) {
     return errorBusiness('Product already exists'); 
   }
 
-  const createProduct = await addProduct(name, quantity);
+  const createProduct = await create(name, quantity);
   return createProduct;
 };
 
+const excludeService = async (id) => {
+  const products = await exclude(id);
+  if (!products) return errorBusiness('Wrong id format');
+  return products;
+};
+
 module.exports = {
-  checkName,
-  checkAllProducts,
-  checkProductById,
+  createService,
+  getAll,
+  filterById,
+  update,
+  excludeService,
 };
