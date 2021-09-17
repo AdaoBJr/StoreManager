@@ -5,6 +5,7 @@ const dictionary = () => ({
     quantityTypeValidation: '"quantity" must be a number',
     alreadyExists: 'Product already exists',
     wrongID: 'Wrong id format',
+    wrongSaleID: 'Wrong sale ID format',
     quantityTypeAndAmountValidation: 'Wrong product ID or invalid quantity',
     notFoundMessage: 'Sale not found',
   },
