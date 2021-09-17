@@ -80,6 +80,19 @@ const buscarTodasVendaController = rescue(async (req, res, _next) => {
   return res.status(200).json(result);
 });
 
+const atualizarVendaController = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const itensSold = req.body;
+
+  const result = await produtoServices.atualizarVendaServices(id, itensSold);
+
+  if ('err' in result) {
+    return next(result);
+  }
+
+  return res.status(200).json(result);
+});
+
 module.exports = { 
 cadastrarProdutoController,
 buscarTodosProdutoController,
@@ -89,4 +102,5 @@ deleteProdutoController,
 cadastrarVendaController,
 buscarVendaIDController,
 buscarTodasVendaController,
+atualizarVendaController,
 };

@@ -27,6 +27,8 @@ app.get('/sales/:id', produtoController.buscarVendaIDController);
 
 app.get('/sales', produtoController.buscarTodasVendaController);
 
+app.put('/sales/:id', produtoController.atualizarVendaController);
+
 app.use(erroMiddleware);
 
 app.listen(3000, () => { console.log('Api rodando na porta 3000'); });

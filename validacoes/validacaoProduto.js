@@ -37,4 +37,8 @@ const validacaoDadosVenda = (quantity) => {
 const validacaoCadastramentoVenda = (array) => 
   array.map((i) => validacaoDadosVenda(i.quantity));
 
-module.exports = { validacaoCadastramentoProduto, validacaoCadastramentoVenda };
+module.exports = { 
+validacaoCadastramentoProduto, 
+validacaoCadastramentoVenda, 
+validacaoDadosVenda,
+};

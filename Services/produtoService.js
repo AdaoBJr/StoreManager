@@ -82,6 +82,18 @@ const buscarTodasVendaServices = async () => {
   return result;
 };
 
+const atualizarVendaServices = async (id, itensSold) => {
+  const verificacao = validacoes.validacaoDadosVenda(itensSold[0].quantity);
+  
+  if (verificacao) {
+    return verificacao;
+  }
+
+  const result = await produtoModel.atualizarVendaModel(id, itensSold);
+
+  return result;
+};
+
 module.exports = { 
 cadastrarProdutoServices, 
 buscarTodosProdutoServices,
@@ -91,4 +103,5 @@ deleteProdutoServices,
 cadastrarVendaServices,
 buscarVendaIDServices,
 buscarTodasVendaServices,
+atualizarVendaServices,
 };
