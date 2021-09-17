@@ -21,4 +21,6 @@ app.get('/products/:id', productsController.getProductById);
 
 app.put('/products/:id', productsController.updateProduct);
 
+app.delete('/products/:id', productsController.deleteProduct);
+
 app.listen(PORT, () => console.log(`Aplicação rodando na porta ${PORT}`));

@@ -16,6 +16,13 @@ const getAllProducts = async () => {
     return allProducts;
 };
 
+const findByName = async (name) => {
+  const product = await connection()
+    .then((db) => db.collection('products').findOne({ name }));
+
+    return product;
+};
+
 const getProductById = async (id) => {
   if (!ObjectId.isValid(id)) return null;
 
@@ -42,9 +49,11 @@ const updateProduct = async (id, name, quantity) => {
     return true;
 };
 
-const findByName = async (name) => {
+const deleteProduct = async (id) => {
+  if (!ObjectId.isValid(id)) return false;
+
   const product = await connection()
-    .then((db) => db.collection('products').findOne({ name }));
+    .then((db) => db.collection('products').deleteOne({ _id: ObjectId(id) }));
 
     return product;
 };
@@ -55,4 +64,5 @@ module.exports = {
   getProductById,
   findByName,
   updateProduct,
+  deleteProduct,
 };
