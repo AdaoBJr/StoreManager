@@ -42,12 +42,12 @@ app.put('/products/:id', validateName, validateQuantity, updateProductById);
 
 app.delete('/products/:id', deleteProductById);
 
-app.post('/sales', validateProductId, validateProductQuantity, requestNewSales);
+app.delete('/sales/:id', requestDeleteSaleById);
 
 app.get('/sales/:id', requestSaleById);
 
-app.delete('/sales/:id', requestDeleteSaleById);
-
 app.get('/sales', requestSalesList);
+
+app.post('/sales', validateProductId, validateProductQuantity, requestNewSales);
 
 app.listen(PORT, () => console.log(`Online na porta ${PORT}`));

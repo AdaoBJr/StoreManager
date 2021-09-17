@@ -10,10 +10,12 @@ const requestNewSales = async (req, res) => {
   return res.status(200).json(newSalesRequested);
 };
 
-const requestSalesList = async (req, res) => {
-  const salesList = await getSalesList();
+const requestSalesList = async (_req, res) => {
+  const sales = await getSalesList();
 
-  return res.status(200).json({ salesList });
+  console.log(sales);
+
+  return res.status(200).json({ sales });
 };
 
 const requestSaleById = async (req, res) => {
@@ -47,7 +49,7 @@ const requestDeleteSaleById = async (req, res) => {
       code: 'invalid_data',
       message: 'Wrong sale ID format',
     },
-  }); 
+  });
 };
 
 module.exports = {

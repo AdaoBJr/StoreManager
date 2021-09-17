@@ -4,11 +4,7 @@ const connection = require('./connection');
 const insertNewSales = async (products) => {
   const db = await connection();
 
-  console.log(products);
-
-  const { insertedId } = await db.collection('sales').insertOne({ products });
-
-  console.log(insertedId);
+  const { insertedId } = await db.collection('sales').insertOne({ itensSold: products });
 
   return { _id: insertedId, itensSold: products };
 };
@@ -16,7 +12,9 @@ const insertNewSales = async (products) => {
 const getAllSalesList = async () => {
   const db = await connection();
 
-  return db.collection('sales').find().toArray();
+  const salesList = await db.collection('sales').find().toArray();
+
+  return salesList;
 };
 
 const getSaleById = async (id) => {
