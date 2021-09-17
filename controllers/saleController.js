@@ -11,6 +11,12 @@ saleRouter.post('/', async (req, res) => {
   return res.status(status).json(messageResult);
 });
 
+saleRouter.get('/', async (_req, res) => {
+  const { status, messageResult } = await saleService.getAllSales();
+
+  return res.status(status).json(messageResult);
+});
+
 module.exports = {
   saleRouter,
 };
