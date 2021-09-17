@@ -41,10 +41,26 @@ const updateProduct = async ({ id, name, quantity }) => {
   .then(() => ({ _id: id, name, quantity }));
 };
 
+/*
+  Material consultado sobre findOneAndDelete
+  https://docs.mongodb.com/manual/reference/method/db.collection.findOneAndDelete/#delete-a-document
+*/
+const removeProduct = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+
+  return connection.getConnection()
+  .then((db) => db.collection('products')
+    .findOneAndDelete({ _id: ObjectId(id) }))
+  .then((result) => ((!result) ? result.value : result));
+};
+
 module.exports = {
   createProduct,
   productExists,
   getAllProducts,
   getProductById,
   updateProduct,
+  removeProduct,
 };
