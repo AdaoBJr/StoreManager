@@ -60,4 +60,22 @@ const updateSaleById = async (id, productIdAndquantity) => {
   return saleUpdated;
 };
 
-module.exports = { addSale, getAllSales, getSaleById, updateSaleById };
+const deleteSaleById = async (id) => {
+  const { wrongSaleID } = dictionary().messages;
+  const { invalidData } = dictionary().code;
+  const { unprocessableEntity } = dictionary().status;
+
+  if (id.length !== 24 || !await salesModel.getSaleById(id)) {
+    return {
+      err: { message: wrongSaleID, code: invalidData, status: unprocessableEntity },
+    };
+  }
+
+  const sale = salesModel.getSaleById(id);
+
+  await salesModel.deleteSaleById(id);
+
+  return sale;
+};
+
+module.exports = { addSale, getAllSales, getSaleById, updateSaleById, deleteSaleById };
