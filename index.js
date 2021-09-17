@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const productsController = require('./controllers/productsController');
+const salesController = require('./controllers/salesController');
 
 const app = express();
 const DEFAULT_PORT = 3000;
@@ -22,5 +23,7 @@ app.get('/products/:id', productsController.getProductById);
 app.put('/products/:id', productsController.updateProduct);
 
 app.delete('/products/:id', productsController.deleteProduct);
+
+app.post('/sales', salesController.createSale);
 
 app.listen(PORT, () => { console.log('Systems are online :D'); });
