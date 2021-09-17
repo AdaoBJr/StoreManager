@@ -53,7 +53,7 @@ const removeProduct = async (id) => {
   return connection.getConnection()
   .then((db) => db.collection('products')
     .findOneAndDelete({ _id: ObjectId(id) }))
-  .then((result) => ((!result) ? result.value : result));
+  .then((result) => result.value);
 };
 
 module.exports = {
