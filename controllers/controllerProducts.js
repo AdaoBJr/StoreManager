@@ -1,6 +1,6 @@
 const express = require('express');
 const rescue = require('express-rescue');
-const { insertName, auxGetAll, getId } = require('../services/services');
+const { insertName, auxGetAll, getId, auxUpdate } = require('../services/services');
 const { validateProductInput } = require('../middleError/validProduct');
 
 const route = express.Router();
@@ -34,5 +34,17 @@ route.get('/:id', async (req, res, next) => {
   }
   return res.status(200).json(auxGetId);
 });
+
+route.put('/:id', validateProductInput, rescue(async (req, res, _next) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  await auxUpdate(id, name, quantity);
+  const opa = {
+    _id: id,
+    name,
+    quantity,
+  };
+  res.status(200).json(opa);
+}));
 
 module.exports = route;

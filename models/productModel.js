@@ -33,4 +33,13 @@ const getId = async (id) => {
   return result;
 };
 
-module.exports = { getName, insertOne, getAll, getId };
+const updateOne = async (id, name, quantity) => {
+  if (!ObjectId.isValid(id)) {
+    return errorBusines('Wrong id format');
+  }
+  const auxConnection = await connection();
+  await auxConnection.collection('products')
+  .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
+};
+
+module.exports = { getName, insertOne, getAll, getId, updateOne };
