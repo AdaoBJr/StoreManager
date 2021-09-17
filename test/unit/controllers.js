@@ -22,6 +22,7 @@ describe('Controllers de Products', () => {
           },
         ],
       };
+
       describe('a resposta', () => {
         beforeEach(() => {
           response.status = sinon.stub()
@@ -91,18 +92,24 @@ describe('Controllers de Products', () => {
     });
 
     describe('quando ID inválido ou não encontrado', () => {
-      const response = {};
-      const request = { params: { id: '61416' } };
       const error = new Error();
+      const request = { params: { id: '61416' } };
+      const response = {};
+      const next = {};
       error.statusCode = 'invalidIdFormat';
-      let next;
+      const spectedError = {
+        err: {
+          code: 'invalid_data',
+          message: 'Wrong id format',
+        }
+      };
+
       describe('a resposta', () => {
         beforeEach(() => {
           response.status = sinon.stub()
             .returns(response);
           response.json = sinon.stub()
-            .returns(response);
-          next = sinon.stub().returns();
+            .returns();
           sinon.stub(productServices, 'getById').throws(error);
         });
 
@@ -114,6 +121,11 @@ describe('Controllers de Products', () => {
           await mwError(error, request, response, next)
           expect(response.status.calledWith(422)).to.be.equal(true);
         });
+
+        it('retorna o erro esperado', async () => {
+          await mwError(error, request, response, next)
+          expect(response.json.calledWith(spectedError)).to.be.equal(true);
+        });
       })
     });
   });
@@ -122,7 +134,6 @@ describe('Controllers de Products', () => {
     describe('quando a função retorna com sucesso', () => {
       const response = {};
       const request = { params: { id: '614160ab109145ec555b8425' } };
-
       const productMock = {
         _id: "61418aa32e836090602e61a3",
         name: "Pipoca",
@@ -157,9 +168,134 @@ describe('Controllers de Products', () => {
           expect(response.json.calledWith(productMock)).to.be.equal(true);
         });
 
-        it('oQueDeveFazer', async () => {
+        it('o produto cadastrado contém as chabes "name" e "quantity"', async () => {
           await productControllers.createProduct(request, response);
           expect(request.body).to.have.all.keys('name', 'quantity');
+        });
+      });
+    });
+
+    describe('quando ocorre um erro', () => {
+      const error = new Error();
+      const request = {};
+      const response = {};
+      let next = {};
+
+      describe('se "name" for menor que 5 caracteres', () => {
+        const expectError = {
+          err: {
+            code: 'invalid_data',
+            message: '"name" length must be at least 5 characters long',
+          }
+        };
+
+        beforeEach(() => {
+          error.statusCode = 'invalidName';
+          response.status = sinon.stub().returns(response);
+          response.json = sinon.stub().returns();
+          sinon.stub(productServices, 'createProduct').throws(error);
+        });
+
+        afterEach(() => {
+          productServices.createProduct.restore();
+        });
+
+        it('retorna o status 422', async () => {
+          await mwError(error, request, response, next);
+          expect(response.status.calledWith(422)).to.be.equal(true)
+        });
+
+        it('retorna um json com o erro esperado', async () => {
+          await mwError(error, request, response, next);
+          expect(response.json.calledWith(expectError)).to.be.equal(true);
+        });
+      });
+
+      describe('quando "quantity" for menor que 1', () => {
+        const expectError = {
+          err: {
+            code: 'invalid_data',
+            message: '"quantity" must be larger than or equal to 1',
+          }
+        }
+        beforeEach(() => {
+          error.statusCode = 'invalidQuantity';
+          response.status = sinon.stub().returns(response);
+          response.json = sinon.stub().returns();
+          sinon.stub(productServices, 'createProduct').throws(error);
+        });
+
+        afterEach(() => {
+          productServices.createProduct.restore();
+        });
+
+        it('responde com o status 422', async () => {
+          await mwError(error, request, response, next);
+          expect(response.status.calledWith(422)).to.be.equal(true);
+        });
+
+        it('retorna um json com o erro esperado', async () => {
+          await mwError(error, request, response, next);
+          expect(response.json.calledWith(expectError)).to.be.equal(true);
+        });
+      });
+
+      describe('quando "quantity não for do tipo number', () => {
+        const expectError = {
+          err: {
+            code: 'invalid_data',
+            message: '"quantity" must be a number',
+          },
+        };
+        beforeEach(() => {
+          error.statusCode = 'invalidQuantityType';
+          response.status = sinon.stub().returns(response);
+          response.json = sinon.stub().returns();
+          sinon.stub(productServices, 'createProduct').throws(error);
+        });
+
+        afterEach(() => {
+          productServices.createProduct.restore();
+        });
+
+        it('responde com o status 422', async () => {
+          await mwError(error, request, response, next);
+          expect(response.status.calledWith(422)).to.be.equal(true);
+        });
+
+        it('retorna um json com o erro esperado', async () => {
+          await mwError(error, request, response, next);
+          expect(response.json.calledWith(expectError)).to.be.equal(true);
+        });
+      });
+
+      describe('quando já existir um produto com o mesmo nome', () => {
+        const expectError = {
+          err: {
+            code: 'invalid_data',
+            message: 'Product already exists',
+          },
+        };
+
+        beforeEach(() => {
+          error.statusCode = 'alreadyExists';
+          response.status = sinon.stub().returns(response);
+          response.json = sinon.stub().returns();
+          sinon.stub(productServices, 'createProduct').throws(error);
+        });
+
+        afterEach(() => {
+          productServices.createProduct.restore();
+        });
+
+        it('responde com o status 422', async () => {
+          await mwError(error, request, response, next);
+          expect(response.status.calledWith(422)).to.be.equal(true);
+        });
+
+        it('retorna um json com o erro esperado', async () => {
+          await mwError(error, request, response, next);
+          expect(response.json.calledWith(expectError)).to.be.equal(true);
         });
       });
     });
