@@ -10,6 +10,24 @@ const getAll = async (_req, res) => {
   }
 };
 
+const getById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const saleId = await saleService.getByIdService(id);
+    if (saleId === false) {
+      return res.status(StatusCodes.NOT_FOUND).json({ 
+        err: { 
+          code: 'not_found',
+          message: 'Sale not found',
+        },
+      });
+    }
+    return res.status(StatusCodes.OK).json(saleId);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const create = async (req, res) => {
   try {
     const itensSold = req.body;
@@ -23,5 +41,6 @@ const create = async (req, res) => {
 
 module.exports = {
   getAll,
+  getById,
   create,
 };

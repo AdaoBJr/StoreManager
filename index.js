@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 app.get('/products', productController.getAll);
 app.get('/sales', saleController.getAll);
 app.get('/products/:id', productController.getById);
+app.get('/sales/:id', saleController.getById);
 
 app.post('/products', productExists,
 validateName,
