@@ -1,14 +1,11 @@
 const productsModel = require('../models/productsModel');
 const service = require('../services/productsService');
 
-const getAllProducts = async (_req, res) => {
-    try {
-        const products = await productsModel.getAll();
-        return res.status(200).json(products);
-    } catch (error) {
-        return res.status(422).json({ message: error.message });
-    }
-};
+// Tentando refatorar com .then and catch!!
+
+const getAllProducts = (_req, res) => productsModel.getAll()
+    .then((products) => res.status(200).json(products))
+    .catch((error) => res.status(422).json({ message: error.message }));
 
 const getProductById = async (req, res) => {
     try {
@@ -18,6 +15,7 @@ const getProductById = async (req, res) => {
         if (result.err) {
             return res.status(422).json(result);
         }
+    
         return res.status(200).json(result);
     } catch (error) {
         return res.status(422).json({ message: error.message });
@@ -40,13 +38,11 @@ const createProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
+    const { name, quantity } = req.body;
+    const { id } = req.params;
     try {
-        const { name, quantity } = req.body;
-        const { id } = req.params;
-
         const result = await service.updateProduct({ id, name, quantity });
         if (result.err) { return res.status(422).json(result); }
-
         return res.status(200).json(result);
     } catch (error) {
         return res.status(500).json({ message: error.message });
