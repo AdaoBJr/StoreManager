@@ -2,7 +2,8 @@
 const Products = require('../models/Products');
 const { isNameValid,
   isQuantityValid,
-  isQuantityValidTwo } = require('../schema/validations');
+  isQuantityValidTwo,
+} = require('../schema/validations');
 
 const create = async (name, quantity) => {
   const existingProduct = await Products.findByName(name);
@@ -25,6 +26,28 @@ const create = async (name, quantity) => {
   return Products.create(name, quantity);
 };
 
+const getAll = async () => Products.getAll();
+
+const findById = async (id) => {
+  const product = await Products.findById(id);
+  // const productExists = isProductExists(product);
+
+  // if (productExists.err) return productExists;
+
+  if (!product) {
+    return {
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    };
+  }
+
+  return Products.findById(id);
+};
+
 module.exports = {
   create,
+  getAll,
+  findById,
 };

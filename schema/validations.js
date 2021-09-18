@@ -55,8 +55,22 @@ const isQuantityValidTwo = (quantity) => {
   return {};
 };
 
+// const isProductExists = (product) => {
+//   if (!product) {
+//     return {
+//       err: {
+//         code: 'invalid_data',
+//         message: 'Wrong id format',
+//       },
+//     };
+//   }
+
+//   return {};
+// };
+
 module.exports = {
   isNameValid,
   isQuantityValid,
   isQuantityValidTwo,
+  // isProductExists,
 };

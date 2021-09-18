@@ -14,6 +14,9 @@ app.get('/', (_request, response) => {
 
 app.post('/products', Products.create);
 
+app.get('/products/:id', Products.findById);
+app.get('/products', Products.getAll);
+
 // const { PORT } = process.env;
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
