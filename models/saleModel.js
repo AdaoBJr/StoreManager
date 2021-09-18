@@ -31,9 +31,25 @@ const updateSale = async ({ id, itensSold }) => {
   .then(() => ({ _id: id, itensSold }));
 };
 
+/*
+  Material consultado sobre findOneAndDelete
+  https://docs.mongodb.com/manual/reference/method/db.collection.findOneAndDelete/#delete-a-document
+*/
+const removeSale = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+
+  return connection.getConnection()
+  .then((db) => db.collection('sales')
+    .findOneAndDelete({ _id: ObjectId(id) }))
+  .then((result) => result.value);
+};
+
 module.exports = {
   createSale,
   getAllSales,
   getSaleById,
   updateSale,
+  removeSale,
 };
