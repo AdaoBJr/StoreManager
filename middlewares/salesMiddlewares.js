@@ -2,7 +2,7 @@
 
 const { ObjectId } = require('mongodb');
 const { validateQuantitySchema } = require('../schemas/productSchema');
-const ProductsModel = require('../models/ProductsModel');
+const SalesModel = require('../models/SalesModel');
 
 // Comments: Valida se o ID (MongoDB) da VENDA é válido 
 const validateIdSales = async (req, res, next) => {
@@ -37,42 +37,25 @@ const validateProductSaleQuantity = async (req, res, next) => {
   next();
 };
 
-// Middleware inutilizado
-const validateIdProductExists = async (req, res, next) => {
-  const saleItems = req.body;
+// Comments: Valida se a venda existe na base para ser deletada 
+const validateSaleExistsById = async (req, res, next) => {
+  const { id } = req.params;
 
-  const products = await ProductsModel.getProducts();
-
-  for (let index = 0; index < saleItems.length; index += 1) {
-    const element = saleItems[index];
-
-    const containId = products.find((product) => product.id === element.productId);
-    console.log(containId);
-
-    if (containId) {
-      return res.status(422).json(
-        { err:
-          { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
-        },
-      );
-    }
-
-    // const product = ProductsModel.getProductById(element.productId);
-    
-    // if (!product) {
-    //   return res.status(422).json(
-    //     { err:
-    //       { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
-    //     },
-    //   );
-    // }
-  }
+  const saleExists = await SalesModel.getSalesById(id);
   
+  if (!saleExists) {
+    return res.status(422).json(
+      { err:
+        { code: 'invalid_data', message: 'Wrong sale ID format' },
+      },
+    ); 
+  }
+
   next();
 };
 
 module.exports = {
   validateIdSales,
-  validateIdProductExists,
   validateProductSaleQuantity,
+  validateSaleExistsById,
 };

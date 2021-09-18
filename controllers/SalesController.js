@@ -2,6 +2,7 @@ const express = require('express');
 const {
   validateProductSaleQuantity,
   validateIdSales,
+  validateSaleExistsById,
 } = require('../middlewares/salesMiddlewares');
 
 const SalesService = require('../services/SalesService');
@@ -49,15 +50,15 @@ salesRouter.put('/:id', validateIdSales, validateProductSaleQuantity, async (req
 });
 
 // ------------------------------------------------------------------
-// Requisito 8: CONTROLLER responsável por receber a requisição de deletar de produtos por ID, fazer chamada ao SERVICE, e retornar msg de confirmação
+// Requisito 8: CONTROLLER responsável por receber a requisição de deletar a venda por ID, fazer chamada ao SERVICE, e retornar msg de confirmação
 
-// productRouter.delete('/:id', validateId, async (req, res) => {
-//   const { id } = req.params;
+salesRouter.delete('/:id', validateIdSales, validateSaleExistsById, async (req, res) => {
+  const { id } = req.params;
 
-//   const product = await ProductsService.deleteProductById(id);
+  const sale = await SalesService.deleteSaleById(id);
 
-//   return res.status(200).json(product);
-// });
+  return res.status(200).json(sale);
+});
 
 // ------------------------------------------------------------------
 
