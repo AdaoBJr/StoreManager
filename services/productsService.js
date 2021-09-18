@@ -37,7 +37,9 @@ const createProduct = async ({ name, quantity }) => {
   return productModel.create({ name, quantity });
 };
 
-const getProductById = (id) => {
+const getProductById = async (id) => {
+  const productExists = await productModel.productById(id);
+  if (!productExists) return wrongIdFormat;
   if (!ObjectId.isValid(id)) return wrongIdFormat;
   return productModel.productById(id);
 };

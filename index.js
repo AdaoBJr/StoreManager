@@ -16,4 +16,4 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.listen(3000, console.log(`Api na porta ${PORT}`));
+app.listen(PORT, console.log(`Api na porta ${PORT}`));
