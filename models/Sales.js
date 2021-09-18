@@ -27,6 +27,16 @@ const getSaleById = async (id) => {
   return db.collection('sales').findOne(ObjectId(id));
 };
 
+const update = async (id, productId, quantity) => {
+  const db = await connection();
+
+  const attSale = await db.collection('sales').findOne({ _id: ObjectId(id) });
+
+  console.log(attSale);
+
+  return attSale;
+};
+
 const deleteSaleById = async (id) => {
   if (!ObjectId.isValid(id)) {
     return null;
@@ -46,4 +56,5 @@ module.exports = {
   getSaleById,
   deleteSaleById,
   insertNewSales,
+  update,
 };

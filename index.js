@@ -13,6 +13,7 @@ const {
   requestSaleById,
   requestDeleteSaleById,
   requestNewSales,
+  requestUpdateSale,
 } = require('./Controllers/Sales');
 
 const {
@@ -41,6 +42,8 @@ app.post('/products', validateName, validateQuantity, addProduct);
 app.put('/products/:id', validateName, validateQuantity, updateProductById);
 
 app.delete('/products/:id', deleteProductById);
+
+app.put('/sales/:id', validateProductId, validateProductQuantity, requestUpdateSale);
 
 app.delete('/sales/:id', requestDeleteSaleById);
 
