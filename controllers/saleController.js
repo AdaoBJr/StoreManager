@@ -18,7 +18,7 @@ saleRouter.get('/', async (_req, res) => {
 });
 
 saleRouter.get('/:id', async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
 
   const { status, messageResult } = await saleService.getSaleById(id);
 
