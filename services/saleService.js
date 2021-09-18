@@ -79,9 +79,31 @@ const updateSale = async ({ id, itensSold }) => {
   };
 };
 
+const removeSale = async (id) => {
+  const sale = await saleModel.removeSale(id);
+
+  if (!sale) {
+    return {
+      status: 422,
+      messageResult: {
+        err: {
+          code: 'invalid_data',
+          message: 'Wrong sale ID format', 
+        },
+      },
+    };
+  }
+
+  return {
+    status: 200, 
+    messageResult: sale,
+  };
+};
+
 module.exports = {
   createSale,
   getAllSales,
   getSaleById,
   updateSale,
+  removeSale,
 };
