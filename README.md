@@ -96,10 +96,10 @@ Você deve utilizar o banco MongoDB para a gestão de dados. Além disso, a API 
 - Para **todos os endpoints** garanta que:
 
   - Caso o recurso não seja encontrado, sua API retorne o status HTTP adequado com o body `{ message: '<recurso> não encontrado' }`.
-  - Em caso de erro, sua API retorne o status HTTP adequado com o body `{ err: { message: <mensagem de erro>, code: <código do erro> } }`.
+  - Em caso de erro, sua API retorne o status HTTP adequado com o body `{ error: { message: <mensagem de erro>, code: <código do erro> } }`.
     - O código do erro deve ser determinado por você e deve seguir o mesmo padrão para toda a aplicação. Por exemplo: `'not_found'`, `'invalid_data'` e afins.
-  - Em caso de dados inválidos, sua API retorne o status HTTP adequado, com o body `{ err: { message: 'Dados inválidos', code: <código do erro> } }`.
-  - Todos os retornos de erro devem seguir o mesmo formato. Para erros que requerem dados adicionais (por exemplo, para informar quais campos estão incorretos) utilize a propriedade `data` dentro do objeto `err`.
+  - Em caso de dados inválidos, sua API retorne o status HTTP adequado, com o body `{ error: { message: 'Dados inválidos', code: <código do erro> } }`.
+  - Todos os retornos de erro devem seguir o mesmo formato. Para erros que requerem dados adicionais (por exemplo, para informar quais campos estão incorretos) utilize a propriedade `data` dentro do objeto `error`.
   - Para gerar os objetos de erro personalizados, você pode utilizar uma biblioteca de erros, como o [`boom`](https://www.npmjs.com/package/@hapi/boom).
 
 - Você pode utilizar middlewares e objetos de erro personalizados para que não tenha que repetir a lógica de tratamento de erro em vários lugares. Não se esqueça também do [express-rescue](https://www.npmjs.com/package/express-rescue), ele pode facilitar muito o trabalho de tratar erros.
@@ -112,8 +112,8 @@ Você deve utilizar o banco MongoDB para a gestão de dados. Além disso, a API 
 
 ## Data de Entrega
 
-  - Serão `3` dias de projeto.
-  - Data de entrega para avaliação final do projeto: `21/09/2021 - 14:00h`.
+  - Serão `X` dias de projeto.
+  - Data de entrega para avaliação final do projeto: `DD/MM/YYYY - 14:00h`.
 
 ---
 
@@ -123,9 +123,9 @@ Você deve utilizar o banco MongoDB para a gestão de dados. Além disso, a API 
 
 1. Clone o repositório
 
-- `git clone https://github.com/tryber/sd-010-b-store-manager.git`.
+- `git clone https://github.com/tryber/sd-010-store-manager.git`.
 - Entre na pasta do repositório que você acabou de clonar:
-  - `cd sd-010-b-store-manager`
+  - `cd sd-010-store-manager`
 
 2. Instale as dependências [**Caso existam**]
 
@@ -141,7 +141,7 @@ Atenção :warning: Não rode o comando npm audit fix! Ele atualiza várias depe
   - Exemplo: `git checkout master`
 - Agora crie uma branch à qual você vai submeter os `commits` do seu projeto
   - Você deve criar uma branch no seguinte formato: `nome-de-usuario-nome-do-projeto`
-  - Exemplo: `git checkout -b joaozinho-sd-010-b-store-manager`
+  - Exemplo: `git checkout -b joaozinho-sd-08-store-manager`
 
 4. Adicione as mudanças ao _stage_ do Git e faça um `commit`
 
@@ -158,17 +158,17 @@ Atenção :warning: Não rode o comando npm audit fix! Ele atualiza várias depe
 
 5. Adicione a sua branch com o novo `commit` ao repositório remoto
 
-- Usando o exemplo anterior: `git push -u origin joaozinho-sd-010-b-store-manager`
+- Usando o exemplo anterior: `git push -u origin joaozinho-sd-08-store-manager`
 
 6. Crie um novo `Pull Request` _(PR)_
 
-- Vá até a página de _Pull Requests_ do [repositório no GitHub](https://github.com/tryber/sd-010-b-store-manager/pulls)
+- Vá até a página de _Pull Requests_ do [repositório no GitHub](https://github.com/tryber/sd-08-store-manager/pulls)
 - Clique no botão verde _"New pull request"_
 - Clique na caixa de seleção _"Compare"_ e escolha a sua branch **com atenção**
 - Clique no botão verde _"Create pull request"_
 - Adicione uma descrição para o _Pull Request_ e clique no botão verde _"Create pull request"_
 - **Não se preocupe em preencher mais nada por enquanto!**
-- Volte até a [página de _Pull Requests_ do repositório](https://github.com/tryber/sd-010-b-store-manager/pulls) e confira que o seu _Pull Request_ está criado
+- Volte até a [página de _Pull Requests_ do repositório](https://github.com/tryber/sd-08-store-manager/pulls) e confira que o seu _Pull Request_ está criado
 
 ---
 
@@ -322,7 +322,7 @@ Na saída da execução dos testes, você verá um <img src="./public/orange-cir
 
 Uma estratégia é pular todos os testes no início e ir implementando um teste de cada vez, removendo dele a função `skip`.
 
-⚠️ Lembre-se de não entregar o projeto com nenhum teste ignorado. Testes ignorados serão tratados como testes falhando.
+⚠️ Lembre-se de não entregar o projeto com nenhum teste ignorado. Testes ignoradados serão tratados como testes falhando.
 
 ## Lista de requisitos
 
@@ -353,7 +353,7 @@ O retorno da API de um produto cadastrado com sucesso deverá ser:
 
 #### Requisição de Cadastro de Produtos:
 
-O projeto deve rodar na porta `http://localhost:3000`
+O projeto deve rodar na porta `http://localhost/3000`
 
 ![Criar produtos](./public/criarProdutos.png)
 
@@ -488,7 +488,7 @@ O projeto deve rodar na porta `http://localhost:3000`
 
 **O que será verificado:**
 
-- Será validado que é possível deletar um produto com sucesso
+- Será validado que não é possível deletar um produto com sucesso
 
   - Se o produto deletado com sucesso, o resultado retornado deverá ser conforme exibido abaixo, com status http `200`:
 
@@ -659,7 +659,7 @@ O retorno de uma venda cadastrada com sucesso deverá ser:
 
 - Será validado que é possível deletar uma venda com sucesso
 
-  - Se a venda foi deletada sucesso, o resultado retornado deverá ser conforme exibido abaixo, com status http `200` e será verificado depois que a venda não existe, com um GET nesse `id`, e este deverá retornar status http `404`, como é validado no requisito 6:
+  - Se a venda foi deletada sucesso, o resultado retornado deverá ser conforme exibido abaixo, com status http `200` e será verificado depois que a venda não existe e deverar retornar http `404`:
 
 ![Deletar uma venda com sucesso](./public/deletarumavendacomsucesso.png)
 
@@ -754,6 +754,6 @@ Use o material que você já viu sobre [Code Review](https://course.betrybe.com/
 
 Ao finalizar e submeter o projeto, não se esqueça de avaliar sua experiência preenchendo o formulário. Leva menos de 3 minutos!
 
-Link: [FORMULÁRIO DE AVALIAÇÃO DE PROJETO](https://bit.ly/3ta7hA0)
+Link: [FORMULÁRIO DE AVALIAÇÃO DE PROJETO](https://be-trybe.typeform.com/to/ZTeR4IbH)
 
 O avaliador automático não necessariamente avalia seu projeto na ordem em que os requisitos aparecem no readme. Isso acontece para deixar o processo de avaliação mais rápido. Então, não se assuste se isso acontecer, ok?
