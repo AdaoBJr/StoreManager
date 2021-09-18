@@ -25,6 +25,16 @@ saleRouter.get('/:id', async (req, res) => {
   return res.status(status).json(messageResult);
 });
 
+saleRouter.put('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  const itensSold = req.body;
+
+  const { status, messageResult } = await saleService.updateSale({ id, itensSold });
+
+  return res.status(status).json(messageResult);
+});
+
 module.exports = {
   saleRouter,
 };
