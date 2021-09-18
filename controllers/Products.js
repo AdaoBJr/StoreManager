@@ -28,8 +28,19 @@ const findById = rescue(async (req, res, _next) => {
   return res.status(200).json(product);
 });
 
+const update = rescue(async (req, res, _next) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  const updateProduct = await Products.update(id, name, quantity);
+
+  if (typeof updateProduct === 'object') return res.status(422).json(updateProduct);
+
+  return res.status(200).json(updateProduct);
+});
+
 module.exports = {
   create,
   getAll,
   findById,
+  update,
 };

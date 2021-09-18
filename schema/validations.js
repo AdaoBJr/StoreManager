@@ -15,12 +15,6 @@ const isNameValid = (name) => {
   return {};
 };
 
-// const isNameValid = (name) => {
-//   if (name.length < 5 && typeof name !== 'string') return false;
-
-//   return true;
-// };
-
 const isQuantityValid = (quantity) => {
   if (quantity < 0) {
     return {
@@ -55,22 +49,8 @@ const isQuantityValidTwo = (quantity) => {
   return {};
 };
 
-// const isProductExists = (product) => {
-//   if (!product) {
-//     return {
-//       err: {
-//         code: 'invalid_data',
-//         message: 'Wrong id format',
-//       },
-//     };
-//   }
-
-//   return {};
-// };
-
 module.exports = {
   isNameValid,
   isQuantityValid,
   isQuantityValidTwo,
-  // isProductExists,
 };

@@ -46,8 +46,21 @@ const findById = async (id) => {
   return Products.findById(id);
 };
 
+const update = async (id, name, quantity) => {
+  const validateName = isNameValid(name);
+  const validateQuantity = isQuantityValid(quantity);
+  const valivalidateQuantityTwo = isQuantityValidTwo(quantity);
+
+  if (validateName.err) return validateName;
+  if (validateQuantity.err) return validateQuantity;
+  if (valivalidateQuantityTwo.err) return valivalidateQuantityTwo;
+
+  return Products.update(id, name, quantity);
+};
+
 module.exports = {
   create,
   getAll,
   findById,
+  update,
 };

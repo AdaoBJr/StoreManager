@@ -17,7 +17,7 @@ app.post('/products', Products.create);
 app.get('/products/:id', Products.findById);
 app.get('/products', Products.getAll);
 
-app.put('/products/:id');
+app.put('/products/:id', Products.update);
 
 // const { PORT } = process.env;
 const PORT = 3000;
