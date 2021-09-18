@@ -3,7 +3,7 @@ const SaleModel = require('../models/SalesModel');
 // const ProductModel = require('../models/ProductModel');
 const {
   validateSales,
-  // validateSaleId,
+  validateSaleId,
 } = require('../middlewares/validations');
 
 const create = async (body) => {
@@ -19,6 +19,21 @@ const create = async (body) => {
   return createSale;
 };
 
+// const getAll = async () => {
+//   await SaleModel.getAll('sales');
+// };
+
+const findById = async (id) => {
+  const isIdValid = validateSaleId(id);
+  if (isIdValid.err) return isIdValid;
+  
+  const sale = await SaleModel.findById(id);
+  if (!sale) return { err: { code: 'not_found', message: 'Sale not found' } };
+  return sale;
+};
+
 module.exports = {
   create,
+  // getAll,
+  findById,
 };

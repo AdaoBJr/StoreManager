@@ -33,19 +33,12 @@ const validateSales = (quantity) => {
   }
 
   if (typeof quantity !== 'number') {
-    return { err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } };
+    return { err: {
+      code: 'invalid_data',
+      message: 'Wrong product ID or invalid quantity' } };
   }
   return true;
 };
-
-// const validateSales = (quantity) => {
-//   if (!quantity || quantity <= 0 || typeof quantity !== 'number') {
-//     return { err: {
-//       code: 'invalid_data',
-//       message: 'Wrong product ID or invalid quantity' } }; 
-//   }
-//   return true;
-// };
 
 const validateId = (id) => {
   if (!ObjectId.isValid(id)) {
