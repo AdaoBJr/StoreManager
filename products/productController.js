@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { alreadyExists, invalidIdFormat } = require('./error/errors');
+const { alreadyExists, invalidIdFormat, invalidQuantityType } = require('./error/errors');
 const model = require('./productModels');
 const service = require('./productServices');
 
@@ -34,22 +34,15 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
   try {
     const { name, quantity } = req.body;
-
-    if (typeof name !== 'string' || Number.isInteger(quantity) !== true) {
+    if (Number.isInteger(quantity) !== true) {
       return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
-        .json({ message: 'Dado inválido' });
+        .json({ err: { code: invalidQuantityType.code, message: invalidQuantityType.message } });
     }
-
     const result = await service.createProduct(name, quantity);
-
     if (result === null) {
       return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
-        .json({ err: {
-          code: alreadyExists.code,
-          message: alreadyExists.message,
-        } });
+        .json({ err: { code: alreadyExists.code, message: alreadyExists.message } });
     }
-
     return res.status(StatusCodes.CREATED).json(result);
   } catch (err) {
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(err);

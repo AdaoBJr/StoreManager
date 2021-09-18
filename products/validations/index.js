@@ -6,7 +6,7 @@ const {
   } = require('../error/errors');
 
 const validateNameLength = (name) => {
-  if (name.length < 5) {
+  if (name.length < 5 || typeof name !== 'string') {
     const error = new Error();
     error.err = {
       code: invalidName.code,
