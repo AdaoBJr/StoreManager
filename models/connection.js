@@ -1,7 +1,8 @@
 const mongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
 
-const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
+const { MONGO_DB_URL } = process.env;
+// || 'mongodb://mongodb:27017/StoreManager'
 const DB_NAME = 'StoreManager';
 
 const connection = () => mongoClient
