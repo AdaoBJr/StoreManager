@@ -1,12 +1,12 @@
 const { StatusCodes } = require('http-status-codes');
-const { alreadyExists } = require('./error/errors');
+const { alreadyExists, invalidIdFormat } = require('./error/errors');
 const model = require('./productModels');
 const service = require('./productServices');
 
 const getAllProducts = async (_req, res) => {
   try {
     const products = await model.getAllProducts();
-    return res.status(StatusCodes.OK).json(products);
+    return res.status(StatusCodes.OK).json({ products });
   } catch (err) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
   }
@@ -18,8 +18,11 @@ const getProductById = async (req, res) => {
     const result = await service.getProductById(id);
 
     if (result === null) {
-      return res.status(StatusCodes.BAD_REQUEST)
-        .json({ message: 'não cadastrado' });
+      return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
+        .json({ err: {
+          code: invalidIdFormat.code,
+          message: invalidIdFormat.message,
+        } });
     }
 
     return res.status(StatusCodes.OK).json(result);
