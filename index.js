@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const productsController = require('./controllers/productsController');
+const salesController = require('./controllers/salesController');
 
 const app = express();
 const PORT = 3000;
@@ -22,5 +23,8 @@ app.get('/products/:id', productsController.getProductById);
 app.put('/products/:id', productsController.updateProduct);
 
 app.delete('/products/:id', productsController.deleteProduct);
+
+/* ===Vendas=== */
+app.post('/sales', salesController.registerSales);
 
 app.listen(PORT, () => console.log(`Aplicação rodando na porta ${PORT}`));
