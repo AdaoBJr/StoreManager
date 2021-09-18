@@ -27,4 +27,8 @@ app.delete('/products/:id', productsController.deleteProduct);
 /* ===Vendas=== */
 app.post('/sales', salesController.registerSales);
 
+app.get('/sales', salesController.getAllSales);
+
+app.get('/sales/:id', salesController.getSalesId);
+
 app.listen(PORT, () => console.log(`Aplicação rodando na porta ${PORT}`));
