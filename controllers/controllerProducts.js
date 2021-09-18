@@ -1,8 +1,8 @@
 const express = require('express');
 const rescue = require('express-rescue');
 const { insertName,
-  auxGetAll, auxGetId, updateOne, auxDeleteOne } = require('../services/services');
-const { validateProductInput } = require('../middleError/validProduct');
+  auxGetAll, auxGetId, updateOne, auxDeleteOne } = require('../services/servicesProducts');
+const { validateProductInput } = require('../validate/validateProduct');
 
 const route = express.Router();
 
