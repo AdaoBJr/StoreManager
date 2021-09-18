@@ -26,7 +26,8 @@ const createSale = async ({ itensSold }) => {
 
 const getAllSales = async () => {
   const sales = await saleModel.getAllSales();
-  
+  // console.log(sales);
+
   return {
     status: 200,
     messageResult: {
@@ -37,7 +38,7 @@ const getAllSales = async () => {
 
 const getSaleById = async (id) => {
   const sale = await saleModel.getSaleById(id);
-
+  // console.log(`sale: ${sale}`);
   if (!sale) {
     return {
       status: 404,
