@@ -34,7 +34,8 @@ const update = async ({ id, saleArray: { productId, quantity } }) => {
 
 const deleteById = async (id) => {
   const db = await mongoConnection.getConnection();
-  await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+  const sale = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+  return sale;
 };
 
 module.exports = {

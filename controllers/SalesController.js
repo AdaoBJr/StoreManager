@@ -35,10 +35,9 @@ const update = async (req, res) => {
 const deleteById = async (req, res) => {
   const { id } = req.params;
   const deletedSale = await SaleService.deleteById(id);
-  console.log(deletedSale);
   if (deletedSale.err) return res.status(422).json(deletedSale);
-
-  return res.status(200).json(deletedSale);
+  
+  return res.status(200).json();
 };
 
 module.exports = {

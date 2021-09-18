@@ -44,10 +44,11 @@ const deleteById = async (id) => {
     return { err: { code: 'invalid_data', message: 'Wrong sale ID format' } }; 
 }
   const { _id } = await findById(id);
-  if (_id) return { err: { code: 'not_found', message: 'Sale not found' } };
+  if (!_id) return { err: { code: 'not_found', message: 'Sale not found' } };
   await SaleModel.deleteById(id);
-// criação do update req 9 
-  return { _id };
+  // console.log(sale);
+  // return sale;
+  return _id;
 };
 
 module.exports = {
