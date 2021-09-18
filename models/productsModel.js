@@ -1,6 +1,19 @@
+const { ObjectId } = require('bson');
 const getConnection = require('./connection');
 
 const collection = 'products';
+
+async function getAll() {
+  const db = await getConnection();
+  const products = await db.collection(collection).find({}).toArray();
+  return products;
+}
+
+async function getById({ id }) {
+  const db = await getConnection();
+  const product = await db.collection(collection).findOne({ _id: ObjectId(id) });
+  return product;
+}
 
 async function getByName({ name }) {
   const db = await getConnection();
@@ -17,6 +30,8 @@ async function create({ name, quantity }) {
 }
 
 module.exports = {
+  getAll,
+  getById,
   create,
   getByName,
 };

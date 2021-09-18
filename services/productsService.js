@@ -1,6 +1,21 @@
 const productsModel = require('../models/productsModel');
 const validateCreate = require('../validations/products/validateCreate');
 
+async function getAll() {
+  const products = await productsModel.getAll();
+  return products;
+}
+
+async function getById({ id }) {
+  if (id.length < 24) return 'wrong id';
+
+  const product = await productsModel.getById({ id });
+
+  if (!product) return 'wrong id';
+  
+  return product;
+}
+
 async function create({ name, quantity }) {
   const validateName = await validateCreate.validateCreateName(name);
   if (validateName) return validateName;
@@ -13,5 +28,7 @@ async function create({ name, quantity }) {
 }
 
 module.exports = {
+  getAll,
+  getById,
   create,
 };

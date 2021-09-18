@@ -10,6 +10,10 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
+app.get('/products', productsController.getAll);
+
+app.get('/products/:id', productsController.getById);
+
 app.post('/products', productsController.create);
 
 app.listen('3000', () => console.log('Running server on port 3000'));

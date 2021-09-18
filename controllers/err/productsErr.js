@@ -22,9 +22,16 @@ const errQuantityNotNumber = {
   },
 };
 
+const errWrongId = {
+  err: {
+    code: 'invalid_data', message: 'Wrong id format',
+  },
+};
+
 module.exports = {
   errNameLength,
   errExists,
   errQuantityLength,
   errQuantityNotNumber,
+  errWrongId,
 };
