@@ -22,8 +22,25 @@ const getAll = async () => {
   return { sales: allSales };
 };
 
+const update = async ({ id, saleArray: { productId, quantity } }) => {
+  const db = await mongoConnection.getConnection();
+  await db.collection('sales')
+    .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: [productId, quantity] } });
+  return {
+    _id: id,
+    itensSold: [{ productId, quantity }],
+  };
+};
+
+const deleteById = async (id) => {
+  const db = await mongoConnection.getConnection();
+  await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+};
+
 module.exports = {
   create,
   getAll,
   findById,
+  update,
+  deleteById,
 };

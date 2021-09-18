@@ -1,4 +1,4 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const SaleModel = require('../models/SalesModel');
 // const ProductModel = require('../models/ProductModel');
 const {
@@ -32,8 +32,28 @@ const findById = async (id) => {
   return sale;
 };
 
+const update = async ({ id, saleArray }) => {
+  const isQuantityValid = validateSales(saleArray.quantity);
+  if (isQuantityValid.err) return isQuantityValid;
+  const updatedSale = await SaleModel.update({ id, saleArray });
+  return updatedSale;
+};
+
+const deleteById = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return { err: { code: 'invalid_data', message: 'Wrong sale ID format' } }; 
+}
+  const { _id } = await findById(id);
+  if (_id) return { err: { code: 'not_found', message: 'Sale not found' } };
+  await SaleModel.deleteById(id);
+// criação do update req 9 
+  return { _id };
+};
+
 module.exports = {
   create,
   // getAll,
   findById,
+  update,
+  deleteById,
 };

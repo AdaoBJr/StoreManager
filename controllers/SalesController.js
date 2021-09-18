@@ -12,7 +12,6 @@ const create = async (req, res) => {
 
 const getAll = async (_req, res) => {
   const allSales = await SaleModel.getAll();
-  console.log(allSales);
   return res.status(200).json(allSales);
 };
 
@@ -23,8 +22,29 @@ const findById = async (req, res) => {
   return res.status(200).json(sale);
 };
 
+const update = async (req, res) => {
+  const { id } = req.params;
+  const [saleArray] = req.body;
+  const sale = await SaleService.update({ id, saleArray });
+
+  if (sale.err) return res.status(422).json(sale);
+
+  return res.status(200).json(sale);
+};
+
+const deleteById = async (req, res) => {
+  const { id } = req.params;
+  const deletedSale = await SaleService.deleteById(id);
+  console.log(deletedSale);
+  if (deletedSale.err) return res.status(422).json(deletedSale);
+
+  return res.status(200).json(deletedSale);
+};
+
 module.exports = {
   create,
   getAll,
   findById,
+  update,
+  deleteById,
 };

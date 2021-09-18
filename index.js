@@ -11,7 +11,10 @@ const PORT = process.env.PORT || 3000;
 app.put('/products/:id', ProductController.update);
 app.get('/products/:id', ProductController.findById);
 app.delete('/products/:id', ProductController.deleteById);
+
 app.get('/sales/:id', SalesController.findById);
+app.put('/sales/:id', SalesController.update);
+app.delete('/sales/:id', SalesController.deleteById);
 
 app.get('/products', ProductController.getAll);
 app.post('/products', ProductController.create);
