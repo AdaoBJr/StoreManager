@@ -17,9 +17,23 @@ const getSaleById = async (id) => {
     .then((db) => db.collection('sales').findOne({ _id: ObjectId(id) }));
 };
 
-// getSaleById('61450d532ce773388599d387').then((result) => console.log(result));
+const updateSale = async ({ id, itensSold }) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+
+  return connection.getConnection()
+  .then((db) => db.collection('sales')
+    .updateOne(
+      { _id: ObjectId(id) },
+      { $set: { itensSold } },
+    ))
+  .then(() => ({ _id: id, itensSold }));
+};
+
 module.exports = {
   createSale,
   getAllSales,
   getSaleById,
+  updateSale,
 };
