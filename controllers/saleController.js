@@ -35,6 +35,14 @@ saleRouter.put('/:id', async (req, res) => {
   return res.status(status).json(messageResult);
 });
 
+saleRouter.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  const { status, messageResult } = await saleService.removeSale(id);
+
+  return res.status(status).json(messageResult);
+});
+
 module.exports = {
   saleRouter,
 };
