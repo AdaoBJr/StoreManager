@@ -1,19 +1,14 @@
 const { ObjectId } = require('mongodb');
 const mongoConnection = require('./connection');
 
-const create = async ({ name, quantity }) => {
+const create = async (name, quantity) => {
   const productsCollection = await mongoConnection.getConnection()
     .then((db) => db.collection('products'));
 
-    const { insertedId: id } = await productsCollection
-    .insertOne({ name, quantity });
-
-    return {
-      id,
-      name,
-      quantity,
-    };
-  };
+  const { insertedId: id } = await productsCollection
+  .insertOne({ name, quantity });
+  return { id, name, quantity };
+};
 
 const findByName = async (name) => {
   const productsCollection = await mongoConnection.getConnection()
@@ -26,11 +21,11 @@ const findByName = async (name) => {
 
 const getAll = async () => {
   const db = await mongoConnection.getConnection();
-  const products = await db.collection('products')
+  const resultProducts = await db.collection('products')
     .find()
     .toArray();
 
-  return products;
+  return { products: [...resultProducts] };
 };
 
 const findById = async (id) => {
@@ -54,18 +49,15 @@ const update = async (id, name, quantity) => {
       .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
 
     return {
-      _id: id,
-      name,
-      quantity,
-    };
+      _id: id, name, quantity };
   };
 
   const deleteById = async (id) => {
     const productsCollection = await mongoConnection.getConnection()
       .then((db) => db.collection('products'));
   
-      await productsCollection
-        .deleteOne({ _id: ObjectId(id) });
+      await productsCollection.deleteOne({ _id: ObjectId(id) });
+      return { _id: id };
     };
 
 module.exports = {

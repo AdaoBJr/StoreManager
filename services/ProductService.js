@@ -1,122 +1,58 @@
 const ProductModel = require('../models/ProductModel');
+const {
+  validateProductName,
+  validateProductQuantity,
+  validateId,
+} = require('../middlewares/validations');
 
-const CREATED = 201;
+const create = async (name, quantity) => {
+  const isProductNameValid = validateProductName(name);
+  const isQuantityValid = validateProductQuantity(quantity);
+  
+  if (isProductNameValid.err) return isProductNameValid;
+  if (isQuantityValid.err) return isQuantityValid;
 
-const nameRequired = {
-  code: 'invalid_data',
-  message: 'name is required',
+  const searchProduct = await ProductModel.findByName(name);
+  if (searchProduct) return { err: { code: 'invalid_data', message: 'Product already exists' } };
+
+  const createdProduct = await ProductModel.create(name, quantity);
+  return createdProduct;
 };
 
-const shortName = {
-  code: 'invalid_data',
-  message: '"name" length must be at least 5 characters long',
+const getAll = async () => {
+  const products = await ProductModel.getAll('products');
+  return products;
 };
 
-const lowQuantity = {
-  code: 'invalid_data',
-  message: '"quantity" must be larger than or equal to 1',
-};
+const findById = async (id) => {
+  const idValid = validateId(id);
+  if (idValid.err) return idValid;
 
-const quantityNotNumber = {
-  code: 'invalid_data',
-  message: '"quantity" must be a number',
-};
-
-const emptyQuantity = {
-  code: 'invalid_data',
-  message: '"quantity" is required',
-};
-
-const invalidId = {
-  code: 'invalid_data',
-  message: 'Wrong id format',
-};
-
-// const cannotFindProducts = {
-//   code: 422,
-//   message: 'It was not possible to return the products',
-// };
-
-const isValidName = (name) => {
-  if (!name) return nameRequired;
-  if (name.length < 5) return shortName;
-  return true;
-};
-
-const isValidQuantity = (quantity) => {
-  if (quantity < 1) {
-    return lowQuantity;
-}
-  if (!quantity) return emptyQuantity;
-
-  if (typeof quantity !== 'number') {
-     return quantityNotNumber; 
-}
-
-  return true;
-}; 
-
-const deleteById = async (id) => {
-  const productFound = await ProductModel.findById(id);
-  if (!productFound) return invalidId;
-  await ProductModel.deleteById(id);
-  return productFound;
+  const product = await ProductModel.findById(id, 'products');
+  return product;
 };
 
 const update = async (id, name, quantity) => {
-  const isProductNameValid = isValidName(name);
-  const isQuantityValid = isValidQuantity(quantity);
-  if (isProductNameValid !== true) return isProductNameValid;
-  if (isQuantityValid !== true) return isQuantityValid;
+  const isProductNameValid = validateProductName(name);
+  const isQuantityValid = validateProductQuantity(quantity);
+  if (isProductNameValid.err) return isProductNameValid;
+  if (isQuantityValid.err) return isQuantityValid;
   const resultModel = await ProductModel.update(id, name, quantity);
   return resultModel;
 };
 
-const create = async (name, quantity) => {
-  const isProductNameValid = isValidName(name);
-  const isQuantityValid = isValidQuantity(quantity);
-  if (isProductNameValid !== true) return isProductNameValid;
-  if (isQuantityValid !== true) return isQuantityValid;
-
-  const searchProduct = await ProductModel.findByName(name);
-  if (searchProduct) return { code: 'invalid_data', message: 'Product already exists' };
-
-  const { id } = await ProductModel
-    .create({ name, quantity });
-
-  return {
-    code: CREATED,
-    id,
-    name,
-    quantity,
-  };
-};
-
-// const getNewProduct = (productData) => {
-//   const { id, name, quantity } = productData;
-
-//   return { id, name, quantity };
-// };
-
-// const getAll = async () => {
-//   const productsData = await ProductModel
-//     .getAll();
-//   if (!productsData) return cannotFindProducts;
-//   return productsData.map(getNewProduct);
-// };
-
-const findById = async (id) => {
-  const productData = await ProductModel
-    .findById(id);
-  if (!productData) return invalidId;
-  
-  return productData;
+const deleteById = async (id) => {
+  const isValidId = validateId(id);
+  if (isValidId.err) return isValidId;
+  const deletedProduct = await ProductModel.deleteById(id, 'products');
+  if (!deletedProduct) return { err: { code: 'invalid_data', message: 'Wrong id format' } };
+  return deletedProduct;
 };
 
 module.exports = {
   create,
-  // getAll,
+  getAll,
   findById,
   update,
   deleteById,
-};  
+};

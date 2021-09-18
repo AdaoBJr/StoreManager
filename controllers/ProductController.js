@@ -1,87 +1,55 @@
 const ProductService = require('../services/ProductService');
-const ProductModel = require('../models/ProductModel');
 
 const OK_STATUS = 200;
+const CREATED = 201;
 const UNPROCESSABLE_ENTITY = 422;
 
 const create = async (req, res) => {
   const { name, quantity } = req.body;
 
-  const { id, code, message } = await ProductService.create(name, quantity);
+  const product = await ProductService.create(name, quantity);
+  const { id } = product;
 
-  if (message) { 
+  if (product.err) { 
     return res.status(UNPROCESSABLE_ENTITY)
-    .json({ err: { code, message } }); 
+    .json(product); 
 }
-  return res.status(code).json({ _id: id, name, quantity });
+  return res.status(CREATED).json({ _id: id, name: product.name, quantity: product.quantity });
 };
 
 const getAll = async (_req, res) => {
-  const products = await ProductModel.getAll();
-
-  if (!products) {
-    return res.status(UNPROCESSABLE_ENTITY).json({
-      err: {
-        code: 422,
-        message: 'It was not possible to return the products',
-      },
-    });
-  }
-
-  res.status(OK_STATUS)
-    .json({ products });
+  const products = await ProductService.getAll();
+  res.status(OK_STATUS).json(products);
 };
 
 const findById = async (req, res) => {
   const { id } = req.params;
 
-  const { code, message, name, quantity } = await ProductService.findById(id);
+  const product = await ProductService.findById(id);
 
-  if (message) {
-    return res.status(UNPROCESSABLE_ENTITY).json({
-      err: {
-        code,
-        message,
-      },
-    });
+  if (product.err) {
+    return res.status(UNPROCESSABLE_ENTITY).json(product);
   }
-  res.status(OK_STATUS)
-    .json({
-      _id: id,
-      name,
-      quantity, 
-    });
+  res.status(OK_STATUS).json(product);
 };
 
 const update = async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
-  const { message, code } = await ProductService.update(id, name, quantity);
+  const product = await ProductService.update(id, name, quantity);
 
-  if (message) {
-    return res.status(UNPROCESSABLE_ENTITY).json({
-      err: {
-        code,
-        message,
-      },
-    });
-  }
-  return res.status(200).json({ _id: id, name, quantity });
+  if (product.err) return res.status(UNPROCESSABLE_ENTITY).json(product);
+
+  return res.status(200).json(product);
 };
 
 const deleteById = async (req, res) => {
   const { id } = req.params;
-  const { name, quantity, message, code } = await ProductService.deleteById(id);
+  const product = await ProductService.deleteById(id);
 
-  if (message) {
-    return res.status(UNPROCESSABLE_ENTITY).json({
-      err: {
-        code,
-        message,
-      },
-    });
-  }
-  return res.status(200).json({ _id: id, name, quantity });
+  if (product.err) return res.status(UNPROCESSABLE_ENTITY).json(product);
+
+  return res.status(200).json(product);
 };
 
 module.exports = {
