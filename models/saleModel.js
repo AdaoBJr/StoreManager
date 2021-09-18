@@ -12,11 +12,12 @@ const getSaleById = async (id) => {
   if (!ObjectId.isValid(id)) {
     return null;
   }
-
+  const i = '61450d532ce773388599d387';
   return connection.getConnection()
-    .then((db) => db.collection('sales').findOne({ _id: ObjectId(id) }));
+    .then((db) => db.collection('sales').findOne({ _id: ObjectId(i) }));
 };
 
+// getSaleById('61450d532ce773388599d387').then((result) => console.log(result));
 module.exports = {
   createSale,
   getAllSales,
