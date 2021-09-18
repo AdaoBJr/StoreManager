@@ -2,13 +2,13 @@ const isNameValid = (name) => {
   if (name.length < 5) {
     return {
       err:
-        { code: 422, message: 'Nome deve ter mais que 5 caracteres' },
+        { code: 'invalid_data', message: '"name" length must be at least 5 characters long' },
     };
   }
   if (typeof name !== 'string') {
     return {
       err:
-        { code: 422, message: 'O nome deve ser uma string' },
+        { code: 'invalid_data', message: 'O nome deve ser uma string' },
     };
   }
 
@@ -25,13 +25,13 @@ const isQuantityValid = (quantity) => {
   if (quantity < 0) {
     return {
       err:
-        { code: 422, message: 'A quantidade dever maior ou igual a 0' },
+        { code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' },
     };
   }
-  if (typeof quantity !== 'number') {
+  if (quantity === 0) {
     return {
       err:
-        { code: 422, message: 'A quantidade deve ser um número' },
+        { code: 'invalid_data', message: '"quantity" must be larger than or equal to 1' },
     };
   }
 
@@ -39,16 +39,16 @@ const isQuantityValid = (quantity) => {
 };
 
 const isQuantityValidTwo = (quantity) => {
-  if (quantity === 0) {
-    return {
-      err:
-        { code: 422, message: 'A quantidade dever maior ou igual a 1' },
-    };
-  }
   if (typeof quantity === 'string') {
     return {
       err:
-        { code: 422, message: 'A quantidade deve ser um número' },
+        { code: 'invalid_data', message: '"quantity" must be a number' },
+    };
+  }
+  if (typeof quantity !== 'number') {
+    return {
+      err:
+        { code: 'invalid_data', message: '"quantity" must be a number' },
     };
   }
 

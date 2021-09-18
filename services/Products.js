@@ -1,3 +1,4 @@
+// const { default: rescue } = require('express-rescue');
 const Products = require('../models/Products');
 const { isNameValid,
   isQuantityValid,
@@ -9,16 +10,17 @@ const create = async (name, quantity) => {
   const validateQuantity = isQuantityValid(quantity);
   const valivalidateQuantityTwo = isQuantityValidTwo(quantity);
 
-  if ()
-
-    if (existingProduct) {
-      return {
-        error: {
-          code: 'alreadyExists',
-          message: 'Um produto já existe com esse nome',
-        },
-      };
-    }
+  if (validateName.err) return validateName;
+  if (existingProduct) {
+    return {
+      err: {
+        code: 'invalid_data',
+        message: 'Product already exists',
+      },
+    };
+  }
+  if (validateQuantity.err) return validateQuantity;
+  if (valivalidateQuantityTwo.err) return valivalidateQuantityTwo;
 
   return Products.create(name, quantity);
 };

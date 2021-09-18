@@ -1,13 +1,13 @@
-const connection = require('./connection');
+const { connection } = require('./connection');
 
 const create = async (name, quantity) => {
   connection()
-    .then((db) => db.collection('StoreManager')).insertOne({ name, quantity });
+    .then((db) => db.collection('products').insertOne({ name, quantity }));
 };
 
 const findByName = async (name) => {
   const productName = await connection()
-    .then((db) => db.collection('StoreManager')).findOne({ name });
+    .then((db) => db.collection('products').findOne({ name }));
 
   if (!productName) return null;
 
