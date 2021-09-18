@@ -3,6 +3,7 @@ const {
   invalidQuantity,
   invalidQuantityType,
   invalidIdFormat,
+  alreadyExists,
   } = require('../error/errors');
 
 const validateNameLength = (name) => {
@@ -51,7 +52,10 @@ const validateProductByName = async (name, callback) => {
   const product = await callback(name);
   if (product) {
     const error = new Error();
-    error.statusCode = 'alreadyExists';
+    error.err = {
+      code: alreadyExists.code,
+      message: alreadyExists.message,
+    };
     throw error;
   }
 };

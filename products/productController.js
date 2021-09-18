@@ -52,19 +52,24 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { name, quantity } = req.body;
-
-    if (typeof name !== 'string' || Number.isInteger(quantity) !== true) {
+    if (Number.isInteger(quantity) !== true) {
       return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
-        .json({ message: 'Dado inválido' });
+        .json({ err: { code: invalidQuantityType.code, message: invalidQuantityType.message } });
     }
-
     const { id } = req.params;
+
+    await service.updateProduct(id, name, quantity);
     const result = await model.updateProduct(id, name, quantity);
 
-    if (result === null) return res.status(StatusCodes.BAD_REQUEST).json({ msg: 'Não atualizado' });
-    return res.status(StatusCodes.NO_CONTENT).send();
+    if (result === null) {
+      return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+        err: { code: invalidIdFormat.code, message: invalidIdFormat.message },
+      });
+    }
+
+    return res.status(StatusCodes.OK).json({ _id: id, name, quantity });
   } catch (err) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(err);
   }
 };
 
