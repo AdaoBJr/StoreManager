@@ -1,7 +1,7 @@
 const express = require('express');
 const {
   validateProductSaleQuantity,
-  validateIdSales,
+  validateIdSalesIsValid,
   validateSaleExistsById,
 } = require('../middlewares/salesMiddlewares');
 
@@ -29,18 +29,18 @@ salesRouter.get('/', async (req, res) => {
   return res.status(200).json({ sales: salesAll });
 });
 
-salesRouter.get('/:id', validateIdSales, validateSaleExistsById, async (req, res) => {
+salesRouter.get('/:id', validateIdSalesIsValid, async (req, res) => {
   const { id } = req.params;
 
   const sale = await SalesService.getSalesById(id);
 
-  // if (!sale) {
-  //   return res.status(404).json(
-  //     { err:
-  //       { code: 'not_found', message: 'Sale not found' },
-  //     },
-  //   );
-  // }
+  if (!sale) {
+    return res.status(404).json(
+      { err:
+        { code: 'not_found', message: 'Sale not found' },
+      },
+    );
+  }
 
   return res.status(200).json(sale);
 });
@@ -48,7 +48,7 @@ salesRouter.get('/:id', validateIdSales, validateSaleExistsById, async (req, res
 // ------------------------------------------------------------------
 // Requisito 7: CONTROLLER responsável por receber a requisição de atualização de venda por ID, fazer chamada ao SERVICE, e retornar a venda atualizada
 
-salesRouter.put('/:id', validateIdSales, validateProductSaleQuantity, async (req, res) => {
+salesRouter.put('/:id', validateProductSaleQuantity, async (req, res) => {
   const { id } = req.params;
   const updateItem = req.body;
 
@@ -60,12 +60,23 @@ salesRouter.put('/:id', validateIdSales, validateProductSaleQuantity, async (req
 // ------------------------------------------------------------------
 // Requisito 8: CONTROLLER responsável por receber a requisição de deletar a venda por ID, fazer chamada ao SERVICE, e retornar msg de confirmação
 
-salesRouter.delete('/:id', validateIdSales, validateSaleExistsById, async (req, res) => {
+salesRouter.delete('/:id', validateSaleExistsById, async (req, res) => {
   const { id } = req.params;
 
   const sale = await SalesService.deleteSaleById(id);
+  console.log(`Sale controller: ${sale}`);
 
-  return res.status(200).json(sale);
+  if (!sale) {
+    return res.status(422).json(
+      { err:
+        { code: 'invalid_data', message: 'Wrong sale ID format' },
+      },
+    );
+  }
+  const { itensSold } = sale;
+  console.log(`ItensSold controller: ${itensSold}`);
+
+  return res.status(200).json({ _id: id, itensSold });
 });
 
 // ------------------------------------------------------------------
