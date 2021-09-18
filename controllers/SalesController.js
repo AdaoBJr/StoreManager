@@ -29,10 +29,18 @@ salesRouter.get('/', async (req, res) => {
   return res.status(200).json({ sales: salesAll });
 });
 
-salesRouter.get('/:id', validateIdSales, async (req, res) => {
+salesRouter.get('/:id', validateIdSales, validateSaleExistsById, async (req, res) => {
   const { id } = req.params;
 
   const sale = await SalesService.getSalesById(id);
+
+  // if (!sale) {
+  //   return res.status(404).json(
+  //     { err:
+  //       { code: 'not_found', message: 'Sale not found' },
+  //     },
+  //   );
+  // }
 
   return res.status(200).json(sale);
 });

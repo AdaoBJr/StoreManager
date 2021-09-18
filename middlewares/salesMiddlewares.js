@@ -11,7 +11,7 @@ const validateIdSales = async (req, res, next) => {
   if (!ObjectId.isValid(id)) {
     return res.status(404).json(
       { err:
-        { code: 'not_found', message: 'Sale not found' },
+        { code: 'not_found', message: 'Wrong sale ID format' },
       },
     ); 
   }
@@ -37,16 +37,33 @@ const validateProductSaleQuantity = async (req, res, next) => {
   next();
 };
 
-// Comments: Valida se a venda existe na base para ser deletada 
+// // Comments: Valida se a venda existe na base para ser deletada 
+// const validateSaleExistsById = async (req, res, next) => {
+//   const { id } = req.params;
+
+//   const saleExists = await SalesModel.getSalesById(id);
+  
+//   if (!saleExists) {
+//     return res.status(422).json(
+//       { err:
+//         { code: 'invalid_data', message: 'Wrong sale ID format' },
+//       },
+//     ); 
+//   }
+
+//   next();
+// };
+
+// Comments: Valida se a venda existe na base, por ID, para ser deletada 
 const validateSaleExistsById = async (req, res, next) => {
   const { id } = req.params;
 
   const saleExists = await SalesModel.getSalesById(id);
   
   if (!saleExists) {
-    return res.status(422).json(
+    return res.status(404).json(
       { err:
-        { code: 'invalid_data', message: 'Wrong sale ID format' },
+        { code: 'invalid_data', message: 'Sale not found' },
       },
     ); 
   }
