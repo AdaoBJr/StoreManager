@@ -23,7 +23,7 @@ const findById = rescue(async (req, res, _next) => {
   const { id } = req.params;
   const product = await Products.findById(id);
 
-  if (product.err) return res.status(422).json(product.err);
+  if (product.err) return res.status(422).json(product);
 
   return res.status(200).json(product);
 });
