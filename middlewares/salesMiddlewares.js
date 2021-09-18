@@ -9,7 +9,7 @@ const validateIdSales = async (req, res, next) => {
   const { id } = req.params;
 
   if (!ObjectId.isValid(id)) {
-    return res.status(404).json(
+    return res.status(422).json(
       { err:
         { code: 'not_found', message: 'Wrong sale ID format' },
       },
@@ -63,7 +63,7 @@ const validateSaleExistsById = async (req, res, next) => {
   if (!saleExists) {
     return res.status(404).json(
       { err:
-        { code: 'invalid_data', message: 'Sale not found' },
+        { code: 'not_found', message: 'Sale not found' },
       },
     ); 
   }

@@ -38,8 +38,6 @@ const putSaleById = async ({ id, updateItem }) => connection()
 const deleteSaleById = async (id) => connection()
     .then((db) => db.collection('sales').findOneAndDelete({ _id: ObjectId(id) }))
     .then(({ value: { itensSold } }) => ({ id, itensSold }));
-    // .then((value) => console.log(value));
-    // value: { _id: 614525e173be329da9d81c3f, itensSold: [ [Object], [Object] ] },
 
 // ------------------------------------------------------------------
 
