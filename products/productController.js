@@ -36,7 +36,7 @@ const createProduct = async (req, res) => {
     const { name, quantity } = req.body;
 
     if (typeof name !== 'string' || Number.isInteger(quantity) !== true) {
-      return res.status(StatusCodes.BAD_REQUEST)
+      return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
         .json({ message: 'Dado inválido' });
     }
 
