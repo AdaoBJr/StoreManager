@@ -1,4 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
+const { alreadyExists } = require('./error/errors');
 const model = require('./productModels');
 const service = require('./productServices');
 
@@ -30,11 +31,20 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
   try {
     const { name, quantity } = req.body;
+
+    if (typeof name !== 'string' || Number.isInteger(quantity) !== true) {
+      return res.status(StatusCodes.BAD_REQUEST)
+        .json({ message: 'Dado inválido' });
+    }
+
     const result = await service.createProduct(name, quantity);
 
     if (result === null) {
-      return res.status(StatusCodes.BAD_REQUEST)
-        .json({ message: 'erro, produto já foi cadastrada' });
+      return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
+        .json({ err: {
+          code: alreadyExists.code,
+          message: alreadyExists.message,
+        } });
     }
 
     return res.status(StatusCodes.CREATED).json(result);
