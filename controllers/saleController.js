@@ -17,6 +17,14 @@ saleRouter.get('/', async (_req, res) => {
   return res.status(status).json(messageResult);
 });
 
+saleRouter.get('/:id', async (req, res) => {
+  const { id } = req.body;
+
+  const { status, messageResult } = await saleService.getSaleById(id);
+
+  return res.status(status).json(messageResult);
+});
+
 module.exports = {
   saleRouter,
 };
