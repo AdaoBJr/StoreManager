@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const saleModel = require('../models/saleModel');
 // const productModel = require('../models/productModel');
 
@@ -16,30 +17,30 @@ const createSale = async (itensSold) => {
 
   // ajuda de Fernanda Porto
   const itens = itensSold
-  .find((obj) => obj.productId.length < 5 || obj.quantity <= 0 || typeof obj.quantity !== 'number');
+  .find((obj) => obj.quantity <= 0 || typeof obj.quantity !== 'number');
   if (itens) return { erro: 'Wrong product ID or invalid quantity' };
 
   return saleModel.create(itensSold);
 };
 
-const updateSale = async ({ id, name, quantity }) => {
-    if (name.length < 5) {
-        return { erro: '"name" length must be at least 5 characters long' }; 
-    }
-
-    if (quantity <= 0) return { erro: '"quantity" must be larger than or equal to 1' };
-    if (typeof quantity !== 'number') return { erro: '"quantity" must be a number' };
-
-    return saleModel.update({ id, name, quantity });
+const updateSale = async ({ id, itensSold }) => {
+  const itens = itensSold
+  .some((obj) => obj.quantity <= 0 || typeof obj.quantity !== 'number');
+  if (itens) {
+    return { erro: 'Wrong product ID or invalid quantity' };
+  }
+   const test = await saleModel.update({ id, itensSold });
+  return test;
 };
 
 const excludeSale = async (id) => {
-    const sale = await saleModel.saleIdExists(id);
-    if (!sale) return null;
+  if (!ObjectId.isValid(id)) return null;
+  const sale = await saleModel.saleIdExists(id);
+  if (!sale) return null;
 
-    const { name, quantity, _id } = sale;
-    await saleModel.exclude(id);
-    return { name, quantity, _id };
+  const { _id, itensSold } = sale;
+  await saleModel.exclude(id);
+  return { _id, itensSold };
 };
 
 module.exports = { createSale, updateSale, excludeSale };

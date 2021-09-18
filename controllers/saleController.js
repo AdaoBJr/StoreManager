@@ -16,9 +16,13 @@ const getSale = async (req, res) => {
   try {
       const { id } = req.params;
       const result = await saleModel.saleIdExists(id);
+      // console.log(result);
+      if (!result || result === null) {
+        return res.status(404).json({ err: { code: 'not_found', message: 'Sale not found' } });
+      }
       return res.status(200).json(result);
   } catch (error) {
-      return res.status(404).json({ err: { code: 'not_found', message: 'Sale not found' } });
+      return res.status(500).json({ message: err });
   }
 };
 
@@ -37,32 +41,40 @@ const createSale = async (req, res) => {
     }
 };
 
-const updateProduct = async (req, res) => {
+// requisitos 7 e 8 com a ajuda de Jonathan Souza 
+
+const updateSale = async (req, res) => {
     try {
-        const { name, quantity } = req.body;
+        const itensSold = req.body;
         const { id } = req.params;
 
-        const result = await saleService.updateProduct({ id, name, quantity });
+        const result = await saleService.updateSale({ id, itensSold });
         if (result.erro) {
           return res.status(422).json({ err: { code: 'invalid_data', message: result.erro } });
         }
 
-        return res.status(200).json({ id, name, quantity });
+        return res.status(200).json({ _id: id, itensSold });
     } catch (error) {
         return res.status(500).json({ message: err });
     }
 };
 
-const deleteProduct = async (req, res) => {
+const deleteSale = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await saleService.exclude(id);
+        const result = await saleService.excludeSale(id);
+
+        console.log(result);
+
+        if (!result || result === null) {
+            return res.status(422)
+            .json({ err: { code: 'invalid_data', message: 'Wrong sale ID format' } });
+          }
 
         if (result) return res.status(200).json(result);
     } catch (error) {
-      return res.status(422).json({
-       err: { code: 'invalid_data', message: 'Wrong id format' } }); 
+        return res.status(500).json({ message: err });
     }
 };
 
-module.exports = { getAllSales, getSale, createSale, updateProduct, deleteProduct };
+module.exports = { getAllSales, getSale, createSale, updateSale, deleteSale };

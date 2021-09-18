@@ -25,7 +25,9 @@ app.route('/sales')
   .post(saleController.createSale);
 
 app.route('/sales/:id')
-  .get(saleController.getSale);
+  .get(saleController.getSale)
+  .put(saleController.updateSale)
+  .delete(saleController.deleteSale);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => { console.log(`Ouvindo a porta ${PORT}`); });
