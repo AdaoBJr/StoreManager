@@ -6,7 +6,7 @@ const OPTIONS = {
 };
 
 const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager'; // rodar avaliator
-// const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager'; //rodar local
+// const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager'; // rodar local
 
 const DB_NAME = 'StoreManager';
 
