@@ -32,4 +32,15 @@ const create = async (itensSold) => {
   return { _id: createdSaleResult.insertedId, itensSold };
 };
 
-module.exports = { getAll, saleById, create, saleExists };
+const update = async (id, itensSold) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await connection();
+
+  await db.collection('sales').updateOne(
+      { _id: ObjectId(id) }, { $set: itensSold },
+  );
+      
+  return { _id: id, itensSold: [itensSold] };
+};
+
+module.exports = { getAll, saleById, create, saleExists, update };

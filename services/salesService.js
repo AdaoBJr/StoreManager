@@ -26,4 +26,13 @@ const createSale = (itensSold) => {
   return saleModel.create(itensSold);
 };
 
-module.exports = { getSaleById, createSale };
+const updateSaleService = async (id, [itensSold]) => {
+  if (itensSold.productId.length < 5 
+    || itensSold.quantity < 1 || typeof itensSold.quantity !== 'number') {
+      return wrongIdFormat;
+  }
+  const update = await saleModel.update(id, itensSold);
+  return update;
+};
+
+module.exports = { getSaleById, createSale, updateSaleService };
