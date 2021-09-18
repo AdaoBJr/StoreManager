@@ -17,6 +17,7 @@ const {
   deleteProductsId,
   createSales,
 } = require('./models');
+const { salesId } = require('./models/sales');
 
 app.use(bodyParser.json());
 
@@ -42,3 +43,5 @@ app.put('/products/:id', [validateName, validateQuantity, updateProducts]);
 app.delete('/products/:id', [deleteProductsId]);
 
 app.post('/sales', [validateQuantitySales, createSales]);
+
+app.get('/sales', [salesId]);
