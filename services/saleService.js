@@ -18,13 +18,18 @@ const getByIdService = async (id) => {
 };
 
 const createService = async ({ itensSold }) => {
-  console.log(itensSold, 'service');
   const sale = await saleModel.create(itensSold);
   return sale;
+};
+
+const updateService = async (id, sale) => {
+  const updatedSale = await saleModel.update(id, sale);
+  return updatedSale;
 };
 
 module.exports = {
   getAllService,
   getByIdService,
   createService,
+  updateService,
 };

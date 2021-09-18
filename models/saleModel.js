@@ -19,10 +19,19 @@ const getById = async ({ id }) => {
 const create = async (itensSold) => {
   const db = await connect.connection();
   const sale = await db.collection('sales').insertOne({ itensSold });
-  console.log(itensSold, 'model');
   return {
     _id: sale.insertedId,
     itensSold,
+  };
+};
+
+const update = async (id, sale) => {
+  const db = await connect.connection();
+  await db.collection('sales')
+    .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: sale } });
+  return {
+    _id: id,
+    itensSold: sale,
   };
 };
 
@@ -30,4 +39,5 @@ module.exports = {
   getAll,
   getById,
   create,
+  update,
 };

@@ -31,7 +31,6 @@ const getById = async (req, res) => {
 const create = async (req, res) => {
   try {
     const itensSold = req.body;
-    console.log(itensSold, 'controller');
     const createSale = await saleService.createService({ itensSold });
     return res.status(StatusCodes.OK).json(createSale);
   } catch (error) {
@@ -39,8 +38,21 @@ const create = async (req, res) => {
   }
 };
 
+const update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const sale = req.body;
+    const updatedSale = await saleService.updateService(id, sale);
+    return res.status(StatusCodes.OK).json(updatedSale);
+  } catch (error) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY)
+      .send('Sorry! There is something wrong!');
+  }
+};
+
 module.exports = {
   getAll,
   getById,
   create,
+  update,
 };
