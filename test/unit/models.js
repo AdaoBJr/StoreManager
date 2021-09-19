@@ -1,14 +1,23 @@
 const sinon = require('sinon');
-const {expect} = require('chai');
+const { expect, assert } = require('chai');
 const { MongoClient } = require('mongodb');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const productsModel = require('../../models/productsModels');
-const mongoConnection = require('../../models/connection')
+const salesModel = require('../../models/salesModel');
+const mongoConnection = require('../../models/connection');
+const CustomError = require('../../helpers/CustomError');
 
 const productOne = { "name": "Camisa las costas", "quantity": 30 };
 const productTwo =  { "name": "Camisa las frentes", "quantity": 200 };
 const idFake = '61449c721d82f6493326b5f9'
+const salesOne = [
+  { "productId": "6140fab81b5413db82960322", "quantity": "10" },
+  { "productId": "6140fabf1b5413db82960323", "quantity": "5" }
+]
+const salesUpdate = [
+  { "productId": "6140fab81b5413db82960322", "quantity": "30" },
+]
 
 describe('Model de produtos', () => {
   let connectionMock;
@@ -175,4 +184,118 @@ describe('Model de produtos', () => {
       expect(response).to.equal(false);
     });
   });
+});
+
+describe('Model de vendas', () => {
+  let connectionMock;
+  let DBServer
+
+  beforeEach(async ()=>{
+    DBServer = new MongoMemoryServer();
+    
+    const URLMock = await DBServer.getUri();
+
+    connectionMock = await MongoClient
+      .connect(URLMock, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      })
+      .then((conn) => conn.db('StoreManager'));
+
+    sinon.stub(mongoConnection, 'getConnection').resolves(connectionMock)
+  });
+
+  afterEach(() => {
+    mongoConnection.getConnection.restore();
+    DBServer.stop();
+  });
+
+  describe('função create', () => {
+    it('retorna um objeto com informações da venda.', async () => {
+      const registredSales = await salesModel.create(salesOne);
+      
+      expect(registredSales).to.have.a.property('_id')
+      expect(registredSales.itensSold).to.deep.equal(salesOne);
+    });
+  });
+
+  describe('função findAll', () => {
+    it('retorna todos as vendas', async () => {
+      await salesModel.create(salesOne);
+      await salesModel.create(salesOne);
+      const allSales = await salesModel.findAll();
+      
+      expect(allSales).to.have.length(2);
+    });
+  });
+
+  describe('função findById', () => {
+    it('retorna um objeto correto referente ao id buscado', async () => {
+      const {_id: id } = await salesModel.create(salesOne);
+
+      const saleFindedById = await salesModel.findById({ id });
+
+      expect(typeof saleFindedById).to.equal('object');
+      expect(saleFindedById.itensSold).to.deep.equal(salesOne);
+    });
+
+    // utilizeis esse site: https://stackoverflow.com/questions/45466040/verify-that-an-exception-is-thrown-using-mocha-chai-and-async-await
+    it('retona erro customizado caso id seja inválido', async () => {
+      try{
+        await salesModel.findById({ id: '' })
+      }catch(err) {
+        expect(err.message).to.equal('Sale not found')
+        expect(err.code).to.equal('not_found')
+        expect(err.statusCode).to.equal(404)
+      }
+    });
+  });
+
+  describe('função updateById', () => {
+    it('retorna o objeto que foi atualizado o a vendo por id', async () => {
+      const {_id: saleId } = await salesModel.create(salesOne);
+      await salesModel.create(salesOne);
+
+      const result = await salesModel.updateById({saleId, itensSold: salesUpdate});
+      expect(result).to.deep.equal({ _id: saleId, itensSold: salesUpdate });
+    });
+
+    it('é atualizado o a quantidade de vedas de um produto', async () => {
+      const {_id: saleId } = await salesModel.create(salesOne);
+      await salesModel.create(salesOne);
+      await salesModel.updateById({saleId, itensSold: salesUpdate})
+
+      const salefindedById = await salesModel.findById({id: saleId});
+      expect(salefindedById.itensSold[0].quantity).to.equal('30')
+    });
+
+    it('retona null caso nada seja atualizado', async () => {
+      await salesModel.create(salesOne);
+
+      const result = await salesModel.updateById({saleId: idFake, itensSold: salesUpdate})
+      expect(result).to.equal(null);
+    });
+  });
+
+  describe('função remove', () => {
+    it('id encontrado retorna boolean true e remove item', async() => {
+      const {_id: id } = await salesModel.create(salesOne);
+      await salesModel.create(salesOne);
+      const booleanResult = await salesModel.remove({ id });
+      expect(booleanResult).to.equal(true)
+
+      const allSales = await salesModel.findAll()
+      expect(allSales).to.have.length(1);
+    })
+
+    it('id não encontrado retorna boolean false e não remove item', async() => {
+      await salesModel.create(salesOne);
+      await salesModel.create(salesOne);
+      const booleanResult = await salesModel.remove({ id: idFake });
+      expect(booleanResult).to.equal(false)
+
+      const allSales = await salesModel.findAll()
+      expect(allSales).to.have.length(2);
+    })
+  })
 });
