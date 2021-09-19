@@ -7,4 +7,15 @@ const create = async (req, res) => {
   return res.status(code).json(newProduct);
 };
 
-module.exports = { create };
+const getAll = async (_req, res) => {
+  const { code, products } = await serviceProduct.getAll();
+  return res.status(code).json({ products });
+};
+
+const getById = async (req, res) => {
+  const { id } = req.params;
+  const { code, err, product } = await serviceProduct.getProductById(id);
+  if (err) return res.status(code).json({ err });
+  return res.status(code).json(product);
+};
+module.exports = { create, getAll, getById };
