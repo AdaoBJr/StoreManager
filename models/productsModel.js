@@ -21,6 +21,15 @@ async function getByName({ name }) {
   return product;
 }
 
+async function update({ id, name, quantity }) {
+  const db = await getConnection();
+  
+  const product = await db
+  .collection(collection).updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
+  
+  return product;
+}
+
 async function create({ name, quantity }) {
   const db = await getConnection();
   const result = await db
@@ -32,6 +41,7 @@ async function create({ name, quantity }) {
 module.exports = {
   getAll,
   getById,
-  create,
   getByName,
+  create,
+  update,
 };

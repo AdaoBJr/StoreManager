@@ -27,8 +27,24 @@ async function create(req, res) {
   return res.status(201).json(products);
 }
 
+async function update(req, res) {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  
+  const product = await productsServices.getById({ id });
+  if (product === 'wrong id') res.status(422).json(productsErr.errWrongId);
+
+  const products = await productsServices.update({ id, name, quantity });
+  if (products === '< then 5') res.status(422).json(productsErr.errNameLength);
+  if (products === 'quantity < 0') res.status(422).json(productsErr.errQuantityLength);
+  if (products === 'quantity not a number') res.status(422).json(productsErr.errQuantityNotNumber);
+
+  return res.status(200).json({ id, name, quantity });
+}
+
 module.exports = {
   getAll,
   getById,
   create,
+  update,
 };
