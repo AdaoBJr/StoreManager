@@ -25,4 +25,18 @@ const createSales = async (sales) => {
   return result;
 };
 
-module.exports = { getId, getAll, createSales };
+const deleteVenda = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+  const auxConnection = await connection();
+  const auxGetId = await getId(id);
+  await auxConnection.collection('sales')
+  .deleteOne({ _id: ObjectId(id) });
+  if (auxGetId) {
+    return auxGetId;
+  }
+  return null;
+};
+
+module.exports = { getId, getAll, createSales, deleteVenda };

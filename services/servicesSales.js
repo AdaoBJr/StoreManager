@@ -1,5 +1,5 @@
-const { getId, createSales, getAll } = require('../models/salesModel');
-const { errorSalesId } = require('../estruturaErro/estruturaErro');
+const { getId, createSales, getAll, deleteVenda } = require('../models/salesModel');
+const { errorSalesId, errorBusines } = require('../estruturaErro/estruturaErro');
 
 const auxGetId = async (id) => {
   const result = await getId(id);
@@ -18,4 +18,12 @@ const insertSales = async (id) => {
   return create;
 };
 
-module.exports = { auxGetId, insertSales, createSales, getAll };
+const auxDeleteVenda = async (id) => {
+  const result = await deleteVenda(id);
+  if (!result) {
+    return errorBusines('Wrong sale ID format');
+  }
+  return result;
+};
+
+module.exports = { auxGetId, insertSales, createSales, getAll, auxDeleteVenda };
