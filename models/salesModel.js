@@ -39,4 +39,15 @@ const deleteVenda = async (id) => {
   return null;
 };
 
-module.exports = { getId, getAll, createSales, deleteVenda };
+const atualizarVenda = async (id, sales) => {
+  console.log(sales);
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+  const auxConnection = await connection();
+  await auxConnection.collection('sales')
+  .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: sales } });
+  return getId(id);
+};
+
+module.exports = { getId, getAll, createSales, deleteVenda, atualizarVenda };

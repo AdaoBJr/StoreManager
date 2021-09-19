@@ -1,7 +1,8 @@
 const express = require('express');
 const rescue = require('express-rescue');
 const { validateSales } = require('../validate/validateSales');
-const { insertSales, getAll, auxGetId, auxDeleteVenda } = require('../services/servicesSales');
+const { insertSales,
+  getAll, auxGetId, auxDeleteVenda, auxAtualizarVenda } = require('../services/servicesSales');
 
 const route = express.Router();
 
@@ -34,6 +35,13 @@ route.delete('/:id', rescue(async (req, res, next) => {
   if (result.isError) {
     return next(result);
   }
+  return res.status(200).json(result);
+}));
+
+route.put('/:id', validateSales, rescue(async (req, res) => {
+  const { id } = req.params;
+  console.log(req.body);
+  const result = await auxAtualizarVenda(id, req.body);
   return res.status(200).json(result);
 }));
 

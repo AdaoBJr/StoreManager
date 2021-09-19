@@ -1,4 +1,4 @@
-const { getId, createSales, getAll, deleteVenda } = require('../models/salesModel');
+const { getId, createSales, getAll, deleteVenda, atualizarVenda } = require('../models/salesModel');
 const { errorSalesId, errorBusines } = require('../estruturaErro/estruturaErro');
 
 const auxGetId = async (id) => {
@@ -26,4 +26,9 @@ const auxDeleteVenda = async (id) => {
   return result;
 };
 
-module.exports = { auxGetId, insertSales, createSales, getAll, auxDeleteVenda };
+const auxAtualizarVenda = async (id, sales) => {
+  const result = atualizarVenda(id, sales);
+  return result;
+};
+
+module.exports = { auxGetId, insertSales, createSales, getAll, auxDeleteVenda, auxAtualizarVenda };
