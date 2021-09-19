@@ -1,0 +1,20 @@
+const express = require('express');
+const rescue = require('express-rescue');
+
+const Sales = require('../services/Sales');
+const { saleValidate } = require('../middlewares');
+const { SUCCESS } = require('../configs/statusCodes');
+
+const sales = express.Router();
+
+sales.post('/',
+  saleValidate,
+  rescue(async (req, res, next) => {
+  const sale = await Sales.create(req.body);
+
+  if (sale.isError) return next(sale);
+
+  return res.status(SUCCESS).json(sale);
+}));
+
+module.exports = sales;

@@ -47,6 +47,29 @@ const remove = async (id) => {
   return product;
 };
 
+const validateQuantity = async ({ productId, quantity: amount }) => {
+  const db = await connection();
+
+  return db.collection('products').findOne({
+    _id: ObjectId(productId),
+    quantity: { $gte: amount },
+  });
+};
+
+const updateQuantity = async ({ productId, quantity: amount }) => {
+  const NUMBER_TWO = 2;
+  const quantityAmount = amount - amount * NUMBER_TWO;
+  const db = await connection();
+
+  const { modifiedCount } = await db.collection('products')
+    .updateOne({
+      _id: ObjectId(productId),
+      quantity: { $gte: amount },
+    }, { $inc: { quantity: quantityAmount } });
+
+  return modifiedCount;
+};
+
 module.exports = {
   create,
   findByName,
@@ -54,4 +77,6 @@ module.exports = {
   getAll,
   update,
   remove,
+  validateQuantity,
+  updateQuantity,
 };
