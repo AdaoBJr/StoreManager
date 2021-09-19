@@ -1,3 +1,4 @@
+const modelsProduct = require('../models/products');
 const MIN_NAME_LENGTH = 5;
 const ID_SIZE = 24;
 
