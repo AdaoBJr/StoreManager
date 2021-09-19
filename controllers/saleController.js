@@ -43,7 +43,7 @@ const deleteSale = async (req, res) => {
   if (message) {
     return res.status(422).json({ err: { code, message } });
   }
-  return res.status(200).json(deleted);
+  return res.status(200).json();
 };
 
 module.exports = {

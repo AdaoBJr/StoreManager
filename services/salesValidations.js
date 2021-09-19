@@ -46,6 +46,7 @@ const validateFindSalesById = async (id) => {
     return { code: 'not_found', message: 'Sale not found' };
   }
   const findSalesById = await salesModels.findSalesById(id);
+  if (!findSalesById) return { code: 'not_found', message: 'Sale not found' };
   return findSalesById;
 };
 
@@ -58,8 +59,13 @@ const validateUpdateSale = async (id, body) => {
 };
 
 const validateDeleteSale = async (id) => {
-  const deleteSale = await salesModels.deleteSale(ObjectId(id));
-  return deleteSale;
+  if (!ObjectId.isValid(id)) { 
+    return { code: 'invalid_data', message: 'Wrong sale ID format' }; 
+  }
+  const { _id } = await validateFindSalesById(id);
+  if (!_id) return { err: { code: 'not_found', message: 'Sale not found' } };
+  await salesModels.deleteSale(id);
+  return _id;
 };
 
 module.exports = {
