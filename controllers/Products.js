@@ -40,6 +40,17 @@ products.put('/:id',
   rescue(async (req, res) => {
   const { id } = req.params;
   const product = await Products.update(id, req.body);
+
+  return res.status(SUCCESS).json(product);
+}));
+
+products.delete('/:id',
+  rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const product = await Products.remove(id);
+
+  if (product.isError) return next(product);
+
   return res.status(SUCCESS).json(product);
 }));
 

@@ -17,9 +17,16 @@ const findById = async (id) => {
   return product;
 };
 
+const remove = async (id) => {
+  const product = await Products.remove(id);
+  if (!product) return Error.invalidData('Wrong id format');
+  return product;
+};
+
 module.exports = {
   create,
   findById,
   getAll: Products.getAll,
   update: Products.update,
+  remove,
 };

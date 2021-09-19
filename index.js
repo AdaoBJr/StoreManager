@@ -8,7 +8,7 @@ const port = 3000;
 app.use(express.json());
 
 app.get('/', (_request, response) => {
-  response.send(`<h1>Running at port ${port}</h1>`);
+  response.send();
 });
 
 app.use(routes);
