@@ -62,4 +62,5 @@ module.exports = {
   getAll,
   getById,
   update,
+  exclude,
 };
