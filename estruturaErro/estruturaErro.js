@@ -4,4 +4,13 @@ const error = (code, message) => ({
   message,
 });
 
-module.exports = { errorBusines: (message) => error('invalid_data', message) };
+const errorSales = (code, message) => ({
+  isError: 'errorSales',
+  code,
+  message,
+});
+
+module.exports = {
+  errorBusines: (message) => error('invalid_data', message),
+  errorSalesId: (message) => errorSales('not_found', message),
+};

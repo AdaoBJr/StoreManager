@@ -44,7 +44,6 @@ const deleteOne = async (id) => {
   }
   const auxConnection = await connection();
   const auxGetId = await getId(id);
-  console.log(auxGetId);
   await auxConnection.collection('products')
   .deleteOne({ _id: ObjectId(id) });
   if (auxGetId) {
