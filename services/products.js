@@ -48,6 +48,18 @@ const isNameValid = (name) => {
   return true;
 };
 
+const isIdValid = (id) => {
+  if (id.length !== ID_SIZE) {
+    return {
+      code: 422,
+      err: {
+        code: 'invalid_data', message: 'Wrong id format',
+      },
+    };
+  }
+  return true;
+};
+
 const create = async ({ name, quantity }) => {
   const validationName = isNameValid(name);
   
@@ -63,4 +75,28 @@ const create = async ({ name, quantity }) => {
   return { code: 201, newProduct };
 };
 
-module.exports = { create };
+const getAll = async () => {
+  const products = await modelsProduct.getAll();
+  return { code: 200, products };
+};
+
+const getById = async (id) => {
+  const isValid = isIdValid(id);
+  if (isValid.err) return isValid;
+  const product = await modelsProduct.getById(id);
+  if (!product) {
+    return {
+      code: 422,
+      err: {
+        code: 'invalid_data', message: 'Wrong id format',
+      },
+    };
+  }
+  return { code: 200, product };
+};
+
+module.exports = {
+  create,
+  getAll,
+  getById,
+};
