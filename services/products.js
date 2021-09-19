@@ -1,6 +1,7 @@
 const modelsProduct = require('../models/products');
 
 const MIN_NAME_LENGTH = 5;
+const ID_SIZE = 24;
 
 const isProductExists = async (name) => {
   const productExists = await modelsProduct.getByName(name);
