@@ -46,6 +46,10 @@ const getProductById = async (id) => {
 };
 
 const updateProductById = async ({ id, name, quantity }) => {
+  if (!await productsModel.getProductById(id)) {
+    error.err.message = 'Product did not exists';
+    return error;
+  }
   if (name.length < 6) {
     error.err.message = '"name" length must be at least 5 characters long';
     return error;
@@ -58,13 +62,13 @@ const updateProductById = async ({ id, name, quantity }) => {
     error.err.message = '"quantity" must be larger than or equal to 1';
     return error;
   }
-
   const updatedProduct = await productsModel.updateProductById({ id, name, quantity });
   return updatedProduct;
 };
 
 const excludeProductById = async (id) => {
   const excludedProduct = await getProductById(id);
+  if (excludedProduct.err) return excludedProduct;
   await productsModel.excludeProductById(id);
   return excludedProduct;
 };

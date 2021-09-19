@@ -35,7 +35,7 @@ const updateProductById = async ({ id, name, quantity }) => {
   await connection.getConnection().then((db) =>
     db.collection('products').updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } }));
 
-  return { id, name, quantity };
+  return { _id: id, name, quantity };
 };
 
 const removeFromStockQuantity = async ({ productId, quantity }, stockQuantity) => {
@@ -53,8 +53,6 @@ const addToStockQuantity = async ({ productId, quantity }, stockQuantity) => {
 };
 
 const excludeProductById = async (id) => {
-  if (!ObjectId.isValid(id)) return null;
-
   const result = await connection.getConnection().then((db) =>
     db.collection('products').deleteOne({ _id: ObjectId(id) }));
 

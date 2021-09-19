@@ -22,7 +22,7 @@ const stockError = {
   },
 };
 
-const validateSale = (productsList) => {
+const validateProducts = (productsList) => {
   const validations = productsList.map((product) => {
     if (product.quantity < 1) return productError;
     if (typeof product.quantity !== 'number') return productError;
@@ -41,8 +41,8 @@ const validateStockQuantity = (newSale, productsList) => {
 };
 
 const createSale = async (newSale) => {
-  const validationResult = validateSale(newSale);
-  if (validationResult[0].err) return productError;
+  const validateProductsResult = validateProducts(newSale);
+  if (validateProductsResult[0].err) return productError;
 
   const getNewSaleProductsFromDB = await Promise.all(
     newSale.map(({ productId }) => productsModel.getProductById(productId)),
@@ -77,8 +77,8 @@ const getSaleById = async (id) => {
 };
 
 const updateSaleById = async (id, saleProductsList) => {
-  const validationResult = validateSale(saleProductsList);
-  if (validationResult[0].err) return productError;
+  const validateProductsResult = validateProducts(saleProductsList);
+  if (validateProductsResult[0].err) return productError;
 
   const updatedSale = await salesModel.updateSaleById(id, saleProductsList);
   return updatedSale;
