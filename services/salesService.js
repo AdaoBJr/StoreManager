@@ -42,8 +42,24 @@ const getSalesId = async (id) => {
   return salesId;
 };
 
+const updateSale = async (id, productId, quantity) => {
+  if (chekQuantity(quantity)) return chekQuantity(quantity);
+  const salesId = await salesModel.updateSale(id, productId, quantity);
+  if (!salesId) {
+    return {
+      err: {
+        code: 'not_found',
+        message: 'Sale not found',
+      },
+    };
+  }
+
+  return salesId;
+};
+
 module.exports = {
   registerSales,
   getAllSales,
   getSalesId,
+  updateSale,
 };
