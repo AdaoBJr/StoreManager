@@ -9,6 +9,16 @@ const create = async (product) => {
   return Products.create(product);
 };
 
+const findById = async (id) => {
+  const product = await Products.findById(id);
+
+  if (!product) return Error.invalidData('Wrong id format');
+  
+  return product;
+};
+
 module.exports = {
   create,
+  findById,
+  getAll: Products.getAll,
 };
