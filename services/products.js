@@ -34,6 +34,7 @@ const isQuantityValid = (quantity) => {
   }
   return true;
 };
+
 const isNameValid = (name) => {
   if (name.length < MIN_NAME_LENGTH) {
     return {
