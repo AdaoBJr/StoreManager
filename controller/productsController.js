@@ -8,7 +8,7 @@ const getAllProducts = (_req, res) => productsModel.getAll()
     .then((products) => res.status(200).json(products))
     .catch((error) => res.status(422).json({ message: error.message }));
 
-const getProductById = async (req, res) => {
+const getProductById = (req, res) => {
     const { id } = req.params;
     return service.getProductById(id).then((result) => {
         if (result.err) {
@@ -18,7 +18,7 @@ const getProductById = async (req, res) => {
     }).catch((error) => res.status(422).json({ message: error.message }));
 };
 
-const createProduct = async (req, res) => {
+const createProduct = (req, res) => {
     const { name, quantity } = req.body;
     return service.createProduct({ name, quantity }).then((result) => {
         if (result.err) { 
@@ -28,7 +28,7 @@ const createProduct = async (req, res) => {
     }).catch((error) => res.status(422).json({ message: error.message }));
 };
 
-const updateProduct = async (req, res) => {
+const updateProduct = (req, res) => {
     const { name, quantity } = req.body;
     const { id } = req.params;
     return service.updateProduct({ id, name, quantity }).then((result) => {
@@ -37,7 +37,7 @@ const updateProduct = async (req, res) => {
     }).catch((error) => res.status(422).json({ message: error.message }));
 };
 
-const deleteProduct = async (req, res) => {
+const deleteProduct = (req, res) => {
     const { id } = req.params;
     return service.deleteProduct(id).then((result) => {
         if (result.err) { return res.status(422).json(result); }

@@ -1,4 +1,4 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const saleModel = require('../models/salesModel');
 
 const wrongIdFormat = {
@@ -7,17 +7,11 @@ const wrongIdFormat = {
     message: 'Wrong product ID or invalid quantity', 
   } };
 
-const saleNotFound = {
-  err: { 
-    code: 'not_found', 
-    message: 'Sale not found', 
-  } };
-
-const getSaleById = async (id) => {
-  const verifySale = await saleModel.saleExists(id);
-  if (!verifySale) return saleNotFound;
-  return saleModel.saleById(id);
-};
+  const wrongSaleIdFormat = {
+    err: { 
+      code: 'invalid_data', 
+      message: 'Wrong sale ID format', 
+    } };
 
 const createSale = (itensSold) => {
   const wrongFormat = itensSold
@@ -35,4 +29,12 @@ const updateSaleService = async (id, [itensSold]) => {
   return update;
 };
 
-module.exports = { getSaleById, createSale, updateSaleService };
+const deleteSale = async (id) => {
+  if (!ObjectId.isValid(id)) return wrongSaleIdFormat;
+  const saleExists = await saleModel.saleById(id);
+  if (!saleExists) return wrongSaleIdFormat;
+  const modelResult = await saleModel.exclude(id);
+  return modelResult;
+};
+
+module.exports = { createSale, updateSaleService, deleteSale };

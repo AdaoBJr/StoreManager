@@ -1,26 +1,27 @@
 const salesModel = require('../models/salesModel');
 const service = require('../services/salesService');
 
-const getAllSales = async (_req, res) => {
-  try {
-      const sales = await salesModel.getAll();
-      return res.status(200).json(sales);
-  } catch (error) {
-      return res.status(422).json({ message: error.message });
-  }
-};
+const saleNotFound = {
+  err: { 
+    code: 'not_found', 
+    message: 'Sale not found', 
+  } };
 
+const getAllSales = async (_req, res) => salesModel.getAll()
+    .then((sales) => res.status(200).json(sales))
+    .catch((error) => res.status(422).json({ message: error.message }));
+
+// Ver qual a treta dessa funcao... Tah muito estranha ela!! Ajuda da Maiara Borsati para ajeitar ela!! ;)  
 const getSaleById = async (req, res) => {
   try {
       const { id } = req.params;
-      const result = await service.getSaleById(id);
-      // if (result.err) {
-      //     return res.status(404).json(result);
-      // Refatorar aqui!!
-      // }
+      const result = await salesModel.saleById(id);
+      if (!result) {
+          return res.status(404).json(saleNotFound);
+      }
       return res.status(200).json(result);
   } catch (error) {
-      return res.status(404).json({ err: { code: 'not_found', message: 'Sale not found' } });
+      return res.status(500).json({ message: error.message });
   }
 };
 
@@ -31,7 +32,6 @@ const createSale = async (req, res) => {
       if (result.err) { 
         return res.status(422).json(result); 
       }
-
       return res.status(200).json(result);
   } catch (error) {
       return res.status(422).json({ message: error.message });
@@ -43,13 +43,19 @@ const updateSale = async (req, res) => {
   const { id } = req.params;
   try {
       const result = await service.updateSaleService(id, itensSold);
-      // console.log(result);
       if (result.err) { return res.status(422).json(result); }
-
       return res.status(200).json(result);
   } catch (error) {
       return res.status(500).json({ message: error.message });
   }
+};
+
+const deleteSale = async (req, res) => {
+  const { id } = req.params;
+  return service.deleteSale(id).then((result) => {
+      if (result.err) { return res.status(422).json(result); }
+      return res.status(200).json(result);
+  }).catch((error) => res.status(422).json({ message: error.message }));
 };
 
 module.exports = {
@@ -57,4 +63,5 @@ module.exports = {
   getSaleById,
   createSale,
   updateSale,
+  deleteSale,
 };
