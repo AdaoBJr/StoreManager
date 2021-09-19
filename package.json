@@ -38,6 +38,7 @@
     "mocha": "^8.4.0",
     "mongodb-memory-server": "^6.9.6",
     "nyc": "^15.1.0",
+    "rewire": "^5.0.0",
     "sinon": "^11.1.1"
   }
 }
