@@ -8,7 +8,7 @@ const DB_NAME = 'StoreManager';
 const OPTION = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-}
+};
 
 const connection = () => MongoClient
   .connect(MONGO_DB_URL, OPTION)
