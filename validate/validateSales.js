@@ -9,7 +9,6 @@ const validateSales = (req, _res, next) => {
       .required(),
     }),
   ).validate(req.body);
-  console.log(error);
   if (error) return next(errorBusines('Wrong product ID or invalid quantity'));
   next();
 };
