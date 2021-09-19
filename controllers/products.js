@@ -7,4 +7,4 @@ const create = async (req, res) => {
   return res.status(code).json(newProduct);
 };
 
-module.exports = create;
+module.exports = { create };
