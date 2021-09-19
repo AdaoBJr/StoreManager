@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const productsController = require('./controllers/productsController');
+const salesController = require('./controllers/salesController');
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,5 +20,7 @@ app.post('/products', productsController.create);
 app.delete('/products/:id', productsController.remove);
 
 app.put('/products/:id', productsController.update);
+
+app.post('/sales', salesController.create);
 
 app.listen('3000', () => console.log('Running server on port 3000'));
