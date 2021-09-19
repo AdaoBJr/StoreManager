@@ -43,9 +43,9 @@ const validateProductData = async ({ name, quantity }) => (
   (await validateProductDataName(name)) || validateProductDataQuantity(quantity)
 );
 
-const addNewProduct = (product) => {
-  const err = validateProductData(product);
-  if (err) return err;
+const addNewProduct = async (product) => {
+  const err = await validateProductData(product);
+  if (err) return ({ ...err, wasAnError: true });
   return productsModel.addProductToDB(product);
 };
 

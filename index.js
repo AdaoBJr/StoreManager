@@ -1,14 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { getAll, addNewProduct } = require('./controllers/products');
+const { getAllProducts, getProductById, addNewProduct } = require('./controllers/products');
 
 const app = express();
 app.use(bodyParser.json());
 
 // não remova esse endpoint, e para o avaliador funcionar
-app.get('/products', getAll);
-
+app.get('/products', getAllProducts);
+app.get('/products/:id', getProductById);
 app.post('/products', addNewProduct);
 
 if (process.env.CI === 'true') {
