@@ -1,3 +1,5 @@
+const ID_SIZE = 24;
+
 const isQuantityValid = (sales) => {
   let erro = 0;
   sales.forEach((sale) => {
@@ -16,4 +18,19 @@ const isQuantityValid = (sales) => {
   return true;
 };
 
-module.exports = { isQuantityValid };
+const isIdValid = (id) => {
+  if (id.length !== ID_SIZE) {
+    return {
+      code: 404,
+      err: {
+        code: 'not_found', message: 'Sale not found',
+      },
+    };
+  }
+  return true;
+};
+
+module.exports = {
+  isQuantityValid,
+  isIdValid,
+ };
