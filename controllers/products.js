@@ -18,4 +18,17 @@ const getById = async (req, res) => {
   if (err) return res.status(code).json({ err });
   return res.status(code).json(product);
 };
-module.exports = { create, getAll, getById };
+
+const update = async (req, res) => {
+  const { id } = req.params;
+  const { code, err, updatedProduct } = await serviceProduct.update(id, req.body);
+  if (err) return res.status(code).json({ err });
+  return res.status(code).json(updatedProduct);
+};
+
+module.exports = {
+  create,
+  getAll,
+  getById,
+  update,
+};
