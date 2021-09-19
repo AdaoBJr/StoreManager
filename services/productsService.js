@@ -41,9 +41,22 @@ async function update({ id, name, quantity }) {
   return updatedProduct;
 }
 
+async function remove({ id }) {
+  if (id.length < 24) return 'wrong id';
+
+  const product = await productsModel.getById({ id });
+
+  if (!product) return 'wrong id';
+
+  await productsModel.remove({ id });
+  
+  return product;
+}
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  remove,
 };

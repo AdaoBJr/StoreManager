@@ -21,6 +21,13 @@ async function getByName({ name }) {
   return product;
 }
 
+async function remove({ id }) {
+  const db = await getConnection();
+  const result = await db.collection(collection).deleteOne({ _id: ObjectId(id) });
+  
+  return result;
+}
+
 async function update({ id, name, quantity }) {
   const db = await getConnection();
   
@@ -44,4 +51,5 @@ module.exports = {
   getByName,
   create,
   update,
+  remove,
 };

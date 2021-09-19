@@ -42,9 +42,19 @@ async function update(req, res) {
   return res.status(200).json({ id, name, quantity });
 }
 
+async function remove(req, res) {
+  const { id } = req.params;
+  const product = await productsServices.remove({ id });
+
+  if (product === 'wrong id') res.status(422).json(productsErr.errWrongId);
+
+  return res.status(200).json(product);
+}
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  remove,
 };
