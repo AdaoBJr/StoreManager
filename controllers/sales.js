@@ -7,4 +7,20 @@ const create = async (req, res) => {
   return res.status(code).json(newSale);
 };
 
-module.exports = { create };
+const getAll = async (_req, res) => {
+  const { code, sales } = await Sale.getAll();
+  return res.status(code).json({ sales });
+};
+
+const getById = async (req, res) => {
+  const { id } = req.params;
+  const { code, err, sale } = await Sale.getSaleById(id);
+  if (err) return res.status(code).json({ err });
+  return res.status(code).json(sale);
+};
+
+module.exports = {
+  create,
+  getAll,
+  getById,
+};
