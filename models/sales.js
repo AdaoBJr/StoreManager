@@ -28,9 +28,16 @@ const update = async (id, updates) => {
   }
 };
 
+const exclude = async (id) => {
+  const db = await connection();
+  const { deletedCount } = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+  return deletedCount;
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   update,
+  exclude,
 };
