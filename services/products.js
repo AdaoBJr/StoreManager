@@ -108,9 +108,26 @@ const update = async (id, updates) => {
   return { code: 200, updatedProduct };
 };
 
+const exclude = async (id) => {
+  const isValid = isIdValid(id);
+  if (isValid.err) return isValid;
+  const product = await modelsProduct.getById(id);
+  if (!product) {
+    return {
+      code: 422,
+      err: {
+        code: 'invalid_data', message: 'Wrong id format',
+      },
+    };
+  }
+  await modelsProduct.exclude(id);
+  return { code: 200, product };
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   update,
+  exclude,
 };
