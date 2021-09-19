@@ -12,7 +12,8 @@ const create = async (product) => {
   const newProduct = db.collection('products').insertOne(product);
   return { _id: newProduct.insertedId, ...product };
 };
+
 module.exports = {
   create,
-  getByName
+  getByName,
 };

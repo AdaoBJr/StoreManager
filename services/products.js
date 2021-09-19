@@ -58,7 +58,7 @@ const create = async ({ name, quantity }) => {
   const productExists = await isProductExists(name);
   
   if (productExists.err) return productExists;
-  const newProduct = await Product.create({ name, quantity });
+  const newProduct = await modelsProduct.create({ name, quantity });
   
   return { code: 201, newProduct };
 };
