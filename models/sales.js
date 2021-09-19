@@ -7,15 +7,18 @@ const err = {
 };
 
 const getSalesId = async (req, res) => {
-    const productsCollection = await getConnection()
+    const dbSales = await getConnection()
     .then((db) => db.collection('sales'));
     const { id } = req.params;
-    const result = ObjectId.isValid(id);
+    const result1 = ObjectId.isValid(id);
+    if (!result1) {
+      return res.status(404).json({ err });
+    }
+    const result = await dbSales.findOne({ _id: ObjectId(id) });
     if (!result) {
         return res.status(404).json({ err });
       }
-    const product = await productsCollection.findOne({ _id: ObjectId(id) });
-    return product;
+    return result;
 };
 
 const salesId = async (req, res) => {
@@ -24,10 +27,10 @@ const salesId = async (req, res) => {
 };
 
 const getAllSales = async (req, res) => {
-    const productsCollection = await getConnection()
+    const dbSales = await getConnection()
     .then((db) => db.collection('sales'));
 
-    const sales = await productsCollection.find({ _id: { $exists: true } }).toArray();
+    const sales = await dbSales.find({ _id: { $exists: true } }).toArray();
         return res.status(200).json({ sales });
 };
 
