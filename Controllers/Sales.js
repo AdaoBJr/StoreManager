@@ -71,6 +71,8 @@ const requestUpdateSale = async (req, res) => {
       },
     });
   }
+
+  return res.status(200).json(updatedSale);
 };
 
 module.exports = {

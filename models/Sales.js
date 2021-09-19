@@ -30,11 +30,20 @@ const getSaleById = async (id) => {
 const update = async (id, productId, quantity) => {
   const db = await connection();
 
-  const attSale = await db.collection('sales').findOne({ _id: ObjectId(id) });
+  const { itensSold } = await getSaleById(id);
 
-  console.log(attSale);
+  itensSold.forEach((item, index) => {
+    if (item.productId === productId[index]) {
+      itensSold[index].quantity = quantity[index];
+    }
+  });
 
-  return attSale;
+  await db.collection('sales').updateOne(
+    { _id: ObjectId(id) },
+    { $set: { itensSold } },
+  );
+
+  return { _id: ObjectId(id), itensSold };
 };
 
 const deleteSaleById = async (id) => {
