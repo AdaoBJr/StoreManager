@@ -21,4 +21,5 @@ module.exports = {
   create,
   findById,
   getAll: Products.getAll,
+  update: Products.update,
 };

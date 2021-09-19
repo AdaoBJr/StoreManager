@@ -35,4 +35,12 @@ products.get('/:id',
   return res.status(SUCCESS).json(product);
 }));
 
+products.put('/:id',
+  productValidate,
+  rescue(async (req, res) => {
+  const { id } = req.params;
+  const product = await Products.update(id, req.body);
+  return res.status(SUCCESS).json(product);
+}));
+
 module.exports = products;
