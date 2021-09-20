@@ -20,6 +20,23 @@ const createProduct = async (name, quantity) => {
   };
 };
 
+const getAllProducts = async () => {
+  const productsFound = await productModel.getAllProducts();
+  if (!productsFound) {
+    return {
+      error: {
+        status: 404,
+        message: 'No products found',
+      },
+    };
+  }
+
+  return {
+    products: productsFound,
+  };
+};
+
 module.exports = {
   createProduct,
+  getAllProducts,
 };
