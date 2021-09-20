@@ -2,15 +2,17 @@ const express = require('express');
 
 const router = express.Router();
 
-const { getAll, getById, create, update, remove, validQuantity } = require('./salesController');
+const salesController = require('./salesController');
 
 router.route('/')
-.get(getAll)
-.post(create);
+.get(salesController.getAllSales)
+.post(salesController.validQuantity,
+  salesController.createSale);
 
 router.route('/:id')
-  .get(getById)
-  .put(validQuantity, update)
-  .delete(remove);
+  .get(salesController.getSaleById)
+  .put(salesController.validQuantity,
+    salesController.updateSale)
+  .delete(salesController.deleteSale);
 
 module.exports = router;
