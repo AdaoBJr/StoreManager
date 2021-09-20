@@ -50,11 +50,12 @@ const findById = async (id) => {
 
 const update = async (id, name, quantity) => {
   const validateName = isNameValid(name);
-  const validateQuantity = isQuantityValid(quantity);
-  const valivalidateQuantityTwo = isQuantityValidTwo(quantity);
-
   if (validateName.err) return validateName;
+
+  const validateQuantity = isQuantityValid(quantity);
   if (validateQuantity.err) return validateQuantity;
+
+  const valivalidateQuantityTwo = isQuantityValidTwo(quantity);
   if (valivalidateQuantityTwo.err) return valivalidateQuantityTwo;
 
   return Products.update(id, name, quantity);

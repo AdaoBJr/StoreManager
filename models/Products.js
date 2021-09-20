@@ -22,6 +22,14 @@ const findById = async (id) => {
   if (!ObjectId.isValid(id)) {
     return null;
   }
+  if (!ObjectId.isValid(id) === null) {
+    return {
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    };
+  }
   const productData = await connection()
     .then((db) => db.collection('products').findOne(new ObjectId(id)));
 
