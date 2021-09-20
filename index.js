@@ -26,4 +26,8 @@ app.delete('/products/:id', productsController.deleteProduct);
 
 app.post('/sales', salesController.createSale);
 
+app.get('/sales', salesController.getAllSales);
+
+app.get('/sales/:id', salesController.getSalesById);
+
 app.listen(PORT, () => { console.log('Systems are online :D'); });

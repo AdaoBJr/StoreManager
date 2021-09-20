@@ -51,8 +51,22 @@ const createSale = async (newSale) => {
   };
 };
 
+const verifyExistenceId = async (id) => {
+  const sales = await salesModel.getSalesById(id);
+  if (!sales) {
+    return {
+      err: {
+        code: 'not_found',
+        message: 'Sale not found',
+      },
+    };
+  }
+  return sales;
+};
+
 module.exports = {
   verifyId,
   verifyQuantity,
   createSale,
+  verifyExistenceId,
 };
