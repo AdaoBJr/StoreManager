@@ -1,4 +1,4 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const productsModel = require('../models/products');
 
 const validateProductDataName = async (name) => {
@@ -49,6 +49,21 @@ const addNewProduct = async (product) => {
   return productsModel.addProductToDB(product);
 };
 
+const getProductById = async (id) => {
+  const err = {
+    err: {
+      code: 'invalid_data',
+      message: 'Wrong id format',
+    },
+    wasAnError: true,
+  };
+  if (!ObjectId.isValid(id)) {
+    return err;
+  }
+  return (await productsModel.getProductByIdFromDB(id)) || err;
+};
+
 module.exports = {
   addNewProduct,
+  getProductById,
 };

@@ -9,13 +9,17 @@ const getAllProducts = async (_req, res) => {
 
 const addNewProduct = async (req, res) => {
   const { name, quantity } = req.body;
-  const newProduct = await productsServices.addNewProduct({ name, quantity }); 
+  const newProduct = await productsServices.addNewProduct({ name, quantity });
   if (newProduct.wasAnError) return res.status(422).json(newProduct);
+  console.log(newProduct.insertedId);
   return res.status(201).json({ name, quantity, _id: newProduct.insertedId });
 };
 
-const getProductById = async (_req, _res) => {
-
+const getProductById = async (req, res) => {
+  const { id } = req.params;
+  const product = await productsServices.getProductById(id);
+  if (product.wasAnError) return res.status(422).json(product);
+  return res.status(200).json(product);
 };
 
 module.exports = {
