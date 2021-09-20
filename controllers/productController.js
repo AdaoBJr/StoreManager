@@ -28,9 +28,17 @@ async function editProduct(req, res) {
   return res.status(200).json(item);
 }
 
+async function removeProduct(req, res) {
+  const { id } = req.params;
+  const item = await ProductService.removeProduct(id);
+  if (item.err) return res.status(422).json(item);
+  return res.status(200).json(item);
+}
+
 module.exports = { 
   saveProduct,
   listProducts,
   listProductById,
   editProduct,
+  removeProduct,
 };

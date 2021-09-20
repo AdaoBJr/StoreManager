@@ -35,13 +35,50 @@ async function listProductById(id) {
 async function editProduct(id, item) {
   const { name, quantity } = item;
   const collection = await connection().then((db) => db.collection('products'));
-
+  
   const editedProduct = await collection.updateOne(
     { _id: ObjectId(id) },
     { $set: { name, quantity } },
-  );
+    );
+    
+    return editedProduct;
+  }
+  
+  async function removeProduct(id) {
+  const collection = await connection().then((db) => db.collection('products'));
+  const deleteProduct = await collection.deleteOne({ _id: ObjectId(id) });
+  
+  return deleteProduct;
+}
 
-  return editedProduct;
+function buildFilterByop(op, productId, quantity) {
+  switch (op) {
+    case 'decrease':
+      return { $and: [{ _id: ObjectId(productId) }, { $expr: { $lt: [quantity, '$quantity'] } }] };
+    default:
+      return { $and: [{ _id: ObjectId(productId) }] };
+  }
+}
+
+async function editProductQt(op, items) {
+  if (op !== 'decrease' && op !== 'increase') {
+    return null;
+  }
+
+  const db = await connection();
+
+  const updateQuantityPromises = items.map(({ productId, quantity }) => {
+    const incQuantity = (op === 'decrease') ? { quantity: -quantity } : { quantity };
+
+    return db.collection('products').findOneAndUpdate(
+      buildFilterByop(op, productId, quantity),
+      { $inc: incQuantity },
+      { returnDocument: 'after' },
+    );
+  });
+
+  const promiseResults = await Promise.all(updateQuantityPromises);
+  return promiseResults.every(({ value }) => value);
 }
 
 module.exports = {
@@ -50,4 +87,6 @@ module.exports = {
   listProducts,
   listProductById,
   editProduct,
+  removeProduct,
+  editProductQt,
 };

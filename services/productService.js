@@ -1,7 +1,10 @@
 const Joi = require('joi');
-const ProductModel = require('../models/productModels');
+const ProductModel = require('../models/productModel');
+const { formatError } = require('../helpers');
 
-function JoiSchema(product) {
+const wrongId = 'Wrong id format';
+
+function JoiValidator(data) {
   const schema = Joi.object({
     name: Joi.string()
         .min(5)
@@ -10,16 +13,7 @@ function JoiSchema(product) {
     quantity: Joi.number().min(1).strict().required(),
   });
 
-  return schema.validate(product).error;
-}
-
-function formatError(message) {
-  return {
-      err: {
-        code: 'invalid_data',
-        message,
-      },
-  };
+  return schema.validate(data).error;
 }
 
 function idValidator(id) {
@@ -28,10 +22,10 @@ function idValidator(id) {
   return idRegex.test(id);
 }
 
-// SERVICE METHODS
+// <-- SERVICE METHODS -->
 
 async function saveProduct(product) {
-  const error = JoiSchema(product);
+  const error = JoiValidator(product);
   if (error) return formatError(error.details[0].message);
   const exists = await ProductModel.findProduct(product);
   if (exists) return formatError('Product already exists');
@@ -45,22 +39,29 @@ async function listProducts() {
 }
 
 async function listProductById(id) {
-  if (!idValidator(id)) return formatError('Wrong id format');
+  if (!idValidator(id)) return formatError(wrongId);
   const item = await ProductModel.listProductById(id);
-  if (!item) return formatError('Wrong id format');
+  if (!item) return formatError(wrongId);
   return item;
 }
 
 async function editProduct(id, item) {
-  if (!idValidator(id)) return formatError('Wrong id format');
-  const error = JoiSchema(item);
+  if (!idValidator(id)) return formatError(wrongId);
+  const error = JoiValidator(item);
   if (error) return formatError(error.details[0].message);
   const { name, quantity } = item;
   const product = await ProductModel.editProduct(id, item);
-
+  
   return (product.matchedCount === 1)
-    ? { _id: id, name, quantity }
-    : formatError('Wrong id format');
+  ? { _id: id, name, quantity }
+  : formatError(wrongId);
+}
+
+async function removeProduct(id) {
+  if (!idValidator(id)) return formatError(wrongId);
+  const deletedItem = await ProductModel.listProductById(id);
+  const item = await ProductModel.removeProduct(id);
+  return (item.deletedCount === 1) ? deletedItem : formatError(wrongId);
 }
 
 module.exports = {
@@ -68,4 +69,5 @@ module.exports = {
   listProducts,
   listProductById,
   editProduct,
+  removeProduct,
 };
