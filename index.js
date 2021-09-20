@@ -11,7 +11,7 @@ app.use('/products', productsRoute);
 app.get('/', (_request, response) => {
   response.send();
 });
-// --------------------- //
+// ----------------------------------------------------
 
 const PORT = 3000;
 app.listen(PORT, () => console.log('Rodando na porta 3000'));
