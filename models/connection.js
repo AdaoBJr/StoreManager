@@ -1,14 +1,20 @@
 const { MongoClient } = require('mongodb');
 
+// conexao teste local
 // const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
+
+// conexao test github
 const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
+
 const DB_NAME = 'StoreManager';
 
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
-const connection = () => MongoClient
+
+const connection = () => 
+  MongoClient
     .connect(MONGO_DB_URL, options)
     .then((conn) => conn.db(DB_NAME))
     .catch((err) => {
