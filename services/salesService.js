@@ -64,9 +64,30 @@ const verifyExistenceId = async (id) => {
   return sales;
 };
 
+const updateSale = async (id, update) => {
+  const { productId, quantity } = update[0];
+  const quantityNotIsValid = verifyQuantity(quantity);
+  const productIdNotIsValid = verifyId(productId);
+  const idExists = verifyExistenceId(id);
+
+  if (quantityNotIsValid) return quantityNotIsValid;
+  if (productIdNotIsValid) return productIdNotIsValid;
+  if (idExists.err) return idExists;
+  return salesModel.updateSale(id, update);
+};
+
+const deleteSale = async (id) => {
+  const saleExists = await verifyExistenceId(id);
+
+  if (!saleExists.err) return salesModel.deleteSale(id);
+  return saleExists;
+};
+
 module.exports = {
   verifyId,
   verifyQuantity,
   createSale,
   verifyExistenceId,
+  updateSale,
+  deleteSale,
 };

@@ -30,4 +30,8 @@ app.get('/sales', salesController.getAllSales);
 
 app.get('/sales/:id', salesController.getSalesById);
 
+app.put('/sales/:id', salesController.updateSale);
+
+app.delete('/sales/:id', salesController.deleteSale);
+
 app.listen(PORT, () => { console.log('Systems are online :D'); });
