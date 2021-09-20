@@ -2,12 +2,13 @@ const express = require('express');
 
 const router = express.Router();
 
-const { getAll, getById } = require('./salesController');
+const { getAll, getById, create } = require('./salesController');
+
+router.route('/')
+.get(getAll)
+.post(create);
 
 router.route('/:id')
   .get(getById);
-
-router.route('/')
-  .get(getAll);
 
 module.exports = router;
