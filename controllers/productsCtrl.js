@@ -2,26 +2,29 @@ const { StatusCodes: { OK, CREATED, INTERNAL_SERVER_ERROR } } = require('http-st
 const { getProducts } = require('../models/productsMdl');
 const { add, getById, update, remove } = require('../services/productSrvc');
 
-const INTERNAL_SERVER_ERROR_MSG = 'Something went wrong :(';
+const INTERNAL_SERVER_ERROR_MSG = 'BAD REQUEST';
 
 const createProduct = async (req, res) => {
   try {
     const { name, quantity } = req.body;
-    const result = await add(name, quantity);
+    const response = await add(name, quantity);
     
-    return res.status(CREATED).json(result);
+    return res.status(CREATED).json(response);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
+
     return res.status(INTERNAL_SERVER_ERROR).send(INTERNAL_SERVER_ERROR_MSG);
   }
 };
 
 const getAllProducts = async (_req, res) => {
   try {
-    const result = await getProducts();
-    return res.status(OK).json({ products: result });
+    const response = await getProducts();
+
+    return res.status(OK).json({ products: response });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
+
     return res.status(INTERNAL_SERVER_ERROR).send(INTERNAL_SERVER_ERROR_MSG);
   }
 };
@@ -29,11 +32,12 @@ const getAllProducts = async (_req, res) => {
 const getProductById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await getById(id);
+    const response = await getById(id);
      
-    return res.status(OK).json(result);
+    return res.status(OK).json(response);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
+
     return res.status(INTERNAL_SERVER_ERROR).send(INTERNAL_SERVER_ERROR_MSG);
   }
 };
@@ -42,11 +46,12 @@ const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, quantity } = req.body;
-    const result = await update(id, name, quantity);
+    const response = await update(id, name, quantity);
    
-    return res.status(OK).json(result);
+    return res.status(OK).json(response);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
+
     return res.status(INTERNAL_SERVER_ERROR).send(INTERNAL_SERVER_ERROR_MSG);
   }
 };
@@ -54,11 +59,12 @@ const updateProduct = async (req, res) => {
 const removeProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await remove(id);
+    const response = await remove(id);
    
-    return res.status(OK).json(result);
+    return res.status(OK).json(response);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
+
     return res.status(INTERNAL_SERVER_ERROR).send(INTERNAL_SERVER_ERROR_MSG);
   }
 };

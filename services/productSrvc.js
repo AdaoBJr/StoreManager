@@ -22,7 +22,7 @@ const update = async (id, name, quantity) => {
   };
 };
 
-const updateStock = (id, quantity) => {
+const updateProductStock = (id, quantity) => {
   updateData(id, quantity);
 };
 
@@ -31,5 +31,5 @@ module.exports = {
   getById,
   update,
   remove,
-  updateStock,
+  updateProductStock,
 };

@@ -9,12 +9,10 @@ const errors = {
   invalidId: 'Wrong id format',
 };
 
-const MIN_NAME_LENGTH = 5;
-
 const nameValidator = (req, res, next) => {
   const { name } = req.body;
 
-  if (name.length <= MIN_NAME_LENGTH) {
+  if (name.length <= 5) {
     return res.status(UNPROCESSABLE_ENTITY).json({
       err: {
         code: 'invalid_data',
