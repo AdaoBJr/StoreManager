@@ -11,7 +11,6 @@ const addNewProduct = async (req, res) => {
   const { name, quantity } = req.body;
   const newProduct = await productsServices.addNewProduct({ name, quantity });
   if (newProduct.wasAnError) return res.status(422).json(newProduct);
-  console.log(newProduct.insertedId);
   return res.status(201).json({ name, quantity, _id: newProduct.insertedId });
 };
 
@@ -30,9 +29,17 @@ const updateProduct = async (req, res) => {
   return res.status(200).json({ name, quantity, _id: id });
 };
 
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  const deletedProduct = await productsServices.deleteProductById(id);
+  if (deletedProduct.wasAnError) return res.status(422).json(deletedProduct);
+  return res.status(200).json({ _id: id });
+};
+
 module.exports = {
   getAllProducts,
   addNewProduct,
   getProductById,
   updateProduct,
+  deleteProduct,
 };

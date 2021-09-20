@@ -18,10 +18,7 @@ module.exports = {
 
   updateProductByIdInDB: async (id, product) => (
     connection()
-      .then((db) => {
-        console.log(id);
-        return db.collection('products').updateOne({ _id: ObjectId(id) }, { $set: product });
-      })
+      .then((db) => db.collection('products').updateOne({ _id: ObjectId(id) }, { $set: product }))
   ),
 
   deleteProductByIdFromDB: async (id) => (
