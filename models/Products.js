@@ -49,15 +49,6 @@ const remove = async (id) => {
   return product;
 };
 
-const validateQuantity = async ({ productId, quantity: amount }) => {
-  const db = await connection();
-
-  return db.collection('products').findOne({
-    _id: ObjectId(productId),
-    quantity: { $gte: amount },
-  });
-};
-
 const ensuresQuantity = async ({ productId, quantity: amount }) => {
   const NUMBER_TWO = 2;
   const quantityAmount = amount - amount * NUMBER_TWO;
@@ -86,7 +77,6 @@ module.exports = {
   getAll,
   update,
   remove,
-  validateQuantity,
   updateQuantity,
   ensuresQuantity,
 };

@@ -22,9 +22,11 @@ const errService = (err) => ({
 });
 
 module.exports = (err, _req, res, _next) => {
+  const isInvalid = ['not_found', 'stock_problem'].some((status) => status === err.code);
+
   if (err.isJoi) return res.status(INVALID_DATE).json(errJoi(err));
   if (err.isError) {
-    return res.status(err.code === 'not_found' ? NOT_FOUND : INVALID_DATE).json(errService(err));
+    return res.status(isInvalid ? NOT_FOUND : INVALID_DATE).json(errService(err));
   }
   res.status(INTERNAL_ERROR).json(errServer());
 };
