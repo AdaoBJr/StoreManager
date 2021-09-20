@@ -1,14 +1,11 @@
 const productModel = require('../models/productsModel');
 
-const createProduct = async ({ name, quantity }) => 
-    productModel.create({ name, quantity });
+const createProduct = ({ name, quantity }) => productModel.create({ name, quantity });
 
-const getProductById = async (id) => productModel.productById(id);
+const getProductById = (id) => productModel.productById(id);
 
-const updateProduct = async ({ id, name, quantity }) => 
-    productModel.update({ id, name, quantity });
+const updateProduct = ({ id, name, quantity }) => productModel.update({ id, name, quantity });
 
-const deleteProduct = async (id) => 
-    productModel.exclude(id);
+const deleteProduct = (id) => productModel.exclude(id);
 
 module.exports = { createProduct, getProductById, updateProduct, deleteProduct };
