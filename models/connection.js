@@ -1,11 +1,11 @@
 const { MongoClient } = require('mongodb');
 
-const MONGO_DB_URL = 'mongodb://127.0.0.1:27017';
-const DB_NAME = 'StoreManager';
+/* const MONGO_DB_URL = 'mongodb://127.0.0.1:27017';
+const DB_NAME = 'StoreManager'; */
 
 // Para o avaliador funcionar no avaliador
-/* const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
-const DB_NAME = 'StoreManager'; */
+const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
+const DB_NAME = 'StoreManager';
 
 const connection = () => MongoClient
     .connect(MONGO_DB_URL, {
