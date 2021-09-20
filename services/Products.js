@@ -6,11 +6,16 @@ const { isNameValid,
 } = require('../schema/validations');
 
 const create = async (name, quantity) => {
-  const existingProduct = await Products.findByName(name);
   const validateName = isNameValid(name);
-  const validateQuantity = isQuantityValid(quantity);
-  const valivalidateQuantityTwo = isQuantityValidTwo(quantity);
+  if (validateName.err) return validateName;
 
+  const validateQuantity = isQuantityValid(quantity);
+  if (validateQuantity.err) return validateQuantity;
+
+  const valivalidateQuantityTwo = isQuantityValidTwo(quantity);
+  if (valivalidateQuantityTwo.err) return valivalidateQuantityTwo;
+
+  const existingProduct = await Products.findByName(name);
   if (existingProduct) {
     return {
       err: {
@@ -19,9 +24,6 @@ const create = async (name, quantity) => {
       },
     };
   }
-  if (validateName.err) return validateName;
-  if (validateQuantity.err) return validateQuantity;
-  if (valivalidateQuantityTwo.err) return valivalidateQuantityTwo;
 
   return Products.create(name, quantity);
 };
