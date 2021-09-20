@@ -40,6 +40,7 @@ const update = async (productId, itensSold) => {
 };
 
 const remove = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
   const db = await connect();
  const deleteSale = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
   return deleteSale;

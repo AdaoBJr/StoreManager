@@ -1,9 +1,5 @@
-const { ObjectId } = require('mongodb');
 const salesModel = require('../models/salesModel');
 const salesService = require('../services/salesService');
-
-const formatError = { err:
-  { code: 'invalid_data', message: 'Wrong sale ID format' } };
 
 const add = async (req, res) => {
   try {
@@ -52,16 +48,26 @@ const update = async (req, res) => {
   }
 };
 
-const remove = async (req, res) => {
+/* const remove = async (req, res) => {
     const { id } = req.params;
     if (!ObjectId.isValid(id)) {
-      return res.status(422).json(formatError);
+      return res.status(404).json(formatError);
     }
-    const verifyDelete = salesService.remove(id);
+    const verifyDelete = await salesService.remove(id);
+    console.log(verifyDelete);
     if (!verifyDelete) {
-      return res.status(422).json(formatError);
+      return res.status(404).json(formatError);
     }
     return res.status(200).json(verifyDelete);
+  }; */
+
+  const remove = async (req, res) => {
+      const { id } = req.params;
+      const { message, code } = await salesService.remove(id);
+      if (message) {
+        return res.status(422).json({ err: { code, message } });
+    }
+        return res.status(200).json();
   };
 
 module.exports = { add, getAll, getById, update, remove };

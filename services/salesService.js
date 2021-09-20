@@ -26,14 +26,13 @@ const update = async (productId, itensSold) => {
 };
 
 const remove = async (id) => {
-  const deleteSale = await salesModel.remove(id);
-  return deleteSale;
+  if (!ObjectId.isValid(id)) {
+    return { code: 'invalid_data', message: 'Wrong sale ID format' };
+  }
+  const { _id } = await getById(id);
+  if (!_id) return { code: 'not_found', message: 'Sale not found' };
+  await salesModel.remove(id);
+  return _id;
 };
 
-const verifyIdDelete = async (id) => {
-  const getId = salesModel.getById(id);
-  if (!ObjectId.isValid(id)) return null;
-  return getId;
-};
-
-module.exports = { add, getById, update, remove, verifyIdDelete };
+module.exports = { add, getById, update, remove };

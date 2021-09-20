@@ -54,10 +54,10 @@ const remove = async (req, res) => {
   try {
     const { id } = req.params;
     const deleteProduct = await service.remove(id);
-   /*  if (deleteProduct.err) {
-      return res.status(422).json(deleteProduct);
-    } */
-    return res.status(200).json(deleteProduct);
+    if (deleteProduct.err) {
+      return res.status(200).json(deleteProduct);
+    }
+    return res.status(404).json(deleteProduct);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
