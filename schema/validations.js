@@ -56,8 +56,20 @@ const isQuantityValidTwo = (quantity) => {
   return {};
 };
 
+const isSalesQuantityValid = (itensSold) => {
+  if (itensSold.find((i) => i.quantity < 0 || i.quantity === 0)) {
+    return {
+      err:
+        { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
+    };
+  }
+
+  return {};
+};
+
 module.exports = {
   isNameValid,
   isQuantityValid,
   isQuantityValidTwo,
+  isSalesQuantityValid,
 };

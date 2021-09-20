@@ -2,6 +2,7 @@ const express = require('express');
 // require('dotenv').config();
 const bodyParser = require('body-parser');
 const Products = require('./controllers/Products');
+const Sales = require('./controllers/Sales');
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.get('/', (_request, response) => {
 });
 
 app.post('/products', Products.create);
+app.post('/sales', Sales.createSale);
 
 app.get('/products', Products.getAll);
 app.get('/products/:id', Products.findById);
