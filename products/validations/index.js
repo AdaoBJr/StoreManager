@@ -4,7 +4,7 @@ const {
   invalidQuantityType,
   invalidIdFormat,
   alreadyExists,
-  } = require('../error/errors');
+  } = require('../../errors/errors');
 
 const validateNameLength = (name) => {
   if (name.length < 5 || typeof name !== 'string') {

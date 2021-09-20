@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { alreadyExists, invalidIdFormat, invalidQuantityType } = require('./error/errors');
+const { alreadyExists, invalidIdFormat, invalidQuantityType } = require('../errors/errors');
 const model = require('./productModels');
 const service = require('./productServices');
 

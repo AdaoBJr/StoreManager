@@ -1,4 +1,4 @@
-const { alreadyExists, invalidIdFormat } = require('./error/errors');
+const { alreadyExists, invalidIdFormat } = require('../errors/errors');
 const model = require('./productModels');
 
 const { validateNameLength, validateQuantity, validateProductId } = require('./validations');
