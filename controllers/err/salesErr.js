@@ -10,7 +10,14 @@ const errNotExists = {
   },
 };
 
+const errNotExistsRemove = {
+  err: {
+    code: 'invalid_data', message: 'Wrong sale ID format',
+  },
+};
+
 module.exports = {
   errSale,
   errNotExists,
+  errNotExistsRemove,
 };

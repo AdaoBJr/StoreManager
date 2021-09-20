@@ -27,4 +27,6 @@ app.get('/sales/:id', salesController.getById);
 
 app.post('/sales', salesController.create);
 
+app.delete('/sales/:id', salesController.remove);
+
 app.listen('3000', () => console.log('Running server on port 3000'));

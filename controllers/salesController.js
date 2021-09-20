@@ -24,8 +24,18 @@ async function create(req, res) {
   return res.status(200).json(createSales);
 }
 
+async function remove(req, res) {
+  const { id } = req.params;
+  const sale = await salesService.remove({ id });
+
+  if (sale === 'id not exists') res.status(422).json(salesErr.errNotExistsRemove);
+
+  return res.status(200).json(sale);
+}
+
 module.exports = {
   getAll,
   getById,
   create,
+  remove,
 };

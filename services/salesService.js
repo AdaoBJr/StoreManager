@@ -24,8 +24,21 @@ async function create(body) {
   return createdSale;
 }
 
+async function remove({ id }) {
+  if (id.length < 24) return 'id not exists';
+
+  const product = await salesModel.getById({ id });
+
+  if (!product) return 'id not exists';
+
+  await salesModel.remove({ id });
+  
+  return product;
+}
+
 module.exports = {
   getAll,
   getById,
   create,
+  remove,
 };

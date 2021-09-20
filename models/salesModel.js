@@ -24,8 +24,16 @@ async function create(body) {
   return { _id: result.insertedId, itensSold: body };
 }
 
+async function remove({ id }) {
+  const db = await getConnection();
+  const result = await db.collection(collection).deleteOne({ _id: ObjectId(id) });
+  
+  return result;
+}
+
 module.exports = {
   getAll,
   getById,
   create,
+  remove,
 };
