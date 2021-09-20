@@ -5,7 +5,9 @@ const { validateIfAlreadyExistsAndLength,
     addProduct,
     getAllProducts,
     getProductById,
-    // validateIfIdAlreadyExists
+    updateProduct,
+    deleteProduct,
+    validateString,
 } = require('../services/ProductsService');
 
 const addNewProduct = async (req, res) => {
@@ -40,8 +42,40 @@ const getProductId = async (req, res) => {
     return res.status(200).json(product);
 };
 
+const productUpdate = async (req, res) => {
+    const { name, quantity } = req.body;
+    const { id } = req.params;
+    if (await validateString(name)) {
+        const data = await validateString(name);
+        return res.status(422).json(data);
+    }
+
+    if (await validateQuantity(quantity)) {
+        const data = await validateQuantity(quantity);
+        return res.status(422).json(data);
+    }
+    const update = await updateProduct(id, name, quantity);
+    console.log(update);
+    if (!update) {
+        // return res.status(422).json(update);
+        return res.status(200).json({ id, name, quantity });
+    }
+};
+
+const productDelete = async (req, res) => {
+    const { id } = req.params;
+    const productDeleted = await deleteProduct(id);
+    // console.log(productDeleted);
+    if (productDeleted.err) {
+        return res.status(422).json(productDeleted);
+    }
+    return res.status(200).json(productDeleted);
+};
+
 module.exports = {
     addNewProduct,
     getProducts,
     getProductId,
+    productUpdate,
+    productDelete,
 };

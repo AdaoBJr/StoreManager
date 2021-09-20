@@ -26,15 +26,22 @@ const validateQuantity = async (quantity) => {
         return {
             err: {
                 code: 'invalid_data',
-                message: '"quantity" must be larger than or equal to 1',
-            },
-        };
+                message: '"quantity" must be larger than or equal to 1' } };
     }
     if (typeof quantity === 'string') {
         return {
             err: {
                 code: 'invalid_data',
-                message: '"quantity" must be a number',
+                message: '"quantity" must be a number' } };
+    }
+};
+
+const validateString = async (name) => {
+    if (name.length < 5) {
+        return { 
+            err: {
+                code: 'invalid_data',
+                message: '"name" length must be at least 5 characters long',
             },
         };
     }
@@ -85,11 +92,47 @@ const getProductById = async (id) => {
     return product;
 };
 
+const updateProduct = async (id, name, quantity) => {
+    // if (!ObjectId.isValid(id)) {
+    //     return {
+    //         err: {
+    //             code: 'invalid_data',
+    //             message: 'Wrong id format',
+    //         },
+    //     };
+    // }
+    const update = await productsModel.updateProduct(id, name, quantity);
+    return update;
+};
+
+const deleteProduct = async (id) => {
+    if (!ObjectId.isValid(id)) {
+        return {
+            err: {
+                code: 'invalid_data',
+                message: 'Wrong id format',
+            },
+        };
+    }
+    const productDeleted = await productsModel.deleteProduct(id);
+    console.log(productDeleted);
+    if (!productDeleted) {
+        return {
+            err: {
+                code: 'invalid_data',
+                message: 'Wrong id format',
+            } };
+    }
+    return productDeleted;
+};
+
 module.exports = {
     validateIfAlreadyExistsAndLength,
     validateQuantity,
     addProduct,
     getAllProducts,
     getProductById,
-    // validateIfIdAlreadyExists,
+    updateProduct,
+    deleteProduct,
+    validateString,
 };
