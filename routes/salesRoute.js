@@ -5,6 +5,8 @@ const errorMiddleware = require('../middlewares/error');
 const router = express.Router();
 
 router.post('/', salesController.createSale);
+router.get('/', salesController.getAllSales);
+router.get('/:id', salesController.getSaleById);
 router.use(errorMiddleware);
 
 module.exports = router;
