@@ -30,8 +30,20 @@ async function list() {
   return sales;
 }
 
+async function edit(id, itensSold) {
+  const collection = await connection().then((db) => db.collection('sales'));
+  const editId = new ObjectId(id);
+  const { value } = await collection.findOneAndUpdate(
+    { _id: editId },
+    { $set: { itensSold } },
+    { returnDocument: 'after' },
+  );
+  return value;
+}
+
 module.exports = {
   save,
   findById,
   list,
+  edit,
 };

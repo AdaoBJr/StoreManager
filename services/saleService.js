@@ -44,8 +44,17 @@ async function findById(id) {
   return sale;
 }
 
+async function edit(id, itensSold) {
+  const error = JoiValidator(itensSold);
+  if (error) return formatError('Wrong product ID or invalid quantity');
+  const saleEdited = await saleModel.edit(id, itensSold);
+  console.log(saleEdited);
+  return saleEdited;
+}
+
 module.exports = {
   save,
   findById,
   list,
+  edit,
 };
