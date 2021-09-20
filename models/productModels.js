@@ -32,9 +32,22 @@ async function listProductById(id) {
   return result;
 }
 
+async function editProduct(id, item) {
+  const { name, quantity } = item;
+  const collection = await connection().then((db) => db.collection('products'));
+
+  const editedProduct = await collection.updateOne(
+    { _id: ObjectId(id) },
+    { $set: { name, quantity } },
+  );
+
+  return editedProduct;
+}
+
 module.exports = {
   saveProduct,
   findProduct,
   listProducts,
   listProductById,
+  editProduct,
 };

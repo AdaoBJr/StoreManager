@@ -20,8 +20,17 @@ async function listProductById(req, res) {
   return res.status(200).json(item);
 }
 
+async function editProduct(req, res) {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  const item = await ProductService.editProduct(id, { name, quantity });
+  if (item.err) return res.status(422).json(item);
+  return res.status(200).json(item);
+}
+
 module.exports = { 
   saveProduct,
   listProducts,
   listProductById,
+  editProduct,
 };
