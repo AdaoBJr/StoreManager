@@ -6,9 +6,9 @@ const registeredProductValidate = async (param) => {
     };
 
   for (let i = 0; i < param.length; i += 1) {
-    if (!param) throw error;
     if (typeof param[i].quantity !== 'number') throw error;
   }
+  return true;
 };
 
 module.exports = {

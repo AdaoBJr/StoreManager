@@ -27,7 +27,7 @@ const create = async (req, res) => {
   try {
     const arrays = req.body;
 
-    const response = await service.testes(arrays);
+    const response = await service.create(arrays);
 
     return res.status(200).json(response);
   } catch (error) {

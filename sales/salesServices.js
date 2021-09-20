@@ -39,6 +39,7 @@ const create = async (sales) => {
     }
 
   const newSales = await model.create(sales);
+
   return newSales;
 };
 
