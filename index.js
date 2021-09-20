@@ -29,6 +29,7 @@ validateQuantity, productController.update);
 app.put('/sales/:id', saleQuantity, saleController.update);
 
 app.delete('/products/:id', productExists, productController.deleteProduct);
+app.delete('/sales/:id', saleController.deleteSale);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {

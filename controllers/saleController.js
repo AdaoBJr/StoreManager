@@ -50,9 +50,29 @@ const update = async (req, res) => {
   }
 };
 
+const deleteSale = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedSale = await saleService.deleteService(id);
+    if (!deletedSale) {
+      console.log('chegou no controller');
+      return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ 
+        err: { 
+          code: 'invalid_data',
+          message: 'Wrong sale ID format',
+        },
+      });
+    }
+    return res.status(StatusCodes.OK).json(deletedSale);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  deleteSale,
 };
