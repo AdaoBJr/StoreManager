@@ -21,21 +21,25 @@ function JoiValidator(data) {
 async function save(items) {
   const error = JoiValidator(items);
   if (error) return formatError('Wrong product ID or invalid quantity');
-  const sales = await saleModel.save(items);
-  const result = await productModel.editProductQt('decrease', items);
+  const result = await productModel.editQt('decrease', items);
   if (!result) {
     return { 
       err: { code: 'STOCK_PROBLEM', message: 'Such amount is not permitted to sell' }, 
     };
   }
+  const sales = await saleModel.save(items);
 
   return sales;
+}
+
+async function list() {
+  return saleModel.list();
 }
 
 async function findById(id) {
   const sale = await saleModel.findById(id);
 
-  if (!sale) return { err: { code: 'NOT_FOUND', message: 'Sale not found' } };
+  if (!sale) return { err: { code: 'not_found', message: 'Sale not found' } };
 
   return sale;
 }
@@ -43,4 +47,5 @@ async function findById(id) {
 module.exports = {
   save,
   findById,
+  list,
 };

@@ -1,14 +1,14 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
-async function findProduct(product) {
+async function findItem(product) {
   const { name } = product;
   const db = await connection();
   const result = await db.collection('products').findOne({ name });
   return result;
 }
 
-async function saveProduct({ name, quantity }) {
+async function save({ name, quantity }) {
   const db = await connection();
   const result = await db.collection('products').insertOne({ name, quantity });
   return {
@@ -18,7 +18,7 @@ async function saveProduct({ name, quantity }) {
   };
 }
 
-async function listProducts() {
+async function list() {
   const db = await connection();
   const results = await db.collection('products').find();
   return {
@@ -26,13 +26,13 @@ async function listProducts() {
   };
 }
 
-async function listProductById(id) {
+async function listById(id) {
   const products = await connection().then((db) => db.collection('products'));
   const result = await products.findOne({ _id: ObjectId(id) });
   return result;
 }
 
-async function editProduct(id, item) {
+async function edit(id, item) {
   const { name, quantity } = item;
   const collection = await connection().then((db) => db.collection('products'));
   
@@ -44,7 +44,7 @@ async function editProduct(id, item) {
     return editedProduct;
   }
   
-  async function removeProduct(id) {
+  async function remove(id) {
   const collection = await connection().then((db) => db.collection('products'));
   const deleteProduct = await collection.deleteOne({ _id: ObjectId(id) });
   
@@ -60,7 +60,7 @@ function buildFilterByop(op, productId, quantity) {
   }
 }
 
-async function editProductQt(op, items) {
+async function editQt(op, items) {
   if (op !== 'decrease' && op !== 'increase') {
     return null;
   }
@@ -82,11 +82,11 @@ async function editProductQt(op, items) {
 }
 
 module.exports = {
-  saveProduct,
-  findProduct,
-  listProducts,
-  listProductById,
-  editProduct,
-  removeProduct,
-  editProductQt,
+  save,
+  findItem,
+  list,
+  listById,
+  edit,
+  remove,
+  editQt,
 };

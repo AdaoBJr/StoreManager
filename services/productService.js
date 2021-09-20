@@ -24,50 +24,50 @@ function idValidator(id) {
 
 // <-- SERVICE METHODS -->
 
-async function saveProduct(product) {
+async function save(product) {
   const error = JoiValidator(product);
   if (error) return formatError(error.details[0].message);
-  const exists = await ProductModel.findProduct(product);
+  const exists = await ProductModel.findItem(product);
   if (exists) return formatError('Product already exists');
-  const item = await ProductModel.saveProduct(product);
+  const item = await ProductModel.save(product);
   return item;
 }
 
-async function listProducts() {
-  const list = await ProductModel.listProducts();
-  return list;
+async function list() {
+  const all = await ProductModel.list();
+  return all;
 }
 
-async function listProductById(id) {
+async function listById(id) {
   if (!idValidator(id)) return formatError(wrongId);
-  const item = await ProductModel.listProductById(id);
+  const item = await ProductModel.listById(id);
   if (!item) return formatError(wrongId);
   return item;
 }
 
-async function editProduct(id, item) {
+async function edit(id, item) {
   if (!idValidator(id)) return formatError(wrongId);
   const error = JoiValidator(item);
   if (error) return formatError(error.details[0].message);
   const { name, quantity } = item;
-  const product = await ProductModel.editProduct(id, item);
+  const product = await ProductModel.edit(id, item);
   
   return (product.matchedCount === 1)
   ? { _id: id, name, quantity }
   : formatError(wrongId);
 }
 
-async function removeProduct(id) {
+async function remove(id) {
   if (!idValidator(id)) return formatError(wrongId);
-  const deletedItem = await ProductModel.listProductById(id);
-  const item = await ProductModel.removeProduct(id);
+  const deletedItem = await ProductModel.listById(id);
+  const item = await ProductModel.remove(id);
   return (item.deletedCount === 1) ? deletedItem : formatError(wrongId);
 }
 
 module.exports = {
-  saveProduct,
-  listProducts,
-  listProductById,
-  editProduct,
-  removeProduct,
+  save,
+  list,
+  listById,
+  edit,
+  remove,
 };
