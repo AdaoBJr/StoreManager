@@ -22,8 +22,18 @@ const getSaleById = rescue(async (req, res, next) => {
   return res.status(200).json(sale);
 });
 
+const updateSale = rescue(async (req, res, next) => {
+  const { id } = req.params;
+
+  const updatedSales = await salesService.updateSales(id, req.body);
+  if (updatedSales.error) return next(updatedSales.error);
+
+  return res.status(200).json(updatedSales);
+});
+
 module.exports = {
   createSale,
   getAllSales,
   getSaleById,
+  updateSale,
 };

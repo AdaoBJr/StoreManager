@@ -81,8 +81,29 @@ const getSaleById = async (id) => {
   return { ...saleFound };
 };
 
+const updateSales = async (id, sales) => {
+  const foundById = await getSaleById(id);
+  if (foundById.error) return foundById;
+
+  const { hasNotFound, isAllQuantitiesValid } = await validateProducts(sales);
+  
+  if (hasNotFound || !isAllQuantitiesValid) {
+    return {
+      error: {
+        status: 422,
+        message: 'Wrong product ID or invalid quantity',
+      },
+    };
+  }
+
+  const updatedSale = await salesModel.updateSale(id, sales);
+
+  return { ...updatedSale };
+};
+
 module.exports = {
   createSales,
   getAllSales,
   getSaleById,
+  updateSales,
 };
