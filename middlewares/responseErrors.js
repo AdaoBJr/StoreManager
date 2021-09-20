@@ -1,4 +1,4 @@
-const { INTERNAL_ERROR, INVALID_DATE } = require('../configs/statusCodes');
+const { INTERNAL_ERROR, INVALID_DATE, NOT_FOUND } = require('../configs/statusCodes');
 
 const errJoi = (err) => ({
   err: {
@@ -23,7 +23,8 @@ const errService = (err) => ({
 
 module.exports = (err, _req, res, _next) => {
   if (err.isJoi) return res.status(INVALID_DATE).json(errJoi(err));
-  if (err.isError) return res.status(INVALID_DATE).json(errService(err));
-
+  if (err.isError) {
+    return res.status(err.code === 'not_found' ? NOT_FOUND : INVALID_DATE).json(errService(err));
+  }
   res.status(INTERNAL_ERROR).json(errServer());
 };

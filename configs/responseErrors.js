@@ -10,7 +10,7 @@ const error = (statusCode, message) => {
 
 module.exports = {
   conflict: (message) => error('409', message),
-  notFound: (message) => error('404', message),
+  notFound: (message) => error('not_found', message),
   badRequest: (message) => error('400', message),
   unauthorized: (message) => error('401', message),
   invalidData: (message) => error('invalid_data', message),
