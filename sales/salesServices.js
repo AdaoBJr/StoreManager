@@ -1,4 +1,5 @@
 const model = require('./salesModels');
+const { registeredProductValidate } = require('./salesValidations');
 
 const getAll = async () => {
   const sales = await model.getAll();
@@ -21,13 +22,33 @@ const getById = async (id) => {
   return sale;
 };
 
-const create = (sales) => {
-  console.log(sales);
+const create = async (sales) => {
+  const error = new Error();
+  error.err = {
+    code: 'invalid_data',
+    message: 'Wrong product ID or invalido quantity',
+  };
+
+  await registeredProductValidate(sales);
+
+  const retorno = await model.productExists(sales);
+
+  for (let i = 0; i < retorno.length; i += 1) {
+      if (retorno.includes(null)) throw error;
+      if (retorno[i].quantity < 1) throw error;
+    }
+
+  const newSales = await model.create(sales);
+  return newSales;
 };
 
 const update = () => {};
 
 const remove = () => {};
+
+const testes = async (_param) => {
+
+};
 
 module.exports = {
   getAll,
@@ -35,4 +56,5 @@ module.exports = {
   create,
   update,
   remove,
+  testes,
 };

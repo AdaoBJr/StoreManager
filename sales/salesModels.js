@@ -4,9 +4,13 @@ const connection = require('../connections/mongoDBConnection');
 const productExists = async (sales) => {
   const db = await connection();
 
-  const product = await db.collection('products').findOne({ _id: ObjectId(sales.id) });
+  const arrayValidates = await sales.map(async (curr) => {
+    const product = await db.collection('products').findOne({ _id: ObjectId(curr.productId) });
 
-  return product;
+    return product;
+  });
+
+  return Promise.all(arrayValidates).then((response) => response);
 };
 
 const getAll = async () => {
@@ -23,12 +27,12 @@ const getById = async (id) => {
   return sale;
 };
 
-const create = async (sale) => {
-  const db = connection();
+const create = async (sales) => {
+  const db = await connection();
 
-  const newSale = db.collection('sales').insertOne({ itensSold: sale });
+  const newSales = await db.collection('sales').insertOne({ itensSold: sales });
 
-  return { _id: newSale.insertedId, newSale };
+  return newSales.ops;
 };
 
 const update = (_id) => {};

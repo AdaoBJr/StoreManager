@@ -25,13 +25,13 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const sales = req.body;
+    const arrays = req.body;
 
-    await service.create(sales);
+    const response = await service.testes(arrays);
 
-    return res.status(200).json('deu bom');
+    return res.status(200).json(response);
   } catch (error) {
-    return res.status(500).json(error);
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(error);
   }
 };
 
@@ -39,10 +39,15 @@ const update = (_req, _res) => {};
 
 const remove = (_req, _res) => {};
 
+const testes = async (_req, _res) => {
+
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
   remove,
+  testes,
 };
