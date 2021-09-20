@@ -2,7 +2,7 @@ const registeredProductValidate = async (param) => {
   const error = new Error();
     error.err = {
       code: 'invalid_data',
-      message: 'Wrong product ID or invalido quantity',
+      message: 'Wrong product ID or invalid quantity',
     };
 
   for (let i = 0; i < param.length; i += 1) {

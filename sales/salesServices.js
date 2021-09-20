@@ -1,6 +1,17 @@
 const model = require('./salesModels');
 const { registeredProductValidate } = require('./salesValidations');
 
+const validQuantity = (sales) => {
+  const validQuantityS = sales.filter((sale) => sale.quantity <= 0);
+
+  return validQuantityS;
+};
+
+const validTypeQuantity = (sales) => {
+  const filtered = sales.filter((sale) => typeof (sale.quantity) !== 'number');
+  return filtered;
+};
+
 const getAll = async () => {
   const sales = await model.getAll();
   return sales;
@@ -17,7 +28,7 @@ const getById = async (id) => {
 
   const sale = await model.getById(id);
 
-  // if (!sale) throw error;
+  if (!sale) throw error;
 
   return sale;
 };
@@ -26,7 +37,7 @@ const create = async (sales) => {
   const error = new Error();
   error.err = {
     code: 'invalid_data',
-    message: 'Wrong product ID or invalido quantity',
+    message: 'Wrong product ID or invalid quantity',
   };
 
   await registeredProductValidate(sales);
@@ -43,12 +54,21 @@ const create = async (sales) => {
   return newSales;
 };
 
-const update = () => {};
+const update = async (id, sale) => {
+  const productExists = await model.saleExists(id);
 
-const remove = () => {};
+  if (productExists) {
+    const response = await model.update(id, sale);
 
-const testes = async (_param) => {
+    return response;
+  }
+  return false;
+};
 
+const remove = async (id) => {
+  const deleted = await model.remove(id);
+
+  return deleted;
 };
 
 module.exports = {
@@ -57,5 +77,6 @@ module.exports = {
   create,
   update,
   remove,
-  testes,
+  validQuantity,
+  validTypeQuantity,
 };

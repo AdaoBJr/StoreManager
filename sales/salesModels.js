@@ -13,6 +13,13 @@ const productExists = async (sales) => {
   return Promise.all(arrayValidates).then((response) => response);
 };
 
+const saleExists = async (id) => {
+  const db = await connection();
+  const sale = await db.collection('sales').findOne({ _id: ObjectId(id) });
+
+  return sale !== null;
+};
+
 const getAll = async () => {
   const db = await connection();
 
@@ -35,13 +42,37 @@ const create = async (sales) => {
   return newSales.ops;
 };
 
-const update = (_id) => {};
+const update = async (id, sale) => {
+  const testeID = ObjectId.isValid(id);
 
-const remove = (_id) => {};
+  if (!testeID) {
+    return null;
+  }
+  const db = await connection();
+  const product = await db.collection('sales').updateOne(
+    { _id: ObjectId(id) }, { $set: { itensSold: sale } },
+  );
+
+  if (product.modifiedCount === 1) {
+    return true;
+  }
+
+  return false;
+};
+
+const remove = async (id) => {
+  const db = await connection();
+
+  const deletedSale = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+  console.log(deletedSale);
+
+  return deletedSale;
+};
 
 module.exports = {
-  getAll,
   productExists,
+  saleExists,
+  getAll,
   getById,
   create,
   update,
