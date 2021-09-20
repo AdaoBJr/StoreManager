@@ -5,10 +5,17 @@ const isNameValid = (name) => {
         { code: 'invalid_data', message: '"name" length must be at least 5 characters long' },
     };
   }
-  if (typeof name !== 'string') {
+  // if (typeof name !== 'string') {
+  //   return {
+  //     err:
+  //       { code: 'invalid_data', message: 'O nome deve ser uma string' },
+  //   };
+  // }
+
+  if (!name) {
     return {
       err:
-        { code: 'invalid_data', message: 'O nome deve ser uma string' },
+        { code: 'invalid_data', message: '"name" length must be at least 5 characters long' },
     };
   }
 

@@ -34,7 +34,7 @@ const update = rescue(async (req, res, _next) => {
   const updateProduct = await Products.update(id, name, quantity);
   // console.log(updateProduct);
 
-  if (typeof updateProduct === 'object') return res.status(422).json(updateProduct);
+  if (typeof updateProduct.err === 'object') return res.status(422).json(updateProduct);
 
   return res.status(200).json(updateProduct);
 });
