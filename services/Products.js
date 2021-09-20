@@ -11,7 +11,6 @@ const create = async (name, quantity) => {
   const validateQuantity = isQuantityValid(quantity);
   const valivalidateQuantityTwo = isQuantityValidTwo(quantity);
 
-  if (validateName.err) return validateName;
   if (existingProduct) {
     return {
       err: {
@@ -20,6 +19,7 @@ const create = async (name, quantity) => {
       },
     };
   }
+  if (validateName.err) return validateName;
   if (validateQuantity.err) return validateQuantity;
   if (valivalidateQuantityTwo.err) return valivalidateQuantityTwo;
 
@@ -58,9 +58,12 @@ const update = async (id, name, quantity) => {
   return Products.update(id, name, quantity);
 };
 
+const deleteProduct = async (id) => Products.deleteProduct(id);
+
 module.exports = {
   create,
   getAll,
   findById,
   update,
+  deleteProduct,
 };

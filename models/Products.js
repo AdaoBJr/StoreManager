@@ -41,10 +41,19 @@ const update = async (id, name, quantity) => {
       .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } }));
 };
 
+const deleteProduct = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+  connection()
+    .then((db) => db.collection('products').deleteOne({ _id: ObjectId(id) }));
+};
+
 module.exports = {
   create,
   findByName,
   getAll,
   findById,
   update,
+  deleteProduct,
 };

@@ -19,6 +19,8 @@ app.get('/products', Products.getAll);
 
 app.put('/products/:id', Products.update);
 
+app.delete('/products/:id', Products.deleteProduct);
+
 // const { PORT } = process.env;
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
