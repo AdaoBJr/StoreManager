@@ -7,24 +7,18 @@ const saleNotFound = {
     message: 'Sale not found', 
   } };
 
-const getAllSales = async (_req, res) => salesModel.getAll()
+const getAllSales = (_req, res) => salesModel.getAll()
     .then((sales) => res.status(200).json(sales))
     .catch((error) => res.status(422).json({ message: error.message }));
 
 // Ver qual a treta dessa funcao... Tah muito estranha ela!! Ajuda da Maiara Borsati para ajeitar ela!! ;)  
-const getSaleById = async (req, res) => {
-  try {
-      const { id } = req.params;
-      const result = await salesModel.saleById(id);
-      if (!result) {
-          return res.status(404).json(saleNotFound);
-      }
-      return res.status(200).json(result);
-  } catch (error) {
-      return res.status(500).json({ message: error.message });
-  }
-};
+const getSaleById = (req, res) => salesModel.saleById(req.params.id)
+  .then((result) => {
+    if (!result) { return res.status(404).json(saleNotFound); }
+  return res.status(200).json(result);
+  }).catch((error) => res.status(422).json({ message: error.message }));
 
+  // Ver de refatorar essa createSale depois!!
 const createSale = async (req, res) => {
   try {
       const itensSold = req.body;
@@ -38,25 +32,17 @@ const createSale = async (req, res) => {
   }
 };
 
-const updateSale = async (req, res) => {
-  const itensSold = req.body;
-  const { id } = req.params;
-  try {
-      const result = await service.updateSaleService(id, itensSold);
-      if (result.err) { return res.status(422).json(result); }
-      return res.status(200).json(result);
-  } catch (error) {
-      return res.status(500).json({ message: error.message });
-  }
-};
+const updateSale = (req, res) => service.updateSaleService(req.params.id, req.body)
+  .then((result) => {
+    if (result.err) { return res.status(422).json(result); }
+    return res.status(200).json(result);
+  }).catch((error) => res.status(422).json({ message: error.message }));
 
-const deleteSale = async (req, res) => {
-  const { id } = req.params;
-  return service.deleteSale(id).then((result) => {
+const deleteSale = (req, res) => service.deleteSale(req.params.id)
+    .then((result) => {
       if (result.err) { return res.status(422).json(result); }
       return res.status(200).json(result);
   }).catch((error) => res.status(422).json({ message: error.message }));
-};
 
 module.exports = {
   getAllSales,
