@@ -1,47 +1,23 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
-const hexValue = 24;
+const create = (itensSold) => connection().then((db) =>
+  db.collection('sales').insertOne({ itensSold })).then(({ ops }) => ops[0]);
 
-const create = async (product) => {
-  const sale = await connection()
-  .then((db) => db.collection('sales').insertOne({ itensSold: [...product] }));
+const getAll = () => connection().then((db) =>
+  db.collection('sales').find().toArray());
 
-  return sale.ops[0];
-};
+const getById = (id) => connection().then((db) =>
+  db.collection('sales').findOne(ObjectId(id)));
 
-const getAll = async () => {
-  const product = await connection()
-  .then((db) => db.collection('sales').find().toArray());
+const update = (id, itensSold) => connection().then((db) =>
+  db.collection('sales').updateOne({ _id: ObjectId(id) }, { $set: { itensSold } }));
 
-  return product;
-};
+const excluse = (id) => connection().then((db) =>
+  db.collection('sales').findOneAndDelete({ _id: ObjectId(id) }));
 
-const getById = async (id) => {
-  if (id.length !== hexValue) return null;
-  const sale = await connection()
-  .then((db) => db.collection('sales').findOne({ _id: new ObjectId(id) }));
-
-  return sale;
-};
-
-const update = async (id, product) => {
-  const sale = await connection()
-  .then((db) => db.collection('sales')
-    .updateOne({ _id: new ObjectId(id) }, { $set: { itensSold: product } }));
-  
-  const salesName = await connection()
-  .then((db) => db.collection('sales').findOne({ _id: new ObjectId(id) }));
-
-  return sale && salesName;
-};
-
-const excluse = async (id) => {
-  const sale = await connection()
-    .then((db) => db.collection('sales').deleteOne({ _id: new ObjectId(id) }));
-
-  return sale;
-};
+const updateStock = (id, quantity) => connection().then((db) =>
+  db.collection('products').updateOne({ _id: ObjectId(id) }, { $inc: { quantity } }));
 
 module.exports = {
   create,
@@ -49,4 +25,5 @@ module.exports = {
   getById,
   update,
   excluse,
+  updateStock,
 };

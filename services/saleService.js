@@ -1,89 +1,29 @@
 const salesModel = require('../models/salesModel');
 
-const min = 1;
-const err = {
-  code: 'invalid_data',
-  message: '',
+const create = (itensSold) => {
+  itensSold.forEach((i) => salesModel.updateStock(i.productId, -i.quantity));
+  return salesModel.create(itensSold).then((data) => ({ status: 200, data }));
 };
 
-const checkQuantity = (quantity) => {
-  if (quantity < min) return true;
+const getAll = () => salesModel.getAll().then((data) => ({ status: 200, data }));
 
-  if (typeof (quantity) !== 'number') return true;
+const getById = (id) => salesModel.getById(id).then((data) => ({ status: 200, data }));
+
+const update = (id, itensSold) => {
+  itensSold.forEach((i) => salesModel.updateStock(i.productId, -i.quantity));
+  return salesModel.update(id, itensSold).then((data) => ({ status: 200, data }));
 };
 
-const validateQuantity = (products) => {
-  const testedQuantity = products.some((product) => checkQuantity(product.quantity));
-  if (testedQuantity) {
-    err.message = 'Wrong product ID or invalid quantity';
-    return { err };
-  }
-};
-
-const checkId = async (id) => {
-  const sale = await salesModel.getById(id);
-  if (!sale) {
-    return {  
-      err: {
-        code: 'not_found',
-        message: 'Sale not found',
-      },
-    };
-  }
-};
-
-const newSales = async (products) => {
-  const sales = validateQuantity(products);
-  if (sales) return sales;
-
-  const newSale = await salesModel.create(products);
-
-  return newSale;
-};
-
-const getSales = async () => {
-  const sales = await salesModel.getAll();
-
-  return { sales };
-};
-
-const findSales = async (id) => {
-  const validId = await checkId(id);
-  if (validId) return validId;
-
-  const sale = await salesModel.getById(id);
-  return sale;
-};
-
-const updateSales = async (id, product) => {
-  const sales = validateQuantity(product);
-  if (sales) return sales;
-
-  const newSale = await salesModel.update(id, product);
-  
-  return newSale;
-};
-
-const deleteSales = async (id) => {
-  const salesId = await findSales(id);
-  if (salesId.err) {
-    return {
-      err: {
-        code: 'invalid_data',
-        message: 'Wrong sale ID format',
-      },
-    };
-  }
-
-  const sale = await salesModel.excluse(id);
-
-  return sale && salesId;
+const excluse = (id) => {
+  salesModel.getById(id).then(({ itensSold }) =>
+    itensSold.forEach((i) => salesModel.updateStock(i.productId, i.quantity)));
+  return salesModel.excluse(id).then((data) => ({ status: 200, data }));
 };
 
 module.exports = {
-  newSales,
-  getSales,
-  findSales,
-  updateSales,
-  deleteSales,
+  create,
+  getAll,
+  getById,
+  update,
+  excluse,
 };

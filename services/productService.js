@@ -7,7 +7,7 @@ const getAll = () => productsModel.getAll().then((data) => ({ status: 200, data 
 
 const getById = (id) => productsModel.getById(id).then((data) => ({ status: 200, data }));
 
-const update = (id, name, quantity) => productsModel.update(id, name, quantity)
+const update = (id, product) => productsModel.update(id, product)
   .then((data) => ({ status: 200, data }));
 
 const excluse = (id) => productsModel.excluse(id).then((data) => ({ status: 200, data }));
