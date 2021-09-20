@@ -1,14 +1,24 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const productController = require('./controllers/productController');
-require('dotenv').config();
+const {
+  createProduct,
+  findProductById,
+  findAllProducts,
+  updateProduct,
+} = require('./controllers/productController');
 
 const app = express();
 const PORT = 3000;
 
 app.use(bodyParser.json());
 
-app.post('/products', productController.createProduct);
+app.get('/products', findAllProducts);
+
+app.get('/products/:id', findProductById);
+
+app.post('/products', createProduct);
+
+app.put('/products/:id', updateProduct);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
