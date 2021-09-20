@@ -15,7 +15,7 @@ const getAll = async () => {
 
 const saleExists = async (id) => {
   const db = await connect();
-  const sale = await db.collection('sales').findOne({ id: ObjectId(id) });
+  const sale = await db.collection('sales').findOne({ _id: ObjectId(id) });
 
   return sale !== null;
 };
@@ -30,20 +30,18 @@ const getById = async (id) => {
   return salesId;
 };
 
-const update = async ({ id, productId, quantity }) => {
-  if (!ObjectId.isValid(id)) return null;
+const update = async (productId, itensSold) => {
+  if (!ObjectId.isValid(productId)) return null;
   const db = await connect();
-  await db.collection('sales')
-      .updateOne({ id: ObjectId(id) }, { $set: { productId, quantity } });
-
-  return { id, productId, quantity };
+  const { value } = await db.collection('sales')
+      .findOneAndUpdate({
+        _id: ObjectId(productId) }, { $set: { itensSold } }, { returnDocument: 'after' });
+  return value;
 };
 
 const remove = async (id) => {
-  if (!ObjectId.isValid(id)) return null;
   const db = await connect();
-  const deleteSale = await db.collection('sales').findOne({ id: ObjectId(id) });
-  await db.collection('sales').deleteOne({ id: ObjectId(id) });
+ const deleteSale = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
   return deleteSale;
 };
 

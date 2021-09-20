@@ -1,4 +1,4 @@
-/* const { ObjectId } = require('mongodb'); */
+const { ObjectId } = require('mongodb');
 const salesModel = require('../models/salesModel');
 
 const quantityError = { err:
@@ -6,9 +6,6 @@ const quantityError = { err:
 
 const saleError = { err:
   { code: 'invalid_data', message: 'Sale not found' } };
-
-  const formatError = { err:
-    { code: 'invalid_data', message: 'Wrong sale ID format' } };
 
 const add = async (itensSold) => {
   const wrongFormat = itensSold.find((obj) => obj.quantity < 1 || typeof obj.quantity !== 'number');
@@ -22,16 +19,21 @@ const getById = async (id) => {
   return salesModel.getById(id);
 };
 
-const update = async ({ id, productId, quantity }) => {
-  if (quantity < 1) return quantityError;
-  if (typeof quantity !== 'number') return quantityError;
-  return salesModel.update({ id, productId, quantity });
+const update = async (productId, itensSold) => {
+  const wrongFormat = itensSold.find((obj) => obj.quantity < 1 || typeof obj.quantity !== 'number');
+    if (wrongFormat) return quantityError;
+  return salesModel.update(productId, itensSold);
 };
 
 const remove = async (id) => {
-  const exists = await salesModel.saleExists(id);
-  if (!exists) return formatError;
-  return salesModel.remove(id);
+  const deleteSale = await salesModel.remove(id);
+  return deleteSale;
 };
 
-module.exports = { add, getById, update, remove };
+const verifyIdDelete = async (id) => {
+  const getId = salesModel.getById(id);
+  if (!ObjectId.isValid(id)) return null;
+  return getId;
+};
+
+module.exports = { add, getById, update, remove, verifyIdDelete };

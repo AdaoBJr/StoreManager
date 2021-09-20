@@ -1,5 +1,9 @@
+const { ObjectId } = require('mongodb');
 const salesModel = require('../models/salesModel');
 const salesService = require('../services/salesService');
+
+const formatError = { err:
+  { code: 'invalid_data', message: 'Wrong sale ID format' } };
 
 const add = async (req, res) => {
   try {
@@ -36,9 +40,9 @@ const getById = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const { productId, quantity } = req.body;
+    const sales = req.body;
     const { id } = req.params;
-    const updateSale = await salesService.update({ id, productId, quantity });
+    const updateSale = await salesService.update(id, sales);
     if (updateSale.err) {
       return res.status(422).json(updateSale);
     }
@@ -49,16 +53,15 @@ const update = async (req, res) => {
 };
 
 const remove = async (req, res) => {
-  try {
     const { id } = req.params;
-    const deleteSale = await salesService.remove(id);
-    if (deleteSale.err) {
-      return res.status(422).json(deleteSale);
+    if (!ObjectId.isValid(id)) {
+      return res.status(422).json(formatError);
     }
-    return res.status(200).json(deleteSale);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-};
+    const verifyDelete = salesService.remove(id);
+    if (!verifyDelete) {
+      return res.status(422).json(formatError);
+    }
+    return res.status(200).json(verifyDelete);
+  };
 
 module.exports = { add, getAll, getById, update, remove };
