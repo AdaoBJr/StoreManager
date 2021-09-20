@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongodb');
 const productModel = require('../models/productModel');
 
+// req 1
 const nameValidation = (name) => {
   if (name.length < 5 || typeof name !== 'string') {
     return false;
@@ -8,6 +9,7 @@ const nameValidation = (name) => {
   return true;
 };
 
+// req 1
 const quantityValidation = (quantity) => {
   if (quantity <= 0) {
     return false;
@@ -15,6 +17,7 @@ const quantityValidation = (quantity) => {
   return true;
 };
 
+// req 1
 const quantityTypeValidation = (quantity) => {
   if (typeof quantity !== 'number') {
     return false;
@@ -22,6 +25,7 @@ const quantityTypeValidation = (quantity) => {
   return true;
 };
 
+// req 1
 const createProductValidation = async (name, quantity) => {
   const validatedName = nameValidation(name);
   const validatedQuantity = quantityValidation(quantity);
@@ -43,6 +47,7 @@ const createProductValidation = async (name, quantity) => {
   return { _id: id, name, quantity };
 };
 
+// req 2
 const findProductByIdValidation = async (id) => {
   if (!ObjectId.isValid(id)) {
     return { code: 'invalid_data', message: 'Wrong id format' }; 
@@ -51,11 +56,13 @@ const findProductByIdValidation = async (id) => {
   return productById;
 };
 
+// req 2
 const findAllProductsValidation = async () => {
   const allProducts = await productModel.findAllProducts();
   return allProducts;
 };
 
+// req 3
 const updateProductValidation = async ({ id, name, quantity }) => {
   const validatedName = nameValidation(name);
   const validatedQuantity = quantityValidation(quantity);
@@ -73,9 +80,20 @@ const updateProductValidation = async ({ id, name, quantity }) => {
   return updatedProduct;
 };
 
+// req 4
+const delProductValidation = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return { code: 'invalid_data', message: 'Wrong id format' };
+  }
+
+  const deletedProduct = await productModel.delProduct(id);
+  return deletedProduct;
+};
+
 module.exports = {
   createProductValidation,
   findProductByIdValidation,
   findAllProductsValidation,
   updateProductValidation,
+  delProductValidation,
 };
