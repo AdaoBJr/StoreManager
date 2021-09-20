@@ -39,7 +39,12 @@ const deleteSale = async (req, res) => {
   const { id } = req.params;
   const sale = await salesService.deleteSale(id);
   if (sale.err) {
-    return res.status(422).json(sale);
+    return res.status(422).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong sale ID format',
+      },
+    });
   }
   return res.status(200).json(sale);
 };

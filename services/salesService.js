@@ -53,7 +53,7 @@ const createSale = async (newSale) => {
 
 const verifyExistenceId = async (id) => {
   const sales = await salesModel.getSalesById(id);
-  if (!sales) {
+  if (!sales || !sales[0]) {
     return {
       err: {
         code: 'not_found',
