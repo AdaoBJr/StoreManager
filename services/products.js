@@ -10,6 +10,8 @@ const validateProductDataName = async (name) => {
       },
     });
   }
+};
+const validateProductUniqueName = async (name) => {
   if (await productsModel.getProductByNameFromDB(name)) {
     return ({
       err: {
@@ -39,12 +41,10 @@ const validateProductDataQuantity = (quantity) => {
   }
 };
 
-const validateProductData = async ({ name, quantity }) => (
-  (await validateProductDataName(name)) || validateProductDataQuantity(quantity)
-);
-
 const addNewProduct = async (product) => {
-  const err = await validateProductData(product);
+  const err = await validateProductDataName(product.name)
+    || await validateProductUniqueName(product.name)
+    || await validateProductDataQuantity(product.quantity);
   if (err) return ({ ...err, wasAnError: true });
   return productsModel.addProductToDB(product);
 };
@@ -63,7 +63,15 @@ const getProductById = async (id) => {
   return (await productsModel.getProductByIdFromDB(id)) || err;
 };
 
+const updateProductById = async (id, product) => {
+  const err = (await validateProductDataName(product.name))
+  || (await validateProductDataQuantity(product.quantity));
+  if (err) return ({ ...err, wasAnError: true });
+  return productsModel.updateProductByIdInDB(id, product);
+};
+
 module.exports = {
   addNewProduct,
   getProductById,
+  updateProductById,
 };

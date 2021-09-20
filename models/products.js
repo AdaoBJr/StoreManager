@@ -16,6 +16,14 @@ module.exports = {
     connection().then((db) => db.collection('products').findOne({ _id: ObjectId(id) }))
   ),
 
+  updateProductByIdInDB: async (id, product) => (
+    connection()
+      .then((db) => {
+        console.log(id);
+        return db.collection('products').updateOne({ _id: ObjectId(id) }, { $set: product });
+      })
+  ),
+
   deleteProductByIdFromDB: async (id) => (
     connection().then((db) => db.collection('products').deleteOne({ _id: ObjectId(id) }))
   ),
