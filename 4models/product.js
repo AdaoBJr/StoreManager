@@ -1,24 +1,44 @@
 // const { ObjectId } = require('mongodb');
-// const connection = require('./connection');
+const connection = require('../connection');
 
-// const getAll = async () => {
-//   const db = await connection();
-// };
+const getAll = async () => {
+  const db = await connection();
 
-// const getById = async (_id) => {
-//   const db = await connection();
-// };
+  const products = db.collection('products').find();
 
-// const create = async () => {
-//   const db = await connection();
-// };
+  return products;
+};
 
-// const update = async (_id) => {
-//   const db = await connection();
-// };
+const getById = async (_id) => {
+  const db = await connection();
 
-// const remove = async (_id) => {
-//   const db = await connection();
-// };
+  const product = db.collection('products').findOne();
 
-// module.exports = { getAll, getById, create, update, remove };
+  return product;
+};
+
+const create = async () => {
+  const db = await connection();
+
+  const newProduct = db.collection('products').insertOne();
+
+  return newProduct;
+};
+
+const update = async (_id) => {
+  const db = await connection();
+
+  const updatedProduct = db.collection('products').update();
+
+  return updatedProduct;
+};
+
+const remove = async (_id) => {
+  const db = await connection();
+
+  const deletedProduct = db.collection('products').delete();
+
+  return deletedProduct;
+};
+
+module.exports = { getAll, getById, create, update, remove };

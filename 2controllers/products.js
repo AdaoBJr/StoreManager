@@ -1,53 +1,62 @@
-// const services = require('../3services/products');
+const { StatusCodes } = require('http-status-codes');
+const services = require('../3services/products');
 
-// const getAll = async (_req, res) => {
-//   try {
-//       res.status().json();
+const getAll = async (_req, res) => {
+  try {
+    const products = await services.getAll();
 
-//   } catch (error) {
-//       res.status().json(error);
+    res.status(StatusCodes.OK).json(products);
+  } catch (error) {
+    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(error);
+  }
+};
 
-//   }
-// };
+const getById = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-// const getById = async (_req, res) => {
-//   try {
-//       res.status().json();
+    const product = await services.getById(id);
 
-//   } catch (error) {
-//       res.status().json(error);
+    res.status(StatusCodes.OK).json(product);
+  } catch (error) {
+      res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(error);
+  }
+};
 
-//   }
-// };
+const create = async (req, res) => {
+  try {
+    const product = req.body;
 
-// const create = async (_req, res) => {
-//   try {
-//       res.status().json();
+    const newProduct = await services.create(product);
 
-//   } catch (error) {
-//       res.status().json(error);
+    res.status(StatusCodes.OK).json(newProduct);
+  } catch (error) {
+    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(error);
+  }
+};
 
-//   }
-// };
+const update = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-// const update = async (_req, res) => {
-//   try {
-//       res.status().json()
+    const updatedProduct = await services.create(id);
 
-//   } catch (error) {
-//       res.status().json(error);
+    res.status(StatusCodes.OK).json(updatedProduct);
+  } catch (error) {
+    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(error);
+  }
+};
 
-//   }
-// };
+const remove = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-// const remove = async (_req, res) => {
-//   try {
-//       res.status().json();
+    const deletedProduct = await services.remove(id);
 
-//   } catch (error) {
-//       res.status().json(error);
+    res.status(StatusCodes.OK).json(deletedProduct);
+  } catch (error) {
+    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(error);
+  }
+};
 
-//   }
-// };
-
-// module.exports = { getAll, getById, create, update, remove };
+module.exports = { getAll, getById, create, update, remove };
