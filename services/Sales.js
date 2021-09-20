@@ -25,4 +25,5 @@ module.exports = {
   create,
   findById,
   getAll: Sales.getAll,
+  update: Sales.update,
 };
