@@ -1,3 +1,33 @@
-const router = require('../controllers/productsController');
+const express = require('express');
+const products = require('../controllers/productsController');
+const validate = require('../middlewares/validator');
 
-module.exports = router;
+const route = express.Router();
+
+route.post(
+  '/',
+  validate.product,
+  validate.productExists,
+  products.create,
+);
+route.get(
+  '/',
+  products.getAll,
+);
+route.get(
+  '/:id',
+  validate.productId,
+  products.getById,
+);
+route.put(
+  '/:id',
+  validate.product,
+  products.update,
+);
+route.delete(
+  '/:id',
+  validate.productId,
+  products.excluse,
+);
+
+module.exports = route;

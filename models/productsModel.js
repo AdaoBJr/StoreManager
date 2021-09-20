@@ -1,59 +1,29 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
-const findName = async (name) => {
-  const product = await connection()
-  .then((db) => db.collection('products').findOne({ name }));
+const create = (product) => connection().then((db) =>
+  db.collection('products').insertOne(product)).then(({ ops }) => ops[0]);
 
-  return product;
-};
+const getAll = () => connection().then((db) =>
+  db.collection('products').find().toArray());
 
-const create = async (name, quantity) => {
-  const product = await connection()
-  .then((db) => db.collection('products').insertOne({ name, quantity }));
+const getById = (id) => connection().then((db) =>
+  db.collection('products').findOne(ObjectId(id)));
 
-  return product.ops[0];
-};
+const findName = (name) => connection().then((db) =>
+  db.collection('products').findOne({ name }));
 
-const getAll = async () => {
-  const getProducts = await connection()
-  .then((db) => db.collection('products').find().toArray());
+  const update = (id, product) => connection().then((db) =>
+  db.collection('products').updateOne({ _id: ObjectId(id) }, { $set: product }));
 
-  return getProducts;
-};
-
-const getById = async (id) => {
-  if (!ObjectId.isValid(id)) return null;
-
-  const productId = await connection()
-  .then((db) => db.collection('products').findOne(ObjectId(id)));
-
-  return productId;
-};
-
-const update = async (id, name, quantity) => {
-  const product = await connection()
-    .then((db) => db.collection('products')
-      .updateOne({ _id: new ObjectId(id) }, { $set: { name, quantity } }));
-  
-  const productName = await connection()
-    .then((db) => db.collection('products').findOne({ name }));
-  
-  return product && productName;
-};
-
-const excluse = async (id) => {
-  const product = await connection()
-    .then((db) => db.collection('products').deleteOne({ _id: new ObjectId(id) }));
-
-  return product;
-};
+const excluse = (id) => connection().then((db) =>
+  db.collection('products').findOneAndDelete({ _id: ObjectId(id) }));
 
 module.exports = {
-  findName,
   create,
   getAll,
   getById,
+  findName,
   update,
   excluse,
 };

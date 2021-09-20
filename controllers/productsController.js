@@ -1,71 +1,45 @@
-const express = require('express');
-
 const rescue = require('express-rescue');
 const services = require('../services/productService');
 
-const route = express.Router();
-
-const STATUS_FAIL = 422;
-const STATUS_CREATED = 201;
+// const STATUS_CREATED = 201;
 const STATUS_OK = 200;
 
-route.post(
-  '/',
-  rescue(async (req, res) => {
-    const { name, quantity } = req.body;
+const create = (req, res) => services.create(req.body)
+  .then(({ status, data }) => res.status(status).json(data));
+
+const getAll = rescue(async (_req, res) => {
+  const getProduct = await services.getAll();
     
-    const newProduct = await services.newProducts(name, quantity);
+  return res.status(STATUS_OK).json(getProduct);
+});
 
-    if (newProduct.err) return res.status(STATUS_FAIL).json(newProduct);
+const getById = rescue(async (req, res) => {
+  const { id } = req.params;
+  const findId = await services.getById(id);
 
-    return res.status(STATUS_CREATED).json(newProduct);
-  }),
-);
+  return res.status(STATUS_OK).json(findId);
+});
 
-route.get(
-  '/',
-  rescue(async (req, res) => {
-    const getProduct = await services.getProducts();
-    return res.status(STATUS_OK).json(getProduct);
-  }),
-);
+const update = rescue(async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
 
-route.get(
-  '/:id',
-  rescue(async (req, res) => {
-    const { id } = req.params;
-    const findId = await services.findProduct(id);
+  const updateProduct = await services.update(id, name, quantity);
 
-    if (findId.err || findId === null) return res.status(STATUS_FAIL).json(findId);
+  return res.status(STATUS_OK).json(updateProduct);
+});
 
-    return res.status(STATUS_OK).json(findId);
-  }),
-);
-
-route.put(
-  '/:id',
-  rescue(async (req, res) => {
-    const { id } = req.params;
-    const { name, quantity } = req.body;
-
-    const updateProduct = await services.updateProduct(id, name, quantity);
-
-    if (updateProduct.err) return res.status(STATUS_FAIL).json(updateProduct);
-
-    return res.status(STATUS_OK).json(updateProduct);
-  }),
-);
-
-route.delete(
-  '/:id',
-  rescue(async (req, res) => {
-    const { id } = req.params;
-  const deletedProduct = await services.deleteProduct(id);
-
-  if (deletedProduct.err) return res.status(STATUS_FAIL).json(deletedProduct);
+const excluse = rescue(async (req, res) => {
+  const { id } = req.params;
+  const deletedProduct = await services.excluse(id);
 
   return res.status(STATUS_OK).json(deletedProduct);
-  }),
-);
+});
 
-module.exports = route;
+module.exports = {
+  create,
+  getAll,
+  getById,
+  update,
+  excluse,
+};

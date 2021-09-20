@@ -1,98 +1,21 @@
-const productModel = require('../models/productsModel');
+const productsModel = require('../models/productsModel');
 
-const min = 1;
-const err = {
-  code: 'invalid_data',
-  message: '',
-};
+const create = (product) => productsModel.create(product)
+  .then((data) => ({ status: 201, data }));
 
-const productName = (name) => {
-  const minName = 5;
-  if (name.length < minName) {
-    err.message = '"name" length must be at least 5 characters long';
-    return { err };
-  }
-};
+const getAll = () => productsModel.getAll().then((data) => ({ status: 200, data }));
 
-const checkProduct = async (name) => {
-  const product = await productModel.findName(name);
-  
-  if (product) {
-    err.message = 'Product already exists';
-    return { err };
-  }
-};
+const getById = (id) => productsModel.getById(id).then((data) => ({ status: 200, data }));
 
-const checkQuantity = (quantity) => {
-  if (quantity < min) {
-    err.message = '"quantity" must be larger than or equal to 1';
-    return { err };
-  }
-  if (typeof quantity !== 'number') {
-    err.message = '"quantity" must be a number';    
-    return { err };
-  }
-};
+const update = (id, name, quantity) => productsModel.update(id, name, quantity)
+  .then((data) => ({ status: 200, data }));
 
-const checkId = async (id) => {
-  const selectProduct = await productModel.getById(id);
-  if (!selectProduct) {
-    err.message = 'Wrong id format';
-    return { err };
-  }
-};
-
-const newProducts = async (name, quantity) => {
-  const validateProduct = await checkProduct(name);
-  if (validateProduct) return validateProduct;
-
-  const validateName = await productName(name);
-  if (validateName) return validateName;
-  if (validateName) return null;
-  const validateQuantity = await checkQuantity(quantity);
-  if (validateQuantity) return validateQuantity;
-
-  const newProduct = await productModel.create(name, quantity);
-  return newProduct;
-};
-
-const getProducts = async () => {
-  const products = await productModel.getAll();
-  return { products };
-};
-
-const findProduct = async (id) => {
-  const validId = await checkId(id);
-  if (validId) return validId;
-
-  const product = await productModel.getById(id);
-  return product;
-};
-
-const updateProduct = async (id, name, quantity) => {
-  const validateName = productName(name);
-  if (validateName) return validateName;
-
-  const validateQuantity = await checkQuantity(quantity);
-  if (validateQuantity) return validateQuantity;
-
-  const newProduct = await productModel.update(id, name, quantity);
-
-  return newProduct;
-};
-
-const deleteProduct = async (id) => {
-  const findId = await findProduct(id);
-  if (findId.err) return findId;
-  
-  const product = await productModel.excluse(id);
-  return product && findId;
-};
+const excluse = (id) => productsModel.excluse(id).then((data) => ({ status: 200, data }));
 
 module.exports = {
-    newProducts,
-    getProducts,
-    findProduct,
-    updateProduct,
-    deleteProduct,
+    create,
+    getAll,
+    getById,
+    update,
+    excluse,
 };
