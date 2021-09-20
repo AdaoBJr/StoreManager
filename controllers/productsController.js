@@ -1,9 +1,9 @@
-// const productsService = require('../services/productsService');
+const productsService = require('../services/productsService');
 const productsModel = require('../models/productsModel');
 
 const registerNewProduct = async (req, res) => {
   const newProduct = req.body;
-  // const newRegister = await productsService.registerNewProduct(newProduct);
+  const newRegister = await productsService.registerNewProduct(newProduct);
   if (newRegister.err) {
     return res.status(422).json(newRegister);
   }
@@ -20,7 +20,7 @@ const getProducts = async (_req, res) => {
 
 const getProductById = async (req, res) => {
   const { id } = req.params;
-  // const product = await productsService.getProductById(id);
+  const product = await productsService.getProductById(id);
   if (product.err) {
     return res.status(422).json(product);
   }
@@ -30,11 +30,11 @@ const getProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
-  // const product = await productsService.getProductById(id);
+  const product = await productsService.getProductById(id);
   if (product.err) {
     return res.status(422).json(product);
   }
-  // const updatedProduct = await productsService.updateProduct({ id, name, quantity });
+  const updatedProduct = await productsService.updateProduct({ id, name, quantity });
   if (updatedProduct.err) {
     console.log(updatedProduct);
     return res.status(422).json(updatedProduct);
@@ -44,7 +44,7 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
-  // const product = await productsService.getProductById(id);
+  const product = await productsService.getProductById(id);
   if (product.err) {
     return res.status(422).json(product);
   }
