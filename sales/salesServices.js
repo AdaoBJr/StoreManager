@@ -22,15 +22,6 @@ const getById = async (id) => {
 };
 
 const create = (sales) => {
-  // const error = new Error();
-  //   error.err = {
-  //     code: 'invalid_data',
-  //     message: 'Wrong product ID or invalid quantity',
-  //   };
-
-  // if (product === false || product === '') throw error;
-  // if (typeof quantity !== 'number' || quantity < 1) throw error;
-
   console.log(sales);
 };
 
