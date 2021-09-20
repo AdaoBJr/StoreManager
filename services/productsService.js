@@ -51,19 +51,19 @@ const getProductById = async (id) => {
 };
 
 const updateProduct = async (id, name, quantity) => {
-  const productFound = await productModel.getProductById(id);
-  if (!productFound) {
-    return {
-      error: {
-        status: 422,
-        message: 'Wrong id format',
-      },
-    };
-  }
+  const foundById = await getProductById(id);
+  if (foundById.error) return foundById;
 
   const updatedProduct = await productModel.updateProduct(id, name, quantity);
 
   return { ...updatedProduct };
+};
+
+const deleteProduct = async (id) => {
+  const foundById = await getProductById(id);
+  if (!foundById.error) await productModel.deleteProduct(id);
+
+  return foundById;
 };
 
 module.exports = {
@@ -71,4 +71,5 @@ module.exports = {
   getAllProducts,
   getProductById,
   updateProduct,
+  deleteProduct,
 };
