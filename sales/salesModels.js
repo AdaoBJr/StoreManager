@@ -11,11 +11,12 @@ const getAll = async () => {
 };
 
 const getById = async (id) => {
-  const objectId = await (ObjectId.isValid(id));
   const db = await connection();
 
-  const sale = db.collection('sales').findOne(id);
-  await service.getById(sale, objectId);
+  const objectId = await (ObjectId.isValid(id));
+  await service.getById(objectId, id);
+
+  const sale = db.collection('sales').findOne({ _id: ObjectId(id) });
 
   return sale;
 };

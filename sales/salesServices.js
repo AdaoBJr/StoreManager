@@ -6,8 +6,8 @@ const getAll = (db) => {
   }
 };
 
-const getById = (sale, id) => {
-  if (!sale || id !== true) {
+const getById = (object, id) => {
+  if (!id || object !== true) {
     const error = new Error();
       error.err = {
         code: 'not_found',
