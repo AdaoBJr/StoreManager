@@ -50,8 +50,25 @@ const getProductById = async (id) => {
   return { ...productFound };
 };
 
+const updateProduct = async (id, name, quantity) => {
+  const productFound = await productModel.getProductById(id);
+  if (!productFound) {
+    return {
+      error: {
+        status: 422,
+        message: 'Wrong id format',
+      },
+    };
+  }
+
+  const updatedProduct = await productModel.updateProduct(id, name, quantity);
+
+  return { ...updatedProduct };
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
+  updateProduct,
 };
