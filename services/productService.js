@@ -1,11 +1,5 @@
 const { ObjectId } = require('mongodb');
-const {
-  createProduct,
-  findProductByName,
-  findProductById,
-  findAllProducts,
-  updateProduct,
-} = require('../models/productModel');
+const productModel = require('../models/productModel');
 
 const nameValidation = (name) => {
   if (name.length < 5 || typeof name !== 'string') {
@@ -41,11 +35,11 @@ const createProductValidation = async (name, quantity) => {
   if (!validatedTypeQuantity) {
     return { code: 'invalid_data', message: '"quantity" must be a number' };
   }
-  const validatedNotEqualName = await findProductByName(name);
+  const validatedNotEqualName = await productModel.findProductByName(name);
   if (validatedNotEqualName) {
     return { code: 'invalid_data', message: 'Product already exists' };
   }
-  const { id } = await createProduct(name, quantity);
+  const { id } = await productModel.createProduct(name, quantity);
   return { _id: id, name, quantity };
 };
 
@@ -53,12 +47,12 @@ const findProductByIdValidation = async (id) => {
   if (!ObjectId.isValid(id)) {
     return { code: 'invalid_data', message: 'Wrong id format' }; 
   }
-  const productById = await findProductById(id);
+  const productById = await productModel.findProductById(id);
   return productById;
 };
 
 const findAllProductsValidation = async () => {
-  const allProducts = await findAllProducts();
+  const allProducts = await productModel.findAllProducts();
   return allProducts;
 };
 
@@ -75,7 +69,7 @@ const updateProductValidation = async ({ id, name, quantity }) => {
   if (!validatedTypeQuantity) {
     return { code: 'invalid_data', message: '"quantity" must be a number' };
   }
-  const updatedProduct = await updateProduct({ id, name, quantity });
+  const updatedProduct = await productModel.updateProduct({ id, name, quantity });
   return updatedProduct;
 };
 

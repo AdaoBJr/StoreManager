@@ -1,9 +1,4 @@
-const {
-  createProductValidation,
-  findProductByIdValidation,
-  findAllProductsValidation,
-  updateProductValidation,
-} = require('../services/productService');
+const productService = require('../services/productService');
 
 const ok = 200;
 const created = 201;
@@ -11,7 +6,7 @@ const unprocessableEntity = 422;
 
 const createProduct = async (req, res) => {
   const { name, quantity } = req.body;
-  const { _id, message, code } = await createProductValidation(name, quantity);
+  const { _id, message, code } = await productService.createProductValidation(name, quantity);
   
   if (message) {
     return res.status(unprocessableEntity).json({ err: { message, code } });
@@ -21,7 +16,7 @@ const createProduct = async (req, res) => {
 
 const findProductById = async (req, res) => {
   const { id } = req.params;
-  const productById = await findProductByIdValidation(id);
+  const productById = await productService.findProductByIdValidation(id);
   const { code, message } = productById;
   if (message) {
     return res.status(422).json({ err: { code, message } });
@@ -30,7 +25,7 @@ const findProductById = async (req, res) => {
 };
 
 const findAllProducts = async (_req, res) => {
-  const productsList = await findAllProductsValidation();
+  const productsList = await productService.findAllProductsValidation();
   return res.status(ok).json({ products: productsList });
 };
 
@@ -38,7 +33,7 @@ const updateProduct = async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
 
-  const productUpdate = await updateProductValidation({ id, name, quantity });
+  const productUpdate = await productService.updateProductValidation({ id, name, quantity });
   const { _id, message, code } = productUpdate;
   if (message) {
     res.status(unprocessableEntity).json({ err: { code, message } });
