@@ -28,7 +28,7 @@ const validateProducts = (productsList) => {
     if (typeof product.quantity !== 'number') return productError;
     return product;
   });
-  return validations;
+  return validations[0];
 };
 
 const validateStockQuantity = (newSale, productsList) => {
@@ -42,7 +42,7 @@ const validateStockQuantity = (newSale, productsList) => {
 
 const createSale = async (newSale) => {
   const validateProductsResult = validateProducts(newSale);
-  if (validateProductsResult[0].err) return productError;
+  if (validateProductsResult.err) return productError;
 
   const getNewSaleProductsFromDB = await Promise.all(
     newSale.map(({ productId }) => productsModel.getProductById(productId)),
@@ -71,34 +71,39 @@ const getAllSales = async () => {
 
 const getSaleById = async (id) => {
   const saleById = await salesModel.getSaleById(id);
-
   if (!saleById) return saleError;
+
   return saleById;
 };
 
-const updateSaleById = async (id, saleProductsList) => {
-  const validateProductsResult = validateProducts(saleProductsList);
-  if (validateProductsResult[0].err) return productError;
+const updateSaleById = async (id, updatedSaleProductsList) => {
+  const oldSale = await getSaleById(id);
+  if (oldSale.err) return saleError;
 
-  const updatedSale = await salesModel.updateSaleById(id, saleProductsList);
+  const validateProductsResult = validateProducts(updatedSaleProductsList);
+  if (validateProductsResult.err) return productError;
+
+  const updatedSale = await salesModel.updateSaleById(id, updatedSaleProductsList);
   return updatedSale;
 };
 
 const excludeSaleById = async (id) => {
   const excludedSale = await getSaleById(id);
 
-  if (!await salesModel.excludeSaleById(id)) {
+  if (excludedSale.err) {
     saleError.err = { code: 'invalid_data', message: 'Wrong sale ID format' };
     return saleError;
   }
 
-  const getNewSaleProductsFromDB = await Promise.all(
+  await salesModel.excludeSaleById(id);
+
+  const getProductsFromDB = await Promise.all(
     excludedSale.itensSold.map(({ productId }) => productsModel.getProductById(productId)),
   );
 
   await Promise.all(
     excludedSale.itensSold.map((product, index) => productsModel.addToStockQuantity(
-      product, getNewSaleProductsFromDB[index].quantity,
+      product, getProductsFromDB[index].quantity,
     )),
   );
 

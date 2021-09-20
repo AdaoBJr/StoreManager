@@ -53,10 +53,10 @@ const addToStockQuantity = async ({ productId, quantity }, stockQuantity) => {
 };
 
 const excludeProductById = async (id) => {
-  const result = await connection.getConnection().then((db) =>
+  await connection.getConnection().then((db) =>
     db.collection('products').deleteOne({ _id: ObjectId(id) }));
 
-  return result;
+  return null;
 };
 
 module.exports = {

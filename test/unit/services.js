@@ -360,4 +360,213 @@ describe('Testa o funcionamento de salesService', () => {
       });
     })
   })
+
+  describe('Chama a função getAllSales', () => {
+    describe('Não existem vendas cadastradas', () => {
+
+      before(() => sinon.stub(salesModel, 'getAllSales').resolves([]))
+      after(() => salesModel.getAllSales.restore());
+
+      it('Retorna um objeto com a propriedade sales contendo um array vazio', async () => {
+        const result = await salesService.getAllSales();
+        expect(result)
+          .to.be.an('object')
+          .that.has.property('sales')
+          .that.is.an('array')
+          .that.has.lengthOf(0);
+      });
+    });
+
+    describe('Existem vendas cadastradas', () => {
+      
+      before(() => sinon.stub(salesModel, 'getAllSales').resolves([{}]));
+      after(() => salesModel.getAllSales.restore(0));
+
+      it('Retorna um objeto com a propriedade sales contendo um array de objetos com uma ou mais posições', async () => {
+        const result = await salesService.getAllSales();
+        expect(result)
+          .to.be.an('object')
+          .that.has.property('sales')
+          .that.is.an('array')
+          .that.has.length.greaterThan(0);
+      });
+    });
+  });
+
+  describe('Chama a função getSaleById', () => {
+    describe('O id informado não é válido', () => {
+      
+      before(() => sinon.stub(salesModel, 'getSaleById').resolves(null));
+      after(() => salesModel.getSaleById.restore());
+
+      it('Falha na verificação do id e retorna o objeto de erro', async () => {
+        const result = await salesService.getSaleById(invalidMongoID);
+        expect(result)
+          .to.be.an('object')
+          .that.has.property('err')
+          .that.has.property('message', 'Sale not found');
+      });
+    });
+
+    describe('O id informado é válido', () => {
+      describe('A venda não existe no Banco de Dados', () => {
+
+        before(() => sinon.stub(salesModel, 'getSaleById').resolves(undefined));
+        after(() => salesModel.getSaleById.restore());
+
+        it('Falha na verificação do id e retorna o objeto de erro', async () => {
+          const result = await salesService.getSaleById(validMongoID);
+          expect(result)
+            .to.be.an('object')
+            .that.has.property('err')
+            .that.has.property('message', 'Sale not found');
+        });
+      });
+
+      describe('A venda existe no Banco de Dados', () => {
+
+        before(() => sinon.stub(salesModel, 'getSaleById').resolves(validSaleFromMongo));
+        after(() => salesModel.getSaleById.restore());
+
+        it('Retorna o objeto da venda encontrado com as propriedades _id, name e quantity', async () => {
+          const result = await salesService.getSaleById(validMongoID);
+          expect(result).to.be.an('object');
+          expect(result).to.have.property('_id');
+          expect(result)
+            .to.have.property('itensSold')
+            .that.is.an('array')
+            .that.has.length.greaterThan(0);
+        });
+      });
+    });
+  });
+
+  describe('Chama a função updateSaleById', () => {
+    describe('O id informado não é válido', () => {
+
+      before(() => sinon.stub(salesModel, 'getSaleById').resolves(null));
+      after(() => salesModel.getSaleById.restore());
+
+      it('Falha na verificação do id e retorna o objeto de erro', async () => {
+        const result = await salesService.getSaleById(invalidMongoID, validSale);
+        expect(result)
+          .to.be.an('object')
+          .that.has.property('err')
+          .that.has.property('message', 'Sale not found');
+      });
+
+    });
+
+    describe('O id informado é válido', () => {
+      describe('A venda não existe no Banco de Dados', () => {
+
+        before(() => sinon.stub(salesModel, 'getSaleById').resolves(undefined));
+        after(() => salesModel.getSaleById.restore());
+
+        it('Falha na verificação do id e retorna o objeto de erro', async () => {
+          const result = await salesService.getSaleById(validMongoID, validSale);
+          expect(result)
+            .to.be.an('object')
+            .that.has.property('err')
+            .that.has.property('message', 'Sale not found');
+        });
+
+      });
+
+      describe('A venda existe no Banco de Dados', () => {
+
+        before(() => sinon.stub(salesModel, 'getSaleById').resolves(validSaleFromMongo));
+        after(() => salesModel.getSaleById.restore());
+
+        describe('Os produtos da venda não são válidos', () => {
+      
+          it('Falha na validação da quantidade e retorna o objeto de erro', async () => {
+            const result = await salesService.updateSaleById(validMongoID, invalidSaleProductQuantity);
+            expect(result)
+              .to.be.an('object')
+              .that.has.property('err')
+              .that.has.property('message', 'Wrong product ID or invalid quantity');
+          })
+    
+        })
+    
+        describe('Os produtos da venda são válidos', () => {
+          
+          before(() => sinon.stub(salesModel, 'updateSaleById').resolves(validSaleFromMongo));
+          after(() => salesModel.updateSaleById.restore());
+
+          it('Retorna o objeto da venda após atualização com as propriedades _id e itensSold', async () => {
+            const result = await salesService.updateSaleById(validMongoID, validSale);
+            expect(result).to.be.an('object');
+            expect(result).to.have.property('_id');
+            expect(result)
+              .to.have.property('itensSold')
+              .that.is.an('array')
+              .that.has.length.greaterThan(0);
+          });
+
+        });
+      });
+    });
+  });
+
+  describe('Chama a função excludeSaleById', () => {
+    describe('O id informado não é válido', () => {
+
+      before(() => sinon.stub(salesModel, 'getSaleById').resolves(null));
+      after(() => salesModel.getSaleById.restore());
+
+      it('Falha na verificação do id e retorna o objeto de erro', async () => {
+        const result = await salesService.excludeSaleById(invalidMongoID);
+        expect(result)
+          .to.be.an('object')
+          .that.has.property('err')
+          .that.has.property('message', 'Wrong sale ID format');
+      })
+    });
+
+    describe('O id informado é válido', () => {
+      describe('A venda não existe no Banco de Dados', () => {
+
+        before(() => sinon.stub(salesModel, 'getSaleById').resolves(undefined));
+        after(() => salesModel.getSaleById.restore());
+
+        it('Falha na verificação do id e retorna o objeto de erro', async () => {
+          const result = await salesService.excludeSaleById(validMongoID);
+          expect(result)
+            .to.be.an('object')
+            .that.has.property('err')
+            .that.has.property('message', 'Wrong sale ID format');
+        })
+
+      })
+
+      describe('A venda existe no Banco de Dados', () => {
+
+        before(() => {
+          sinon.stub(salesModel, 'getSaleById').resolves(validSaleFromMongo);
+          sinon.stub(salesModel, 'excludeSaleById').resolves(null);
+          sinon.stub(productsModel, 'getProductById').resolves(validProductFromMongo);
+          sinon.stub(productsModel, 'addToStockQuantity').resolves(null);
+        });
+
+        after(() => {
+          salesModel.getSaleById.restore();
+          salesModel.excludeSaleById.restore();
+          productsModel.getProductById.restore();
+          productsModel.addToStockQuantity.restore();
+        });
+
+        it('Exclui a venda com sucesso e retorna o objeto da venda excluída', async () => {
+          const result = await salesService.excludeSaleById(validMongoID);
+          expect(result).to.be.an('object');
+          expect(result).to.have.property('_id');
+          expect(result)
+            .to.have.property('itensSold')
+            .that.is.an('array')
+            .that.has.length.greaterThan(0);
+        });
+      });
+    });
+  });
 });

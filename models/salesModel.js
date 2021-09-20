@@ -10,8 +10,7 @@ const createSale = async (newSale) => {
 
 const getAllSales = async () => {
   const result = await connection.getConnection().then((db) =>
-
-  db.collection('sales').find().toArray());
+    db.collection('sales').find().toArray());
 
   return result;
 };
@@ -35,12 +34,10 @@ const updateSaleById = async (id, saleProductsList) => {
 };
 
 const excludeSaleById = async (id) => {
-  if (!ObjectId.isValid(id)) return null;
-
-  const result = await connection.getConnection().then((db) =>
+  await connection.getConnection().then((db) =>
     db.collection('sales').deleteOne({ _id: ObjectId(id) }));
 
-  return result;
+  return null;
 };
 
 module.exports = {
