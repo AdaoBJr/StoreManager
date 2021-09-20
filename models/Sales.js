@@ -38,8 +38,8 @@ const update = async (id, data) => {
 const remove = async (id) => {
   if (!ObjectId.isValid(id)) return null;
 
-  const sale = await findById(id);
   const db = await connection();
+  const sale = await findById(id);
 
   await db.collection('sales').deleteOne({ _id: ObjectId(id) });
 

@@ -8,7 +8,7 @@ const create = async (sales) => {
 
   if (!productsQuantity) return Error.unstorable('Such amount is not permitted to sell');
 
-  sales.forEach((sale) => { Product.updateQuantity(sale); });
+  sales.forEach((sale) => { Product.ensuresQuantity(sale); });
 
   return Sales.create(sales);
 };
@@ -22,9 +22,12 @@ const findById = async (id) => {
 };
 
 const remove = async (id) => {
-  const sale = await Sales.remove(id);
+  const sale = await Sales.findById(id);
+  const saleRemoved = await Sales.remove(id);
 
-  if (!sale) return Error.invalidData('Wrong sale ID format');
+  if (!sale || !saleRemoved) return Error.invalidData('Wrong sale ID format');
+
+  sale.itensSold.forEach((products) => Product.updateQuantity(products));
 
   return sale;
 };
