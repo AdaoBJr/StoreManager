@@ -5,7 +5,7 @@ const getAll = async (_req, res) => {
   try {
     const products = await services.getAll();
 
-    res.status(StatusCodes.OK).json(products);
+    res.status(StatusCodes.OK).json({ products });
   } catch (error) {
     res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(error);
   }

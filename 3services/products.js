@@ -1,7 +1,8 @@
 const models = require('../4models/product');
 
 const getAll = async () => {
-  const model = models.getAll();
+  const model = await models.getAll();
+
   return model;
 };
 
