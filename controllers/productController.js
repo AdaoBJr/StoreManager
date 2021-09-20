@@ -40,9 +40,9 @@ const updateProduct = async (req, res) => {
   const productUpdate = await productService.updateProductValidation({ id, name, quantity });
   const { _id, message, code } = productUpdate;
   if (message) {
-    res.status(unprocessableEntity).json({ err: { code, message } });
+    return res.status(unprocessableEntity).json({ err: { code, message } });
   }
-  res.status(ok).json({ _id, name, quantity });
+  return res.status(ok).json({ _id, name, quantity });
 };
 
 // req 4
