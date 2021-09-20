@@ -1,3 +1,9 @@
 const connection = require('./connection');
 
-module.exports = {};
+const createSale = async (sales) => 
+  connection()
+    .then((db) => db.collection('sales').insertOne({ itensSold: sales }));
+
+module.exports = {
+  createSale,
+};
