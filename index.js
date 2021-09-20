@@ -21,6 +21,10 @@ app.delete('/products/:id', productsController.remove);
 
 app.put('/products/:id', productsController.update);
 
+app.get('/sales', salesController.getAll);
+
+app.get('/sales/:id', salesController.getById);
+
 app.post('/sales', salesController.create);
 
 app.listen('3000', () => console.log('Running server on port 3000'));

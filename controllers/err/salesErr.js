@@ -4,6 +4,13 @@ const errSale = {
   },
 };
 
+const errNotExists = {
+  err: {
+    code: 'not_found', message: 'Sale not found',
+  },
+};
+
 module.exports = {
   errSale,
+  errNotExists,
 };
