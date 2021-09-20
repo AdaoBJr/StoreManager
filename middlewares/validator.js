@@ -8,7 +8,7 @@ const productExists = async (req, _res, next) => validate.productsExists(req.bod
   .then(() => next())
   .catch((err) => next({ status: 422, err }));
 
-const productId = (req, _res, next) => validate.productId(req.params.id)
+const productId = (req, _res, next) => validate.productsId(req.params.id)
   .then(() => next())
   .catch((err) => next({ status: 422, err }));
 

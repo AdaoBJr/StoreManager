@@ -18,7 +18,7 @@ const productsExists = async ({ name }) => {
   if (exists) throw err('invalid_data', 'Product already exists');
 };
 
-const productId = async (id) => {
+const productsId = async (id) => {
   if (!ObjectId.isValid(id)) throw err('invalid_data', 'Wrong id format');
 };
 
@@ -42,7 +42,7 @@ const saleId = async (id) => {
 const stock = async (itensSold) => {
   const arr = await productsModel.getAll();
   const available = itensSold.every(({ productId, quantity }) => {
-    const stocks = arr.find((e) => e._id.toString() === productId);
+    const stocks = arr.find(({ _id }) => _id.toString() === productId);
     return stocks.quantity >= quantity;
   });
   if (!available) throw err('stock_problem', 'Such amount is not permitted to sell');
@@ -51,7 +51,7 @@ const stock = async (itensSold) => {
 module.exports = {
   product,
   productsExists,
-  productId,
+  productsId,
   sale,
   saleExists,
   saleId,
