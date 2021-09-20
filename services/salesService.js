@@ -101,9 +101,26 @@ const updateSales = async (id, sales) => {
   return { ...updatedSale };
 };
 
+const deleteSale = async (id) => {
+  const foundById = await getSaleById(id);
+  if (foundById.error) {
+    return {
+      error: {
+        status: 422,
+        message: 'Wrong sale ID format',
+      },
+    };
+  }
+
+  await salesModel.deleteSale(id);
+
+  return foundById;
+};
+
 module.exports = {
   createSales,
   getAllSales,
   getSaleById,
   updateSales,
+  deleteSale,
 };
