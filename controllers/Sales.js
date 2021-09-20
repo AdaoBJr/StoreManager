@@ -43,4 +43,14 @@ sales.put('/:id',
     return res.status(SUCCESS).json(sale);
 }));
 
+sales.delete('/:id',
+  rescue(async (req, res, next) => {
+    const { id } = req.params;
+    const sale = await Sales.remove(id);
+
+    if (sale.isError) return next(sale);
+
+    return res.status(SUCCESS).json(sale);
+}));
+
 module.exports = sales;

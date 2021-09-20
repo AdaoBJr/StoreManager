@@ -40,6 +40,7 @@ const update = async (id, data) => {
 
 const remove = async (id) => {
   if (!ObjectId.isValid(id)) return null;
+
   const db = await connection();
   const product = await findById(id);
 

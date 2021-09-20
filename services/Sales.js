@@ -21,9 +21,18 @@ const findById = async (id) => {
   return sale;
 };
 
+const remove = async (id) => {
+  const sale = await Sales.remove(id);
+
+  if (!sale) return Error.invalidData('Wrong sale ID format');
+
+  return sale;
+};
+
 module.exports = {
   create,
   findById,
   getAll: Sales.getAll,
   update: Sales.update,
+  remove,
 };

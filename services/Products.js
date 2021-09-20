@@ -19,6 +19,7 @@ const findById = async (id) => {
 
 const remove = async (id) => {
   const product = await Products.remove(id);
+
   if (!product) return Error.invalidData('Wrong id format');
   return product;
 };

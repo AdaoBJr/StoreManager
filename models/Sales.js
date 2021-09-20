@@ -35,9 +35,21 @@ const update = async (id, data) => {
   return findById(id);
 };
 
+const remove = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+
+  const sale = await findById(id);
+  const db = await connection();
+
+  await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+
+  return sale;
+};
+
 module.exports = {
   create,
   findById,
   getAll,
   update,
+  remove,
 };
