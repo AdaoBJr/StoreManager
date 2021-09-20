@@ -24,14 +24,23 @@ const createProduct = rescue(async (req, res, next) => {
   return res.status(201).json(newProduct); // Status 201 - Created
 });
 
-const getAllProducts = rescue(async (req, res, next) => {
+const getAllProducts = rescue(async (_req, res, next) => {
   const allProducts = await productsService.getAllProducts();
   if (allProducts.error) return next(allProducts.error);
 
   return res.status(200).json(allProducts); // Status 200 - Ok/Success
 });
 
+const getProductById = rescue(async (req, res, next) => {
+  const { id } = req.params;
+  const product = await productsService.getProductById(id);
+  if (product.error) return next(product.error);
+
+  return res.status(200).json(product);
+});
+
 module.exports = {
   createProduct,
   getAllProducts,
+  getProductById,
 };

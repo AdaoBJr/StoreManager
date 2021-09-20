@@ -36,7 +36,22 @@ const getAllProducts = async () => {
   };
 };
 
+const getProductById = async (id) => {
+  const productFound = await productModel.getProductById(id);
+  if (!productFound) {
+    return {
+      error: {
+        status: 422,
+        message: 'Wrong id format',
+      },
+    };
+  }
+
+  return { ...productFound };
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
+  getProductById,
 };
