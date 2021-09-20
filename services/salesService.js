@@ -24,6 +24,15 @@ async function create(body) {
   return createdSale;
 }
 
+async function update({ id, body }) {
+  const validateQuantity = validateCreate.validateQuantity(body);
+  if (validateQuantity) return validateQuantity;
+
+  const createdSale = await salesModel.update({ id, body });
+  console.log(createdSale);
+  return createdSale;
+}
+
 async function remove({ id }) {
   if (id.length < 24) return 'id not exists';
 
@@ -40,5 +49,6 @@ module.exports = {
   getAll,
   getById,
   create,
+  update,
   remove,
 };

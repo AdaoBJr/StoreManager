@@ -24,6 +24,16 @@ async function create(req, res) {
   return res.status(200).json(createSales);
 }
 
+async function update(req, res) {
+  const { id } = req.params;
+  const { body } = req;
+  const updateSales = await salesService.update({ id, body });
+  
+  if (updateSales === 'invalid quantity') res.status(422).json(salesErr.errSale);
+
+  return res.status(200).json(updateSales);
+}
+
 async function remove(req, res) {
   const { id } = req.params;
   const sale = await salesService.remove({ id });
@@ -37,5 +47,6 @@ module.exports = {
   getAll,
   getById,
   create,
+  update,
   remove,
 };

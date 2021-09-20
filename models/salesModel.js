@@ -24,6 +24,18 @@ async function create(body) {
   return { _id: result.insertedId, itensSold: body };
 }
 
+const update = async ({ id, body }) => {
+  if (!ObjectId.isValid(id)) return null;
+  const db = await getConnection();
+  await db.collection(collection)
+  .updateOne({ _id: ObjectId(id) }, 
+  { $set: { body } });
+  return {
+    _id: id,
+    itensSold: body,
+  }; 
+};
+
 async function remove({ id }) {
   const db = await getConnection();
   const result = await db.collection(collection).deleteOne({ _id: ObjectId(id) });
@@ -35,5 +47,6 @@ module.exports = {
   getAll,
   getById,
   create,
+  update,
   remove,
 };
