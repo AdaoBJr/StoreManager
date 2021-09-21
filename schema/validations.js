@@ -64,8 +64,17 @@ const isSalesQuantityValid = (itensSold) => {
     };
   }
 
+  if (itensSold.find((j) => typeof j.quantity === 'string')) {
+    return {
+      err:
+        { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
+    };
+  }
+
   return {};
 };
+
+// const isSales
 
 module.exports = {
   isNameValid,
