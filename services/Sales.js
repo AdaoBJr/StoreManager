@@ -40,9 +40,18 @@ const updateSale = async (id, itemToUpdate) => {
   return Sales.updateSale(id, itemToUpdate);
 };
 
+const deleteSale = async (id) => {
+  const deletedSale = await Sales.deleteSale(id);
+
+  if (!deletedSale) return false;
+
+  return deletedSale;
+};
+
 module.exports = {
   createSale,
   findSaleById,
   getAllSales,
   updateSale,
+  deleteSale,
 };

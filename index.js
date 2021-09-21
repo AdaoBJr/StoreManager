@@ -25,6 +25,7 @@ app.put('/products/:id', Products.update);
 app.put('/sales/:id', Sales.updateSale);
 
 app.delete('/products/:id', Products.deleteProduct);
+app.delete('/sales/:id', Sales.deleteSale);
 
 // const { PORT } = process.env;
 const PORT = 3000;
