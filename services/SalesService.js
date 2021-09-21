@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const salesModel = require('../models/SalesModel');
 
 const validateQuantity = async (array) => {
@@ -27,7 +28,35 @@ const addNewSale = async (array) => {
     return addSale;
 };
 
+const getAllSales = async () => {
+    const allSales = await salesModel.getAllSales();
+    return allSales;
+};
+
+const getSaleById = async (id) => {
+    if (!ObjectId.isValid(id)) {
+        return {
+            err: {
+                code: 'not_found',
+                message: 'Sale not found',
+            },
+        };
+    }
+    const getSale = await salesModel.getSaleById(id);
+    if (getSale === null) {
+        return {
+            err: {
+                code: 'not_found',
+                message: 'Sale not found',
+            },
+        };
+    }
+    return getSale;
+};
+
 module.exports = {
     validateQuantity,
     addNewSale,
+    getAllSales,
+    getSaleById,
 };

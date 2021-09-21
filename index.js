@@ -22,6 +22,10 @@ app.delete('/products/:id', productsController.productDelete);
 
 app.post('/sales', salesController.addNewSale);
 
+app.get('/sales/:id', salesController.getSaleById);
+
+app.get('/sales', salesController.getAllSales);
+
 app.listen(3000, () => {
   console.log('Online now!');
 });
