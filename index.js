@@ -28,6 +28,8 @@ app.get('/sales', salesController.getAllSales);
 
 app.put('/sales/:id', salesController.updateSale);
 
+app.delete('/sales/:id', salesController.deleteSale);
+
 app.listen(3000, () => {
   console.log('Online now!');
 });
