@@ -34,6 +34,7 @@ const updateProduct = async (id, name, quantity) => {
     .UpdateOne(
       { _id: ObjectId(id) },
       { $set: { name, quantity } },
+      { returnOriginal: false },
     );
 
   if (!updatedProduct) return null;
