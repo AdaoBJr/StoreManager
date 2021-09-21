@@ -1,4 +1,4 @@
-const { ObjectId } = require('mongodb');
+const { ObjectID } = require('mongodb');
 const connection = require('./connection');
 
 const create = async (name, quantity) => {
@@ -35,7 +35,7 @@ const getById = async (id) => {
   const productsCollection = await connection()
     .then((db) => db.collection('products'));
 
-  const response = await productsCollection.findOne(new ObjectId(id));
+  const response = await productsCollection.findOne(new ObjectID(id));
   return response;
 };
 
@@ -62,7 +62,7 @@ const deleteById = async (id) => {
 
   try {
     const deleted = await productsCollection.deleteOne(
-      { _id: new ObjectId(id) },
+      { _id: new ObjectID(id) },
     );
     console.log(deleted);
     return deleted;
