@@ -41,9 +41,23 @@ async function edit(id, itensSold) {
   return value;
 }
 
+async function remove(id) {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+  const userId = new ObjectId(id);
+  const collection = await connection().then((db) => db.collection('sales'));
+  const product = await collection.findOneAndDelete({ _id: userId });
+  if (!product) return null;
+
+  const { value } = product;
+  return value;
+}
+
 module.exports = {
   save,
   findById,
   list,
   edit,
+  remove,
 };

@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { ObjectId } = require('mongodb');
 const { formatError } = require('../helpers');
 const saleModel = require('../models/saleModel');
 const productModel = require('../models/productModel');
@@ -48,8 +49,21 @@ async function edit(id, itensSold) {
   const error = JoiValidator(itensSold);
   if (error) return formatError('Wrong product ID or invalid quantity');
   const saleEdited = await saleModel.edit(id, itensSold);
-  console.log(saleEdited);
   return saleEdited;
+}
+
+async function remove(id) {
+  if (!ObjectId.isValid(id)) {
+    return formatError('Wrong sale ID format');
+  }
+
+  const saleDeleted = await saleModel.remove(id);
+  if (!saleDeleted) {
+    return { err: { code: 'not_found', message: 'Sale not found' } };
+  }
+
+  await productModel.editQt('increase', saleDeleted.itensSold);
+  return saleDeleted;
 }
 
 module.exports = {
@@ -57,4 +71,5 @@ module.exports = {
   findById,
   list,
   edit,
+  remove,
 };
