@@ -23,7 +23,7 @@ const findSaleById = rescue(async (req, res, _next) => {
   const { id } = req.params;
   const sale = await Sales.findSaleById(id);
 
-  if (sale === false) return res.status(404).json(sale);
+  if (typeof sale.err !== 'undefined') return res.status(404).json(sale);
   if (!sale) return res.status(404).json(sale);
 
   return res.status(200).json(sale);
