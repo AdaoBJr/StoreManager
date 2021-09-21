@@ -1,13 +1,13 @@
 const { findById, update } = require('../products');
 
-const productsExpand = async ({ itensSold }) => {
+const productsExpand = ({ itensSold }) => {
   itensSold.forEach(async ({ productId: id, quantity }) => {
     const { product } = await findById({ id });
     await update({ id, name: product.name, quantity: product.quantity - quantity });
   });
 };
 
-const restoreProducts = async ({ sale: { itensSold } }) => {
+const restoreProducts = ({ sale: { itensSold } }) => {
   itensSold.forEach(async ({ productId: id, quantity }) => {
     const { product } = await findById({ id });
     await update({ id, name: product.name, quantity: product.quantity + quantity });
