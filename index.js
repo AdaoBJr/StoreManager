@@ -26,6 +26,8 @@ app.get('/sales/:id', salesController.getSaleById);
 
 app.get('/sales', salesController.getAllSales);
 
+app.put('/sales/:id', salesController.updateSale);
+
 app.listen(3000, () => {
   console.log('Online now!');
 });
