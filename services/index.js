@@ -20,5 +20,5 @@ module.exports = {
   registerProduct,
   registerSale,
   updateProduct,
-  updateSale
+  updateSale,
 };

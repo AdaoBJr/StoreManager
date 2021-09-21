@@ -3,6 +3,7 @@ const { ObjectId } = require('mongodb');
 const { findOne } = require('../models/salesModel');
 
 const { error } = require('../middlewares/errorMessage');
+
 const {
   success,
   notFoundCode,
@@ -12,31 +13,29 @@ const {
   notFound,
 } = error.errorMessage;
 
-const findSale = async (id) => {
-  if (!ObjectId.isValid(id)) {
-    return ({ 
-      statusCode: notFoundCode,
-      infos: {
-        err: {
-          code: notFound,
-          message: saleNotFound,
-        },
-      },
-    });
-  }
-  const sale = await findOne(id);
-  if (!sale || sale._id == undefined) {
-    return ({
-      statusCode: notFoundCode,
-      infos: {
-        err: {
-          code: notFound,
-          message: saleNotFound,
-        },
-      },
-    });
-  }
+const firstReturn = { 
+  statusCode: notFoundCode,
+  infos: {
+    err: {
+      code: notFound,
+      message: saleNotFound,
+    },
+  },
+};
+const secondReturn = {
+  statusCode: notFoundCode,
+  infos: {
+    err: {
+      code: notFound,
+      message: saleNotFound,
+    },
+  },
+};
 
+const findSale = async (id) => {
+  if (!ObjectId.isValid(id)) { return firstReturn; }
+  const sale = await findOne(id);
+  if (!sale || sale.id === undefined) { return secondReturn; }
   return {
     statusCode: success,
     infos: sale,

@@ -1,5 +1,6 @@
-const connection = require('./connection');
 const { ObjectId } = require('mongodb');
+const connection = require('./connection');
+
 const zero = 0;
 
 const register = async (itens) => {
@@ -8,9 +9,9 @@ const register = async (itens) => {
   const sales = await db.collection('sales').insertOne({ itensSold })
     .then((result) => ({ _id: result.insertedId, itensSold }));
 
-  for (let index = zero; index < itens.length; index++) {
+  for (let index = zero; index < itens.length; index += 1) {
     const saleProduct = itens[index];
-    await db.collection('products')
+    db.collection('products')
       .updateOne(
         { _id: ObjectId(saleProduct.productId) },
         { $inc: { quantity: -saleProduct.quantity } },
@@ -38,7 +39,7 @@ const updateOne = async (id, itens) => {
   const db = await connection();
   await db.collection('sales').updateOne(
     { _id: ObjectId(id) },
-    { $set: { itensSold: itens } }
+    { $set: { itensSold: itens } },
   );
   return ({
     _id: ObjectId(id),
@@ -53,15 +54,14 @@ const deleteOne = async (id) => {
   await db.collection('sales')
     .deleteOne({ _id: ObjectId(id) });
 
-  for (let index = zero; index < sales.itensSold.length; index++) {
+  for (let index = zero; index < sales.itensSold.length; index += 1) {
     const saleProduct = sales.itensSold[index];
-    await db.collection('products')
+    db.collection('products')
       .updateOne(
         { _id: ObjectId(saleProduct.productId) },
         { $inc: { quantity: saleProduct.quantity } },
       );
   }
-  return;
 };
 
 module.exports = {
@@ -69,5 +69,5 @@ module.exports = {
   listAll,
   findOne,
   updateOne,
-  deleteOne
+  deleteOne,
 };

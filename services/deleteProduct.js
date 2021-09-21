@@ -4,6 +4,7 @@ const {
 } = require('../models/productsModel');
 
 const { error } = require('../middlewares/errorMessage');
+
 const {
   success,
   invalid,
@@ -15,30 +16,29 @@ const {
 
 const minID = 24;
 
+const firstReturn = { 
+  statusCode: invalid,
+  infos: {
+    err: {
+      code: invalidData,
+      message: invalidID,
+    },
+  },
+};
+const secondReturn = { 
+  statusCode: invalid,
+  infos: {
+    err: {
+      code: invalidData,
+      message: invalidID,
+    },
+  },
+};
+
 const deleteProduct = async (id) => {
-  if (id.length < minID) {
-    return ({ 
-      statusCode: invalid,
-      infos: {
-        err: {
-          code: invalidData,
-          message: invalidID,
-        },
-      },
-    });
-  }
+  if (id.length < minID) { return firstReturn; }
   const product = await findOne(id);
-  if (!product) {
-    return ({ 
-      statusCode: invalid,
-      infos: {
-        err: {
-          code: invalidData,
-          message: invalidID,
-        },
-      },
-    });
-  }
+  if (!product) { return secondReturn; }
   await deleteOne(id);
   return {
     statusCode: success,

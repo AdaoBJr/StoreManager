@@ -6,6 +6,7 @@ const {
 } = require('../models/salesModel');
 
 const { error } = require('../middlewares/errorMessage');
+
 const {
   success,
   notFoundCode,
@@ -18,35 +19,36 @@ const {
   saleNotFound,
 } = error.errorMessage;
 
+const firstReturn = { 
+  statusCode: invalid,
+  infos: {
+    err: {
+      code: invalidData,
+      message: invalidSaleID,
+    },
+  },
+};
+const secondReturn = {
+  statusCode: notFoundCode,
+  infos: {
+    err: {
+      code: notFound,
+      message: saleNotFound,
+    },
+  },
+};
+
 const deleteSale = async (id) => {
-  if (!ObjectId.isValid(id)) {
-    return ({ 
-      statusCode: invalid,
-      infos: {
-        err: {
-          code: invalidData,
-          message: invalidSaleID,
-        },
-      },
-    });
-  }
+  let retorno = {};
+  if (!ObjectId.isValid(id)) { retorno = firstReturn; }
   const sale = await findOne(id);
-  if (!sale || sale._id == undefined) {
-    return ({
-      statusCode: notFoundCode,
-      infos: {
-        err: {
-          code: notFound,
-          message: saleNotFound,
-        },
-      },
-    });
-  }
+  if (!sale || sale.id === undefined) { retorno = secondReturn; }
   await deleteOne(id);
-  return {
+  retorno = {
     statusCode: success,
     infos: sale,
   };
+  return retorno;
 };
 
 module.exports = deleteSale;

@@ -1,6 +1,7 @@
 const { listAll } = require('../models/productsModel');
 
 const { error } = require('../middlewares/errorMessage');
+
 const { success } = error.codeStatus;
 
 const listAllProducts = async () => {

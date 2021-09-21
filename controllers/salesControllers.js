@@ -43,5 +43,5 @@ module.exports = {
   findSaleController,
   listAllSalesController,
   updateSaleController,
-  deleteSaleController
+  deleteSaleController,
 };

@@ -1,5 +1,5 @@
-const connection = require('./connection');
 const { ObjectId } = require('mongodb');
+const connection = require('./connection');
 
 const register = async (name, quantity) => {
   const db = await connection();
@@ -24,7 +24,7 @@ const findOne = async (id, name) => {
   const result = await db.collection('products')
     .findOne({
       $or: [
-        {_id: ObjectId(id) },
+        { _id: ObjectId(id) },
         { name },
       ],
     });
@@ -39,7 +39,7 @@ const updateOne = async (id, name, quantity) => {
       { $set: {
         name,
         quantity,
-      } }
+      } },
     );
   return {
     id,
@@ -52,7 +52,6 @@ const deleteOne = async (id) => {
   const db = await connection();
   await db.collection('products')
     .deleteOne({ _id: ObjectId(id) });
-  return;
 };
 
 module.exports = {
@@ -60,5 +59,5 @@ module.exports = {
   listAll,
   findOne,
   updateOne,
-  deleteOne
+  deleteOne,
 };
