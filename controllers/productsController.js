@@ -77,9 +77,32 @@ const updateById = rescue(async (req, res, next) => {
   return res.status(200).json({ _id: id, name, quantity });
 });
 
+const deleteById = rescue(async (req, res, _next) => {
+  const { id } = req.params;
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(422).json({ err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    });
+  }
+  const product = await ProductsService.getById(id);
+  const { _id, name, quantity } = product;
+
+  await ProductsService.deleteById(id);
+
+  return res.status(200).json({
+    _id,
+    name,
+    quantity,
+  });
+});
+
 module.exports = {
   create,
   getAll,
   getById,
   updateById,
+  deleteById,
 };
