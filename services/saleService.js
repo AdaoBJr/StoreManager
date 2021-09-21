@@ -31,6 +31,7 @@ const registerMultipleSalesValidation = (body) => {
 };
 
 // req 5
+// Acertos na função feitos com a ajuda do colega Henrique Zózimo e Ivan Rafael
 const registerSaleValidation = async (body) => {
   const multipleSales = registerMultipleSalesValidation(body);
   if (multipleSales === false) {
@@ -52,17 +53,29 @@ const findSaleByIdValidation = async (id) => {
     return { code: 'not_found', message: 'Sale not found' };
   }
   const foundSaleById = await saleModel.findSaleById(id);
+  if (!foundSaleById) return { code: 'not_found', message: 'Sale not found' };
   return foundSaleById;
 };
 
 // req 7
-const updateSaleValidation = (id, body) => {
+const updateSaleValidation = async (id, body) => {
   const multipleSales = registerMultipleSalesValidation(body);
   if (multipleSales === false) {
     return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
   }
-  const updateSale = saleModel.updateSale(ObjectId(id), body);
+  const updateSale = await saleModel.updateSale(ObjectId(id), body);
   return updateSale;
+};
+
+// req 8
+const deleteSaleValidation = async (id) => {
+  if (!ObjectId.isValid(id)) { 
+    return { code: 'invalid_data', message: 'Wrong sale ID format' }; 
+  }
+  const { _id } = await findSaleByIdValidation(id);
+  if (!_id) return { err: { code: 'not_found', message: 'Sale not found' } };
+  await saleModel.deleteSale(id);
+  return _id;
 };
 
 module.exports = {
@@ -70,4 +83,5 @@ module.exports = {
   findAllSalesValidation,
   findSaleByIdValidation,
   updateSaleValidation,
+  deleteSaleValidation,
 };

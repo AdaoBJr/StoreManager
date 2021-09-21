@@ -26,6 +26,8 @@ app.get('/sales/:id', saleController.findSaleById); // req 6
 
 app.put('/sales/:id', saleController.updateSale); // req 7
 
+app.delete('/sales/:id', saleController.deleteSale); // req 8
+
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.send();

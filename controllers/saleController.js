@@ -1,11 +1,11 @@
 const saleService = require('../services/saleService');
 
 const ok = 200;
-// const created = 201;
 const unprocessableEntity = 422;
 const notFound = 404;
 
 // req 5
+// Acertos na função feitos com a ajuda do colega Henrique Zózimo e Ivan Rafael
 const registerSale = async (req, res) => {
   const sale = req.body;
   const register = await saleService.registerSaleValidation(sale);
@@ -46,9 +46,21 @@ const updateSale = async (req, res) => {
   return res.status(ok).json(updatedSale);
 };
 
+// req 8
+const deleteSale = async (req, res) => {
+  const { id } = req.params;
+  const deleted = await saleService.deleteSaleValidation(id);
+  const { code, message } = deleted;
+  if (message) {
+    return res.status(unprocessableEntity).json({ err: { code, message } });
+  }
+  return res.status(ok).json();
+};
+
 module.exports = {
   registerSale,
   findAllSales,
   findSaleById,
   updateSale,
+  deleteSale,
 };

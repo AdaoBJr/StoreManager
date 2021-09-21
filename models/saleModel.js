@@ -26,8 +26,15 @@ const findSaleById = async (id) => {
 const updateSale = async (id, body) => {
   const db = await connection();
   await db.collection('sales').updateOne({ _id: ObjectId(id) },
-  { $set: { itensSold: [body] } });
+  { $set: { itensSold: body } });
   return { _id: id, itensSold: body };
+};
+
+// req 8
+const deleteSale = async (id) => {
+  const db = await connection();
+  const deleted = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+  return deleted;
 };
 
 module.exports = {
@@ -35,4 +42,5 @@ module.exports = {
   findAllSales,
   findSaleById,
   updateSale,
+  deleteSale,
 };
