@@ -38,4 +38,4 @@ const remove = async ({ id }) => {
     return { name, quantity, _id };
 };
 
-module.exports = { createProduct, getAll, getById, update };
+module.exports = { createProduct, getAll, getById, update, remove };
