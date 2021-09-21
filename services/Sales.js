@@ -1,5 +1,7 @@
 const Sales = require('../models/Sales');
-const { isSalesQuantityValid } = require('../schema/validations');
+const { isSalesQuantityValid,
+  isQuantityValid,
+  isQuantityValidTwo } = require('../schema/validations');
 
 const createSale = async (itensSold) => {
   const validateQuantity = isSalesQuantityValid(itensSold);
@@ -27,9 +29,20 @@ const findSaleById = async (id) => {
   return findSaleById(sale);
 };
 
+const updateSale = async (id, itemToUpdate) => {
+  const { quantity } = itemToUpdate[0];
+  const validateQuantity = isQuantityValid(quantity);
+  if (validateQuantity.err) return validateQuantity;
+
+  const valivalidateQuantityTwo = isQuantityValidTwo(quantity);
+  if (valivalidateQuantityTwo.err) return valivalidateQuantityTwo;
+
+  return Sales.updateSale(id, itemToUpdate);
+};
+
 module.exports = {
   createSale,
   findSaleById,
   getAllSales,
-
+  updateSale,
 };

@@ -29,8 +29,24 @@ const findSaleById = rescue(async (req, res, _next) => {
   return res.status(200).json(sale);
 });
 
+const updateSale = rescue(async (req, res, _next) => {
+  const { id } = req.params;
+  const itemToUpdate = req.body;
+  const updatedItem = await Sales.updateSale(id, itemToUpdate);
+
+  if (typeof updatedItem.err === 'object') {
+    return res.status(422).json({
+      err:
+        { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
+    });
+  }
+
+  return res.status(200).json(updatedItem);
+});
+
 module.exports = {
   createSale,
   findSaleById,
   getAllSales,
+  updateSale,
 };

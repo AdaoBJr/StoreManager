@@ -22,6 +22,7 @@ app.get('/sales', Sales.getAllSales);
 app.get('/sales/:id', Sales.findSaleById);
 
 app.put('/products/:id', Products.update);
+app.put('/sales/:id', Sales.updateSale);
 
 app.delete('/products/:id', Products.deleteProduct);
 
