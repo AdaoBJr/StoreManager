@@ -7,7 +7,12 @@ const {
         wrongId,
 } = require('../middlewares/productsMiddlewares');
 
-const { listAll, productById } = require('../controllers/productsControllers');
+const {
+        listAll,
+        productById,
+        updateProduct,
+        deleteProduct,
+} = require('../controllers/productsControllers');
 
 const routes = new Router();
 
@@ -20,5 +25,10 @@ routes.post('/products',
 routes.get('/products', listAll);
 
 routes.get('/products/:id', wrongId, productById);
+
+routes.put('/products/:id', authLengthName,
+authQuantity, updateProduct);
+
+routes.delete('/products/:id', deleteProduct);
 
 module.exports = routes;
