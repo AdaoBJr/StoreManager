@@ -18,6 +18,8 @@ app.post('/sales', Sales.createSale);
 
 app.get('/products', Products.getAll);
 app.get('/products/:id', Products.findById);
+app.get('/sales', Sales.getAllSales);
+// app.get('/sales/:id', Sales.findSaleById);
 
 app.put('/products/:id', Products.update);
 
