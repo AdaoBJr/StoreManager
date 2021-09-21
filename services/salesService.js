@@ -42,18 +42,9 @@ const getSalesId = async (id) => {
   return salesId;
 };
 
-const updateSale = async (id, productId, quantity) => {
-  if (chekQuantity(quantity)) return chekQuantity(quantity);
-  const salesId = await salesModel.updateSale(id, productId, quantity);
-  if (!salesId) {
-    return {
-      err: {
-        code: 'not_found',
-        message: 'Sale not found',
-      },
-    };
-  }
-
+const updateSale = async (id, dataSales) => {
+  const salesId = await salesModel.updateSale(id, dataSales);
+  if (chekQuantity(dataSales[0].quantity)) return chekQuantity(dataSales);
   return salesId;
 };
 

@@ -32,20 +32,22 @@ const getSalesId = async (req, res) => {
 
 const updateSale = async (req, res) => {
   const { id } = req.params;
-  const { productId, quantity } = req.body;
-  const updatedSale = await salesService.updateSale(id, productId, quantity);
+  const dataSales = req.body;
+  console.log(dataSales);
+  const updatedSale = await salesService.updateSale(id, dataSales);
 
   if (updatedSale.err) {
     return res.status(422).json(updatedSale);
   }
 
-  return res.status(STATUS_OK)
-    .json(
-      {
-        _id: id,
-        itensSold: [{ productId, quantity }],
-      },
-  );
+  const itensSold = [
+    {
+      productId: dataSales[0].productId,
+      quantity: dataSales[0].quantity,
+    },
+  ];
+
+  return res.status(STATUS_OK).json({ _id: id, itensSold });
 };
 
 module.exports = {
