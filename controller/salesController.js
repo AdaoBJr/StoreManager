@@ -48,26 +48,10 @@ const update = async (req, res) => {
   }
 };
 
-/* const remove = async (req, res) => {
-    const { id } = req.params;
-    if (!ObjectId.isValid(id)) {
-      return res.status(404).json(formatError);
-    }
-    const verifyDelete = await salesService.remove(id);
-    console.log(verifyDelete);
-    if (!verifyDelete) {
-      return res.status(404).json(formatError);
-    }
-    return res.status(200).json(verifyDelete);
-  }; */
-
-  const remove = async (req, res) => {
-      const { id } = req.params;
-      const { message, code } = await salesService.remove(id);
-      if (message) {
-        return res.status(422).json({ err: { code, message } });
-    }
-        return res.status(200).json();
-  };
+  const remove = (req, res) => salesService.remove(req.params.id)
+  .then((result) => {
+    if (result.err) { return res.status(422).json(result); }
+    return res.status(200).json(result);
+  }).catch((error) => res.status(422).json({ message: error.message }));
 
 module.exports = { add, getAll, getById, update, remove };
