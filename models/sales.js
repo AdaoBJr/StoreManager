@@ -32,7 +32,18 @@ async function updateSale(id, sale) {
 async function deleteSale(id) {
   if (!ObjectId.isValid(id)) return null;
   const db = await connection();
-  const result = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+  const result = await db.collection('sales').findOneAndDelete({ _id: ObjectId(id) });
+  return result.value;
+}
+
+async function quantityUpdate(id, quantity) {
+  const db = await connection();
+  const product = await db.collection('products').findOne({ _id: ObjectId(id) });
+  if (product && (product.quantity - quantity < 0)) return null;
+  const result = await db.collection('products').updateOne(
+    { _id: ObjectId(id) },
+    { $inc: { quantity: -quantity } },
+  );
   return result;
 }
 
@@ -42,4 +53,5 @@ module.exports = {
   findById,
   updateSale,
   deleteSale,
+  quantityUpdate,
 };

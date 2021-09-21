@@ -32,8 +32,28 @@ function idValidation(sale) {
   if (!sale) throw error;
 }
 
+function quantityValidation(sale) {
+  const error = new Error();
+  error.status = 404;
+  error.err = {
+    code: 'stock_problem',
+    message: 'Such amount is not permitted to sell',
+  };
+  if (!sale) throw error;
+}
+
+async function quantityUpdate(sale) {
+  const sales = sale.map(async (item) => {
+    const stock = await model.quantityUpdate(item.productId, item.quantity);
+    quantityValidation(stock);
+    return stock;
+  });
+  await Promise.all(sales);
+}
+
 async function newSale(sale) {
   saleValidation(sale);
+  await quantityUpdate(sale);
   const result = await model.newSale(sale);
   return result;
 }
@@ -51,6 +71,7 @@ async function findById(id) {
 
 async function updateSale(id, sale) {
   saleValidation(sale);
+  await quantityUpdate(sale);
   const result = await model.updateSale(id, sale);
   return result;
 }
@@ -58,6 +79,9 @@ async function updateSale(id, sale) {
 async function deleteSale(id) {
   const result = await model.deleteSale(id);
   idValidation(result);
+  const { itensSold } = result;
+  const sale = [{ productId: itensSold[0].productId, quantity: itensSold[0].quantity * -1 }];
+  await quantityUpdate(sale);
   return result;
 }
 
