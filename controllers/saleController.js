@@ -11,6 +11,7 @@ const registerSale = async (req, res) => {
   const register = await saleService.registerSaleValidation(sale);
   const { _id, code, message } = register;
   if (message) {
+    console.log(message);
     return res.status(unprocessableEntity).json({ err: { code, message } });
   }
   return res.status(ok).json({ _id, itensSold: [...req.body] });

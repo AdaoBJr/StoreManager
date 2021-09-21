@@ -2,7 +2,7 @@ const { ObjectId } = require('mongodb');
 const saleModel = require('../models/saleModel');
 
 // req 5
-const saleQuantityValidation = async (quantity) => {
+const saleQuantityValidation = (quantity) => {
   if (quantity <= 0) {
     return false;
   }
@@ -10,7 +10,7 @@ const saleQuantityValidation = async (quantity) => {
 };
 
 // req 5
-const notStringValidation = async (quantity) => {
+const notStringValidation = (quantity) => {
   if (typeof quantity === 'string') {
     return false;
   }
@@ -32,7 +32,9 @@ const registerMultipleSalesValidation = (body) => {
 
 // req 5
 const registerSaleValidation = async (body) => {
-  if (registerMultipleSalesValidation(body) === false) {
+  const multipleSales = registerMultipleSalesValidation(body);
+  console.log(multipleSales);
+  if (multipleSales === false) {
     return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
   }
   const registeredSale = await saleModel.registerSale(body);
