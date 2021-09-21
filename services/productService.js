@@ -39,11 +39,13 @@ const createProductValidation = async (name, quantity) => {
   if (!validatedTypeQuantity) {
     return { code: 'invalid_data', message: '"quantity" must be a number' };
   }
+
   const validatedNotEqualName = await productModel.findProductByName(name);
   if (validatedNotEqualName) {
     return { code: 'invalid_data', message: 'Product already exists' };
   }
-  const { id } = await productModel.createProduct(name, quantity);
+
+  const { id } = await productModel.createProduct({ name, quantity });
   return { _id: id, name, quantity };
 };
 
