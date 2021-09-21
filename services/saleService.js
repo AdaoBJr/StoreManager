@@ -33,7 +33,6 @@ const registerMultipleSalesValidation = (body) => {
 // req 5
 const registerSaleValidation = async (body) => {
   const multipleSales = registerMultipleSalesValidation(body);
-  console.log(multipleSales);
   if (multipleSales === false) {
     return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
   }
@@ -56,8 +55,19 @@ const findSaleByIdValidation = async (id) => {
   return foundSaleById;
 };
 
+// req 7
+const updateSaleValidation = (id, body) => {
+  const multipleSales = registerMultipleSalesValidation(body);
+  if (multipleSales === false) {
+    return { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
+  }
+  const updateSale = saleModel.updateSale(ObjectId(id), body);
+  return updateSale;
+};
+
 module.exports = {
   registerSaleValidation,
   findAllSalesValidation,
   findSaleByIdValidation,
+  updateSaleValidation,
 };

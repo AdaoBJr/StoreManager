@@ -20,7 +20,7 @@ const findProductById = async (req, res) => {
   const { id } = req.params;
   const productById = await productService.findProductByIdValidation(id);
   const { code, message } = productById;
-  if (message) {
+  if (!productById) {
     return res.status(422).json({ err: { code, message } });
   }
   return res.status(200).json(productById);

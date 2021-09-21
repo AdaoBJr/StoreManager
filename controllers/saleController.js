@@ -11,7 +11,6 @@ const registerSale = async (req, res) => {
   const register = await saleService.registerSaleValidation(sale);
   const { _id, code, message } = register;
   if (message) {
-    console.log(message);
     return res.status(unprocessableEntity).json({ err: { code, message } });
   }
   return res.status(ok).json({ _id, itensSold: [...req.body] });
@@ -34,8 +33,22 @@ const findSaleById = async (req, res) => {
   return res.status(ok).json(saleById);
 };
 
+// req 7
+const updateSale = async (req, res) => {
+  const { id } = req.params;
+  const { body } = req;
+  const updatedSale = await saleService.updateSaleValidation(id, body);
+  const { code, message } = updatedSale;
+
+  if (message) {
+    return res.status(unprocessableEntity).json({ err: { code, message } });
+  }
+  return res.status(ok).json(updatedSale);
+};
+
 module.exports = {
   registerSale,
   findAllSales,
   findSaleById,
+  updateSale,
 };

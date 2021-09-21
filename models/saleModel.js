@@ -22,8 +22,17 @@ const findSaleById = async (id) => {
   return saleById;
 };
 
+// req 7
+const updateSale = async (id, body) => {
+  const db = await connection();
+  await db.collection('sales').updateOne({ _id: ObjectId(id) },
+  { $set: { itensSold: [body] } });
+  return { _id: id, itensSold: body };
+};
+
 module.exports = {
   registerSale,
   findAllSales,
   findSaleById,
+  updateSale,
 };
