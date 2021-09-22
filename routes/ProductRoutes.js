@@ -1,10 +1,12 @@
 const { Router } = require('express');
-const { createProduct, findAll, findOneP } = require('../controllers/ProductsControllers');
 const {
-  isValidName,
-  productExists,
-  isValidQuantity,
-  isValidProduct,
+  // Controllers
+  createProduct, findAll, findOneP, updateProductById,
+} = require('../controllers/ProductsControllers');
+
+const {
+  // Middlewares
+  isValidName, productExists, isValidQuantity, isValidProduct,
 } = require('../middlewares/ProductsMiddlewares');
 
 const routes = new Router();
@@ -14,9 +16,14 @@ routes.get('/', (_request, response) => {
   response.send();
 });
 
+// Consultar dados
 routes.get('/products', findAll);
 routes.get('/products/:id', isValidProduct, findOneP);
 
+// Inserir dados
 routes.post('/products', isValidName, productExists, isValidQuantity, createProduct);
+
+// Atualizar dados
+routes.put('/products/:id', isValidName, isValidQuantity, updateProductById);
 
 module.exports = routes;
