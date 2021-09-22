@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const {
   // Controllers
-  createProduct, findAll, findOneP, updateProductById,
+  createProduct, findAll, findOneP, updateProductById, deleteProductById,
 } = require('../controllers/ProductsControllers');
 
 const {
@@ -25,5 +25,8 @@ routes.post('/products', isValidName, productExists, isValidQuantity, createProd
 
 // Atualizar dados
 routes.put('/products/:id', isValidName, isValidQuantity, updateProductById);
+
+// Deletar dados
+routes.delete('/products/:id', deleteProductById);
 
 module.exports = routes;

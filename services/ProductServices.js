@@ -1,6 +1,7 @@
 const {
-  newProduct, findProduct, findOneProduct, updateProduct,
+  newProduct, findProduct, findOneProduct, updateProduct, deleteProduct,
 } = require('../models/ProductsModel');
+const { deleteProductMiddleware } = require('../middlewares/ProductsMiddlewares');
 
 const create = async ({ name, quantity }) => {
   const newProducts = await newProduct({ name, quantity });
@@ -22,9 +23,21 @@ const update = async ({ id, name, quantity }) => {
   return updateProductService;
 };
 
+const deleteP = async ({ id }) => {
+  const product = await deleteProductMiddleware({ id });
+  
+  if (!product) {
+    return product;
+  }
+  const { name, quantity, _id } = product;
+  await deleteProduct({ id });
+  return { name, quantity, _id };
+};
+
 module.exports = {
   create,
   find,
   findOne,
   update,
+  deleteP,
 };
