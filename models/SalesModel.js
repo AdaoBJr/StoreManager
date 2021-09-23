@@ -26,6 +26,7 @@ const updateSale = async (id, array) =>
                     .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: array } }))
                     .then((re) => re);
 
+// Aprendi a usar o findOneAndDelete aqui:https://docs.mongodb.com/manual/reference/method/db.collection.findOneAndDelete/
 const deleteSale = (id) =>
             connection()
                 .then((db) => db.collection('sales').findOneAndDelete({ _id: ObjectId(id) }))
