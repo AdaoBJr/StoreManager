@@ -1,6 +1,13 @@
 const { ObjectId } = require('mongodb');
 const productsModel = require('../models/ProductsModel');
 
+const errorId = {
+    err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+    },
+};
+
 const validateIfAlreadyExistsAndLength = async (name) => {
     const isExists = await productsModel.verifyIsAlreadyExists(name);
     if (isExists === true) {
@@ -73,55 +80,33 @@ const getAllProducts = async () => {
 
 const getProductById = async (id) => {
     if (!ObjectId.isValid(id)) {
-        return {
-            err: {
-                code: 'invalid_data',
-                message: 'Wrong id format',
-            },
-        };
+        return errorId;
     }
     const product = await productsModel.getProductById(id);
     if (product === null) {
-        return {
-            err: {
-                code: 'invalid_data',
-                message: 'Wrong id format',
-            },
-        };
+        return errorId;
     }
     return product;
 };
 
 const updateProduct = async (id, name, quantity) => {
-    // if (!ObjectId.isValid(id)) {
-    //     return {
-    //         err: {
-    //             code: 'invalid_data',
-    //             message: 'Wrong id format',
-    //         },
-    //     };
-    // }
+    if (!ObjectId.isValid(id)) {
+        return errorId;
+    }
     const update = await productsModel.updateProduct(id, name, quantity);
-    return update;
+    if (update) {
+        return { id, name, quantity };
+    }
 };
 
 const deleteProduct = async (id) => {
     if (!ObjectId.isValid(id)) {
-        return {
-            err: {
-                code: 'invalid_data',
-                message: 'Wrong id format',
-            },
-        };
+        return errorId;
     }
     const productDeleted = await productsModel.deleteProduct(id);
     console.log(productDeleted);
     if (!productDeleted) {
-        return {
-            err: {
-                code: 'invalid_data',
-                message: 'Wrong id format',
-            } };
+        return errorId;
     }
     return productDeleted;
 };

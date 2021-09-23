@@ -56,9 +56,9 @@ const productUpdate = async (req, res) => {
     }
     const update = await updateProduct(id, name, quantity);
     console.log(update);
-    if (!update) {
+    if (update) {
         // return res.status(422).json(update);
-        return res.status(200).json({ id, name, quantity });
+        return res.status(200).json(update);
     }
 };
 
