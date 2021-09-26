@@ -1,6 +1,13 @@
 const { MongoClient } = require('mongodb');
 
-const { DB_URL_TESTS, DB_NAME } = process.env;
+const DB = {
+  NAME: 'StoreManager',
+  URL: 'mongodb://mongodb:27017/StoreManager',
+};
+
+const { DB_NAME } = process.env || DB.NAME;
+
+const { DB_URL } = process.env || DB.URL;
 
 const OPTIONS = {
   useNewUrlParser: true,
@@ -8,7 +15,7 @@ const OPTIONS = {
 };
 
 function connection() {
-  const client = MongoClient.connect(DB_URL_TESTS, OPTIONS)
+  const client = MongoClient.connect(DB_URL, OPTIONS)
     .then((conn) => conn.db(DB_NAME))
     .catch((error) => {
       console.error(error);
