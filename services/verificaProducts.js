@@ -43,4 +43,24 @@ const verificaName = ({ name }) => {
   }
  };
 
-module.exports = { verificaName, verificaQuantity, nameExists };
+ const getProducts = async (id) => {
+  if (!id) {
+    const allProducts = await models.getAllProducts();
+    return allProducts;
+  }
+  const productById = await models.getProductById(id);
+
+  if (!productById) {
+    return {
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    };
+  }
+
+  return productById;
+};
+module.exports = { verificaName, verificaQuantity, nameExists, getProducts };
+
+// requisito realizado com ajuda de colegas
