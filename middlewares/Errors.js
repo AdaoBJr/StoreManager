@@ -1,16 +1,26 @@
+const errorCodeNames = {
+  invalidData: 'invalid_data',
+  notFound: 'not_found',
+  alreadyExists: 'already exists',
+};
+
 module.exports = (error, _request, response, _next) => {
   if (error.isJoi) {
     return response
-      .status(400)
-      .json({ error: { message: error.details[0].message.replace(/"/g, '\'') } });
+      .status(422)
+      .json({ err: {
+        code: 'invalid_data',
+        message: error.details[0].message.replace(/"/g, '"'),
+      } });
   }
 
   const statusByErrorCode = {
-    notFound: 404,
-    alreadyExists: 409,
+    [errorCodeNames.invalidData]: 422,
+    [errorCodeNames.notFound]: 404,
+    [errorCodeNames.alreadyExists]: 409,
   };
 
   const status = statusByErrorCode[error.code] || 500;
 
-  return response.status(status).json({ error: { message: error.message } });
+  return response.status(status).json({ err: { code: error.code, message: error.message } });
 };

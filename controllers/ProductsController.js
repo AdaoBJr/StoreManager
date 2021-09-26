@@ -1,9 +1,8 @@
-const express = require('express');
+const rescue = require('express-rescue');
+
 const ProductsModel = require('../models/ProductsModel');
 
-const router = express.Router();
-
-router.get('/', async (_request, response, next) => {
+const getAll = (rescue(async (_request, response, next) => {
   const { products, error } = await ProductsModel.getAll();
 
   if (error) {
@@ -11,6 +10,14 @@ router.get('/', async (_request, response, next) => {
   }
 
   return response.status(200).json(products);
-});
+}));
 
-module.exports = router;
+const create = (rescue(async (request, response, _next) => {
+  const { name, quantity } = request.body;
+
+  const product = await ProductsModel.create(name, quantity);
+
+  return response.status(201).json(product);
+}));
+
+module.exports = { getAll, create };
