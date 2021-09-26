@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const express = require('express');
 
 const ErrorHandler = require('./middlewares/Errors');
@@ -18,6 +16,6 @@ app.use('/products', require('./routes/ProductsRoutes'));
 
 app.use(ErrorHandler);
 
-const { PORT } = process.env || 3000;
+const PORT = 3000;
 
 app.listen(PORT, () => console.log(`Aplicação ao rodar na porta ${PORT}`));
