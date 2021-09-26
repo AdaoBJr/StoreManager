@@ -1,0 +1,23 @@
+use('StoreManager');
+
+// db.products.drop();
+
+// db.products.insertMany([
+//   { "name": "Cerveja Skol", "quantity": 10 },
+//   { "name": "Monitor AGON", "quantity": 56 },
+//   { "name": "MacBook Air", "quantity": 7 },
+// ]);
+
+// db.sales.drop();
+
+// db.sales.insertMany([
+//   {
+//     "itemsSold": [
+//       { "product": "615089a370db5738a517286f", "quantity": 2 },
+//       { "product": "615089a370db5738a5172870", "quantity": 39 },
+//       { "product": "615089a370db5738a5172871", "quantity": 5 },
+//     ],
+//   },
+// ]);
+
+db.sales.find().pretty();
