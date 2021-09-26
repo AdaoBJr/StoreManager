@@ -1,6 +1,6 @@
 use('StoreManager');
 
-// db.products.drop();
+db.products.drop();
 
 // db.products.insertMany([
 //   { "name": "Cerveja Skol", "quantity": 10 },
@@ -8,7 +8,7 @@ use('StoreManager');
 //   { "name": "MacBook Air", "quantity": 7 },
 // ]);
 
-// db.sales.drop();
+db.sales.drop();
 
 // db.sales.insertMany([
 //   {
