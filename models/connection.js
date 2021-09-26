@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-const { DB_URL, DB_NAME } = process.env;
+const { DB_URL_TESTS, DB_NAME } = process.env;
 
 const OPTIONS = {
   useNewUrlParser: true,
@@ -8,7 +8,7 @@ const OPTIONS = {
 };
 
 function connection() {
-  const client = MongoClient.connect(DB_URL, OPTIONS)
+  const client = MongoClient.connect(DB_URL_TESTS, OPTIONS)
     .then((conn) => conn.db(DB_NAME))
     .catch((error) => {
       console.error(error);

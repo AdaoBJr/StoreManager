@@ -6,15 +6,13 @@ const COLLECTION = 'products';
 
 async function getAll() {
   const products = await connection().then((db) => db.collection(COLLECTION).find().toArray())
-  .then((results) => (results.length > 0 ? results : null));
+  .then((results) => (results.length > 0 ? results : ''));
 
   if (!products) {
-    return { error: { code: 'not_found', message: 'No products found' } };
+    return { products };
   }
   
-  const data = { products };
-  
-  return data;
+  return { products };
 }
 
 async function getById(id) {
@@ -26,9 +24,7 @@ async function getById(id) {
     return { error: { code: 'not_found', message: 'No products found' } };
   }
 
-  const data = { product };
-
-  return data;
+  return { product };
 }
 
 async function create(name, quantity) {
@@ -63,4 +59,22 @@ async function update(id, name, quantity) {
   }
 }
 
-module.exports = { create, getAll, getById, update };
+async function obliterate(id) {
+  try {
+    const { error, product } = await getById(id);
+
+    if (error) {
+      return { error: { code: 'invalid_data', message: 'Wrong id format' } };
+    }
+
+    await connection()
+      .then((db) => db.collection(COLLECTION).deleteOne({ _id: ObjectId(id) }));
+
+    return { product };
+  } catch (error) {
+    console.error(error);
+    return process.exit(1);
+  }
+}
+
+module.exports = { create, getAll, getById, update, obliterate };

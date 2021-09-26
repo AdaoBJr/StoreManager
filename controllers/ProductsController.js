@@ -42,4 +42,14 @@ const update = rescue(async (request, response, _next) => {
   return response.status(STATUS.HTTP_OK).json(updatedProduct);
 });
 
-module.exports = { getAll, getById, create, update };
+const obliterate = rescue(async (request, response, next) => {
+  const { id } = request.params;
+
+  const { product, error } = await ProductsModel.obliterate(id);
+
+  if (error) { return next(error); }
+
+  return response.status(STATUS.HTTP_OK).json(product);
+});
+
+module.exports = { getAll, getById, create, update, obliterate };
