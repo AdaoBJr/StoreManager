@@ -23,7 +23,7 @@ async function getById(id) {
     .then((result) => (!result ? null : result));
 
   if (!product) {
-    return { error: { code: 'not_found', messagem: 'No products found' } };
+    return { error: { code: 'not_found', message: 'No products found' } };
   }
 
   const data = { product };
@@ -44,4 +44,23 @@ async function create(name, quantity) {
   }
 }
 
-module.exports = { create, getAll, getById };
+async function update(id, name, quantity) {
+  try {
+    const updatedProduct = await connection()
+      .then((db) => db.collection(COLLECTION).updateOne(
+        { _id: ObjectId(id) },
+        { $set: { name, quantity } },
+        { returnOriginal: false },
+      ))
+      .then((result) => (!!result.matchedCount));
+
+    if (!updatedProduct) return { error: { code: 'not_found', message: 'No products found' } };
+
+    return { _id: id, name, quantity };
+  } catch (error) {
+    console.error(error);
+    return process.exit(1);
+  }
+}
+
+module.exports = { create, getAll, getById, update };

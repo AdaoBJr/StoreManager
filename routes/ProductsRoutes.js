@@ -8,11 +8,13 @@ const isValid = require('../middlewares/isValid');
 const router = express.Router();
 
 router.get('/', ProductsController.getAll);
-router.get('/:id', isValid.productId, ProductsController.getById);
-
-router.post('/',
-  dataValidationOf.productCreation,
+router.post('/', dataValidationOf.productCreation,
   checkIf.productExists,
   ProductsController.create);
+  
+router.get('/:id', isValid.productId, ProductsController.getById);
+router.put('/:id', isValid.productId,
+  dataValidationOf.productCreation,
+  ProductsController.update);
 
 module.exports = router;

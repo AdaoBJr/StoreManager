@@ -33,4 +33,13 @@ const create = rescue(async (request, response, _next) => {
   return response.status(STATUS.HTTP_CREATED).json(product);
 });
 
-module.exports = { getAll, getById, create };
+const update = rescue(async (request, response, _next) => {
+  const { id } = request.params;
+  const { name, quantity } = request.body;
+
+  const updatedProduct = await ProductsModel.update(id, name, quantity);
+
+  return response.status(STATUS.HTTP_OK).json(updatedProduct);
+});
+
+module.exports = { getAll, getById, create, update };
