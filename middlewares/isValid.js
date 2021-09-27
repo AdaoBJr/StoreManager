@@ -1,15 +1,27 @@
 const { ObjectId } = require('mongodb');
 
-function productId(request, _response, next) {
+function productIdFromParams(request, _response, next) {
   const { id } = request.params;
-
+  
   const isValid = ObjectId.isValid(id);
+  
+  if (isValid) { return next(); }
+  
+  const invalidData = { code: 'invalid_data', message: 'Wrong id format' };
+
+  return next(invalidData);
+}
+
+function productIdFromBody(request, _response, next) {
+  const { productId } = request.body;
+
+  const isValid = ObjectId.isValid(productId);
 
   if (isValid) { return next(); }
 
-  const newError = { code: 'invalid_data', message: 'Wrong id format' };
+  const invalidData = { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
 
-  return next(newError);
+  return next(invalidData);
 }
 
-module.exports = { productId };
+module.exports = { productIdFromParams, productIdFromBody };

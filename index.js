@@ -13,6 +13,7 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/products', require('./routes/ProductsRoutes'));
+app.use('/sales', require('./routes/SalesRoutes'));
 
 app.use(ErrorHandler);
 

@@ -12,10 +12,10 @@ router.post('/', dataValidationOf.productCreation,
   checkIf.productExists,
   ProductsController.create);
   
-router.get('/:id', isValid.productId, ProductsController.getById);
-router.put('/:id', isValid.productId,
+router.get('/:id', isValid.productIdFromParams, ProductsController.getById);
+router.put('/:id', isValid.productIdFromParams,
   dataValidationOf.productCreation,
   ProductsController.update);
-router.delete('/:id', isValid.productId, ProductsController.obliterate);
+router.delete('/:id', isValid.productIdFromParams, ProductsController.obliterate);
 
 module.exports = router;
