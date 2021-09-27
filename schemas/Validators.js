@@ -18,16 +18,25 @@ function productsData(data) {
   return status;
 }
 
-function salesData(data) {
+function genericValidator(data) {
   const { error } = Joi.object({
-    productId: requireNonEmptyString.length(ID_LENGTH),
-    quantity: quantityJoiValidation,
-  }).messages({
-    'string.length': 'Wrong product ID or invalid quantity',
-    'number.positive': 'Wrong product ID or invalid quantity',
-  }).validate(data);
+      productId: requireNonEmptyString.length(ID_LENGTH),
+      quantity: quantityJoiValidation,
+    }).validate(data);
+    
+    if (error) { return false; }
 
-  if (error) { return { error }; }
+    return true;
+}
+
+function salesData(data) {
+  const validated = data.every((sale) => genericValidator(sale));
+
+  if (!validated) {
+    return {
+      error: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
+    };
+  }
 
   return status;
 }

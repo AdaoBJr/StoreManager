@@ -7,12 +7,30 @@ const STATUS = {
   HTTP_OK: 200,
 };
 
-const create = rescue(async (request, response, _next) => {
-  const { productId, quantity } = request.body;
+const getAll = rescue(async (_request, response, next) => {
+  const { sales, error } = await SalesModel.getAll();
 
-  const newSale = await SalesModel.create(productId, quantity);
+  if (error) { return next(error); }
 
-  return response.status(STATUS.HTTP_OK).json(newSale);
+  return response.status(STATUS.HTTP_OK).json({ sales });
 });
 
-module.exports = { create };
+const getById = rescue(async (request, response, next) => {
+  const { id } = request.params;
+
+  const { sale, error } = await SalesModel.getById(id);
+
+  if (error) { return next(error); }
+
+  return response.status(STATUS.HTTP_OK).json(sale);
+});
+
+const create = rescue(async (request, response, _next) => {
+  const { body } = request;
+
+  const sale = await SalesModel.create(body);
+
+  return response.status(STATUS.HTTP_OK).json(sale);
+});
+
+module.exports = { getAll, getById, create };

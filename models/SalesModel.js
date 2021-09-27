@@ -17,25 +17,23 @@ async function getAll() {
 
 async function getById(id) {
   const sale = await connection()
-    .then((db) => db.collection(COLLECTION).findOne({ _id: ObjectId(id) }))
+    .then((db) => db.collection(COLLECTION).findOne({ _id: id }))
     .then((result) => (!result ? null : result));
 
   if (!sale) {
-    return { error: { code: 'not_found', message: 'No sales found' } };
+    return { error: { code: 'not_found', message: 'Sale not found' } };
   }
 
   return { sale };
 }
 
-async function create(productId, quantity) {
+async function create(data) {
   try {
-    const newData = { itensSold: [
-      { productId, quantity },
-    ] };
+    const newData = { itensSold: data };
 
     const newSale = await connection()
       .then((db) => db.collection(COLLECTION).insertOne(newData))
-      .then((result) => ({ _id: result.insertedId, itensSold: [{ productId, quantity }] }));
+      .then(({ ops }) => ops[0]);
 
       return newSale;
   } catch (error) {

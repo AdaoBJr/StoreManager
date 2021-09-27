@@ -23,4 +23,4 @@ db.sales.drop();
 //   },
 // ]);
 
-db.sales.find().pretty();
+// db.sales.find().pretty();
