@@ -1,5 +1,5 @@
 ### Termos e acordos
-
+ok
 Ao iniciar este projeto, você concorda com as diretrizes do Código de Ética e Conduta e do Manual da Pessoa Estudante da Trybe
 
 # Boas vindas ao repositório do projeto Store Manager!
@@ -30,7 +30,7 @@ Aqui você vai encontrar os detalhes de como estruturar o desenvolvimento do seu
 
     `Obrigatórios`
     - [1 - Crie um endpoint para o cadastro de produtos](#1---crie-um-endpoint-para-o-cadastro-de-produtos)
-    - [2 - Crie um endpoint para listar os produtos](#2---crie-um-endpoint-para-listar-os-produtos)
+    - [2 - Crie um endpoint para listar os produtos](#2---crgit@github.com:tryber/sd-010-b-store-manager.gitie-um-endpoint-para-listar-os-produtos)
     - [3 - Crie um endpoint para atualizar um produto](#3---crie-um-endpoint-para-atualizar-um-produto)
     - [4 - Crie um endpoint para deletar um produto](#4---crie-um-endpoint-para-deletar-um-produto)
     - [5 - Crie um endpoint para cadastrar vendas](#5---crie-um-endpoint-para-cadastrar-vendas)
