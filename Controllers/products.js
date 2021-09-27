@@ -6,4 +6,6 @@ const create = async (req, res) => {
     return res.status(201).json(result);
 };
 
-module.exports = create;
+module.exports = {
+  create,
+};
