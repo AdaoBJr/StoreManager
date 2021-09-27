@@ -68,6 +68,15 @@ const deleteProduct = async (id) => {
   return { id };
 };
 
+const refreshProduct = async (productId, quantity) => {
+  const product = await Connection.getConnection();
+  const response = await product.collection('products').updateOne(
+    { _id: ObjectId(productId) }, { $inc: { quantity }, 
+  },
+);
+  return response;
+};
+
 module.exports = {
   createProduct,
   findProductByName,
@@ -75,4 +84,5 @@ module.exports = {
   updateProduct,
   findProductById,
   deleteProduct,
+  refreshProduct,
 }; 

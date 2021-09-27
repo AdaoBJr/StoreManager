@@ -49,7 +49,7 @@ const createSale = async (body) => {
       _id: ObjectId(id),
     });
     return sales;
-  };  
+  }; 
 
 module.exports = {
   createSale,
