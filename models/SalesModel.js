@@ -4,6 +4,17 @@ const connection = require('./connection');
 
 const COLLECTION = 'sales';
 
+const ERRORS = {
+  invalidSaleData: {
+    code: 'invalid_data',
+    message: 'Wrong product ID or invalid quantity',
+  },
+  notFoundSaleData: {
+    code: 'not_found',
+    message: 'Sale not found',
+  },
+};
+
 async function getAll() {
   const sales = await connection().then((db) => db.collection(COLLECTION).find().toArray())
   .then((results) => (results.length > 0 ? results : ''));
@@ -17,12 +28,9 @@ async function getAll() {
 
 async function getById(id) {
   const sale = await connection()
-    .then((db) => db.collection(COLLECTION).findOne({ _id: id }))
-    .then((result) => (!result ? null : result));
+    .then((db) => db.collection(COLLECTION).findOne({ _id: ObjectId(id) }));
 
-  if (!sale) {
-    return { error: { code: 'not_found', message: 'Sale not found' } };
-  }
+  if (!sale) { return { error: ERRORS.notFoundSaleData }; }
 
   return { sale };
 }
@@ -42,19 +50,18 @@ async function create(data) {
   }
 }
 
-async function update(id, productId, quantity) {
+async function update(id, data) {
   try {
+    const updatedData = { itensSold: data };
+
     const updatedSale = await connection()
       .then((db) => db.collection(COLLECTION).updateOne(
-        { _id: ObjectId(id) },
-        { $set: { productId, quantity } },
-        { returnOriginal: false },
-      ))
-      .then((result) => (!!result.matchedCount));
+        { _id: ObjectId(id) }, { $set: updatedData }, { returnOriginal: false },
+      )).then((result) => (result));
 
-    if (!updatedSale) return { error: { code: 'not_found', message: 'No sales found' } };
+    if (!updatedSale) { return { error: ERRORS.invalidSaleData }; }
 
-    return { _id: id, productId, quantity };
+    return { result: { _id: id, itensSold: data } };
   } catch (error) {
     console.error(error);
     return process.exit(1);

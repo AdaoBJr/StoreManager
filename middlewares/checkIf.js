@@ -1,6 +1,6 @@
 const ProductsModel = require('../models/ProductsModel');
 
-const productExists = async (request, _response, next) => {
+async function productExists(request, _response, next) {
   const { name } = request.body;
 
   const result = await ProductsModel.getAll()
@@ -13,6 +13,6 @@ const productExists = async (request, _response, next) => {
   }
 
   return next();
-};
+}
 
 module.exports = { productExists };

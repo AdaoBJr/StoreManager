@@ -33,4 +33,15 @@ const create = rescue(async (request, response, _next) => {
   return response.status(STATUS.HTTP_OK).json(sale);
 });
 
-module.exports = { getAll, getById, create };
+const update = rescue(async (request, response, next) => {
+  const { id } = request.params;
+  const { body } = request;
+
+  const { result, error } = await SalesModel.update(id, body);
+
+  if (error) { return next(error); }
+
+  return response.status(STATUS.HTTP_OK).json(result);
+});
+
+module.exports = { getAll, getById, create, update };

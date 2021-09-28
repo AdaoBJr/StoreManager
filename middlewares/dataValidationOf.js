@@ -8,7 +8,7 @@ function productCreation(request, _response, next) {
   return next();
 }
 
-function saleCreation(request, _response, next) {
+function saleCreationOrUpdate(request, _response, next) {
   const { error } = validate.salesData(request.body);
 
   if (error) { return next(error); }
@@ -16,4 +16,4 @@ function saleCreation(request, _response, next) {
   return next();
 }
 
-module.exports = { productCreation, saleCreation };
+module.exports = { productCreation, saleCreationOrUpdate };

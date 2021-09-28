@@ -14,16 +14,19 @@ function productIdFromParams(request, _response, next) {
   return next(invalidData);
 }
 
-// function productIdFromBody(request, _response, next) {
-//   const { body } = request;
+function salesIdFromParams(request, _response, next) {
+  const { id } = request.params;
 
-//   const isValid = bulkValidations.productIds(body);
+  const validId = ObjectId.isValid(id);
+  const isInvalid = !validId && (typeof Number(id) === 'number');
 
-//   if (isValid) { return next(); }
+  if (isInvalid) { 
+    const invalidData = { code: 'not_found', message: 'Sale not found' };
+  
+    return next(invalidData);
+  }
 
-//   const invalidData = { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
+   return next();
+}
 
-//   return next(invalidData);
-// }
-
-module.exports = { productIdFromParams /* productIdFromBody */ };
+module.exports = { productIdFromParams, salesIdFromParams };
