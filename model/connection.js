@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
-const MONGO_DB_URL = 'mongodb://127.0.0.1:27017';
-const DB_NAME = 'rest_aula';
+const MONGO_DB_URL = process.env.DB_URL || 'mongodb://mongodb:27017/StoreManager';
+const DB_NAME = process.env.DB_URL || 'StoreManager';
 
 const connection = async () => MongoClient
         .connect(MONGO_DB_URL, {
@@ -11,7 +11,6 @@ const connection = async () => MongoClient
         .then((conn) => conn.db(DB_NAME))
         .catch((err) => {
             console.error(err);
-            process.exit(1);
         });
 
 module.exports = connection;

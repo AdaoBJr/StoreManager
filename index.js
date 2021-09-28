@@ -3,16 +3,11 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+require('dotenv').config();
+
 app.use(bodyParser.json());
 
-// Conexão local
-// const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
-// const DB_NAME = 'StoreManager';
-const PORT = '3000';
-
-// Conexão avaliador
-// const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
-// const DB_NAME = 'StoreManager';
+const PORT = process.env.PORT || '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
