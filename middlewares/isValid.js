@@ -1,7 +1,5 @@
 const { ObjectId } = require('mongodb');
 
-// const bulkValidations = require('../services/bulkValidations');
-
 function productIdFromParams(request, _response, next) {
   const { id } = request.params;
   
@@ -14,19 +12,34 @@ function productIdFromParams(request, _response, next) {
   return next(invalidData);
 }
 
-function salesIdFromParams(request, _response, next) {
+function salesIdFromPutParams(request, _response, next) {
   const { id } = request.params;
 
   const validId = ObjectId.isValid(id);
   const isInvalid = !validId && (typeof Number(id) === 'number');
 
   if (isInvalid) { 
-    const invalidData = { code: 'not_found', message: 'Sale not found' };
+    const invalidId = { code: 'not_found', message: 'Sale not found' };
   
-    return next(invalidData);
+    return next(invalidId);
   }
 
    return next();
 }
 
-module.exports = { productIdFromParams, salesIdFromParams };
+function salesIdFromDeleteParams(request, _response, next) {
+  const { id } = request.params;
+
+  const validId = ObjectId.isValid(id);
+  const isInvalid = !validId && (typeof Number(id) === 'number');
+
+  if (isInvalid) {
+    const invalidId = { code: 'invalid_data', message: 'Wrong sale ID format' };
+
+    return next(invalidId);
+  }
+
+  return next();
+}
+
+module.exports = { productIdFromParams, salesIdFromPutParams, salesIdFromDeleteParams };

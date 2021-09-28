@@ -13,6 +13,10 @@ const ERRORS = {
     code: 'not_found',
     message: 'Sale not found',
   },
+  invalidId: {
+    code: 'invalid_data',
+    message: 'Wrong sale ID format',
+  },
 };
 
 async function getAll() {
@@ -57,7 +61,7 @@ async function update(id, data) {
     const updatedSale = await connection()
       .then((db) => db.collection(COLLECTION).updateOne(
         { _id: ObjectId(id) }, { $set: updatedData }, { returnOriginal: false },
-      )).then((result) => (result));
+      ));
 
     if (!updatedSale) { return { error: ERRORS.invalidSaleData }; }
 
@@ -71,11 +75,9 @@ async function update(id, data) {
 async function obliterate(id) {
   try {
     const { error, sale } = await getById(id);
-
-    if (error) {
-      return { error: { code: 'invalid_data', message: 'Wrong id format' } };
-    }
-
+    
+    if (error) { return { error: ERRORS.invalidId }; }
+    
     await connection()
       .then((db) => db.collection(COLLECTION).deleteOne({ _id: ObjectId(id) }));
 

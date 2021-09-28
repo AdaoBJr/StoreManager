@@ -10,7 +10,11 @@ const router = express.Router();
 router.get('/', SalesController.getAll);
 router.post('/', dataValidationOf.saleCreationOrUpdate, SalesController.create);
 
-router.get('/:id', isValid.salesIdFromParams, SalesController.getById);
-router.put('/:id', dataValidationOf.saleCreationOrUpdate, SalesController.update);
+router.get('/:id', isValid.salesIdFromPutParams, SalesController.getById);
+router.put('/:id',
+  isValid.salesIdFromPutParams,
+  dataValidationOf.saleCreationOrUpdate,
+  SalesController.update);
+router.delete('/:id', isValid.salesIdFromDeleteParams, SalesController.obliterate);
 
 module.exports = router;
