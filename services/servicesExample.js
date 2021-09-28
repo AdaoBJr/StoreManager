@@ -1,4 +1,4 @@
-const MoviesModel = require('../model/modeloExample');
+const MoviesModel = require('../model/modelExample');
 
 const isValid = (title, directedBy, releaseYear) => {
   if (!title || typeof title !== 'string') return false;
