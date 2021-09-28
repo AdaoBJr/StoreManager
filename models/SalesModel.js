@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongodb');
 
 const connection = require('./connection');
+const StockModel = require('./StockModel');
 
 const COLLECTION = 'sales';
 
@@ -43,12 +44,14 @@ async function getById(id) {
 async function create(data) {
   try {
     const newData = { itensSold: data };
-
+    
+    await StockModel.createStock(data);
+    
     const newSale = await connection()
-      .then((db) => db.collection(COLLECTION).insertOne(newData))
-      .then(({ ops }) => ops[0]);
-
-      return newSale;
+    .then((db) => db.collection(COLLECTION).insertOne(newData))
+    .then(({ ops }) => ops[0]);
+    
+    return newSale;
   } catch (error) {
     console.error(error);
     return process.exit(1);
@@ -57,6 +60,8 @@ async function create(data) {
 
 async function update(id, data) {
   try {
+    await StockModel.updateStock(data);
+    
     const updatedData = { itensSold: data };
 
     const updatedSale = await connection()
@@ -77,11 +82,13 @@ async function obliterate(id) {
   try {
     const { error, sale } = await getById(id);
     
+    await StockModel.restoreStock(sale);
+    
     if (error) { return { error: ERRORS.invalidId }; }
     
     await connection()
-      .then((db) => db.collection(COLLECTION).deleteOne({ _id: ObjectId(id) }));
-
+    .then((db) => db.collection(COLLECTION).deleteOne({ _id: ObjectId(id) }));
+    
     return { sale };
   } catch (error) {
     console.error(error);

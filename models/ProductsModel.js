@@ -30,7 +30,7 @@ async function getById(id) {
 async function create(name, quantity) {
   try {
     const newProduct = await connection()
-      .then((db) => db.collection(COLLECTION).insertOne({ name, quantity }))
+      .then((db) => db.collection(COLLECTION).insertOne({ name, quantity, initialStock: quantity }))
       .then((result) => ({ _id: result.insertedId, name, quantity }));
 
       return newProduct;
@@ -45,7 +45,7 @@ async function update(id, name, quantity) {
     const updatedProduct = await connection()
       .then((db) => db.collection(COLLECTION).updateOne(
         { _id: ObjectId(id) },
-        { $set: { name, quantity } },
+        { $set: { name, quantity, initialStock: quantity } },
         { returnOriginal: false },
       ))
       .then((result) => (!!result.matchedCount));

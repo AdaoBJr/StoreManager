@@ -3,12 +3,12 @@ use('StoreManager');
 db.products.drop();
 
 db.products.insertMany([
-  { "name": "Cerveja Skol", "quantity": 10 },
-  { "name": "Monitor AGON", "quantity": 56 },
-  { "name": "MacBook Air", "quantity": 7 },
-  { name: 'Martelo de Thor', quantity: 10 },
-  { name: 'Traje de encolhimento', quantity: 20 },
-  { name: 'Escudo do Capitão América', quantity: 30 },
+  { name: "Cerveja Skol", quantity: 10, initialStock: 10},
+  { name: "Monitor AGON", quantity: 56, initialStock: 56},
+  { name: "MacBook Air", quantity: 7, initialStock: 7},
+  { name: 'Martelo de Thor', quantity: 10, initialStock: 10},
+  { name: 'Traje de encolhimento', quantity: 20, initialStock: 20},
+  { name: 'Escudo do Capitão América', quantity: 30, initialStock: 30},
 ]);
 
 db.sales.drop();

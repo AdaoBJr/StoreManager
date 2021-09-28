@@ -1,30 +1,58 @@
 const { ObjectId } = require('mongodb');
 
 const connection = require('./connection');
+const ProductsModel = require('./ProductsModel');
 
 const COLLECTION = 'products';
 
 async function update(productId, quantity) {
   await connection()
-    .then((db) => db.collection(COLLECTION)).updateOne(
+    .then((db) => db.collection(COLLECTION).updateOne(
       { _id: ObjectId(productId) },
-      { $inc: { quantity } },
+      { $set: { quantity } },
       { returnOriginal: false },
-  );
+  ));
 }
 
-async function bulkUpdate(data, inc = true) {
-  await data.forEach(async ({ productId, quantity }, index) => {
-    console.log(`Rodada ${index + 1}: ${productId}, ${quantity}.`);
+async function bulkUpdate(data, isCreation = true, isDelete = false) {
+  return data.forEach(async ({ productId, quantity }) => {
+    const { product } = await ProductsModel.getById(productId);
 
-    if (inc) {
-      await update(productId, quantity);
+    if (isDelete) {
+      const newQuantity = product.quantity + quantity;
+      return update(productId, newQuantity);
     }
 
-    await update(productId, (-quantity));
+    if (isCreation) {
+      const newQuantity = product.quantity - quantity;
+
+      return update(productId, newQuantity);
+    }
+
+    const newQuantity = product.initialStock - quantity;
+
+    return update(productId, newQuantity);
   });
-  
-  console.log('ACABOU!');
 }
 
-module.exports = { update, bulkUpdate };
+async function createStock(data) {
+  await bulkUpdate(data, true, false);
+
+  return '';
+}
+
+async function updateStock(data) {
+  await bulkUpdate(data, false, false);
+
+  return '';
+}
+
+async function restoreStock(data) {
+  const bulkData = data.itensSold;
+
+  await bulkUpdate(bulkData, false, true);
+
+  return '';
+}
+
+module.exports = { createStock, updateStock, restoreStock };
