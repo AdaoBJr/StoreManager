@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb');
 
-function productIdFromParams(request, _response, next) {
+function fromProductRequestParams(request, _response, next) {
   const { id } = request.params;
   
   const isValid = ObjectId.isValid(id);
@@ -12,7 +12,7 @@ function productIdFromParams(request, _response, next) {
   return next(invalidData);
 }
 
-function salesIdFromPutParams(request, _response, next) {
+function fromSalesPutRequestParams(request, _response, next) {
   const { id } = request.params;
 
   const validId = ObjectId.isValid(id);
@@ -27,7 +27,7 @@ function salesIdFromPutParams(request, _response, next) {
    return next();
 }
 
-function salesIdFromDeleteParams(request, _response, next) {
+function fromSalesDeleteRequestParams(request, _response, next) {
   const { id } = request.params;
 
   const validId = ObjectId.isValid(id);
@@ -42,4 +42,8 @@ function salesIdFromDeleteParams(request, _response, next) {
   return next();
 }
 
-module.exports = { productIdFromParams, salesIdFromPutParams, salesIdFromDeleteParams };
+module.exports = {
+  fromProductRequestParams,
+  fromSalesPutRequestParams,
+  fromSalesDeleteRequestParams,
+};
