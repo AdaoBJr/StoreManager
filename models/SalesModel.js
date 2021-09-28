@@ -20,8 +20,9 @@ const ERRORS = {
 };
 
 async function getAll() {
-  const sales = await connection().then((db) => db.collection(COLLECTION).find().toArray())
-  .then((results) => (results.length > 0 ? results : ''));
+  const sales = await connection()
+    .then((db) => db.collection(COLLECTION).find().toArray())
+    .then((results) => (results.length > 0 ? results : ''));
 
   if (!sales) {
     return { sales };
