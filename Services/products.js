@@ -1,6 +1,6 @@
 const model = require('../Models/product');
 
-const checkName = (name) => {
+const nameLenght = (name) => {
   if (name.length < 5) {
     const error = new Error();
     error.statusCode = 'invalidName';
@@ -8,7 +8,7 @@ const checkName = (name) => {
   }
 };
 
-const checkQntty = (quantity) => {
+const checkQ = (quantity) => {
   if (quantity < 1) {
     const error = new Error();
     error.statusCode = 'invalidQuantity';
@@ -22,7 +22,7 @@ const checkQntty = (quantity) => {
   }
 };
 
-const findName = async (name) => {
+const findByName = async (name) => {
   const product = await model.findByName(name);
   if (product) {
     const error = new Error();
@@ -31,14 +31,14 @@ const findName = async (name) => {
   }
 };
 
-const checkPrd = async (name, quantity) => {
-  checkName(name);
-  checkQntty(quantity);
-  await findName(name);
-  const result = await model.checkPrd(name, quantity);
+const createProduct = async (name, quantity) => {
+  nameLenght(name);
+  checkQ(quantity);
+  await findByName(name);
+  const result = await model.createProduct(name, quantity);
   return result;
 };
 
 module.exports = {
-  checkPrd,
+  createProduct,
 };

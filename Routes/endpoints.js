@@ -1,9 +1,9 @@
 const rescue = require('express-rescue');
 const controller = require('../Controllers/products');
 
-const post2Create = (app) => {
-    app.route('/products')
-      .post(rescue(controller.create));
-  };
+const productRoutes = (app) => {
+  app.route('/products')
+    .post(rescue(controller.createProduct));
+};
 
-module.exports = post2Create;
+module.exports = productRoutes;
