@@ -15,6 +15,9 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
+app.route('/products/:id')
+.get(productController.getOneProduct);
+
 app.route('/products')
 .post(productController.createNewProduct)
 .get(productController.getAllProducts);
