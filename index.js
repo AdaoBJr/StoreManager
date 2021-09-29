@@ -16,7 +16,8 @@ app.get('/', (_request, response) => {
 });
 
 app.route('/products/:id')
-.get(productController.getOneProduct);
+.get(productController.getOneProduct)
+.put(productController.updateProduct);
 
 app.route('/products')
 .post(productController.createNewProduct)
