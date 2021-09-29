@@ -107,4 +107,15 @@ describe('Busca por produtos cadastrados no db', () => {
     expect(foundById).to.have.a.property('_id');
     expect(foundById.name).to.equal("Primeiro Produto");
   })
+
+  it('Atualiza um produto', async () => {
+    const newName = "Novo produto"
+    const newQuantity = 500
+    const oneProduct = await productsModel.findByName("Primeiro Produto")
+    await productsModel.updateOne(oneProduct._id, newName, newQuantity)
+    const foundById = await productsModel.findById(oneProduct._id)
+
+    expect(foundById).to.have.a.property('_id');
+    expect(foundById.name).to.equal(newName);
+  })
 })

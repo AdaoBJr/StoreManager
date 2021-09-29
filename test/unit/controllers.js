@@ -138,3 +138,63 @@ describe('Testa a consulta aos produtos no productController', () => {
   })
 
 })
+
+describe('Atualiza um produto no db', () => {
+  const req = {};
+  const res = {};
+
+  const updatedProduct = {
+    id: '615495794851a62068f4da07',
+    name: "Novo nome",
+    Quantity: 325
+  }
+
+  beforeEach(() => {
+    req.body = { name: updatedProduct.name, quantity: updatedProduct.quantity};
+    req.params = { id: updatedProduct.id}
+
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+
+    sinon.stub(productService, 'updateProduct').resolves(updatedProduct)
+  });
+
+  afterEach(() => {
+    productService.updateProduct.restore();
+  });
+
+  it('Retorna o produto atualizado', async () => {
+    await productController.updateProduct(req, res)
+
+    expect(res.status.calledWith(200)).to.be.equal(true);
+    expect(res.json.calledWith(updatedProduct)).to.be.ok;
+  })
+
+  it('Retorna um erro quando o ID está errado', async () => {
+    req.params.id = "InvalidID"
+    await productController.updateProduct(req, res)
+
+    expect(res.status.calledWith(422)).to.be.equal(true);
+  })
+
+  it('Retorna um erro quando a lenght do name é menor que 5', async () => {
+    req.body.name = "err"
+    await productController.updateProduct(req, res)
+
+    expect(res.status.calledWith(422)).to.be.equal(true);
+  })
+
+  it('Retorna um erro quando a quantidade é menor que 1', async () => {
+    req.body.quantity = 0
+    await productController.updateProduct(req, res)
+
+    expect(res.status.calledWith(422)).to.be.equal(true);
+  })
+
+  it('Retorna um erro quando a quantidade é uma string', async () => {
+    req.body.quantity = "String"
+    await productController.updateProduct(req, res)
+
+    expect(res.status.calledWith(422)).to.be.equal(true);
+  })
+})

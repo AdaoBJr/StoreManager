@@ -4,6 +4,8 @@ const sinon = require('sinon');
 const serviceModel = require('../../services/productsService')
 const productsModel = require('../../models/productsModel')
 
+const fakeValidId = '615495794851a62068f4da07'
+
 describe('Testa a função validateProduct do productService', () => {
   before(() => {
     sinon.stub(productsModel, 'findByName')
@@ -60,7 +62,6 @@ describe('Testa a função createNewProduct do productService', () => {
 })
 
 describe('Verifica se é possivel consultar os produtos cadastrados', () => {
-  const fakeValidId = '615495794851a62068f4da07'
 
   describe('Testes de erro de id e cadastro', () => {
     before(() => {
@@ -133,5 +134,30 @@ describe('Verifica se é possivel consultar os produtos cadastrados', () => {
 
       expect(foundProductList.products).to.be.an('array').not.empty;
     })
+  })
+})
+
+describe('Verifica se o produto é atualizado', () => {
+  before(() => {
+    sinon.stub(productsModel, 'updateOne')
+    .resolves(
+      {
+        _id: fakeValidId,
+        name: "New Product Name",
+        quantity: 100
+      }
+    )
+  })
+
+  after(() => {
+    productsModel.updateOne.restore();
+  })
+  
+  it('Retorna o produto atualizado', async () => {
+    const newProduct = await serviceModel.updateProduct(fakeValidId, "New Product Name", 100);
+
+    expect(newProduct).to.be.an('object');
+    expect(newProduct).to.have.a.property('_id');
+    expect(newProduct.name).to.equal("New Product Name");
   })
 })
