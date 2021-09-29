@@ -36,10 +36,12 @@ const getAllProducts = async () => {
   const productsCollection = await mongoConnection.connection()
   .then((db) => db.collection('products'));
 
-  const products = productsCollection.find()
+  const allProducts = await productsCollection.find()
   .toArray();
 
-  return products;
+  return {
+    products: allProducts,
+  };
 };
 
 module.exports = {
