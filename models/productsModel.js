@@ -60,10 +60,15 @@ const updateOne = async (id, name, quantity) => {
   return { id, name, quantity };
 };
 
+const deleteProduct = async (req, res, _next) => {
+  
+};
+
 module.exports = {
   create,
   findByName,
   getAllProducts,
   findById,
   updateOne,
+  deleteProduct,
 };
