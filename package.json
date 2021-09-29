@@ -9,7 +9,7 @@
     "start": "nodemon index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx",
     "myTest": "mocha ./test/unit/models.js --exit",
-    "coverageTest": "jest --coverage ./test/unit/*"
+    "coverageTest": "nyc mocha ./test/unit/*.js --exit"
   },
   "repository": {
     "type": "git",
