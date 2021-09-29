@@ -64,7 +64,7 @@ const deleteProduct = async (id) => {
   const productsCollection = await mongoConnection.connection()
   .then((db) => db.collection('products'));
 
-  const { deletedCount } = productsCollection.deleteOne({ _id: ObjectID(id) });
+  const { deletedCount } = await productsCollection.deleteOne({ _id: ObjectID(id) });
 
   return deletedCount;
 };
