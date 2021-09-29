@@ -52,7 +52,6 @@ describe('Insere um novo produto no BD', () => {
 
   after(async () => {
     await mongoConnection.connection.restore();
-    sinon.restore();
 	});
 
   describe('Quando é inserido com sucesso', () => {
@@ -69,7 +68,7 @@ describe('Insere um novo produto no BD', () => {
 
     it('Encontra o produto no banco de dados', async () => {
       const found = await productsModel.findByName(newProduct.name)
-      expect(found).to.be.true;
+      expect(found).to.have.a.property('_id')
     })
   })
 });
@@ -92,21 +91,19 @@ describe('Busca por produtos cadastrados no db', () => {
 
   after(async () => {
     await mongoConnection.connection.restore();
-    sinon.restore();
 	});
 
   it('Retorna todos os produtos', async () => {
     await productsModel.create("Primeiro Produto", 100)
-    await productsModel.create("segundo Produto", 100)
     const allProducts = await productsModel.getAllProducts()
-    
-    expect(allProducts).to.be.an('array').not.empty;
+
+    expect(allProducts.products).to.be.an('array').not.empty;
   })
 
   it('Retorna um produto', async () => {
     const oneProduct = await productsModel.findByName("Primeiro Produto")
-    const foundById = await productsModel.findById(oneProduct.id)
-    
+    const foundById = await productsModel.findById(oneProduct._id)
+
     expect(foundById).to.have.a.property('_id');
     expect(foundById.name).to.equal("Primeiro Produto");
   })
