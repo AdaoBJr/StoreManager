@@ -161,3 +161,40 @@ describe('Verifica se o produto é atualizado', () => {
     expect(newProduct.name).to.equal("New Product Name");
   })
 })
+
+
+describe('Verifica se o produto é deletado', () => {
+  describe('Quando ele existe', () => {
+    before(() => {
+      sinon.stub(productsModel, 'deleteProduct')
+      .resolves(1)
+    })
+  
+    after(() => {
+      productsModel.deleteProduct.restore();
+    })
+    
+    it('Deleta o produto', async () => {
+      const deleted = await serviceModel.deleteProduct(fakeValidId);
+      
+      expect(deleted).to.be.true;
+    })
+  })
+
+  describe('Quando ele não existe', () => {
+    before(() => {
+      sinon.stub(productsModel, 'deleteProduct')
+      .resolves(0)
+    })
+  
+    after(() => {
+      productsModel.deleteProduct.restore();
+    })
+    
+    it('Retorna uma mensagem de erro', async () => {
+      const deleted = await serviceModel.deleteProduct(fakeValidId);
+  
+      expect(deleted).to.have.property('errorMessage')
+    })
+  })
+})

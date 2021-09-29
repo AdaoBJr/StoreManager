@@ -8,7 +8,7 @@
     "test:mocha": "nyc --all --include models --include services --include controllers mocha test/unit/*.js --exit",
     "start": "nodemon index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx",
-    "myTest": "mocha ./test/unit/models.js --exit",
+    "myTest": "mocha ./test/unit/services.js --exit",
     "myCoverageTest": "npx nyc --all --include controllers --reporter json-summary mocha test/unit/controllers.js --exit",
     "myCoverage": "nyc npm run test"
   },
