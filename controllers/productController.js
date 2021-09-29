@@ -47,7 +47,7 @@ const updateProduct = async (req, res) => {
 };
 
 const deleteProduct = async (req, res, _next) => {
-  const { id } = req.parm;
+  const { id } = req.params;
   const errorMessage = await productService.validateId(id);
   if (errorMessage) return res.status(422).json(errorMessage);
 
