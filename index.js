@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const productModels = require('./model/productsModel');
+const productController = require('./controllers/productController');
 
 const app = express();
 
@@ -15,11 +15,7 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.post('/products', async (request, response) => {
-  const { name, quantity } = request.body;
-  const createdProduct = await productModels.create(name, quantity);
-  response.status(201).json(createdProduct);
-});
+app.post('/products', productController.createNewProduct);
 
 app.listen(PORT, () => {
   console.log('Online');
