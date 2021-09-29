@@ -63,9 +63,11 @@ const deleteProduct = async (id) => {
   if (deleted > 0) return true;
 
   return {
-    err: {
-      code: 'invalid_data',
-      message: 'Wrong id format',
+    errorMessage: {
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
     },
   };
 };
