@@ -6,8 +6,8 @@ const MONGO_DB_URL = process.env.DB_URL || 'mongodb://mongodb:27017/StoreManager
 
 const DB_NAME = 'StoreManager';
 
-const connection = () => MongoClient
-    .connect(MONGO_DB_URL, {
+const connection = (URL = MONGO_DB_URL) => MongoClient
+    .connect(URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,        
     })
