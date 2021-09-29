@@ -1,4 +1,5 @@
 const errorCodeNames = {
+  stockProblem: 'stock_problem',
   invalidData: 'invalid_data',
   notFound: 'not_found',
   alreadyExists: 'already exists',
@@ -17,6 +18,7 @@ module.exports = (error, _request, response, _next) => {
   const statusByErrorCode = {
     [errorCodeNames.invalidData]: 422,
     [errorCodeNames.notFound]: 404,
+    [errorCodeNames.stockProblem]: 404,
     [errorCodeNames.alreadyExists]: 409,
   };
 

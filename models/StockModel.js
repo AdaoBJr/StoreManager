@@ -4,55 +4,70 @@ const connection = require('./connection');
 const ProductsModel = require('./ProductsModel');
 
 const COLLECTION = 'products';
+const ERRORS = {
+  stockProblem: {
+    code: 'stock_problem',
+    message: 'Such amount is not permitted to sell',
+  },
+};
 
 async function update(productId, quantity) {
-  await connection()
-    .then((db) => db.collection(COLLECTION).updateOne(
-      { _id: ObjectId(productId) },
-      { $set: { quantity } },
-      { returnOriginal: false },
-  ));
+  if (quantity >= 0) {
+    await connection()
+      .then((db) => db.collection(COLLECTION).updateOne(
+        { _id: ObjectId(productId) },
+        { $set: { quantity } },
+        { returnOriginal: false },
+    ));
+  }
+
+  return { error: true };
 }
 
-async function bulkUpdate(data, isCreation = true, isDelete = false) {
-  return data.forEach(async ({ productId, quantity }) => {
+async function bulkUpdate(data, targetCase) {
+  let result;
+
+  data.forEach(async ({ productId, quantity }) => {
     const { product } = await ProductsModel.getById(productId);
 
-    if (isDelete) {
-      const newQuantity = product.quantity + quantity;
-      return update(productId, newQuantity);
+    if (targetCase === 'isCreation') {
+      const { error } = await update(productId, (product.quantity - quantity));
+
+      result = { error };
+
+      return '';
     }
 
-    if (isCreation) {
-      const newQuantity = product.quantity - quantity;
+    if (targetCase === 'isUpdate') {
+      const { error } = await update(productId, (product.initialStock - quantity));
 
-      return update(productId, newQuantity);
+      result = { error };
+      
+      return '';
     }
 
-    const newQuantity = product.initialStock - quantity;
-
-    return update(productId, newQuantity);
+    return update(productId, (product.quantity + quantity));
   });
+  
+  return result;
 }
 
 async function createStock(data) {
-  await bulkUpdate(data, true, false);
+  const result = await bulkUpdate(data, 'isCreation');
 
-  return '';
+  return result;
 }
 
 async function updateStock(data) {
-  await bulkUpdate(data, false, false);
+  const result = await bulkUpdate(data, 'isUpdate');
 
-  return '';
+  return result;
 }
 
 async function restoreStock(data) {
   const bulkData = data.itensSold;
 
-  await bulkUpdate(bulkData, false, true);
-
-  return '';
+  await bulkUpdate(bulkData, 'isDelete');
 }
 
 module.exports = { createStock, updateStock, restoreStock };

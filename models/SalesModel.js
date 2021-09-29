@@ -43,9 +43,11 @@ async function getById(id) {
 
 async function create(data) {
   try {
-    const newData = { itensSold: data };
-    
     await StockModel.createStock(data);
+
+    // if (error) { return { error }; }
+
+    const newData = { itensSold: data };
     
     const newSale = await connection()
     .then((db) => db.collection(COLLECTION).insertOne(newData))
@@ -61,6 +63,8 @@ async function create(data) {
 async function update(id, data) {
   try {
     await StockModel.updateStock(data);
+    
+    // if (error) { return { error }; }
     
     const updatedData = { itensSold: data };
 
