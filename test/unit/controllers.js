@@ -25,35 +25,35 @@ describe('Verifica se retorna as informações corretas ao criar produto', () =>
 
 })
 
-describe('Quando o payload é válido', async () => {
-	const newProduct = {
-    _id: '604cb554311d68f491ba5781',
-    name: "UmProduto",
-    quantity: 100,
-  }
+// describe('Quando o payload é válido', async () => {
+// 	const newProduct = {
+//     _id: '604cb554311d68f491ba5781',
+//     name: "UmProduto",
+//     quantity: 100,
+//   }
 
-  const res = {};
-  const req = {};
+//   const res = {};
+//   const req = {};
 
-  before(() => {
-    req.body = {
-      name: newProduct.name,
-      quantity: newProduct.quantity
-    };
+//   before(() => {
+//     req.body = {
+//       name: newProduct.name,
+//       quantity: newProduct.quantity
+//     };
 
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
+//     res.status = sinon.stub().returns(res);
+//     res.json = sinon.stub().returns();
 
-    sinon.stub(productService, 'createNewProduct').resolves({ ...newProduct });
-  });
+//     sinon.stub(productService, 'createNewProduct').resolves({ ...newProduct });
+//   });
 
-  after(() => {
-    productService.createNewProduct.restore();
-  });
+//   after(() => {
+//     productService.createNewProduct.restore();
+//   });
 
-  it('Quando o payload é válido', async () => {
-    await productController.createNewProduct(req, res)
+//   it('Quando o payload é válido', async () => {
+//     await productController.createNewProduct(req, res)
 
-    expect(res.status.calledWith(201)).to.be.equal(true);
-  })
-})
+//     expect(res.status.calledWith(201)).to.be.equal(true);
+//   })
+// })
