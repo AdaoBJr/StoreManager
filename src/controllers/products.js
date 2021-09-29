@@ -1,13 +1,12 @@
-const { StatusCodes } = require('http-status-codes');
-const services = require('../3services/products');
+const services = require('../services/products');
 
 const getAll = async (_req, res) => {
   try {
     const products = await services.getAll();
 
-    res.status(StatusCodes.OK).json({ products });
+    res.status(200).json({ products });
   } catch (error) {
-    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(error);
+    res.status(500).json(error);
   }
 };
 
@@ -17,9 +16,9 @@ const getById = async (req, res) => {
 
     const product = await services.getById(id);
 
-    res.status(StatusCodes.OK).json(product);
+    res.status(200).json(product);
   } catch (error) {
-      res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(error);
+      res.status(500).json(error);
   }
 };
 
@@ -29,9 +28,10 @@ const create = async (req, res) => {
 
     const newProduct = await services.create(product);
 
-    res.status(StatusCodes.OK).json(newProduct);
+    res.status(201).json(newProduct);
   } catch (error) {
-    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(error);
+    res.status(error.err.status)
+      .json({ err: { code: error.err.code, message: error.err.message } });
   }
 };
 
@@ -41,9 +41,9 @@ const update = async (req, res) => {
 
     const updatedProduct = await services.create(id);
 
-    res.status(StatusCodes.OK).json(updatedProduct);
+    res.status(200).json(updatedProduct);
   } catch (error) {
-    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(error);
+    res.status(500).json(error);
   }
 };
 
@@ -53,9 +53,9 @@ const remove = async (req, res) => {
 
     const deletedProduct = await services.remove(id);
 
-    res.status(StatusCodes.OK).json(deletedProduct);
+    res.status(200).json(deletedProduct);
   } catch (error) {
-    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(error);
+    res.status(500).json(error);
   }
 };
 
