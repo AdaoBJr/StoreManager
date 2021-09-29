@@ -8,7 +8,7 @@ const mongoConnection = require('../../models/connection')
 const productsModel = require('../../models/productsModel')
 
 describe('Testa a conexão do servidor', () => {
-  it('Servidor online após conectar', async() => {
+  it('Conecta ao db com url correta', async() => {
       const collections = await mongoConnection.connection()
       .then(async (db) => db.listCollections().toArray())
       .catch(err => {
@@ -17,6 +17,16 @@ describe('Testa a conexão do servidor', () => {
 
       expect(collections).to.be.an('array')
   })
+
+  it('Não conecta ao db com url incorreta', async() => {
+    const URL = 'xablau'
+    const collections = await mongoConnection.connection(URL)
+    .catch(err => {
+      return new Error('Não foi possivel acessar o db')
+    })
+
+    expect(collections).to.be.an('error');
+})
 })
 
 describe('Insere um novo produto no BD', () => {
