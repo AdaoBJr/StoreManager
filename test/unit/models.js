@@ -17,7 +17,7 @@ describe('Testa a conexão do servidor', () => {
 
       expect(collections).to.be.an('array')
   })
-
+  //Ainda não consegui entender como vou testar o catch da connection, o avaliador buga se eu passar uma string errada
   // it('Não conecta ao db com url incorreta', async() => {
   //   const URL = 'maogodb://mongodb:27017/StoreManager'
   //   const collections = await mongoConnection.connection(URL)
