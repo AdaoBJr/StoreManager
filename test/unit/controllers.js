@@ -17,6 +17,10 @@ describe('Verifica se retorna as informações corretas ao criar produto', () =>
     sinon.stub(productService, 'validateProduct').resolves('Produto inválido');
   })
 
+  after(() => {
+    productService.validateProduct.restore();
+  });
+
   it('Quando o payload é inválido', async () => {
     await productController.createNewProduct(req, res)
 
@@ -26,25 +30,23 @@ describe('Verifica se retorna as informações corretas ao criar produto', () =>
 })
 
 describe('Quando o payload é válido', async () => {
-	const newProduct = {
-    _id: '604cb554311d68f491ba5781',
-    name: "UmProduto",
-    quantity: 100,
-  }
-
   const res = {};
   const req = {};
 
   before(() => {
     req.body = {
-      name: newProduct.name,
-      quantity: newProduct.quantity
+      name: 'UmProduto',
+      quantity: 100,
     };
 
     res.status = sinon.stub().returns(res);
     res.json = sinon.stub().returns();
 
-    sinon.stub(productService, 'createNewProduct').resolves({ ...newProduct });
+    sinon.stub(productService, 'createNewProduct').resolves({
+      _id: '604cb554311d68f491ba5781',
+      name: 'UmProduto',
+      quantity: 100,
+    });
   });
 
   after(() => {
