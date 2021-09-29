@@ -33,4 +33,9 @@ module.exports = {
     connection().then((db) => db.collection('products').deleteMany({}))
   ),
 
+  updateProductQuantityInDB: async (id, quantity) => (
+    connection().then((db) => (
+      db.collection('products').updateOne({ _id: ObjectId(id) }, { $inc: { quantity } })))
+  ),
+
 };

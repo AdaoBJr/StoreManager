@@ -9,6 +9,10 @@ const {
   deleteProduct,
 } = require('./controllers/products');
 
+const {
+  createSale,
+} = require('./controllers/sales');
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -19,6 +23,8 @@ app.get('/products/:id', getProductById);
 app.post('/products', addNewProduct);
 app.put('/products/:id', updateProduct);
 app.delete('/products/:id', deleteProduct);
+
+app.post('/sales', createSale);
 
 if (process.env.CI === 'true') {
   console.log('Running in CI mode');
