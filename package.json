@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha ./test/unit/models.js --exit",
     "start": "nodemon index.js",
-    "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx"
+    "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx",
+    "coverageTest": "jest --coverage ./test/unit/*"
   },
   "repository": {
     "type": "git",
