@@ -119,3 +119,35 @@ describe('Busca por produtos cadastrados no db', () => {
     expect(foundById.name).to.equal(newName);
   })
 })
+
+describe('Testa se está deletando um produto', () => {
+  let DBServer = new MongoMemoryServer();
+  let connectionMock;
+
+  before(async () => {
+    const URLMock = await DBServer.getUri();
+    connectionMock = await MongoClient.
+    connect(URLMock, {
+      useNewUrlParser: true,
+			useUnifiedTopology: true,
+    })
+    .then(conn => conn.db('StoreManager'));
+
+    sinon.stub(mongoConnection, 'connection').resolves(connectionMock);
+  })
+
+  after(async () => {
+    await mongoConnection.connection.restore();
+	});
+  it('Deleta o produto se ele existir', async () => {
+    await productsModel.create("Um produto", 10)
+    const oneProduct = await productsModel.findByName("Um produto")
+    const deletedQuantity = await productsModel.deleteProduct(oneProduct._id)
+
+    expect(deletedQuantity).to.equal(1)
+  })
+
+  it('Retorna 0 se o produto não existir', async () => {
+    
+  })
+})
