@@ -4,7 +4,7 @@
   "description": "Simple CRUD to sales and products",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./test/unit/**/*$NAME*.js --exit",
+    "test": "mocha ./test/unit/models.js --exit",
     "start": "nodemon index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx"
   },
@@ -32,6 +32,7 @@
     "nodemon": "^2.0.4"
   },
   "devDependencies": {
+    "@types/mongodb": "^4.0.7",
     "chai": "^4.3.4",
     "eslint-config-trybe-backend": "^1.0.3",
     "mocha": "^8.4.0",
