@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const productsModel = require('../model/productsModel');
+const productsModel = require('../models/productsModel');
 
 const validateProduct = async (name, quantity) => {
   const { error } = Joi.object({

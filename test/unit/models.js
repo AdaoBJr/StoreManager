@@ -4,8 +4,8 @@ const { MongoClient, ObjectId } = require('mongodb');
 const sinon = require('sinon');
 const { expect } = require('chai');
 
-const mongoConnection = require('../../model/connection')
-const productsModel = require('../../model/productsModel')
+const mongoConnection = require('../../models/connection')
+const productsModel = require('../../models/productsModel')
 
 describe('Testa a conexão do servidor', () => {
   it('Servidor online após conectar', async() => {
@@ -13,9 +13,8 @@ describe('Testa a conexão do servidor', () => {
       .then(async (db) => db.listCollections().toArray())
       .catch(err => {
         console.error(err);
-        process.exit(1);
       })
-      
+
       expect(collections).to.be.an('array')
   })
 })
@@ -42,7 +41,8 @@ describe('Insere um novo produto no BD', () => {
   })
 
   after(async () => {
-    sinon.restore()
+    await mongoConnection.connection.restore();
+    sinon.restore();
 	});
 
   describe('Quando é inserido com sucesso', () => {
