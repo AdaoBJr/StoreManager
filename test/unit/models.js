@@ -7,10 +7,23 @@ const { expect } = require('chai');
 const mongoConnection = require('../../model/connection')
 const productsModel = require('../../model/productsModel')
 
+describe('Testa a conexão do servidor', () => {
+  it('Servidor online após conectar', async() => {
+      const collections = await mongoConnection.connection()
+      .then(async (db) => db.listCollections().toArray())
+      .catch(err => {
+        console.error(err);
+        process.exit(1);
+      })
+      
+      expect(collections).to.be.an('array')
+  })
+})
+
 describe('Insere um novo produto no BD', () => {
 	const newProduct = {
     name: "UmProduto",
-    Quantity: "100"
+    quantity: 100
   }
 
   let DBServer = new MongoMemoryServer();
@@ -34,14 +47,19 @@ describe('Insere um novo produto no BD', () => {
 
   describe('Quando é inserido com sucesso', () => {
     it('Retorna um objeto', async () => {
-      const response = await productsModel.create(newProduct)
+      const response = await productsModel.create(newProduct.name, newProduct.quantity)
       expect(response).to.be.a('object');
     })
 
     it('O objeto possui o "id" do novo produto', async () => {
-      const response = await productsModel.create(newProduct);
+      const getOne = await connectionMock.collection('products').findOne({})
 
-      expect(response).to.have.a.property('id');
+      expect(getOne).to.have.a.property('_id');
     });
+
+    it('Encontra o produto no banco de dados', async () => {
+      const found = await productsModel.findByName(newProduct.name)
+      expect(found).to.be.true;
+    })
   })
 });
