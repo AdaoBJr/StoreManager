@@ -26,8 +26,6 @@ describe('11 - Escreva testes para seus models', () => {
 
   it('Será validado que cobertura total das linhas dos arquivos na pasta `models` é maior ou igual a 80%', async () => {
     const coverageResults = await readCoverageFile();
-    console.log('models coverageResults', coverageResults);
-    console.log('models lines', coverageResults.total.lines.pct);
     expect(coverageResults.total.lines.pct).toBeGreaterThanOrEqual(80);
   });
 });
@@ -41,7 +39,7 @@ describe('12 - Escreva testes para seus services', () => {
     await exec('rm -rf coverage .nyc_output');
   });
 
-  it.skip('Será validado que cobertura total das linhas dos arquivos na pasta `services` é maior ou igual a 80%', async () => {
+  it('Será validado que cobertura total das linhas dos arquivos na pasta `services` é maior ou igual a 80%', async () => {
     const coverageResults = await readCoverageFile();
     expect(coverageResults.total.lines.pct).toBeGreaterThanOrEqual(80);
   });
@@ -56,7 +54,7 @@ describe('13 - Escreva testes para seus controllers', () => {
     await exec('rm -rf coverage .nyc_output');
   });
 
-  it.skip('Será validado que cobertura total das linhas dos arquivos na pasta `controllers` é maior ou igual a 80%', async () => {
+  it('Será validado que cobertura total das linhas dos arquivos na pasta `controllers` é maior ou igual a 80%', async () => {
     const coverageResults = await readCoverageFile();
     expect(coverageResults.total.lines.pct).toBeGreaterThanOrEqual(80);
   });
