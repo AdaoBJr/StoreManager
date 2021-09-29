@@ -15,7 +15,9 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.post('/products', productController.createNewProduct);
+app.route('/products')
+.post(productController.createNewProduct)
+.get(productController.getAllProducts);
 
 app.listen(PORT, () => {
   console.log('Online');
