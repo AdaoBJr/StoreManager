@@ -28,8 +28,27 @@ const getAllProducts = async (_req, res, _next) => {
   return res.status(200).json(allProducts);
 };
 
+const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const errorMessage = await productService.validateId(id);
+  if (errorMessage) return res.status(422).json(errorMessage);
+
+  const { name, quantity } = req.body;
+  const message = await productService.validateProduct(name, quantity);
+  if (message && message !== 'Product already exists') { 
+    return res.status(422).json({ err: { code: 'invalid_data', message } }); 
+  }
+
+  // const haveProduct = await productService.getProductById(id);
+  // if (!haveProduct) return res.status(422).json({ err: { code: 'invalid_data', message } });
+
+  const updatedProduct = await productService.updateProduct(id, name, quantity);
+  return res.status(200).json(updatedProduct);
+};
+
 module.exports = {
   createNewProduct,
   getAllProducts,
   getOneProduct,
+  updateProduct,
 };
