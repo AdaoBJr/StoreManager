@@ -60,8 +60,11 @@ const updateOne = async (id, name, quantity) => {
   return { id, name, quantity };
 };
 
-const deleteProduct = async (req, res, _next) => {
-  
+const deleteProduct = async (id) => {
+  const productsCollection = await mongoConnection.connection()
+  .then((db) => db.collection('products'));
+
+  productsCollection.deleteOne({ _id: ObjectID(id) });
 };
 
 module.exports = {
