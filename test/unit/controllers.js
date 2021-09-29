@@ -198,3 +198,81 @@ describe('Atualiza um produto no db', () => {
     expect(res.status.calledWith(422)).to.be.equal(true);
   })
 })
+
+describe('Remove um produto do db', () => {
+  describe('Quando ele exite', () => {
+    const req = {};
+    const res = {};
+  
+    const product = {
+      id: '615495794851a62068f4da07',
+      name: "Novo nome",
+      Quantity: 325
+    }
+  
+    before(() => {
+      req.params = { id: product.id }
+  
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+  
+      sinon.stub(productService, 'validateId').resolves()
+      sinon.stub(productService, 'getProductById').resolves(product)
+      sinon.stub(productService, 'deleteProduct').resolves(1)
+    });
+  
+    after(() => {
+      productService.validateId.restore();
+      productService.getProductById.restore();
+      productService.deleteProduct.restore();
+    });
+  
+    it('Retorna o produto removido', async () => {
+      await productController.deleteProduct(req, res)
+  
+      expect(res.status.calledWith(200)).to.be.equal(true);
+      expect(res.json.calledWith(product)).to.be.ok;
+    })
+  })
+
+  describe('Quando o produto não exite', () => {
+    const req = {};
+    const res = {};
+  
+    const product = {
+      id: '615495794851a62068f4da07',
+      name: "Novo nome",
+      Quantity: 325
+    }
+  
+    before(() => {
+      req.params = { id: product.id }
+  
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+  
+      sinon.stub(productService, 'validateId').resolves()
+      sinon.stub(productService, 'getProductById').resolves(product)
+      sinon.stub(productService, 'deleteProduct').resolves({
+        errorMessage: {
+          err: {
+            code: 'invalid_data',
+            message: 'Wrong id format',
+          },
+        },
+      })
+    });
+  
+    after(() => {
+      productService.validateId.restore();
+      productService.getProductById.restore();
+      productService.deleteProduct.restore();
+    });
+  
+    it('Retorna o status 422', async () => {
+      await productController.deleteProduct(req, res)
+  
+      expect(res.status.calledWith(422)).to.be.equal(true);
+    })
+  })
+});
