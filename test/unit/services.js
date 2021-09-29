@@ -58,3 +58,80 @@ describe('Testa a função createNewProduct do productService', () => {
   })
 
 })
+
+describe('Verifica se é possivel consultar os produtos cadastrados', () => {
+  const fakeValidId = '615495794851a62068f4da07'
+
+  describe('Testes de erro de id e cadastro', () => {
+    before(() => {
+      sinon.stub(productsModel, 'findById')
+      .resolves()
+    })
+  
+    after(() => {
+      productsModel.findById.restore();
+    })
+
+    it('Retorna um erro se o id for inválido', async () => {
+      const response = await serviceModel.validateId("InvalidId")
+      
+      expect(response.err.code).to.equal('invalid_data');
+    })
+  
+    it('Retorna um erro se o produto não estiver cadastrado', async () => {
+      const response = await serviceModel.getProductById(fakeValidId)
+      
+      expect(response.err.code).to.equal('invalid_data');
+    })
+  })
+
+  describe('Teste de um produto válido', () => {
+    before(() => {
+      sinon.stub(productsModel, 'findById')
+      .resolves({
+        _id: fakeValidId,
+        name: "Product Name",
+        quantity: 100
+      })
+    })
+  
+    after(() => {
+      productsModel.findById.restore();
+    })
+    
+    it('Retorna o produto se o id estiver correto e o produto estiver cadastrado', async () => {
+      const foundProduct = await serviceModel.getProductById(fakeValidId);
+      
+      expect(foundProduct).to.have.property('_id')
+    })
+  })
+  describe('Verifica se retorna todos os produtos', () => {
+    before(() => {
+      sinon.stub(productsModel, 'getAllProducts')
+      .resolves({
+        "products": [
+          {
+            _id: fakeValidId,
+            name: "Product Name",
+            quantity: 100
+          },
+          {
+            _id: fakeValidId,
+            name: "Second Product Name",
+            quantity: 10
+          }
+        ]
+      })
+    })
+  
+    after(() => {
+      productsModel.getAllProducts.restore();
+    })
+    
+    it('Retorna o produto se o id estiver correto e o produto estiver cadastrado', async () => {
+      const foundProductList = await serviceModel.getAllProducts(fakeValidId);
+
+      expect(foundProductList.products).to.be.an('array').not.empty;
+    })
+  })
+})

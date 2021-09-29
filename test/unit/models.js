@@ -73,3 +73,41 @@ describe('Insere um novo produto no BD', () => {
     })
   })
 });
+
+describe('Busca por produtos cadastrados no db', () => {
+  let DBServer = new MongoMemoryServer();
+  let connectionMock;
+
+  before(async () => {
+    const URLMock = await DBServer.getUri();
+    connectionMock = await MongoClient.
+    connect(URLMock, {
+      useNewUrlParser: true,
+			useUnifiedTopology: true,
+    })
+    .then(conn => conn.db('StoreManager'));
+
+    sinon.stub(mongoConnection, 'connection').resolves(connectionMock);
+  })
+
+  after(async () => {
+    await mongoConnection.connection.restore();
+    sinon.restore();
+	});
+
+  it('Retorna todos os produtos', async () => {
+    await productsModel.create("Primeiro Produto", 100)
+    await productsModel.create("segundo Produto", 100)
+    const allProducts = await productsModel.getAllProducts()
+    
+    expect(allProducts).to.be.an('array').not.empty;
+  })
+
+  it('Retorna um produto', async () => {
+    const oneProduct = await productsModel.findByName("Primeiro Produto")
+    const foundById = await productsModel.findById(oneProduct.id)
+    
+    expect(foundById).to.have.a.property('_id');
+    expect(foundById.name).to.equal("Primeiro Produto");
+  })
+})
