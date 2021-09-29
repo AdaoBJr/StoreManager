@@ -1,4 +1,4 @@
-// const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const connection = require('../../connection');
 
 const getAll = async () => {
@@ -9,10 +9,10 @@ const getAll = async () => {
   return products;
 };
 
-const getById = async (_id) => {
+const getById = async (id) => {
   const db = await connection();
 
-  const product = db.collection('products').findOne();
+  const product = await db.collection('products').findOne({ _id: ObjectId(id) });
 
   return product;
 };

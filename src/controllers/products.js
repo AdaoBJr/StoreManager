@@ -18,7 +18,8 @@ const getById = async (req, res) => {
 
     res.status(200).json(product);
   } catch (error) {
-      res.status(500).json(error);
+    res.status(422)
+      .json({ err: { code: 'invalid_data', message: 'Wrong id format' } });
   }
 };
 
