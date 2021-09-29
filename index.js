@@ -17,7 +17,8 @@ app.get('/', (_request, response) => {
 
 app.route('/products/:id')
 .get(productController.getOneProduct)
-.put(productController.updateProduct);
+.put(productController.updateProduct)
+.delete(productController.deleteProduct);
 
 app.route('/products')
 .post(productController.createNewProduct)
