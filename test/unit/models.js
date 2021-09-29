@@ -19,7 +19,7 @@ describe('Testa a conexão do servidor', () => {
   })
 
   it('Não conecta ao db com url incorreta', async() => {
-    const URL = 'xablau'
+    const URL = 'maogodb://mongodb:27017/StoreManager'
     const collections = await mongoConnection.connection(URL)
     .catch(err => {
       return new Error('Não foi possivel acessar o db')
