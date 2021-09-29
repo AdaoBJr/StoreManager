@@ -20,7 +20,7 @@ const findByName = async (name) => {
 
   const found = await productsCollection.findOne({ name });
 
-  if (found) return true;
+  if (found) return found;
 };
 
 const findById = async (id) => {
