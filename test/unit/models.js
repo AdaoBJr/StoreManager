@@ -18,15 +18,15 @@ describe('Testa a conexão do servidor', () => {
       expect(collections).to.be.an('array')
   })
 
-  it('Não conecta ao db com url incorreta', async() => {
-    const URL = 'maogodb://mongodb:27017/StoreManager'
-    const collections = await mongoConnection.connection(URL)
-    .catch(err => {
-      return new Error('Não foi possivel acessar o db')
-    })
+  // it('Não conecta ao db com url incorreta', async() => {
+  //   const URL = 'maogodb://mongodb:27017/StoreManager'
+  //   const collections = await mongoConnection.connection(URL)
+  //   .catch(err => {
+  //     return new Error('Não foi possivel acessar o db')
+  //   })
 
-    expect(collections).to.be.an('error');
-})
+  //   expect(collections).to.be.an('error');
+  // })
 })
 
 describe('Insere um novo produto no BD', () => {
