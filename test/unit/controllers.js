@@ -13,6 +13,8 @@ describe('Verifica se retorna as informações corretas ao criar produto', () =>
 
     res.status = sinon.stub().returns(res);
     res.json = sinon.stub().returns();
+
+    sinon.stub(productService, 'validateProduct').resolves('Produto inválido');
   })
 
   it('Quando o payload é inválido', async () => {
