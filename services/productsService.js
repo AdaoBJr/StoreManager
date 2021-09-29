@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { ObjectID } = require('mongodb');
 const productsModel = require('../models/productsModel');
 
 const validateProduct = async (name, quantity) => {
@@ -20,7 +21,40 @@ const createNewProduct = async (name, quantity) => {
   return newProduct;
 };
 
+const validateId = async (id) => {
+  const isValidId = ObjectID.isValid(id);
+
+  if (!isValidId) {
+    return {
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    };
+  }
+};
+
+const getProductById = async (id) => {
+  const product = await productsModel.findById(id);
+
+  if (!product) {
+    return {
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong id format',
+      },
+    };
+  }
+
+  return product;
+};
+
+const getAllProducts = async () => productsModel.getAllProducts();
+
 module.exports = {
   createNewProduct,
   validateProduct,
+  getProductById,
+  getAllProducts,
+  validateId,
 };
