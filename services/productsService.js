@@ -7,7 +7,7 @@ const validateProduct = async (name, quantity) => {
     quantity: Joi.number().integer().min(1),
   })
   .validate({ name, quantity });
-  
+
   if (error) return error.details[0].message;
 
   const alreadyExists = await productsModel.findByName(name);
@@ -17,7 +17,7 @@ const validateProduct = async (name, quantity) => {
 const createNewProduct = async (name, quantity) => {
   const newProduct = await productsModel.create(name, quantity);
 
-  return { newProduct };
+  return newProduct;
 };
 
 module.exports = {

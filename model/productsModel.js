@@ -7,7 +7,7 @@ const create = async (name, quantity) => {
   const { insertedId: id } = await productsCollection.insertOne({ name, quantity });
 
   return {
-    id,
+    _id: id,
     name,
     quantity,
   };
