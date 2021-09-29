@@ -12,12 +12,12 @@ const createNewProduct = async (req, res, _next) => {
 const getOneProduct = async (req, res, _next) => {
   const { id } = req.params;
 
-  const hasErrorMessage = await productService.validateId(id);
-  if (hasErrorMessage) return res.status(422).json(hasErrorMessage.err); 
+  const errorMessage = await productService.validateId(id);
+  if (errorMessage) return res.status(422).json(errorMessage); 
   
   const product = await productService.getProductById(id);
 
-  if (product.err) return res.status(422).json(product.err);
+  if (product.err) return res.status(422).json(product);
 
   return res.status(200).json(product); 
 };
