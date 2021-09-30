@@ -44,23 +44,15 @@ const validateProductsArray = async (salesArray) => {
   return error;
 };
 
-const insertSalesProducts = async (salesArray) => {
-  const response = await salesModel.insertSales(salesArray);
+const insertSales = async (salesArray) => salesModel.insertSales(salesArray);
 
-  return response;
-};
-
-const findSaleById = async (saleId) => {
-  const found = await salesModel.findSaleById(saleId);
-
-  return found;
-};
+const findSaleById = async (saleId) => salesModel.findSaleById(saleId);
 
 const getAllSales = async () => salesModel.getAllSales();
 
 module.exports = {
   validateProductsArray,
-  insertSalesProducts,
+  insertSales,
   validateId,
   validateQuantity,
   isProductOnDb,
