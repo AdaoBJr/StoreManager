@@ -28,18 +28,18 @@ const isProductOnDb = async (productId) => {
 
 const validateProductsArray = async (salesArray) => {
   let error;
-  salesArray.forEach((element) => {
+  await Promise.all(salesArray.map(async (element) => {
     const { productId, quantity } = element;
-    const invalidId = validateId(productId);
+    const invalidId = await validateId(productId);
     const invalidQuantity = validateQuantity(quantity);
-    const productExists = isProductOnDb(productId);
+    const productExists = await isProductOnDb(productId);
     // Inverte o productExists para que error seja true caso o produto não exista
     if (invalidId || invalidQuantity || !productExists) {
       error = { errorMessage: { err: { 
         code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }, 
       } };
     }
-  });
+  }));
 
   return error;
 };
