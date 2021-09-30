@@ -11,12 +11,12 @@ const validateId = async (id) => {
 };
 
 const validateQuantity = (quantity) => {
-  const { err } = Joi.object({
+  const { error } = Joi.object({
     quantity: Joi.number().integer().min(1),
   })
   .validate({ quantity });
 
-  if (err) return true;
+  if (error) return true;
   return false;
 };
 
@@ -27,20 +27,19 @@ const isProductOnDb = async (productId) => {
   return false;
 };
 
-const validadeProductsArray = async (salesArray) => {
+const validateProductsArray = async (salesArray) => {
   let error;
-
-  salesArray.map(async (element) => {
-    if (error) return element;
+  await salesArray.forEach(async (element) => {
     const { productId, quantity } = element;
     const invalidId = await validateId(productId);
-    const invalidQuantity = await validateQuantity(quantity);
+    const invalidQuantity = validateQuantity(quantity);
     // Inverte o resultado para que error seja true caso o produto não exista
-    const inexistentProduct = await !isProductOnDb(productId);
+    const inexistentProduct = !isProductOnDb(productId);
     if (invalidId || invalidQuantity || inexistentProduct) {
-      error = { err: { code: 'indalid_data', message: 'Wrong product ID or invalid quantity' } };
+      error = { errorMessage: { err: { 
+        code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }, 
+      } };
     }
-    return element;
   });
 
   return error;
@@ -53,6 +52,6 @@ const insertSalesProducts = async (salesArray) => {
 };
 
 module.exports = {
-  validadeProductsArray,
+  validateProductsArray,
   insertSalesProducts,
 };
