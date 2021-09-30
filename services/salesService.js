@@ -50,10 +50,13 @@ const insertSalesProducts = async (salesArray) => {
   return response;
 };
 
+const getAllSales = async () => salesModel.getAllSales();
+
 module.exports = {
   validateProductsArray,
   insertSalesProducts,
   validateId,
   validateQuantity,
   isProductOnDb,
+  getAllSales,
 };
