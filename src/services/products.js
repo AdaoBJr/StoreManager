@@ -60,9 +60,7 @@ const create = async (product) => {
   return model;
 };
 
-const update = async (id, product) => {
-  const { name, quantity } = product;
-
+const update = async (id, name, quantity) => {
   if (name.length < 5) throw nameLengthError;
   if (quantity < 1) throw quantityValueError;
   if (typeof quantity !== 'number') throw quantityTypeError;
@@ -70,12 +68,16 @@ const update = async (id, product) => {
   const productExists = await models.getByName(name);
   if (productExists) throw productExistsError;
 
-  const model = await models.update(id, product);
+  const model = await models.update(id, name, quantity);
+
   return model;
 };
 
 const remove = async (id) => {
-  const model = models.remove(id);
+  const productExists = await models.getById(id);
+  if (productExists === null) throw idError;
+
+  const model = await models.remove(id);
   return model;
 };
 

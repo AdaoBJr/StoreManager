@@ -4,9 +4,9 @@ const getAll = async (_req, res) => {
   try {
     const products = await services.getAll();
 
-    res.status(200).json({ products });
+    return res.status(200).json({ products });
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 };
 
@@ -16,9 +16,9 @@ const getById = async (req, res) => {
 
     const product = await services.getById(id);
 
-    res.status(200).json(product);
+    return res.status(200).json(product);
   } catch (error) {
-    res.status(422)
+    return res.status(422)
       .json({ err: { code: 'invalid_data', message: 'Wrong id format' } });
   }
 };
@@ -29,9 +29,9 @@ const create = async (req, res) => {
 
     const newProduct = await services.create(product);
 
-    res.status(201).json(newProduct);
+    return res.status(201).json(newProduct);
   } catch (error) {
-    res.status(error.err.status)
+    return res.status(error.err.status)
       .json({ err: { code: error.err.code, message: error.err.message } });
   }
 };
@@ -39,13 +39,13 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = req.body;
+    const { name, quantity } = req.body;
 
-    const updatedProduct = await services.update(id, product);
+    await services.update(id, name, quantity);
 
-    res.status(200).json(updatedProduct);
+    return res.status(200).json({ _id: id, name, quantity });
   } catch (error) {
-    res.status(error.err.status)
+    return res.status(error.err.status)
     .json({ err: { code: error.err.code, message: error.err.message } });
   }
 };
@@ -56,9 +56,13 @@ const remove = async (req, res) => {
 
     const deletedProduct = await services.remove(id);
 
-    res.status(200).json(deletedProduct);
+    return res.status(200).json(deletedProduct);
   } catch (error) {
-    res.status(500).json(error);
+    if (error.err) {
+      return res.status(error.err.status)
+        .json({ err: { code: error.err.code, message: error.err.message } });
+    }
+    return res.status(422).json({ err: { code: 'invalid_data', message: 'Wrong id format' } });
   }
 };
 

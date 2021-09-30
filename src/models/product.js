@@ -33,20 +33,21 @@ const create = async (product) => {
   return newProduct.ops[0];
 };
 
-const update = async (id, body) => {
+const update = async (id, name, quantity) => {
   const db = await connection();
 
   const updatedProduct = await db.collection('products')
-    .update({ _id: ObjectId(id) }, { $set: body });
-    console.log(updatedProduct);
+    .updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } });
 
   return updatedProduct;
 };
 
-const remove = async (_id) => {
+const remove = async (id) => {
   const db = await connection();
 
-  const deletedProduct = db.collection('products').delete();
+  if (!ObjectId(id)) return null;
+
+  const deletedProduct = await db.collection('products').deleteOne({ _id: ObjectId(id) });
 
   return deletedProduct;
 };
