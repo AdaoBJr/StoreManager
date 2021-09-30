@@ -6,6 +6,7 @@ const { expect } = require('chai');
 
 const mongoConnection = require('../../models/connection')
 const productsModel = require('../../models/productsModel')
+const salesModel = require('../../models/salesModel')
 
 describe('Testa a conexão do servidor', () => {
   it('Conecta ao db com url correta', async() => {
@@ -149,5 +150,38 @@ describe('Testa se está deletando um produto', () => {
 
   it('Retorna 0 se o produto não existir', async () => {
     
+  })
+})
+
+
+describe('Testa se está inserindo as sales', () => {
+  let DBServer = new MongoMemoryServer();
+  let connectionMock;
+
+  before(async () => {
+    const URLMock = await DBServer.getUri();
+    connectionMock = await MongoClient.
+    connect(URLMock, {
+      useNewUrlParser: true,
+			useUnifiedTopology: true,
+    })
+    .then(conn => conn.db('StoreManager'));
+
+    sinon.stub(mongoConnection, 'connection').resolves(connectionMock);
+  })
+
+  after(async () => {
+    await mongoConnection.connection.restore();
+	});
+
+  it('Verifica se as sales foram inseridas', async () => {
+    const oneProductArray = [{id: '61560bcb86ef5f44ec59a746', name: "Escova", quantity: 1}]
+    const insertedSales = await salesModel.insertSales(oneProductArray)
+    const foundById = await salesModel.findById(insertedProducts._id)
+
+    expect(insertedSales).to.have.a.property('_id');
+    expect(insertedSales.itensSold).to.be.an.instanceof(Array)
+    expect(foundById).to.have.a.property('_id');
+    expect(foundById.itensSold).to.be.an.instanceof(Array)
   })
 })
