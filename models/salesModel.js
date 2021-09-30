@@ -1,15 +1,6 @@
 const { ObjectID } = require('mongodb');
 const mongoConnection = require('./connection');
 
-const findById = async (id) => {
-  const salesCollection = await mongoConnection.connection()
-  .then((db) => db.collection('sales'));
-
-  const found = await salesCollection.findOne({ _id: ObjectID(id) });
-
-  return found;
-};
-
 const insertSales = async (salesArray) => {
   const salesCollection = await mongoConnection.connection()
   .then((db) => db.collection('sales'));
@@ -47,7 +38,6 @@ const findSaleById = async (saleId) => {
 
 module.exports = {
   insertSales,
-  findById,
   getAllSales,
   findSaleById,
 };
