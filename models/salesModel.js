@@ -36,8 +36,18 @@ const getAllSales = async () => {
   };
 };
 
+const findSaleById = async (saleId) => {
+  const salesCollection = await mongoConnection.connection()
+  .then((db) => db.collection('sales'));
+
+  const found = await salesCollection.findOne({ _id: ObjectID(saleId) });
+
+  return found;
+};
+
 module.exports = {
   insertSales,
   findById,
   getAllSales,
+  findSaleById,
 };
