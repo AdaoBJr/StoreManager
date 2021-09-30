@@ -1,9 +1,13 @@
 const express = require('express');
-const app = express();
-// const bodyParser = require('body-parser');
-// app.use(bodyParser.json());
+const bodyParser = require('body-parser');
 
-// const StoreController = require('./controllers/storeController');
+const app = express();
+app.use(bodyParser.json());
+
+const HTTP_OK_STATUS = 200;
+const PORT = '3000';
+
+const StoreController = require('./controllers/storeController');
 // const SalesController = require('./controllers/salesController');
 // const ErrorMiddleware = require('./middlewares/error.js');
 
@@ -12,7 +16,7 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-// app.post('/products', StoreController.create);
+app.post('/products', StoreController.create);
 // app.get('/products/:id', StoreController.getByIdOrName);
 // app.get('/products', StoreController.getAll);
 // app.put('/products/:id', StoreController.updateById);
@@ -24,7 +28,5 @@ app.get('/', (_request, response) => {
 // app.delete('/sales/:id', SalesController.deleteById);
 
 // app.use(ErrorMiddleware);
-
-const PORT = 3000;
 
 app.listen(PORT, () => { console.log(`Ouvindo a porta ${PORT}`); });
