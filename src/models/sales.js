@@ -24,7 +24,9 @@ const create = async (sales) => {
 
   const newSale = await db.collection('sales').insertOne({ itensSold: sales });
 
-  return newSale.ops;
+  console.log(newSale.ops);
+
+  return newSale.ops[0];
 };
 
 const update = async (id) => {

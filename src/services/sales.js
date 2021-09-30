@@ -29,7 +29,7 @@ const create = async (sales) => {
   });
 
   products.map((curr) => {
-    if (curr === false) throw invalidError;
+    if (curr === null) throw invalidError;
     return true;
   });
 
