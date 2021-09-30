@@ -62,7 +62,12 @@ const remove = async (req, res) => {
 
     return res.status(200).json(service);
   } catch (error) {
-    return res.status(500).json(error);
+    if (error.err) {
+      return res.status(error.err.status)
+        .json({ err: { code: error.err.code, message: error.err.message } });
+    }
+    return res.status(422)
+      .json({ err: { code: 'invalid_data', message: 'Wrong sale ID format' } });
   }
 };
 

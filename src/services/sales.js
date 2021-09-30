@@ -2,11 +2,14 @@ const models = require('../models/sales');
 const productModel = require('../models/product');
 
 const invalidError = new Error();
-invalidError
-  .err = { status: 422, code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
+  invalidError
+    .err = { status: 422, code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
 const notFoundError = new Error();
- notFoundError
-  .err = { status: 404, code: 'not_found', message: 'Sale not found' };
+  notFoundError
+    .err = { status: 404, code: 'not_found', message: 'Sale not found' };
+const wrongError = new Error();
+  wrongError
+   .err = { status: 422, code: 'invalid_data', message: 'Wrong sale ID format' };
 
 const validatePromisse = (sales) => Promise
   .all(sales.map((curr) => productModel.getById(curr.productId)))
@@ -49,7 +52,10 @@ const update = async (id) => {
 };
 
 const remove = async (id) => {
-  const model = models.remove(id);
+  const model = await models.remove(id);
+
+  if (model === null) throw wrongError;
+
   return model;
 };
 

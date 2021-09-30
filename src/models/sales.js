@@ -24,8 +24,6 @@ const create = async (sales) => {
 
   const newSale = await db.collection('sales').insertOne({ itensSold: sales });
 
-  console.log(newSale.ops);
-
   return newSale.ops[0];
 };
 
@@ -46,6 +44,8 @@ const remove = async (id) => {
   if (!ObjectId(id)) return null;
 
   const deletedSale = await db.collection('sales').deleteOne({ _id: ObjectId(id) });
+
+  if (!deletedSale) return null;
 
   return deletedSale;
 };
