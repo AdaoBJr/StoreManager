@@ -1,9 +1,9 @@
-// const { ObjectID } = require('mongodb');
+const { ObjectID } = require('mongodb');
 const mongoConnection = require('./connection');
 
 const findById = async (id) => {
   const productsCollection = await mongoConnection.connection()
-  .then((db) => db.collection('products'));
+  .then((db) => db.collection('sales'));
 
   const found = await productsCollection.findOne({ _id: ObjectID(id) });
 
