@@ -26,11 +26,11 @@ app.route('/products')
 .get(productController.getAllProducts);
 
 app.route('/sales')
-.get(salesController.getAll)
+.get(salesController.getAllSales)
 .post(salesController.insertSales);
 
 app.route('/sales/:id')
-.get(salesController.getById);
+.get(salesController.getSaleById);
 
 app.listen(PORT, () => {
   console.log('Online');
