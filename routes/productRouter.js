@@ -7,11 +7,9 @@ const router = express.Router();
 
 router.post(
   '/',
-  // eslint-disable-next-line no-return-await
-  async (req, res, next) => await nameValidation(req, res, next),
+  async (req, res, next) => nameValidation(req, res, next),
   quantityValidation,
-  // eslint-disable-next-line no-return-await
-  async (req, res) => await productController.create(req, res),
+  async (req, res) => productController.create(req, res),
 );
 
 module.exports = router;
