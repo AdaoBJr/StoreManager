@@ -26,8 +26,8 @@ app.route('/products')
 .get(productController.getAllProducts);
 
 app.route('/sales')
-.post(salesController.insertSales)
+.post(salesController.insertSales);
 
-.app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log('Online');
 });
