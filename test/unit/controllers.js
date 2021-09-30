@@ -2,6 +2,8 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 
 const productController = require('../../controllers/productController')
+const salesController = require('../../controllers/salesController')
+const salesService = require('../../services/salesService')
 const productService = require('../../services/productsService')
 
 describe('Verifica se retorna as informações corretas ao criar produto', () => {
@@ -14,7 +16,7 @@ describe('Verifica se retorna as informações corretas ao criar produto', () =>
     res.status = sinon.stub().returns(res);
     res.json = sinon.stub().returns();
 
-    sinon.stub(productService, 'validateProduct').resolves('Produto inválido');
+    sinon.stub(productService, 'validateProduct').resolves('Invalid payload');
   })
 
   after(() => {
@@ -276,3 +278,78 @@ describe('Remove um produto do db', () => {
     })
   })
 });
+
+describe('Insere as sales no db na rota /sales', () => {
+  describe('Quando um dos produtos está errado', () => {
+    const req = {};
+    const res = {};
+  
+    const wrongSalesProducts = [{
+      Quantity: 325
+    }]
+  
+    before(() => {
+      req.body = { wrongSalesProducts }
+  
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+  
+      sinon.stub(salesService, 'validateProductsArray').resolves({ errorMessage: { err: { 
+        code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }, 
+      } })
+    });
+  
+    after(() => {
+      salesService.validateProductsArray.restore();
+    });
+  
+    it('Retorna o status 422', async () => {
+      await salesController.insertSales(req, res)
+  
+      expect(res.status.calledWith(422)).to.be.equal(true);
+    })
+  })
+
+  describe('Quando os produtos estão corretos', () => {
+    const req = {};
+    const res = {};
+
+    const correctSales = [
+      {
+        productId: "615634e53519a410a0fbbfd5",
+        quantity: 10,
+      }
+    ]
+
+    const insertedSales = {
+      _id: "615634ffbb5b8c47a42ee951",
+      itensSold: [
+        {
+          productId: "615634e53519a410a0fbbfd5",
+          quantity: 10,
+        }
+      ]
+    }
+  
+    before(() => {
+      req.body = { correctSales }
+  
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+  
+      sinon.stub(salesService, 'validateProductsArray').resolves()
+      sinon.stub(salesService, 'insertSalesProducts').resolves(insertedSales)
+    });
+  
+    after(() => {
+      salesService.validateProductsArray.restore();
+      salesService.insertSalesProducts.restore();
+    });
+  
+    it('Retorna o status 422', async () => {
+      await salesController.insertSales(req, res)
+  
+      expect(res.status.calledWith(200)).to.be.equal(true);
+    })
+  })
+})
