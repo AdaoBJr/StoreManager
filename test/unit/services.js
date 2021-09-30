@@ -3,6 +3,8 @@ const sinon = require('sinon');
 
 const serviceModel = require('../../services/productsService')
 const productsModel = require('../../models/productsModel')
+const salesService = require('../../services/salesService')
+const salesModel = require('../../models/salesModel')
 
 const fakeValidId = '615495794851a62068f4da07'
 
@@ -195,6 +197,170 @@ describe('Verifica se o produto é deletado', () => {
       const deleted = await serviceModel.deleteProduct(fakeValidId);
   
       expect(deleted).to.have.property('errorMessage')
+    })
+  })
+})
+
+describe('Teste das funções validateId, validateQuantity, isProductOnDb, insertSalesProducts e validateProductsArray do salesService', () => {
+  describe('Função insertSalesProducts', () => {
+    const dbResponse = {
+      _id: "615634ffbb5b8c47a42ee951",
+      itensSold: [
+        {
+          productId: "615634e53519a410a0fbbfd5",
+          quantity: 10,
+        }
+      ]
+    }
+    before(() => {
+      sinon.stub(salesModel, 'insertSales').returns(dbResponse);
+    });
+  
+    after(() => {
+      salesModel.insertSales.restore();
+    });
+
+    it('Retorna o objeto inserido no db', async () => {
+      const response = await salesService.insertSalesProducts([{productId: '615634e53519a410a0fbbfd5',quantity: 10}])
+  
+      expect(response).to.be.equal(dbResponse);
+    })
+  })
+
+  describe('Função validateId', () => {
+    it('Envia um ID válido', async () => {
+      const response = await salesService.validateId('InvalidID')
+  
+      expect(response).to.be.true;
+    })
+
+    it('Envia um ID inválido', async () => {
+      const response = await salesService.validateId(fakeValidId)
+  
+      expect(response).to.be.false;
+    })
+  })
+
+  describe('Função validateQuantity', () => {
+    it('Envia uma quantidade menor que 1', async () => {
+      const response = await salesService.validateQuantity(0)
+  
+      expect(response).to.be.true;
+    })
+
+    it('Envia uma quantidade maior que 0', async () => {
+      const response = await salesService.validateQuantity(1)
+  
+      expect(response).to.be.false;
+    })
+  })
+
+  describe('Função isProductOnDb', () => {
+    describe('O produto está no banco', () => {
+      before(() => {
+        sinon.stub(productsModel, 'findById')
+          .resolves(true);
+      });
+    
+      after(() => {
+        productsModel.findById.restore();
+      });
+      
+      it('A resposta é true', async () => {
+        const response = await salesService.isProductOnDb(fakeValidId)
+    
+        expect(response).to.be.true;
+      })
+    })
+
+    describe('O produto não está no banco', () => {
+      before(() => {
+        sinon.stub(productsModel, 'findById')
+          .resolves();
+      });
+    
+      after(() => {
+        productsModel.findById.restore();
+      });
+
+      it('A resposta é false', async () => {
+        const response = await salesService.isProductOnDb(fakeValidId)
+    
+        expect(response).to.be.false;
+      })
+    })
+  })
+
+  describe('Função validateProductsArray', () => {  
+    describe('Todos os dados enviados estão corretos', () => {
+      const salesArray = [
+        { productId: fakeValidId, quantity: 10},
+        { productId: fakeValidId, quantity: 100}
+      ]
+      before(() => {
+        sinon.stub(productsModel, 'findById').returns(true);
+      });
+    
+      after(() => {
+        productsModel.findById.restore();
+      });
+  
+      it('A resposta é undefined', async () => {
+        const response = await salesService.validateProductsArray(salesArray)
+    
+        expect(response).to.be.undefined;
+      })
+    })
+
+    describe('O produto não está cadastrado', () => {
+      const salesArray = [
+        { productId: fakeValidId, quantity: 10},
+        { productId: fakeValidId, quantity: 100}
+      ]
+      before(() => {
+        sinon.stub(productsModel, 'findById').returns(false);
+      });
+    
+      after(() => {
+        productsModel.findById.restore();
+      });
+  
+      it('A resposta é um erro', async () => {
+        const response = await salesService.validateProductsArray(salesArray)
+    
+        expect(response.errorMessage).to.exist;
+      })
+    })
+
+    describe('Quando algum outro dado é inválido', () => {
+      let salesArray = [
+        { productId: 'fakeValidId', quantity: 10},
+        { productId: fakeValidId, quantity: 100}
+      ]
+
+      before(() => {
+        sinon.stub(productsModel, 'findById').returns(true);
+      });
+    
+      after(() => {
+        productsModel.findById.restore();
+      });
+  
+      it('Quando ao menos um id é inválido a resposta é uma mensagem de erro', async () => {
+        const response = await salesService.validateProductsArray(salesArray)
+    
+        expect(response.errorMessage).to.exist;
+      })
+
+      it('Quando ao menos um número é menor que 1 a resposta é uma mensagem de erro', async () => {
+        salesArray = [
+          { productId: fakeValidId, quantity: 0},
+          { productId: fakeValidId, quantity: 100}
+        ]
+        const response = await salesService.validateProductsArray(salesArray)
+    
+        expect(response.errorMessage).to.exist;
+      })
     })
   })
 })
