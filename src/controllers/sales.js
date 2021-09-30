@@ -1,53 +1,57 @@
-// const services = require('../3services/sales');
+const services = require('../services/sales');
 
-// const getAll = async (_req, res) => {
-//   try {
-//       res.status().json();
+const getAll = async (_req, res) => {
+  try {
+    const service = await services.getAll();
 
-//   } catch (error) {
-//       res.status().json(error);
+    return res.status(200).json(service);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
 
-//   }
-// };
+const getById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const service = await services.getById(id);
 
-// const getById = async (_req, res) => {
-//   try {
-//       res.status().json();
+    return res.status(200).json(service);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
 
-//   } catch (error) {
-//       res.status().json(error);
+const create = async (req, res) => {
+  try {
+    const service = await services.create();
 
-//   }
-// };
+    return res.status(200).json(service);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
 
-// const create = async (_req, res) => {
-//   try {
-//       res.status().json();
+const update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const service = await services.update(id);
 
-//   } catch (error) {
-//       res.status().json(error);
+    return res.status(200).json(service);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
 
-//   }
-// };
+const remove = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-// const update = async (_req, res) => {
-//   try {
-//       res.status().json();
+    const service = await services.remove(id);
 
-//   } catch (error) {
-//       res.status().json(error);
+    return res.status(200).json(service);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
 
-//   }
-// };
-
-// const remove = async (_req, res) => {
-//   try {
-//       res.status().json();
-
-//   } catch (error) {
-//       res.status().json(error);
-
-//   }
-// };
-
-// module.exports = { getAll, getById, create, update, remove };
+module.exports = { getAll, getById, create, update, remove };
