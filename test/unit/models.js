@@ -177,10 +177,23 @@ describe('Testa se está inserindo as sales', () => {
   it('Verifica se as sales foram inseridas', async () => {
     const oneProductArray = [{id: '61560bcb86ef5f44ec59a746', name: "Escova", quantity: 1}]
     const insertedSales = await salesModel.insertSales(oneProductArray)
-    const foundById = await salesModel.findById(insertedProducts._id)
 
     expect(insertedSales).to.have.a.property('_id');
     expect(insertedSales.itensSold).to.be.an.instanceof(Array)
+  })
+
+  it('Busca todas as sales', async () => {
+    const allSales = await salesModel.getAllSales();
+    
+    expect(allSales.sales).to.exist;
+    expect(allSales.sales).to.be.an.instanceof(Array);
+  })
+
+  it('Busca uma sale por ID', async () => {
+    const oneProductArray = [{id: '61560bcb86ef5f44ec59a746', name: "Lapis", quantity: 100}]
+    const insertedSales = await salesModel.insertSales(oneProductArray)
+    const foundById = await salesModel.findSaleById(insertedSales._id)
+
     expect(foundById).to.have.a.property('_id');
     expect(foundById.itensSold).to.be.an.instanceof(Array)
   })
