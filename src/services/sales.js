@@ -4,6 +4,9 @@ const productModel = require('../models/product');
 const invalidError = new Error();
 invalidError
   .err = { status: 422, code: 'invalid_data', message: 'Wrong product ID or invalid quantity' };
+const notFoundError = new Error();
+ notFoundError
+  .err = { status: 404, code: 'not_found', message: 'Sale not found' };
 
 const validatePromisse = (sales) => Promise
   .all(sales.map((curr) => productModel.getById(curr.productId)))
@@ -16,7 +19,10 @@ const getAll = async () => {
 };
 
 const getById = async (id) => {
-  const model = models.getById(id);
+  const model = await models.getById(id);
+
+  if (model === null) throw notFoundError;
+
   return model;
 };
 

@@ -2,9 +2,9 @@ const services = require('../services/sales');
 
 const getAll = async (_req, res) => {
   try {
-    const service = await services.getAll();
+    const sales = await services.getAll();
 
-    return res.status(200).json(service);
+    return res.status(200).json({ sales });
   } catch (error) {
     return res.status(500).json(error);
   }
@@ -17,7 +17,12 @@ const getById = async (req, res) => {
 
     return res.status(200).json(service);
   } catch (error) {
-    return res.status(500).json(error);
+    if (error.err) {
+      return res.status(error.err.status)
+        .json({ err: { code: error.err.code, message: error.err.message } });
+    }
+    return res.status(404)
+      .json({ err: { code: 'not_found', message: 'Sale not found' } });
   }
 };
 
