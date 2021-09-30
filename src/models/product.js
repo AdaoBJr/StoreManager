@@ -14,6 +14,8 @@ const getById = async (id) => {
 
   const product = await db.collection('products').findOne({ _id: ObjectId(id) });
 
+  if (!product) return false;
+
   return product;
 };
 

@@ -23,11 +23,18 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const service = await services.create();
+    const sales = req.body;
+
+    const service = await services.create(sales);
 
     return res.status(200).json(service);
   } catch (error) {
-    return res.status(500).json(error);
+    if (error.err) {
+      return res.status(error.err.status)
+        .json({ err: { code: error.err.code, message: error.err.message } });
+    }
+    return res.status(422)
+      .json({ err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } });
   }
 };
 

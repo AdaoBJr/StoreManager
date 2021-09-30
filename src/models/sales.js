@@ -19,12 +19,12 @@ const getById = async (id) => {
   return sale;
 };
 
-const create = async () => {
+const create = async (sales) => {
   const db = await connection();
 
-  const newSale = await db.collection('sales').create();
+  const newSale = await db.collection('sales').insertOne({ itensSold: sales });
 
-  return newSale;
+  return newSale.ops;
 };
 
 const update = async (id) => {
