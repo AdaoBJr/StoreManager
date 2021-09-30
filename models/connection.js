@@ -11,15 +11,13 @@ const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
 
 let db = null;
 
-const connection = () => {
-  return db
+const connection = () => (db
     ? Promise.resolve(db)
     : MongoClient.connect(MONGO_DB_URL, OPTIONS)
-      .then((conn) => {
-        db = conn.db(DB_NAME);
-        return db;
-      });
-};
+    .then((conn) => {
+      db = conn.db(DB_NAME);
+      return db;
+    }));
 
 module.exports = connection;
 

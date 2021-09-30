@@ -4,6 +4,7 @@ const Product = require('./controllers/Product');
 // const Sale = require('./controllers/Sale');
 const erro = require('./middlewares/error');
 require('dotenv').config();
+
 const PORT_NUMBER = 3000;
 const PORT = process.env.PORT || PORT_NUMBER;
 const app = express();
