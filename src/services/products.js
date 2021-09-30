@@ -25,7 +25,7 @@ productExistsError.err = {
   message: 'Product already exists',
 };
 const idError = new Error();
-productExistsError.err = {
+idError.err = {
   status: 422,
   code: 'invalid_data',
   message: 'Wrong id format',
@@ -60,8 +60,17 @@ const create = async (product) => {
   return model;
 };
 
-const update = async (id) => {
-  const model = models.update(id);
+const update = async (id, product) => {
+  const { name, quantity } = product;
+
+  if (name.length < 5) throw nameLengthError;
+  if (quantity < 1) throw quantityValueError;
+  if (typeof quantity !== 'number') throw quantityTypeError;
+
+  const productExists = await models.getByName(name);
+  if (productExists) throw productExistsError;
+
+  const model = await models.update(id, product);
   return model;
 };
 

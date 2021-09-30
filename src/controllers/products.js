@@ -39,12 +39,14 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { id } = req.params;
+    const product = req.body;
 
-    const updatedProduct = await services.create(id);
+    const updatedProduct = await services.update(id, product);
 
     res.status(200).json(updatedProduct);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(error.err.status)
+    .json({ err: { code: error.err.code, message: error.err.message } });
   }
 };
 

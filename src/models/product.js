@@ -33,10 +33,12 @@ const create = async (product) => {
   return newProduct.ops[0];
 };
 
-const update = async (_id) => {
+const update = async (id, body) => {
   const db = await connection();
 
-  const updatedProduct = db.collection('products').update();
+  const updatedProduct = await db.collection('products')
+    .update({ _id: ObjectId(id) }, { $set: body });
+    console.log(updatedProduct);
 
   return updatedProduct;
 };
