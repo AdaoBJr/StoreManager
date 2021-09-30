@@ -5,7 +5,7 @@ const insertSales = async (req, res, _next) => {
   const haveSomeInvalidData = await salesService.validateProductsArray(salesArray);
   if (haveSomeInvalidData) return res.status(422).json(haveSomeInvalidData.errorMessage);
   
-  const insertedSales = await salesService.insertSalesProducts(salesArray);
+  const insertedSales = await salesService.insertSales(salesArray);
 
   return res.status(200).json(insertedSales);
 };
