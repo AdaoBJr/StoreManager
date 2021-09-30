@@ -46,11 +46,18 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const service = await services.update(id);
+    const sales = req.body;
 
-    return res.status(200).json(service);
+    await services.update(id, sales);
+
+    return res.status(200).json({ _id: id, itensSold: sales });
   } catch (error) {
-    return res.status(500).json(error);
+    if (error.err) {
+      return res.status(error.err.status)
+        .json({ err: { code: error.err.code, message: error.err.message } });
+    }
+    return res.status(422)
+      .json({ err: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } });
   }
 };
 

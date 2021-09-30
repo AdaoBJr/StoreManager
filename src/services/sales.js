@@ -46,8 +46,21 @@ const create = async (sales) => {
   return model;
 };
 
-const update = async (id) => {
-  const model = models.update(id);
+const update = async (id, sales) => {
+  const products = await validatePromisse(sales);
+
+  sales.map((curr) => {
+    if (curr.quantity < 1 || typeof curr.quantity !== 'number') throw invalidError;
+    return true;
+  });
+
+  products.map((curr) => {
+    if (curr === null) throw invalidError;
+    return true;
+  });
+
+  const model = await models.update(id, sales);
+
   return model;
 };
 

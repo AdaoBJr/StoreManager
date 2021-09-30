@@ -27,13 +27,13 @@ const create = async (sales) => {
   return newSale.ops[0];
 };
 
-const update = async (id) => {
+const update = async (id, sales) => {
   const db = await connection();
 
   if (!ObjectId(id)) return null;
 
   const updatedSale = await db.collection('sales')
-    .updateOne({ _id: ObjectId(id) });
+    .updateOne({ _id: ObjectId(id) }, { $set: { itensSold: sales } });
 
   return updatedSale;
 };
