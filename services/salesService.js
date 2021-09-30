@@ -50,6 +50,12 @@ const insertSalesProducts = async (salesArray) => {
   return response;
 };
 
+const findSaleById = async (saleId) => {
+  const found = await salesModel.findById(saleId);
+
+  return found;
+};
+
 const getAllSales = async () => salesModel.getAllSales();
 
 module.exports = {
@@ -59,4 +65,5 @@ module.exports = {
   validateQuantity,
   isProductOnDb,
   getAllSales,
+  findSaleById,
 };
