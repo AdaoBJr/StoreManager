@@ -10,8 +10,9 @@ const create = rescue(async (req, res, next) => {
     name: Joi.string().min(FIVE).not()
     .empty()
     .required(),
-    quantity: Joi.number().integer().min(1).not().empty().
-    required(),
+    quantity: Joi.number().integer().min(1).not()
+    .empty()
+    .required(),
   }).validate(req.body);
   if (error) {
     return next(error);
