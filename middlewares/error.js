@@ -19,7 +19,6 @@ module.exports = (err, _req, res, _next) => {
   //   stock_problem: NOT_FOUND,
   // };
 
-
   const status = statusByErrorCode[err.code] || INTERNAL_SERVER_ERROR;
 
   res.status(status).json({ err: { code: err.code, message: err.message } });
