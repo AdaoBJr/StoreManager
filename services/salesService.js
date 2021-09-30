@@ -51,7 +51,7 @@ const insertSalesProducts = async (salesArray) => {
 };
 
 const findSaleById = async (saleId) => {
-  const found = await salesModel.findById(saleId);
+  const found = await salesModel.findSaleById(saleId);
 
   return found;
 };
