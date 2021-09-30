@@ -54,4 +54,7 @@ const insertSalesProducts = async (salesArray) => {
 module.exports = {
   validateProductsArray,
   insertSalesProducts,
+  validateId,
+  validateQuantity,
+  isProductOnDb,
 };
