@@ -338,18 +338,118 @@ describe('Insere as sales no db na rota /sales', () => {
       res.json = sinon.stub().returns();
   
       sinon.stub(salesService, 'validateProductsArray').resolves()
-      sinon.stub(salesService, 'insertSalesProducts').resolves(insertedSales)
+      sinon.stub(salesService, 'insertSales').resolves(insertedSales)
     });
   
     after(() => {
       salesService.validateProductsArray.restore();
-      salesService.insertSalesProducts.restore();
+      salesService.insertSales.restore();
     });
   
-    it('Retorna o status 422', async () => {
+    it('Retorna o status 200', async () => {
       await salesController.insertSales(req, res)
   
       expect(res.status.calledWith(200)).to.be.equal(true);
+    })
+  })
+})
+
+
+
+
+
+describe('Busca as sales cadastradas', () => {
+  describe('Busca todas as sales cadastradas', () => {
+    const req = {};
+    const res = {};
+  
+    before(() => {
+      req.body = {}
+  
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+  
+      sinon.stub(salesService, 'getAllSales').resolves({
+        sales: [
+          {
+            _id: "61564ef6d2acfb31804c6258",
+            itensSold: [
+              {
+                productId: "61564ef1d2acfb31804c6257",
+                quantity: 9999,
+              }
+            ]
+          }
+        ]
+      })
+    });
+  
+    after(() => {
+      salesService.getAllSales.restore();
+    });
+  
+    it('Retorna o status 200', async () => {
+      await salesController.getAllSales(req, res)
+  
+      expect(res.status.calledWith(200)).to.be.equal(true);
+    })
+  })
+
+  describe('Retorna uma sale quando o ID está correto', () => {
+    const req = {};
+    const res = {};
+  
+    before(() => {
+      req.params = { id: "615650750eb846767429e95d" }
+  
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+  
+      sinon.stub(salesService, 'validateId').resolves(false)
+      sinon.stub(salesService, 'findSaleById').resolves({
+        _id: "615650750eb846767429e95d",
+        itensSold: [
+          {
+            productId: "615650700eb846767429e95c",
+            quantity: 9999,
+          }
+        ]
+      })
+    });
+  
+    after(() => {
+      salesService.validateId.restore();
+      salesService.findSaleById.restore();
+    });
+  
+    it('Retorna o status 200', async () => {
+      await salesController.getSaleById(req, res)
+  
+      expect(res.status.calledWith(200)).to.be.equal(true);
+    })
+  })
+
+  describe('Retorna um erro quando o ID está incorreto', () => {
+    const req = {};
+    const res = {};
+  
+    before(() => {
+      req.params = { id: "650750eb846767429e95d" }
+  
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+  
+      sinon.stub(salesService, 'validateId').resolves(true)
+    });
+  
+    after(() => {
+      salesService.validateId.restore();
+    });
+  
+    it('Retorna o status 404', async () => {
+      await salesController.getSaleById(req, res)
+  
+      expect(res.status.calledWith(404)).to.be.equal(true);
     })
   })
 })
