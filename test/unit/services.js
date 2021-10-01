@@ -221,7 +221,7 @@ describe('Teste das funções validateId, validateQuantity, isProductOnDb, inser
     });
 
     it('Retorna o objeto inserido no db', async () => {
-      const response = await salesService.insertSalesProducts([{productId: '615634e53519a410a0fbbfd5',quantity: 10}])
+      const response = await salesService.insertSales([{productId: '615634e53519a410a0fbbfd5',quantity: 10}])
   
       expect(response).to.be.equal(dbResponse);
     })
@@ -361,6 +361,71 @@ describe('Teste das funções validateId, validateQuantity, isProductOnDb, inser
     
         expect(response.errorMessage).to.exist;
       })
+    })
+  })
+})
+
+
+describe('Testa a funcao updateProductQuantity do salesService', () => {
+    const validSaleArray = [
+      {
+        "productId": "6156723b0aa0488f7c75afcc",
+        "quantity": "1"
+      }
+    ]
+  describe('Quando a quantidade é válida', () =>{
+    const validProduct = {
+      _id: "6156723b0aa0488f7c75afcc",
+      name: "aaa Vai logo por favor",
+      quantity: 1
+    }
+    before(() => {
+      sinon.stub(productsModel, 'findById')
+      .resolves(validProduct)
+      sinon.stub(productsModel, 'updateOne')
+      .resolves()
+    })
+  
+    after(() => {
+      productsModel.findById.restore();
+      productsModel.updateOne.restore();
+    })
+    
+    it('Atualiza a quantidade removendo do estoque', async () => {
+      const updated = await salesService.updateProductQuantity(validSaleArray, true);
+      
+      expect(updated).to.be.undefined;
+    })
+
+    it('Atualiza a quantidade adicionando ao estoque', async () => {
+      const updated = await salesService.updateProductQuantity(validSaleArray);
+      
+      expect(updated).to.be.undefined;
+    })
+  })
+
+  describe('Quando a quantidade informada é maior que o estoque', () =>{
+    const validProduct = {
+      _id: "6156723b0aa0488f7c75afcc",
+      name: "aaa Vai logo por favor",
+      quantity: 0
+    }
+    before(() => {
+      sinon.stub(productsModel, 'findById')
+      .resolves(validProduct)
+      sinon.stub(productsModel, 'updateOne')
+      .resolves()
+    })
+  
+    after(() => {
+      productsModel.findById.restore();
+      productsModel.updateOne.restore();
+    })
+
+    it('Retorna uma mensagem de erro', async () => {
+      const updated = await salesService.updateProductQuantity(validSaleArray, true);
+      
+      expect(updated.errorMessage).to.exist;
     })
   })
 })
