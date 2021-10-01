@@ -21,5 +21,5 @@ app.use(({ status, err }, _req, res, _next) => {
 });
 
 app.listen(PORT, () => {
-  console.log('Server localhost:3000 is Online');
-}); 
+  console.log('3000 Online');
+});
