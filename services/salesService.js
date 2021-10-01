@@ -52,6 +52,8 @@ const getAllSales = async () => salesModel.getAllSales();
 
 const updateSale = async (id, salesArray) => salesModel.updateOneSale(id, salesArray);
 
+const deleteSaleById = async (id) => salesModel.deleteSaleById(id);
+
 module.exports = {
   validateProductsArray,
   insertSales,
@@ -61,4 +63,5 @@ module.exports = {
   getAllSales,
   findSaleById,
   updateSale,
+  deleteSaleById,
 };
