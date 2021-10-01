@@ -9,11 +9,10 @@ const findProductByName = async (name) => {
   return product;
 };
 
-const createProduct = (name, quantity) => {
+const createProduct = ({ name, quantity }) =>
   connection()
     .then((db) => db.collection('products').insertOne({ name, quantity }))
     .then((result) => result.ops[0]);
-};
 
 module.exports = {
   findProductByName,

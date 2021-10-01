@@ -29,7 +29,7 @@ const validateQuantity = (req, res, next) => {
     });
   }
 
-  if (!productsService.validateNumberQuantityService(quantity)) {
+  if (productsService.validateNumberQuantityService(quantity)) {
     return res.status(422).json({
       err: {
         code: 'invalid_data',
