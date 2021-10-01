@@ -23,7 +23,6 @@ const getById = async (id) => {
 };
 
 const update = async (id, name, quantity) => {
-
   if (!ObjectId.isValid(id)) return null;
 
   return connection()
