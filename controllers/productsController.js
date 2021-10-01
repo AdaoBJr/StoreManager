@@ -60,10 +60,32 @@ const addNewProduct = (req, res) => {
   .then((result) => res.status(201).json(result));
 };
 
+const getAll = (req, res) => {
+  productsService.getAllService()
+  .then((result) => res.status(200).json({ products: result }));
+};
+
+const getById = (req, res) => {
+  const { id } = req.params;
+  productsService.getByIdService(id)
+  .then((result) => {
+    if (result === null) {
+      return res.status(422).json({
+        err: {
+          code: 'invalid_data', message: 'Wrong id format',
+        },
+      });
+    }
+  return res.status(200).json(result);
+  });
+};
+
 module.exports = {
   router,
   validateExistance,
   validateName,
   validateQuantity,
   addNewProduct,
+  getAll,
+  getById,
 };

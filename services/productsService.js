@@ -27,10 +27,22 @@ const createProductService = async ({ name, quantity }) => {
   return newProd;
 };
 
+const getAllService = async () => {
+  const all = await productModel.getAll();
+  return all;
+};
+
+const getByIdService = async (id) => {
+  const product = await productModel.getById(id);
+  return product;
+};
+
 module.exports = {
   validateNameService,
   validateQuantityService,
   validateNumberQuantityService,
   validateExistanceService,
   createProductService,
+  getAllService,
+  getByIdService,
 };

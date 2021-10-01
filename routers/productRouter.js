@@ -9,4 +9,8 @@ prodController.validateQuantity,
 prodController.validateExistance,
 prodController.addNewProduct);
 
+router.get('/', prodController.getAll);
+
+router.get('/:id', prodController.getById);
+
 module.exports = router;
