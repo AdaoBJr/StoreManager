@@ -44,6 +44,28 @@ const validateProductsArray = async (salesArray) => {
   return error;
 };
 
+const updateProductQuantity = async (salesArray, removeFromStock) => {
+  let error; let updatedQuantity;
+
+  await Promise.all(salesArray.map(async (element) => {
+    if (error) return;
+    const { productId, quantity } = element;
+    const productInStock = await productsModel.findById(productId);
+    if (removeFromStock && quantity > productInStock.quantity) {
+      error = { errorMessage: { err: { 
+        code: 'stock_problem', message: 'Such amount is not permited to sell' }, 
+      } }; return; 
+    }
+    if (removeFromStock) {
+      updatedQuantity = productInStock.quantity - quantity;
+    } else {
+      updatedQuantity = productInStock.quantity + quantity;
+    }
+    await productsModel.updateOne(productId, productInStock.name, Number(updatedQuantity));
+  }));
+  return error;
+};
+
 const insertSales = async (salesArray) => salesModel.insertSales(salesArray);
 
 const findSaleById = async (saleId) => salesModel.findSaleById(saleId);
@@ -64,4 +86,5 @@ module.exports = {
   findSaleById,
   updateSale,
   deleteSaleById,
+  updateProductQuantity,
 };

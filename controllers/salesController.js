@@ -5,6 +5,12 @@ const insertSales = async (req, res, _next) => {
   const haveSomeInvalidData = await salesService.validateProductsArray(salesArray);
   if (haveSomeInvalidData) return res.status(422).json(haveSomeInvalidData.errorMessage);
   
+  const updatedItensInStock = await salesService.updateProductQuantity(salesArray, true);
+
+  if (updatedItensInStock) {
+    return res.status(404).json(updatedItensInStock.errorMessage);
+  }
+  
   const insertedSales = await salesService.insertSales(salesArray);
 
   return res.status(200).json(insertedSales);
@@ -49,6 +55,12 @@ const updateSale = async (req, res) => {
   const haveSomeInvalidData = await salesService.validateProductsArray(salesArray);
   if (haveSomeInvalidData) return res.status(422).json(haveSomeInvalidData.errorMessage);
 
+  const updatedItensInStock = await salesService.updateProductQuantity(salesArray, false);
+
+  if (updatedItensInStock) {
+    return res.status(404).json(updatedItensInStock.errorMessage);
+  }
+
   const updatedSale = await salesService.updateSale(id, salesArray);
   return res.status(200).json(updatedSale);
 };
@@ -59,6 +71,11 @@ const deleteSale = async (req, res, _next) => {
   const isIdInvalid = await salesService.validateId(id);
   if (!isIdInvalid) {
     const currentSale = await salesService.findSaleById(id);
+    const updatedInStock = await salesService.updateProductQuantity(currentSale.itensSold, false);
+
+    if (updatedInStock) {
+      return res.status(404).json(updatedInStock.errorMessage);
+    }
 
     const deletedCount = await salesService.deleteSaleById(id);
     
