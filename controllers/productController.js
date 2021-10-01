@@ -50,8 +50,41 @@ const getById = async (req, res, next) => {
   return res.status(success).json(product);
 };
 
+const update = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  const success = 200;
+
+  const updatedProduct = await productsService.update(id, name, quantity);
+
+  return res.status(success).json(updatedProduct);
+};
+
+const remove = async (req, res, next) => {
+  const { id } = req.params;
+  const success = 200;
+  const message = 'Wrong id format';
+  const code = 'invalid_data';
+  const errType = 422;
+
+  const removedProduct = await productsService.remove(id);
+
+  if (!removedProduct) { 
+    return next({
+    err: {
+      message,
+      code,
+      data: { errType },
+    },
+  });
+}
+  return res.status(success).json(removedProduct);
+};
+
 module.exports = {
   add,
   getAll,
   getById,
+  update,
+  remove,
 };
