@@ -207,4 +207,16 @@ describe('Testa se está inserindo as sales', () => {
     expect(updatedSale).to.have.a.property('_id');
     expect(updatedSale.itensSold[0].id).to.be.equal('615650700eb846767429e95c')
   })
+
+  it('Deleta uma sale', async () => {
+    const oneSaleArray = [{id: '61560bcb86ef5f44ec59a746', name: "Lapis", quantity: 100}]
+    const insertedSales = await salesModel.insertSales(oneSaleArray)
+    const foundSale = await salesModel.findSaleById(insertedSales._id)
+    const deletedSale = await salesModel.deleteSaleById(insertedSales._id)
+    const foundDeletedSale = await salesModel.findSaleById(insertedSales._id)
+
+    expect(deletedSale).to.equal(1);
+    expect(foundSale).to.be.exist;
+    expect(foundDeletedSale).to.be.null;
+  })
 })
