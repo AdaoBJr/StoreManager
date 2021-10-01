@@ -10,4 +10,4 @@ route.get('/:id', validate.saleExists, sales.getById);
 route.put('/:id', validate.sale, sales.update);
 route.delete('/:id', validate.saleId, validate.saleExists, sales.remove);
 
-module.exports = route; 
+module.exports = route;

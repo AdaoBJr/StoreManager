@@ -1,4 +1,5 @@
 const { ObjectID } = require('mongodb');
+
 const products = require('../models/products');
 const sales = require('../models/sales');
 
@@ -18,7 +19,7 @@ const productExists = async ({ name }) => {
   if (exists) throw err('invalid_data', 'Product already exists');
 };
 
-const productId = async (id) => {
+const productsId = async (id) => {
   if (!ObjectID.isValid(id)) throw err('invalid_data', 'Wrong id format');
 };
 
@@ -39,13 +40,13 @@ const saleId = async (id) => {
   if (!ObjectID.isValid(id)) throw err('invalid_data', 'Wrong sale ID format');
 };
 
-const stock = async (itensSold) => {
+const stocks = async (itensSold) => {
   const arr = await products.getAll();
-  const available = itensSold.every(({ productsId, quantity }) => {
-    const stocks = arr.find((e) => e.id.toString() === productsId);
-    return stocks.quantity >= quantity;
+  const available = itensSold.every(({ productId, quantity }) => {
+    const stock = arr.find((e) => e._id.toString() === productId);
+    return stock.quantity >= quantity;
   });
   if (!available) throw err('stock_problem', 'Such amount is not permitted to sell');
 };
 
-module.exports = { product, productExists, productId, sale, saleExists, saleId, stock }; 
+module.exports = { product, productExists, productsId, sale, saleExists, saleId, stocks };

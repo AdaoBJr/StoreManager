@@ -12,7 +12,7 @@ const productId = (req, _res, next) => validate.productId(req.params.id)
   .then(() => next())
   .catch((err) => next({ status: 422, err }));
 
-  const sale = (req, _res, next) => validate.sale([...req.body])
+const sale = (req, _res, next) => validate.sale([...req.body])
   .then(() => next())
   .catch((err) => next({ status: 422, err }));
 
