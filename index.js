@@ -31,7 +31,8 @@ app.route('/sales')
 
 app.route('/sales/:id')
 .get(salesController.getSaleById)
-.put(salesController.updateSale);
+.put(salesController.updateSale)
+.delete(salesController.deleteSale);
 
 app.listen(PORT, () => {
   console.log('Online');
