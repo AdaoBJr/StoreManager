@@ -35,8 +35,27 @@ const getSaleById = async (req, res, _next) => {
   }); 
 };
 
+const updateSale = async (req, res) => {
+  const { id } = req.params;
+  const salesArray = req.body;
+
+  const isIdInvalid = await salesService.validateId(id);
+  if (isIdInvalid) {
+    return res.status(422).json({ err: { 
+      code: 'invalid_data', message: 'Wrong product ID or invalid quantity' }, 
+    }); 
+  }
+
+  const haveSomeInvalidData = await salesService.validateProductsArray(salesArray);
+  if (haveSomeInvalidData) return res.status(422).json(haveSomeInvalidData.errorMessage);
+
+  const updatedSale = await salesService.updateSale(id, salesArray);
+  return res.status(200).json(updatedSale);
+};
+
 module.exports = {
   insertSales,
   getAllSales,
   getSaleById,
+  updateSale,
 };
