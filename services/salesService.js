@@ -53,7 +53,7 @@ const updateProductQuantity = async (salesArray, removeFromStock) => {
     const productInStock = await productsModel.findById(productId);
     if (removeFromStock && quantity > productInStock.quantity) {
       error = { errorMessage: { err: { 
-        code: 'stock_problem', message: 'Such amount is not permited to sell' }, 
+        code: 'stock_problem', message: 'Such amount is not permitted to sell' }, 
       } }; return; 
     }
     if (removeFromStock) {
