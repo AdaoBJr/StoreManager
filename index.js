@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Product = require('./controllers/Product');
-// const Sale = require('./controllers/Sale');
+const Sale = require('./controllers/Sale');
 const erro = require('./middlewares/error');
 require('dotenv').config();
 
@@ -21,11 +21,11 @@ app.get('/products/:id', Product.getOne);
 app.put('/products/:id', Product.edit);
 app.delete('/products/:id', Product.deleteOne);
 
-// app.post('/sales', Sale.create);
-// app.get('/sales', Sale.getAll);
-// app.get('/sales/:id', Sale.getOne);
-// app.put('/sales/:id', Sale.edit);
-// app.delete('/sales/:id', Sale.deleteOne);
+app.post('/sales', Sale.create);
+app.get('/sales', Sale.getAll);
+app.get('/sales/:id', Sale.getOne);
+app.put('/sales/:id', Sale.edit);
+app.delete('/sales/:id', Sale.deleteOne);
 
 app.use(erro);
 
