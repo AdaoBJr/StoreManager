@@ -30,7 +30,8 @@ app.route('/sales')
 .post(salesController.insertSales);
 
 app.route('/sales/:id')
-.get(salesController.getSaleById);
+.get(salesController.getSaleById)
+.put(salesController.updateSale);
 
 app.listen(PORT, () => {
   console.log('Online');
