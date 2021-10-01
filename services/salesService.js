@@ -50,6 +50,8 @@ const findSaleById = async (saleId) => salesModel.findSaleById(saleId);
 
 const getAllSales = async () => salesModel.getAllSales();
 
+const updateSale = async (id, salesArray) => salesModel.updateOneSale(id, salesArray);
+
 module.exports = {
   validateProductsArray,
   insertSales,
@@ -58,4 +60,5 @@ module.exports = {
   isProductOnDb,
   getAllSales,
   findSaleById,
+  updateSale,
 };
