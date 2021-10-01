@@ -43,7 +43,7 @@ const edit = rescue(async (req, res, next) => {
   return res.status(OK).json(editedProduct);
 });
 
-const getAll = async (req, res) => {
+const getAll = async (_req, res) => {
   const OK = 200;
   const products = await service.getAll();
   res.status(OK).json(products);
