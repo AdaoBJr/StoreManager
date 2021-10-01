@@ -175,8 +175,8 @@ describe('Testa se está inserindo as sales', () => {
 	});
 
   it('Verifica se as sales foram inseridas', async () => {
-    const oneProductArray = [{id: '61560bcb86ef5f44ec59a746', name: "Escova", quantity: 1}]
-    const insertedSales = await salesModel.insertSales(oneProductArray)
+    const oneSaleArray = [{id: '61560bcb86ef5f44ec59a746', name: "Escova", quantity: 1}]
+    const insertedSales = await salesModel.insertSales(oneSaleArray)
 
     expect(insertedSales).to.have.a.property('_id');
     expect(insertedSales.itensSold).to.be.an.instanceof(Array)
@@ -190,11 +190,21 @@ describe('Testa se está inserindo as sales', () => {
   })
 
   it('Busca uma sale por ID', async () => {
-    const oneProductArray = [{id: '61560bcb86ef5f44ec59a746', name: "Lapis", quantity: 100}]
-    const insertedSales = await salesModel.insertSales(oneProductArray)
+    const oneSaleArray = [{id: '61560bcb86ef5f44ec59a746', name: "Lapis", quantity: 100}]
+    const insertedSales = await salesModel.insertSales(oneSaleArray)
     const foundById = await salesModel.findSaleById(insertedSales._id)
 
     expect(foundById).to.have.a.property('_id');
     expect(foundById.itensSold).to.be.an.instanceof(Array)
+  })
+
+  it('Atualiza uma sale', async () => {
+    const oneSaleArray = [{id: '61560bcb86ef5f44ec59a746', name: "Lapis", quantity: 100}]
+    const insertedSales = await salesModel.insertSales(oneSaleArray)
+    const newSaleArray = [{id: '615650700eb846767429e95c', name: "Lapis", quantity: 100}]
+    const updatedSale = await salesModel.updateOneSale(insertedSales._id, newSaleArray)
+
+    expect(updatedSale).to.have.a.property('_id');
+    expect(updatedSale.itensSold[0].id).to.be.equal('615650700eb846767429e95c')
   })
 })
