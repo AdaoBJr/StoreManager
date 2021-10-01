@@ -36,8 +36,27 @@ const findSaleById = async (saleId) => {
   return found;
 };
 
+const updateOneSale = async (id, salesArray) => {
+  const salesCollection = await mongoConnection.connection()
+  .then((db) => db.collection('sales'));
+
+  await salesCollection.updateOne(
+    { _id: ObjectID(id) },
+    {
+      $set: {
+        itensSold: salesArray,
+      },
+    },
+  );
+  return {
+    _id: id,
+    itensSold: salesArray,
+  };
+};
+
 module.exports = {
   insertSales,
   getAllSales,
   findSaleById,
+  updateOneSale,
 };
