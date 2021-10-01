@@ -1,5 +1,4 @@
 // hello-msc/models/connection.js
-
 const { MongoClient } = require('mongodb');
 
 require('dotenv').config();

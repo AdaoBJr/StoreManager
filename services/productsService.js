@@ -11,13 +11,13 @@ const validateQuantityService = (quantity) => {
 };
 
 const validateNumberQuantityService = (quantity) => {
-  if (typeof (quantity) !== 'number') return false;
-  return true;
+  if (typeof (quantity) !== 'number') return true;
+  return false;
 };
 
 const validateExistanceService = async (name) => {
-  const productsExists = await productModel.findProductByName(name);
-  if (productsExists) return true;
+  const productExists = await productModel.findProductByName(name);
+  if (productExists) return true;
   return false;
 };
 

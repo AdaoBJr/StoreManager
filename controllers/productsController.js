@@ -45,10 +45,11 @@ const validateExistance = async (req, res, next) => {
   const productExists = await productsService.validateExistanceService(name);
 
   if (productExists) {
-    return res.status(422).json({
-      err: 'invalid_data',
-      message: 'Product already exists',
-    });
+  return res.status(422).json({ 
+      err: {
+        code: 'invalid_data',
+        message: 'Product already exists' }, 
+    }); 
   }
   next();
 };
@@ -61,8 +62,8 @@ const addNewProduct = (req, res) => {
 
 module.exports = {
   router,
+  validateExistance,
   validateName,
   validateQuantity,
-  validateExistance,
   addNewProduct,
 };
