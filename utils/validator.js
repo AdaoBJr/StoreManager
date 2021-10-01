@@ -43,7 +43,7 @@ const saleId = async (id) => {
 const stocks = async (itensSold) => {
   const arr = await products.getAll();
   const available = itensSold.every(({ productId, quantity }) => {
-    const stock = arr.find((e) => e._id.toString() === productId);
+    const stock = arr.find((e) => e.id.toString() === productId);
     return stock.quantity >= quantity;
   });
   if (!available) throw err('stock_problem', 'Such amount is not permitted to sell');
