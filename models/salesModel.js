@@ -54,9 +54,19 @@ const updateOneSale = async (id, salesArray) => {
   };
 };
 
+const deleteSaleById = async (id) => {
+  const salesCollection = await mongoConnection.connection()
+  .then((db) => db.collection('sales'));
+
+  const { deletedCount } = await salesCollection.deleteOne({ _id: ObjectID(id) });
+
+  return deletedCount;
+};
+
 module.exports = {
   insertSales,
   getAllSales,
   findSaleById,
   updateOneSale,
+  deleteSaleById,
 };
