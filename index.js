@@ -12,7 +12,8 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-const products = require('./routers/productsRouter');
+const products = require('./routers/productRouter');
+
 app.use('/products', products);
 
 app.listen(PORT, () => {
