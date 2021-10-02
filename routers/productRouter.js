@@ -18,4 +18,8 @@ prodController.validateName,
 prodController.validateQuantity,
 prodController.updateProduct);
 
+router.delete('/:id',
+prodController.deleteIdProduct,
+prodController.deleteProduct);
+
 module.exports = router;

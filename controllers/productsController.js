@@ -88,6 +88,30 @@ const updateProduct = async (req, res) => {
   .then((result) => res.status(200).json(result));
 };
 
+const deleteIdProduct = async (req, res, next) => {
+  const { id } = req.params;
+  productsService.getByIdService(id)
+  .then((result) => {
+    if (!result) {
+      return res.status(422).json({
+        err: { code: 'invalid_data', message: 'Wrong id format',
+        },
+      });
+    }
+    return res.status(200).json(result);
+  })
+  .catch(() => res.status(422).json({
+    err: { code: 'invalid_data', messae: 'Wrong id format',
+    },
+  }));
+  next();
+};
+
+const deleteProduct = async (req, _res) => {
+  const { id } = req.params;
+  productsService.deleteProductService(id);
+};
+
 module.exports = {
   router,
   validateExistance,
@@ -97,4 +121,6 @@ module.exports = {
   getAll,
   getById,
   updateProduct,
+  deleteIdProduct,
+  deleteProduct,
 };
