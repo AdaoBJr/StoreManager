@@ -13,4 +13,9 @@ router.get('/', prodController.getAll);
 
 router.get('/:id', prodController.getById);
 
+router.put('/:id',
+prodController.validateName,
+prodController.validateQuantity,
+prodController.updateProduct);
+
 module.exports = router;

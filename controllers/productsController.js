@@ -80,6 +80,14 @@ const getById = (req, res) => {
   });
 };
 
+const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+
+  productsService.updateProdService(id, name, quantity)
+  .then((result) => res.status(200).json(result));
+};
+
 module.exports = {
   router,
   validateExistance,
@@ -88,4 +96,5 @@ module.exports = {
   addNewProduct,
   getAll,
   getById,
+  updateProduct,
 };

@@ -3,7 +3,7 @@ const { MongoClient } = require('mongodb');
 
 require('dotenv').config();
 
-// conexão com o banco para testes
+// conexão com o banco para testes locais
 // const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
 
 // conexão para os o github

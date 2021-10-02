@@ -37,6 +37,11 @@ const getByIdService = async (id) => {
   return product;
 };
 
+const updateProdService = async (id, name, quantity) => {
+  const update = await productModel.updateProduct(id, name, quantity);
+  return update;
+};
+
 module.exports = {
   validateNameService,
   validateQuantityService,
@@ -45,4 +50,5 @@ module.exports = {
   createProductService,
   getAllService,
   getByIdService,
+  updateProdService,
 };
