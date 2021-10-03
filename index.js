@@ -1,8 +1,9 @@
 const express = require('express');
+require('dotenv').config();
 
 const app = express();
 
-const PORT = process.env.PORT;
+const PORT = 3000;
 
 function listeningPort() {
   return console.log(`Aplicação ouvindo a porta ${PORT}!`)
