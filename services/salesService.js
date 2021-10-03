@@ -30,6 +30,11 @@ const updateSaleService = async (id, sale) => {
   return saleUpdate;
 };
 
+const deleteSaleService = async (id) => {
+  const saleDelete = await salesModel.deleteSale(id);
+  return saleDelete;
+};
+
 module.exports = {
   validateQuantity,
   validateQuantityType,
@@ -37,4 +42,5 @@ module.exports = {
   getAllService,
   getByIdService,
   updateSaleService,
+  deleteSaleService,
 };

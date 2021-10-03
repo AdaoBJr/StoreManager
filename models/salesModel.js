@@ -20,13 +20,18 @@ const updateSale = (id, itensSold) => {
   connection()
   .then((db) => db.collection('sales')
   .updateOne({ _id: ObjectId(id) }, { $set: { itensSold } }));
-
   return { _id: id, itensSold };
 };
+
+const deleteSale = (id) =>
+  connection()
+  .then((db) => db.collection('sales')
+  .deleteOne({ _id: ObjectId(id) }));
 
 module.exports = {
   registerSale,
   getAll,
   getById,
   updateSale,
+  deleteSale,
 };
