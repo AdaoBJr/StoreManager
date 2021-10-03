@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const createProduct = require('../services/productService');
 
@@ -15,7 +16,8 @@ router.post('/', async (req, res) => {
         message: newProduct.details[0].message,
       },
     });
-  } else if (newProduct.err) {
+  }
+  if (newProduct.err) {
     return res.status(UNPROCESSABLE_ENTITY_STATUS).send(newProduct);
   }
   return res.status(CREATED_STATUS).json(newProduct);

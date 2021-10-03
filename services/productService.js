@@ -22,7 +22,7 @@ const createProduct = async (product) => {
     if (duplicateValidation) {
       return { err:
         { code: 'invalid_data',
-          message: 'Product already exists' }
+          message: 'Product already exists' },
       };
     }
     return productModel.insertProduct(value);
@@ -33,5 +33,5 @@ const createProduct = async (product) => {
 };
 
 module.exports = {
-  createProduct
+  createProduct,
 };

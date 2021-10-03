@@ -9,8 +9,8 @@ const LOCAL_PORT = 3000;
 const PORT = process.env.PORT || LOCAL_PORT;
 
 function listeningPort() {
-  return console.log(`Aplicação ouvindo a porta ${PORT}!`)
-};
+  return console.log(`Aplicação ouvindo a porta ${PORT}!`);
+}
 
 app.use('/products', productController);
 
