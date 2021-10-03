@@ -22,7 +22,17 @@ const validateQuantity = (req, res, next) => {
 const registerSale = (req, res) => {
   const newSale = req.body;
   salesService.registerSaleService(newSale)
-  .then((response) => res.status(200).json(response));
+  .then((response) => {
+    if (response === null) {
+      return res.status(404).json({
+        err: {
+          code: 'stock_problem',
+          message: 'Such amount is not permitted to sell',
+        },
+      });
+    }
+    return res.status(200).json(response);
+  });
 };
 
 const getAll = (req, res) => 

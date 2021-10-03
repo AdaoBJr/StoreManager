@@ -2,15 +2,25 @@ const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
 const registerSale = (sale) =>
-  connection()
-  .then((db) => {
-    sale.forEach((item) => {
-      db.collection('products')
-      .updateOne({ _id: ObjectId(item.productId) }, { $inc: { quantity: (-1) * item.quantity } });
+  connection().then((db) => {
+    const validationTotal = sale.map(async (item) => {
+      const product = await db.collection('products')
+      .findOne({ _id: ObjectId(item.productId) });
+      if (item.quantity > product.quantity) { return false; } return true;
     });
-    return db.collection('sales').insertOne({ itensSold: sale });
+    return Promise.all(validationTotal).then((values) => {
+      const isValid = values.every((item) => item === true);
+      if (isValid === false) return null;
+      const alter = sale.map((item) => db.collection('products')
+      .updateOne({ _id: ObjectId(item.productId) }, { $inc: { quantity: (-1) * item.quantity } }));
+      return Promise.all(alter).then(() => db.collection('sales')
+      .insertOne({ itensSold: sale }));
+    });
   })
-  .then((result) => result.ops[0]);
+  .then((result) => {
+    if (result === null) return null;
+    return result.ops[0];
+  });
 
 const getAll = () =>
   connection()
