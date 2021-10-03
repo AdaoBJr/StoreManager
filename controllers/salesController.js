@@ -45,10 +45,18 @@ const getById = (req, res) => {
   }));
 };
 
+const updateSale = (req, res) => {
+  const { id } = req.params;
+  const saleDetails = req.body;
+  salesService.updateSaleService(id, saleDetails)
+  .then((result) => res.status(200).json(result));
+};
+
 module.exports = {
   router,
   validateQuantity,
   registerSale,
   getAll,
   getById,
+  updateSale,
 };

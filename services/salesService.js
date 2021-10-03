@@ -25,10 +25,16 @@ const getByIdService = async (id) => {
   return productSale;
 };
 
+const updateSaleService = async (id, sale) => {
+  const saleUpdate = await salesModel.updateSale(id, sale);
+  return saleUpdate;
+};
+
 module.exports = {
   validateQuantity,
   validateQuantityType,
   registerSaleService,
   getAllService,
   getByIdService,
+  updateSaleService,
 };

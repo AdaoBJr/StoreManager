@@ -16,8 +16,17 @@ const getById = (id) => {
   .then((db) => db.collection('sales').findOne(ObjectId(id)));
 };
 
+const updateSale = (id, itensSold) => {
+  connection()
+  .then((db) => db.collection('sales')
+  .updateOne({ _id: ObjectId(id) }, { $set: { itensSold } }));
+
+  return { _id: id, itensSold };
+};
+
 module.exports = {
   registerSale,
   getAll,
   getById,
+  updateSale,
 };

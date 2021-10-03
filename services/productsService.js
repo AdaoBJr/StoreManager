@@ -23,7 +23,6 @@ const validateExistanceService = async (name) => {
 
 const createProductService = async ({ name, quantity }) => {
   const newProd = await productModel.createProduct({ name, quantity });
-
   return newProd;
 };
 
