@@ -4,7 +4,7 @@ const rescue = require('express-rescue');
 const { createProduct } = require('./controllers/productController');
 
 const app = express();
-const PORT = '3000';
+const PORT = 3000;
 app.use(bodyParser.json());
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -15,7 +15,7 @@ app.get('/', (_request, response) => {
 app.post('/products', rescue(createProduct));
 
 app.use((err, _req, res, _next) => {
-  const { err: { code, message }, status } = err;
+  const { status, err: { code, message } } = err;
   res.status(status).json({ err: { code, message } });
 });
 
