@@ -55,7 +55,15 @@ const updateSale = (req, res) => {
 const deleteSale = (req, res) => {
   const { id } = req.params;
   salesService.deleteSaleService(id)
-  .then((result) => res.status(200).json(result))
+  .then((result) => {
+    if (result === null || result === undefined) {
+      return res.status(422).json({
+        err: { code: 'invalid_data', message: 'Wrong sale ID format',
+        },
+      });
+    }
+    res.status(200).json(result);
+  })
   .catch(() => res.status(422).json({
     err: {
       code: 'invalid_data',
