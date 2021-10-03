@@ -1,8 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const productController = require('./controllers/productController');
-
 const app = express();
 const PORT = '3000';
 app.use(bodyParser.json());
@@ -11,10 +9,6 @@ app.use(bodyParser.json());
 app.get('/', (_request, response) => {
   response.send();
 });
-
-app.post('/products', productController.createProduct);
-app.get('/products', productController.getAllProducts);
-app.get('/products', productController.getProductById);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
