@@ -7,8 +7,17 @@ const getAll = async () => salesModel.getAll()
 
 const getById = async (id) => salesModel.getById(id); 
 
+const update = async (productId, quantity) => (
+  salesModel.update(productId, quantity)
+    .then(([sale]) => ({ ...sale, itensSold: [sale.itensSold] }))
+);
+
+const remove = async (id) => salesModel.remove(id);
+
 module.exports = {
   add,
   getAll,
   getById,
+  update,
+  remove,
 };
