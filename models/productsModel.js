@@ -3,6 +3,11 @@ const connection = require('./connection');
 
 const PRODUCTS = 'products';
 
+async function getAll() {
+  return connection()
+    .then((db) => db.collection(PRODUCTS).find({}).toArray());
+}
+
 async function getByName(name) {
   return connection()
     .then((db) => db.collection(PRODUCTS).findOne({ name }));
@@ -26,4 +31,5 @@ module.exports = {
   insertProduct,
   getByName,
   getById,
+  getAll,
 };
