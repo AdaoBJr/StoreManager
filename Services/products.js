@@ -1,6 +1,6 @@
-const model = require('../Models/product');
+const model = require('../models/Products');
 
-const nameLenght = (name) => {
+const checkNameLength = (name) => {
   if (name.length < 5) {
     const error = new Error();
     error.statusCode = 'invalidName';
@@ -8,7 +8,7 @@ const nameLenght = (name) => {
   }
 };
 
-const checkQ = (quantity) => {
+const checkValidQuantity = (quantity) => {
   if (quantity < 1) {
     const error = new Error();
     error.statusCode = 'invalidQuantity';
@@ -22,7 +22,15 @@ const checkQ = (quantity) => {
   }
 };
 
-const findByName = async (name) => {
+const checkProductId = (productId) => {
+  if (!productId) {
+    const error = new Error();
+    error.statusCode = 'invalidIdFormat';
+    throw error;
+  }
+};
+
+const findProductByName = async (name) => {
   const product = await model.findByName(name);
   if (product) {
     const error = new Error();
@@ -31,14 +39,24 @@ const findByName = async (name) => {
   }
 };
 
-const createProduct = async (name, quantity) => {
-  nameLenght(name);
-  checkQ(quantity);
-  await findByName(name);
-  const result = await model.createProduct(name, quantity);
+const selectAll = () => model.selectAll();
+
+const selectById = async (id) => {
+  const result = await model.findById(id);
+  checkProductId(result);
+  return result;
+};
+
+const createProd = async (name, quantity) => {
+  checkNameLength(name);
+  checkValidQuantity(quantity);
+  await findProductByName(name);
+  const result = await model.createProd(name, quantity);
   return result;
 };
 
 module.exports = {
-  createProduct,
+  createProd,
+  selectAll,
+  selectById,
 };
