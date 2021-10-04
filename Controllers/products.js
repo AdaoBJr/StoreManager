@@ -1,7 +1,7 @@
 const service = require('../services/Products');
 
 const selectAll = async (req, res) => {
-  const result = await service.getAll();
+  const result = await service.selectAll();
   return res.status(200).json({ products: result });
 };
 
