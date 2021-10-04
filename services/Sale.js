@@ -1,72 +1,51 @@
-const Sale = require('../models/Sale');
-const Product = require('../models/Product');
+const model = require('../models/Sale');
+const valid = require('../validations/salesValidations');
 
-const validateSoldProducts = async (soldProducts) => {
-  const err = {
-    error: { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' },
-  };
-  // const err2 = {
-  //   error: { code: 'stock_problem', message: 'Such amount is not permitted to sell' }
-  // };
-  let invalid = false;
-  // let noStock = false;
-  soldProducts.forEach(async (soldProduct) => {
-    if (soldProduct.quantity < 1
-      || typeof soldProduct.quantity === 'string'
-      || !Product.findById(soldProduct.id)) {
-      invalid = true;
-    }
-    // const product = await Product.findById(soldProduct.productId);
-    // if (soldProduct.quantity > product.quantity) {
-    //   noStock = true;
-    // }
-    // console.log('soldProduct.quantity is: ' + soldProduct.quantity);
-    // console.log('product.quantity is: ' + product.quantity);
-    // console.log('noStock is: ' + noStock);
+const updateProductQtts = async (sale) => {
+  const sellPromises = sale.map(async (item) => {
+    const verifyQtt = await model.sellQuantity(item.productId, item.quantity);
+    valid.verifyStock(verifyQtt);
+    return verifyQtt;
   });
-  if (invalid) return err;
-  // console.log('noStock out is: ' + noStock);
-  // if (noStock) return err2;
-  return null;
+  return Promise.all(sellPromises);
 };
 
-const create = async (soldProducts) => {
-  const invalid = await validateSoldProducts(soldProducts);
-  if (invalid) return invalid;
-  return Sale.create(soldProducts);
+const getAll = () => model.getAll();
+
+const getById = async (id) => {
+  const result = await model.getById(id);
+  valid.isValidSale(result);
+  return result;
 };
 
-const getAll = async () => {
-  const sales = await Sale.getAll();
-  return { sales };
+const newSale = async (sale) => {
+  valid.validateSale(sale);
+  await updateProductQtts(sale);
+  const result = await model.newSale(sale);
+  return result;
 };
 
-const findById = async (id) => {
-  const sale = await Sale.findById(id);
-  if (!sale) return { error: { code: 'not_found', message: 'Sale not found' } };
-  return sale;
+const updateSale = async (id, sale) => {
+  valid.validateSale(sale);
+  const result = await model.updateSale(id, sale);
+  return result;
 };
 
-const edit = async (id, itens) => {
-  const invalid = await validateSoldProducts(itens);
-  if (invalid) return invalid;
-  const existSale = await Sale.findById(id);
-  if (!existSale) {
-    return { error:
-    { code: 'invalid_data', message: 'Wrong id format' },
-    };
-  }
-  return Sale.edit(id, itens);
+const deleteSale = async (id) => {
+  const sale = await model.getById(id);
+  valid.validateDeletion(sale);
+  const { itensSold } = sale;
+  const item = [{ productId: itensSold[0].productId, quantity: itensSold[0].quantity * -1 }];
+  await updateProductQtts(item);
+  const result = await model.deleteSale(id);
+  return result;
 };
 
-const deleteOne = async (id) => {
-  const existSale = await Sale.findById(id);
-  if (!existSale) {
-    return { error:
-    { code: 'invalid_data', message: 'Wrong sale ID format' },
-    };
-  }
-  return Sale.deleteOne(id);
+module.exports = {
+  getAll,
+  getById,
+  newSale,
+  updateSale,
+  deleteSale,
+  updateProductQtts,
 };
-
-module.exports = { create, getAll, findById, edit, deleteOne };

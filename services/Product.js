@@ -1,43 +1,40 @@
-const Product = require('../models/Product');
+const model = require('../models/Product');
+const valid = require('../validations/productsValidations');
 
-const create = async (name, quantity) => {
-  const existProduct = await Product.findByName(name);
-  if (existProduct) {
-    return { error: { code: 'invalid_data', message: 'Product already exists' },
-   };
-  }
-  return Product.create(name, quantity);
+const getAll = () => model.getAll();
+
+const getById = async (id) => {
+  const result = await model.getById(id);
+  valid.checkProductId(result);
+  return result;
 };
 
-const getAll = async () => {
-  const products = await Product.getAll();
-  return { products };
+const createProduct = async ({ name, quantity }) => {
+  valid.checkNameLength(name);
+  valid.checkValidQuantity(quantity);
+  await valid.findProductByName(name, model.findByName);
+  const result = await model.createProduct({ name, quantity });
+  return result;
 };
 
-const findById = async (id) => {
-  const product = await Product.findById(id);
-  if (!product) return { error: { code: 'invalid_data', message: 'Wrong id format' } };
-  return product;
+const updateProduct = async (id, name, quantity) => {
+  valid.checkNameLength(name);
+  valid.checkValidQuantity(quantity);
+  const result = await model.updateProduct(id, name, quantity);
+  valid.checkProductId(result);
+  return result;
 };
 
-const edit = async (id, name, quantity) => {
-  const existProduct = await Product.findById(id);
-  if (!existProduct) {
-    return { error:
-    { code: 'invalid_data', message: 'Wrong id format' },
-   };
-  }
-  return Product.edit(id, name, quantity);
+const deleteProduct = async (id) => {
+  const result = await model.deleteProduct(id);
+  valid.checkProductId(result);
+  return result;
 };
 
-const deleteOne = async (id) => {
-  const existProduct = await Product.findById(id);
-  if (!existProduct) {
-    return { error:
-    { code: 'invalid_data', message: 'Wrong id format' },
-   };
-  }
-  return Product.deleteOne(id);
+module.exports = {
+  createProduct,
+  getAll,
+  getById,
+  updateProduct,
+  deleteProduct,
 };
-
-module.exports = { create, getAll, findById, edit, deleteOne };

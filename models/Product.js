@@ -1,57 +1,53 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
-// Atenção: formato antigo possuía um return:
-const formatProduct = ({ name, quantity, pid }) => ({ pid, name, quantity });
-
-const create = async (name, quantity) => {
-  const db = await connection();
-  const createNew = await db.collection('products').insertOne({ name, quantity }); 
-  const result = await createNew.ops[0];
-  return formatProduct(result);
+const createProduct = async ({ name, quantity }) => {
+  if (!name || !quantity) return null;
+  return connection()
+    .then((db) => db.collection('products').insertOne({ name, quantity }))
+    .then((result) => ({ _id: result.insertedId, name, quantity }));
 };
 
 const findByName = async (name) => {
   const product = await connection()
     .then((db) => db.collection('products').findOne({ name }));
   if (!product) return null;
-  return formatProduct(product);
+  return product;
 };
 
-const findById = async (id) => {
+const getAll = async () =>
+  connection()
+    .then((db) => db.collection('products').find().toArray())
+    .then((result) => ({ products: result }));
+
+const getById = async (id) => {
   if (!ObjectId.isValid(id)) return null;
-  const pid = ObjectId(id);
-  const product = await connection()
-    .then((db) => db.collection('products').findOne({ pid }));
-  if (!product) return null;
-  return formatProduct(product);
+  return connection()
+    .then((db) => db.collection('products').findOne({ _id: ObjectId(id) }));
 };
 
-const getAll = async () => {
-  const products = await connection()
-    .then((db) => db.collection('products').find());
-  const result = await products.toArray();
-  return result.map(formatProduct);
+const updateProduct = async (id, name, quantity) => {
+  if (!ObjectId.isValid(id)) return null;
+  await connection()
+    .then((db) => db
+      .collection('products').updateOne({ _id: ObjectId(id) }, { $set: { name, quantity } }));
+  return {
+    _id: id, name, quantity,
+  };
 };
 
-const edit = async (id, name, quantity) => {
-  const db = await connection();
-  const pid = ObjectId(id);
-  const edition = await db.collection('products')
-    .updateOne({ pid }, { $set: { name, quantity } }); 
-  const edited = await findById(id);
-  console.log(edition);
-  return formatProduct(edited);
+const deleteProduct = async (id) => {
+  if (!ObjectId.isValid(id)) return null;
+  return connection()
+    .then((db) => db.collection('products').findOneAndDelete({ _id: ObjectId(id) }))
+    .then(({ value }) => ({ ...value }));
 };
 
-const deleteOne = async (id) => {
-  const db = await connection();
-  const pid = ObjectId(id);
-  const deleted = await findById(id);
-  const deleting = await db.collection('products')
-    .deleteOne({ pid });
-  console.log(deleting);
-  return formatProduct(deleted);
+module.exports = {
+  createProduct,
+  findByName,
+  getAll,
+  getById,
+  updateProduct,
+  deleteProduct,
 };
-
-module.exports = { create, findByName, getAll, findById, edit, deleteOne };
