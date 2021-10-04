@@ -25,6 +25,12 @@ const validateProducts = async (products) => {
   }
 };
 
+const getAllSales = async () => {
+  const allSales = await salesModel.getAll();
+  return allSales;
+};
+
 module.exports = {
   validateProducts,
+  getAllSales,
 };

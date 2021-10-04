@@ -17,7 +17,13 @@ async function insertProduct(products) {
     .then((result) => getById(result.insertedId));
 }
 
+async function getAll() {
+  return connection()
+    .then((db) => db.collection(SALES).find({}).toArray());
+}
+
 module.exports = { 
   insertProduct,
   getById,
+  getAll,
 };
