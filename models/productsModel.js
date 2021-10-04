@@ -40,10 +40,19 @@ async function updateProduct(product, id) {
     ));
 }
 
+async function deleteById(id) {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+  return connection()
+    .then((db) => db.collection(PRODUCTS).deleteOne({ _id: ObjectId(id) }));
+}
+
 module.exports = { 
   insertProduct,
   getByName,
   getById,
   getAll,
   updateProduct,
+  deleteById,
 };

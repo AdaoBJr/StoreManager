@@ -33,10 +33,7 @@ const validateProduct = async (product) => {
 
 const getProduct = async () => {
   const allProducts = await productModel.getAll();
-  if (allProducts.length > 0) {
-    return allProducts;
-  }
-  return null;
+  return allProducts; 
 };
 
 const validateToUpdate = async (product) => {
@@ -49,8 +46,18 @@ const validateToUpdate = async (product) => {
   }
 };
 
+const validadeToDelete = async (id) => {
+  const productById = await productModel.getById(id);
+  if (productById) {
+    productModel.deleteById(id);
+    return productById;
+  }
+  return null;
+};
+
 module.exports = {
   validateProduct,
   getProduct,
   validateToUpdate,
+  validadeToDelete,
 };
