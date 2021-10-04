@@ -8,6 +8,7 @@ const verifyExistenceProduct = async (id) => {
   try {
     const verifyId = await productsService.getById(id);
     if (verifyId) { return true; }
+
     return false;
   } catch (err) { return false; }
 };
@@ -79,8 +80,30 @@ const getById = rescue(async (req, res, _next) => {
   return res.status(200).json(response);
 });
 
+const update = rescue(async (req, res, _next) => {
+  const { id } = req.params; const sale = req.body;
+
+  const validation = await verifySalesArray(sale);
+  const verify = validation.every(isTrue);
+
+  if (!verify) {
+    return res.status(422).json({
+      err: {
+        code: 'invalid_data',
+        message: 'Wrong product ID or invalid quantity',
+      },
+    });
+  }
+
+  await salesService.update(id, sale);
+  const newSale = await salesService.getById(id);
+
+  return res.status(200).json(newSale);
+});
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };
