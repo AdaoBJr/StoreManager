@@ -14,7 +14,7 @@ app.use('/products', productController);
 
 app.use('/sales', salesController);
 
-// não remova esse endpoint, e para o avaliador funcionar
+// não remova esse endpoint, e para o avaliador funcionar.
 app.get('/', (_request, response) => {
   response.send();
 });
