@@ -27,9 +27,23 @@ async function insertProduct(product) {
     .then((result) => getById(result.insertedId));
 }
 
+async function updateProduct(product, id) {
+  return connection()
+    .then((db) => db.collection(PRODUCTS).updateOne(
+      { _id: ObjectId(id) },
+      { 
+        $set: {
+          name: product.name,
+          quantity: product.quantity,
+        }
+      }
+    ));
+};
+
 module.exports = { 
   insertProduct,
   getByName,
   getById,
   getAll,
+  updateProduct,
 };

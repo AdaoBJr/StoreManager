@@ -27,11 +27,30 @@ const validateProduct = async (product) => {
     }
     return productModel.insertProduct(value);
   } catch (err) {
-    console.error(err);
+    return err;
+  }
+};
+
+const getProduct = async () => {
+  const allProducts = await productModel.getAll();
+  if (allProducts.length > 0) {
+    return allProducts;
+  }
+  return null;
+};
+
+const validateToUpdate = async (product) => {
+  const { name, quantity, id } = product;
+  try {
+    const value = await schema.validate({ name, quantity });
+    return productModel.updateProduct(value, id);
+  } catch (err) {
     return err;
   }
 };
 
 module.exports = {
   validateProduct,
+  getProduct,
+  validateToUpdate,
 };

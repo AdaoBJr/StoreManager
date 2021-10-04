@@ -11,7 +11,6 @@ const UNPROCESSABLE_ENTITY_STATUS = 422;
 router.post('/', async (req, res) => {
   const { name, quantity } = req.body;
   const newProduct = await productService.validateProduct({ name, quantity });
-
   if (newProduct.isJoi) {
     return res.status(UNPROCESSABLE_ENTITY_STATUS).send({ err:
       { code: 'invalid_data',
@@ -20,7 +19,7 @@ router.post('/', async (req, res) => {
   if (newProduct.err) {
     return res.status(UNPROCESSABLE_ENTITY_STATUS).send(newProduct);
   }
-  res.status(CREATED_STATUS).json(newProduct);
+  return res.status(CREATED_STATUS).json(newProduct);
 });
 
 router.get('/:id', async (req, res) => {
@@ -35,12 +34,24 @@ router.get('/:id', async (req, res) => {
 
 router.get('/', async (_req, res) => {
   const allProducts = await productModel.getAll();
-  // console.log(allProducts);
   if (allProducts) {
     return res.status(OK_STATUS).json({ products: allProducts });
   }
   return res.status(UNPROCESSABLE_ENTITY_STATUS).json({ err:
     { code: 'invalid_data', message: 'Wrong id format' } });
+});
+
+router.put('/:id', async (req, res) => {
+  const { name, quantity } = req.body;
+  const { id } = req.params;
+  const productToUpdate = await productService.validateToUpdate({ name, quantity, id });
+  if(productToUpdate.isJoi) {
+    return res.status(UNPROCESSABLE_ENTITY_STATUS).send({ err:
+      { code: 'invalid_data',
+        message: productToUpdate.details[0].message } });
+  }
+  const productUpdated = await productModel.getById(id);
+  return res.status(OK_STATUS).json(productUpdated);
 });
 
 module.exports = router;
