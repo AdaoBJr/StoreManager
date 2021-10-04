@@ -1,5 +1,16 @@
 const service = require('../services/sales');
 
+const allSales = async (req, res) => {
+    const result = await service.allSales();
+    return res.status(200).json(result);
+};
+
+const selectById = async (req, res) => {
+    const { id } = req.params;
+    const result = await service.selectById(id);
+    return res.status(200).json(result);
+};
+
 const newSale = async (req, res) => {
     const sale = req.body;
     const result = await service.newSale(sale);
@@ -8,4 +19,6 @@ const newSale = async (req, res) => {
 
 module.exports = {
     newSale,
+    allSales,
+    selectById,
 };
