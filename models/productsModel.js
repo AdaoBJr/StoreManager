@@ -1,6 +1,13 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
+const productExists = async (name) => {
+  const product = await connection.getConnection()
+    .then((db) => db.collection('products').findOne({ name }));
+  
+  return product !== null;
+};
+
 const createProduct = async (name, quantity) => {
     const productsConnection = await connection.getConnection()
     .then((db) => db.collection('products'));
@@ -72,4 +79,5 @@ module.exports = {
     findByName,
     updateProduct,
     deleteProduct,
+    productExists,
 };
