@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const productModel = require('../models/productsModel');
+
 const MINIMUM_NAME_LENGTH = 5;
 const MINUMUM_QUANTITY_VALUE = 1;
 
@@ -21,7 +22,7 @@ const validateProduct = async (product) => {
     if (duplicateValidation) {
       return { err:
         { code: 'invalid_data',
-          message: 'Product already exists' }
+          message: 'Product already exists' },
       };
     }
     return productModel.insertProduct(value);

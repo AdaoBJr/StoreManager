@@ -6,19 +6,19 @@ const OPTIONS = {
 };
 
 // conexão do banco local
-// const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
-// const DB_NAME = 'StoreManager';
-
-// conexão do avaliador
-const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
+const MONGO_DB_URL = 'mongodb://localhost:27017/StoreManager';
 const DB_NAME = 'StoreManager';
 
-const connection = () => {
+// conexão do avaliador
+// const MONGO_DB_URL = 'mongodb://mongodb:27017/StoreManager';
+// const DB_NAME = 'StoreManager';
+
+function connection() {
   return MongoClient.connect(MONGO_DB_URL, OPTIONS)
     .then((conn) => {
-      db = conn.db(DB_NAME);
+      const db = conn.db(DB_NAME);
       return db;
     });
-};
+}
 
 module.exports = connection;

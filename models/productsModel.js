@@ -3,24 +3,24 @@ const connection = require('./connection');
 
 const PRODUCTS = 'products';
 
-const getByName = async (name) => {
+async function getByName(name) {
   return connection()
-    .then((db) => db.collection(PRODUCTS).findOne({ 'name': name }));
-};
+    .then((db) => db.collection(PRODUCTS).findOne({ name }));
+}
 
-const getById = async (id) => {
+async function getById(id) {
   if (!ObjectId.isValid(id)) {
     return null;
   }
   return connection()
     .then((db) => db.collection(PRODUCTS).findOne({ _id: ObjectId(id) }));
-};
+}
 
-const insertProduct = async (product) => {
+async function insertProduct(product) {
   return connection()
     .then((db) => db.collection(PRODUCTS).insertOne(product))
     .then((result) => getById(result.insertedId));
-};
+}
 
 module.exports = { 
   insertProduct,
