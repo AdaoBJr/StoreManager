@@ -1,5 +1,5 @@
 const rescue = require('express-rescue');
-const controller = require('../controllers/Products');
+const controller = require('../Controllers/Products');
 
 const route2products = (app) => {
   app.route('/products')
