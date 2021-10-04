@@ -1,33 +1,33 @@
 const model = require('../models/Product');
-const valid = require('../validations/productsValidations');
+const validation = require('../validations/productsValidations');
 
 const getAll = () => model.getAll();
 
 const getById = async (id) => {
   const result = await model.getById(id);
-  valid.checkProductId(result);
+  validation.checkProductId(result);
   return result;
 };
 
 const createProduct = async ({ name, quantity }) => {
-  valid.checkNameLength(name);
-  valid.checkValidQuantity(quantity);
-  await valid.findProductByName(name, model.findByName);
+  validation.checkNameLength(name);
+  validation.checkValidQuantity(quantity);
+  await validation.findProductByName(name, model.findByName);
   const result = await model.createProduct({ name, quantity });
   return result;
 };
 
 const updateProduct = async (id, name, quantity) => {
-  valid.checkNameLength(name);
-  valid.checkValidQuantity(quantity);
+  validation.checkNameLength(name);
+  validation.checkValidQuantity(quantity);
   const result = await model.updateProduct(id, name, quantity);
-  valid.checkProductId(result);
+  validation.checkProductId(result);
   return result;
 };
 
 const deleteProduct = async (id) => {
   const result = await model.deleteProduct(id);
-  valid.checkProductId(result);
+  validation.checkProductId(result);
   return result;
 };
 
