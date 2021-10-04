@@ -22,7 +22,7 @@ const allSales = () => model.allSales();
 
 const selectById = async (id) => {
   const result = await model.selectById(id);
-  isValidSale(result);
+  validateSale(result);
   return result;
 };
 
@@ -32,8 +32,15 @@ const newSale = async (sale) => {
     return ret;
 };
 
+const saleUpdate = async (id, sale) => {
+  saleValidation(sale);
+  const result = await model.saleUpdate(id, sale);
+  return result;
+};
+
 module.exports = {
     newSale,
     allSales,
     selectById,
+    saleUpdate,
 };

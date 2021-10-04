@@ -17,8 +17,20 @@ const newSale = async (sale) =>
     .then((db) => db.collection('sales').insertOne({ itensSold: sale }))
     .then((result) => result.ops[0]);
 
+const saleUpdate = async (id, sale) => {
+  if (!ObjectId.isValid(id)) return null;
+  await connection()
+    .then((db) => db.collection('sales').updateOne(
+      { _id: ObjectId(id) }, { $set: { itensSold: sale } },
+    ));
+  return {
+    _id: id, itensSold: sale,
+  };
+};
+
 module.exports = {
   newSale,
   allSales,
   selectById,
+  saleUpdate,
 };
