@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const salesServices = require('../services/salesServices');
 const salesModel = require('../models/salesModel');
+const productsModel = require('../models/productsModel');
 
 const OK_STATUS = 200;
 const UNPROCESSABLE_ENTITY_STATUS = 422;
@@ -16,6 +17,14 @@ router.post('/', async (req, res) => {
       { code: 'invalid_data',
         message: 'Wrong product ID or invalid quantity' } });
   }
+  const id = validatedProducts.itensSold[0].productId;
+  const validatedQuantity = validatedProducts.itensSold[0].quantity;
+  const productById = await productsModel.getById(id);
+  const newProduct = {
+    name: productById.name,
+    quantity: productById.quantity - validatedQuantity,
+  };
+  await productsModel.updateProduct(newProduct, id);
   return res.status(OK_STATUS).send(validatedProducts);
 });
 
@@ -51,7 +60,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  const producToDelete = await salesServices.validadeToDelete(id);
+  const producToDelete = await salesServices.validateToDelete(id);
   if (producToDelete) {
     return res.status(OK_STATUS).json(producToDelete);
   }

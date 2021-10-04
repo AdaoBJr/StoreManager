@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const salesModel = require('../models/salesModel');
+const productsModel = require('../models/productsModel');
 
 const MINIMUM_NAME_LENGTH = 5;
 const MINUMUM_QUANTITY_VALUE = 1;
@@ -39,11 +40,19 @@ const validateToUpdate = async (product, id) => {
   }
 };
 
-const validadeToDelete = async (id) => {
-  const productById = await salesModel.getById(id);
-  if (productById) {
+const validateToDelete = async (id) => {
+  const saleById = await salesModel.getById(id);
+  if (saleById) {
+    const saleQuantity = saleById.itensSold[0].quantity;
+    const productIdFromSale = saleById.itensSold[0].productId;
+    const productById = await productsModel.getById(productIdFromSale);
+    const newProduct = {
+      name: productById.name,
+      quantity: productById.quantity + saleQuantity,
+    };
+    await productsModel.updateProduct(newProduct, productIdFromSale);
     salesModel.deleteById(id);
-    return productById;
+    return saleById;
   }
   return null;
 };
@@ -52,5 +61,5 @@ module.exports = {
   validateProducts,
   getAllSales,
   validateToUpdate,
-  validadeToDelete,
+  validateToDelete,
 };
