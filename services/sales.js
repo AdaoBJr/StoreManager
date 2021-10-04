@@ -16,4 +16,6 @@ const newSale = async (sale) => {
     return ret;
 };
 
-module.exports = newSale;
+module.exports = {
+    newSale,
+};
