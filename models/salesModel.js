@@ -22,8 +22,21 @@ async function getAll() {
     .then((db) => db.collection(SALES).find({}).toArray());
 }
 
+async function updateSale(product, id) {
+  return connection()
+    .then((db) => db.collection(SALES).updateOne(
+      { _id: ObjectId(id) },
+      { 
+        $set: {
+          itensSold: product,
+        },
+      },
+    ));
+}
+
 module.exports = { 
   insertProduct,
   getById,
   getAll,
+  updateSale,
 };

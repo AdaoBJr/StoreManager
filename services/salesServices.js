@@ -30,7 +30,17 @@ const getAllSales = async () => {
   return allSales;
 };
 
+const validateToUpdate = async (product, id) => {
+  try {
+    const validatedSale = await schema.validate(product);
+    return salesModel.updateSale(validatedSale, id);
+  } catch (err) {
+    return err;
+  }
+};
+
 module.exports = {
   validateProducts,
   getAllSales,
+  validateToUpdate,
 };

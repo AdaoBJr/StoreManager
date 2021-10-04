@@ -36,4 +36,17 @@ router.get('/', async (_req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  const product = req.body;
+  const { id } = req.params;
+  const saleToUpdate = await salesServices.validateToUpdate(product, id);
+  if (saleToUpdate.isJoi) {
+    return res.status(UNPROCESSABLE_ENTITY_STATUS).send({ err:
+      { code: 'invalid_data',
+        message: 'Wrong product ID or invalid quantity' } });
+  }
+  const saleUptadated = await salesModel.getById(id);
+  return res.status(OK_STATUS).json(saleUptadated);
+});
+
 module.exports = router;
