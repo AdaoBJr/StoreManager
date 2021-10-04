@@ -13,7 +13,7 @@ const add = async (itensSold) => {
   await productsModel.update(productId, currentProduct.name, newQuantity);
 
   return connection()
-    .then((db) => db.collection(coll).insertOne({ itensSold }))
+    .then((db) => db.collection(colection).insertOne({ itensSold }))
     .then((response) => response.ops[0]);
 };
 
