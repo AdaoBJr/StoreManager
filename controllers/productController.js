@@ -45,7 +45,7 @@ router.put('/:id', async (req, res) => {
   const { name, quantity } = req.body;
   const { id } = req.params;
   const productToUpdate = await productService.validateToUpdate({ name, quantity, id });
-  if(productToUpdate.isJoi) {
+  if (productToUpdate.isJoi) {
     return res.status(UNPROCESSABLE_ENTITY_STATUS).send({ err:
       { code: 'invalid_data',
         message: productToUpdate.details[0].message } });

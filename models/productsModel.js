@@ -35,10 +35,10 @@ async function updateProduct(product, id) {
         $set: {
           name: product.name,
           quantity: product.quantity,
-        }
-      }
+        },
+      },
     ));
-};
+}
 
 module.exports = { 
   insertProduct,
