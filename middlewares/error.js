@@ -34,6 +34,12 @@ const errors = {
     message: 'Wrong product ID or invalid quantity',
     status: 422,
   },
+
+  notFound: {
+    code: 'not_found',
+    message: 'Sale not found',
+    status: 404,
+  },
 };
 
 module.exports = (err, _req, res, _next) => {
