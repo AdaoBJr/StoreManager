@@ -42,7 +42,7 @@ const findProductByName = async (name) => {
 const selectAll = () => model.selectAll();
 
 const selectById = async (id) => {
-  const result = await model.findById(id);
+  const result = await model.selectById(id);
   checkProductId(result);
   return result;
 };
@@ -59,6 +59,13 @@ const updateProd = async (id, name, quantity) => {
   checkNameLength(name);
   checkValidQuantity(quantity);
   const result = await model.updateProd(id, name, quantity);
+  checkProductId(result);
+  return result;
+};
+
+const deleteProd = async (id) => {
+  const result = await model.deleteProd(id);
+  checkProductId(result);
   return result;
 };
 
@@ -67,4 +74,5 @@ module.exports = {
   selectAll,
   selectById,
   updateProd,
+  deleteProd,
 };
