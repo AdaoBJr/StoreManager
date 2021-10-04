@@ -29,6 +29,10 @@ app.delete('/products/:id', productsController.deleteById);
 
 app.post('/sales', salesController.create);
 
+app.get('/sales', salesController.getAll);
+
+app.get('/sales/:id', salesController.getById);
+
 app.use(errorMiddleware);
 
 app.listen(PORT, () => {

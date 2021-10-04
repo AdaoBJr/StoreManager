@@ -1,9 +1,10 @@
 const rescue = require('express-rescue');
+const { ObjectID } = require('mongodb');
 
 const productsService = require('../services/productsServices');
 const salesService = require('../services/salesService');
 
-const verifyExistence = async (id) => {
+const verifyExistenceProduct = async (id) => {
   try {
     const verifyId = await productsService.getById(id);
     if (verifyId) { return true; }
@@ -13,7 +14,7 @@ const verifyExistence = async (id) => {
 
 const verifySalesEntry = async (object) => {
   const { productId, quantity } = object;
-  const verifyId = await verifyExistence(productId);
+  const verifyId = await verifyExistenceProduct(productId);
 
   return (
     verifyId && typeof quantity === 'number' && quantity >= 1
@@ -51,6 +52,35 @@ const create = rescue(async (req, res, _next) => {
   return res.status(200).json(created);
 });
 
+const getAll = rescue(async (_req, res, _next) => {
+  const response = await salesService.getAll();
+
+  return res.status(200).json(response);
+});
+
+const getById = rescue(async (req, res, _next) => {
+  const { id } = req.params;
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).json({ err: { code: 'not_found', message: 'Sale not found' } });
+  }
+
+  const response = await salesService.getById(id);
+
+  if (!response) {
+    return res.status(404).json({
+      err: {
+        code: 'not_found',
+        message: 'Sale not found',
+      },
+    });
+  }
+
+  return res.status(200).json(response);
+});
+
 module.exports = {
   create,
+  getAll,
+  getById,
 };
