@@ -34,9 +34,18 @@ async function updateSale(product, id) {
     ));
 }
 
+async function deleteById(id) {
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+  return connection()
+    .then((db) => db.collection(SALES).deleteOne({ _id: ObjectId(id) }));
+}
+
 module.exports = { 
   insertProduct,
   getById,
   getAll,
   updateSale,
+  deleteById,
 };

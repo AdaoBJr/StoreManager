@@ -39,8 +39,18 @@ const validateToUpdate = async (product, id) => {
   }
 };
 
+const validadeToDelete = async (id) => {
+  const productById = await salesModel.getById(id);
+  if (productById) {
+    salesModel.deleteById(id);
+    return productById;
+  }
+  return null;
+};
+
 module.exports = {
   validateProducts,
   getAllSales,
   validateToUpdate,
+  validadeToDelete,
 };

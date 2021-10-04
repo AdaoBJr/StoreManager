@@ -49,4 +49,14 @@ router.put('/:id', async (req, res) => {
   return res.status(OK_STATUS).json(saleUptadated);
 });
 
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  const producToDelete = await salesServices.validadeToDelete(id);
+  if (producToDelete) {
+    return res.status(OK_STATUS).json(producToDelete);
+  }
+  return res.status(UNPROCESSABLE_ENTITY_STATUS).json({ err:
+    { code: 'invalid_data', message: 'Wrong sale ID format' } });
+});
+
 module.exports = router;
