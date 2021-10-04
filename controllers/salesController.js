@@ -14,15 +14,17 @@ router.post('/', async (req, res) => {
   const validatedProducts = await salesServices.validateProducts(products);
   if (validatedProducts.isJoi) {
     return res.status(UNPROCESSABLE_ENTITY_STATUS).send({ err:
-      { code: 'invalid_data',
-        message: 'Wrong product ID or invalid quantity' } });
+      { code: 'invalid_data', message: 'Wrong product ID or invalid quantity' } });
   }
   const id = validatedProducts.itensSold[0].productId;
   const validatedQuantity = validatedProducts.itensSold[0].quantity;
   const productById = await productsModel.getById(id);
+  if ((productById.quantity - validatedQuantity) <= 0) {
+    return res.status(NOT_FOUND_STATUS).send({ err:
+      { code: 'stock_problem', message: 'Such amount is not permitted to sell' } });
+  }
   const newProduct = {
-    name: productById.name,
-    quantity: productById.quantity - validatedQuantity,
+    name: productById.name, quantity: productById.quantity - validatedQuantity,
   };
   await productsModel.updateProduct(newProduct, id);
   return res.status(OK_STATUS).send(validatedProducts);
