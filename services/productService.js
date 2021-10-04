@@ -1,6 +1,5 @@
 const Joi = require('joi');
 const productModel = require('../models/productsModel');
-
 const MINIMUM_NAME_LENGTH = 5;
 const MINUMUM_QUANTITY_VALUE = 1;
 
@@ -14,7 +13,7 @@ const schema = Joi.object({
     .required(),
 });
 
-const createProduct = async (product) => {
+const validateProduct = async (product) => {
   const { name, quantity } = product;
   try {
     const value = await schema.validate({ name, quantity });
@@ -22,7 +21,7 @@ const createProduct = async (product) => {
     if (duplicateValidation) {
       return { err:
         { code: 'invalid_data',
-          message: 'Product already exists' },
+          message: 'Product already exists' }
       };
     }
     return productModel.insertProduct(value);
@@ -33,5 +32,5 @@ const createProduct = async (product) => {
 };
 
 module.exports = {
-  createProduct,
+  validateProduct,
 };
