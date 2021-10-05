@@ -56,7 +56,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  const producToDelete = await productService.validadeToDelete(id);
+  const producToDelete = await productService.validateToDelete(id);
   if (producToDelete) {
     return res.status(OK_STATUS).json(producToDelete);
   }
