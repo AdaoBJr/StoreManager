@@ -139,6 +139,8 @@ describe.skip('Iniciando testes do modulo productsService', () => {
     });
 
   });
+});
+
 
   describe('Teste do modulo salesService', () => {
     describe('Testando a criação de vendas', () => {
@@ -289,4 +291,3 @@ describe.skip('Iniciando testes do modulo productsService', () => {
     });
   });
 // teste github ainda com problemas
-});
