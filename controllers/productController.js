@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
 });
 
 router.get('/', async (_req, res) => {
-  const allProducts = await productModel.getAll();
+  const allProducts = await productService.getProduct();
   if (allProducts) {
     return res.status(OK_STATUS).json({ products: allProducts });
   }

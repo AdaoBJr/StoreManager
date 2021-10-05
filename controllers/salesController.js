@@ -20,6 +20,11 @@ router.post('/', async (req, res) => {
   const id = validatedProducts.itensSold[0].productId;
   const validatedQuantity = validatedProducts.itensSold[0].quantity;
   const productById = await productsModel.getById(id);
+  if ((productById.quantity - validatedQuantity) <= 0) {
+    return res.status(NOT_FOUND_STATUS).send({ err:
+      { code: 'stock_problem',
+        message: 'Such amount is not permitted to sell' } });
+  }
   const newProduct = {
     name: productById.name,
     quantity: productById.quantity - validatedQuantity,

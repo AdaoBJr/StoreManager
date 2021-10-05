@@ -27,7 +27,6 @@ const validateProduct = async (product) => {
     }
     return productModel.insertProduct(value);
   } catch (err) {
-    console.error(err);
     return err;
   }
 };
@@ -43,7 +42,6 @@ const validateToUpdate = async (product) => {
     const value = await schema.validate({ name, quantity });
     return productModel.updateProduct(value, id);
   } catch (err) {
-    console.error(err);
     return err;
   }
 };
