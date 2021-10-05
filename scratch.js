@@ -11,5 +11,4 @@ const salesService = require('./services/sales');
   salesService.updateProductQuantity(id, 55);
   someProduct = await productService.getProductById(id);
   console.log(someProduct);
-
 })());
