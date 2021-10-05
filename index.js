@@ -11,6 +11,8 @@ const {
 
 const {
   createSale,
+  getAllSales,
+  getSaleById,
 } = require('./controllers/sales');
 
 const app = express();
@@ -25,6 +27,8 @@ app.put('/products/:id', updateProduct);
 app.delete('/products/:id', deleteProduct);
 
 app.post('/sales', createSale);
+app.get('/sales', getAllSales);
+app.get('/sales/:id', getSaleById);
 
 if (process.env.CI === 'true') {
   console.log('Running in CI mode');

@@ -8,4 +8,8 @@ module.exports = {
     connection().then((db) => db.collection('sales').insertOne({ itensSold: sales }))
   ),
 
+  getAllSales: () => (
+    connection().then((db) => db.collection('sales').find().toArray())
+  ),
+
 };

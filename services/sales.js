@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const salesModel = require('../models/sales');
 const productsModel = require('../models/products');
 
@@ -34,8 +35,23 @@ const createSale = async (data) => (
   validateSales(data) || salesModel.createSales(data)
 );
 
+const getSaleById = async (id) => {
+  const err = {
+    err: {
+      code: 'invalid_data',
+      message: 'Wrong id format',
+    },
+    wasAnError: true,
+  };
+  if (!ObjectId.isValid(id)) {
+    return err;
+  }
+  return (await salesModel.getProductByIdFromDB(id)) || err;
+};
+
 module.exports = {
   validateProductQuantityUpdate,
   updateProductQuantity,
   createSale,
+  getSaleById,
 };
