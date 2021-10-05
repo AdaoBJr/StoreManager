@@ -15,7 +15,7 @@ app.get('/', (_request, response) => {
 });
 
 route.product(app);
-// route.sales(app);
+route.sales(app);
 
 app.use(error);
 
