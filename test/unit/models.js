@@ -128,4 +128,71 @@ describe('Buscando produtos por id', () => {
   });
 });
 
+describe('Testando a atualização dos produtos', async () => {
+  let productToBeUpdated;
+
+  before(async () => {
+    productToBeUpdated = await productsModel.add('Produto', 100);
+  });
+
+  after(async () => {
+    await connectionMock.db('StoreManager').collection('products').deleteMany({});
+  });
+
+  describe('Atualização realizada com sucesso', () => {
+    it('Retorno trás as caracteristicas desejadas', async () => {
+      await productsModel.update(productToBeUpdated._id, 'Atualização ok!', 999);
+      const updatedProduct = await productsModel.getById(productToBeUpdated._id);
+
+      expect(updatedProduct.name).to.be.equal('Atualização ok!');
+      expect(updatedProduct.quantity).to.be.equal(999);
+    });
+  });
+
+  describe('Testando erro na atualização', () => {
+    it('Deve-se retornar null', async () => {
+      const invalidId = '111';
+      const updatedProduct = await productsModel.update(invalidId, '', 0);
+
+      expect(updatedProduct).to.be.null;
+    });
+  });
+});
+
+describe('Teste do "delete" produtos', () => {
+  describe('Delete feito com sucesso!', () => {
+    let productToBeDeleted;
+    before(async () => {
+      productToBeDeleted = await productsModel.add('Produtos', 100);
+    });
+
+    it('Retorno de um array', async () => {
+      await productsModel.remove(productToBeDeleted._id);
+
+      const products = await productsModel.getAll();
+
+      expect(products).to.be.a('array');
+    });
+
+    it('Retorno de um array vazio', async () => {
+      await productsModel.remove(productToBeDeleted._id);
+
+      const products = await productsModel.getAll();
+
+      expect(products.length).to.be.equal(0);
+    });
+  });
+
+  describe('Erro ao deletar um produto', () => {
+    describe('Produto não existente', () => {
+      it('Retorno null', async () => {
+        const invalidId = 999;
+        const deletedProduct = await productsModel.remove(invalidId);
+
+        expect(deletedProduct).to.be.null;
+      });
+    });
+  });
+});
+
 });
