@@ -36,7 +36,10 @@ const saleDelete = async (id) => {
 };
 
 const salesStock = async (id, quantity) => {
-  console.log(quantity);
+  const storage = await connection()
+  .then((db) => db.collection('products').findOne({ _id: ObjectId(id) }));
+  console.log('Storage: ', storage.quantity);
+  if (storage.quantity - quantity < 0) return null;
   return connection()
     .then((db) => db.collection('products').updateOne(
       { _id: ObjectId(id) }, { $inc: { quantity: -quantity } },

@@ -26,10 +26,21 @@ const checkDelete = (sale) => {
   }
 };
 
+const checkStorage = (stock) => {
+  if (!stock) {
+    const e = new Error();
+    e.statusCode = 'stockProblem';
+    throw e;
+  }
+};
+
 const updateStock = async (sale) => {
-  const sales = sale.map((item) =>
-    model.sellQuantity(item.productId, item.quantity));
-  Promise.all(sales);
+  const asyncSale = sale.map(async (item) => {
+    const lookAtStock = await model.salesStock(item.productId, item.quantity);
+    checkStorage(lookAtStock);
+    return lookAtStock;
+  });
+  await Promise.all(asyncSale);
 };
 
 const allSales = () => model.allSales();
