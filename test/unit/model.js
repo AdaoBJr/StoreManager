@@ -1,11 +1,11 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
 const { MongoClient, ObjectId } = require('mongodb');
-const { getConnection } = require('./mongoMockConnection');
+const { getConnection } = require('./mongoMock');
 
 const mongoConnection = require('../../models/connection');
-const productsModel = require('../../models/Products');
-const salesModel = require('../../models/Sales');
+const productsModel = require('../../models/productModel');
+const salesModel = require('../../models/sales');
 
 
 describe('Exibe toda a lista de produtos', () => {

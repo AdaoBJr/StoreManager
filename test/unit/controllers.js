@@ -2,10 +2,10 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
 
-const productServices = require('../../services/Products');
-const salesService = require('../../services/Sales');
-const productControllers = require('../../controllers/Products');
-const salesControllers = require('../../controllers/Sales');
+const productServices = require('../../services/productService');
+const salesService = require('../../services/sales');
+const productControllers = require('../../controllers/productController');
+const salesControllers = require('../../controllers/saleControllers');
 
 const mwError = require('../../middlewares/error');
 
