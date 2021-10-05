@@ -238,6 +238,55 @@ describe.skip('Iniciando testes do modulo productsService', () => {
       });
     });
   
+    describe('Atualização dos produtos sendo testada', () => {
+      before(() => {
+        sinon.stub(productsModel, 'update').resolves({
+          name: 'Produto 1',
+          quantity: 100,
+          _id: '60e7331efa30b90f51fe8242',
+        });
+      });
+  
+      after(() => {
+        productsModel.update.restore();
+      });
+  
+      it('Retornar o mesmo objeto recebido do model', async () => {
+        const product = await productsService.update()
+  
+        expect(product).to.be.deep.equal({
+          name: 'Produto 1',
+          quantity: 100,
+          _id: '60e7331efa30b90f51fe8242',
+        })
+      });
+  
+    });
+  
+    describe('Teste de exclusão dos produtos', () => {
+      before(() => {
+        sinon.stub(productsModel, 'remove').resolves({
+          name: 'Produto 1',
+          quantity: 100,
+          _id: '60e7331efa30b90f51fe8242',
+        });
+      });
+  
+      after(() => {
+        productsModel.remove.restore();
+      });
+  
+      it('Retornar o mesmo objeto recebido do model', async () => {
+        const product = await productsService.remove()
+  
+        expect(product).to.be.deep.equal({
+          name: 'Produto 1',
+          quantity: 100,
+          _id: '60e7331efa30b90f51fe8242',
+        })
+      });
+  
+    });
+  });
 
-});
 });
