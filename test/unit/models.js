@@ -73,4 +73,22 @@ describe('Falha na criação', () => {
 });
 });
 
+describe('Testa a leitura dos produtos no banco de dados', () => {
+  describe('Quando a leitura é feita com sucesso', () => {
+    let response;
+
+    before(async () => {
+      response = await productsModel.getAll();
+    });
+
+    it('O resultado deve ser um array', () => {
+      expect(response).to.be.a('array');
+    });
+
+    it('O resultado deve ser um array populado', () => {
+      response.forEach((product) => expect(product).to.be.a('object'));
+    });
+  });
+});
+
 });
