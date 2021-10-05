@@ -68,9 +68,9 @@ describe('Falha na criação', () => {
       const duplicityResponse = await productsModel.add('Produto', 100);
 
       expect(duplicityResponse).to.be.null;
+      });
     });
   });
-});
 });
 
 describe('Testa a leitura dos produtos no banco de dados', () => {
@@ -194,6 +194,7 @@ describe('Teste do "delete" produtos', () => {
     });
   });
 });
+});
 
 describe('salesModel testes finais', () => {
   let connectionMock;
@@ -229,6 +230,4 @@ describe('salesModel testes finais', () => {
       });
     }); 
   });
-});
-
 });
