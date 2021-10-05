@@ -8,29 +8,15 @@ const productExists = async (name) => {
   return product !== null;
 };
 
-const createProduct = async (name, quantity) => {
-    const productsConnection = await connection.getConnection()
-    .then((db) => db.collection('products'));
-  
-    const { insertedId: id } = await productsConnection.insertOne({ name, quantity });
-  
-    return {
-      _id: id,
-      name,
-      quantity,
-    };
-  };
+const createProduct = async ({ name, quantity }) => connection
+.getConnection()
+.then((db) => db.collection('products').insertOne({ name, quantity }))
+.then((result) => result.ops[0]);
 
-const getAllProducts = async () => {
-    const productsConnection = await connection.getConnection()
-    .then((db) => db.collection('products'));
-
-    const listOfProducts = await productsConnection.find().toArray();
-
-    return {
-        products: listOfProducts,
-    };
-};
+const listAllProducts = async () => connection
+.getConnection()
+.then((db) =>
+  db.collection('products').find().toArray());
 
 const findById = async (id) => {
     if (!ObjectId.isValid(id)) {
@@ -74,7 +60,7 @@ const updateProduct = async (id, name, quantity) => {
 
 module.exports = {
     createProduct,
-    getAllProducts,
+    listAllProducts,
     findById,
     findByName,
     updateProduct,

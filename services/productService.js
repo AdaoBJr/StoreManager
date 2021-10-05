@@ -54,8 +54,8 @@ const createProduct = async ({ name, quantity }) => {
   };
 };
 
-const getAllProducts = () => {
-    const products = productsModel.getAllProducts();
+const getAllProducts = async () => {
+    const products = await productsModel.listAllProducts();
 
     return {
         status: 200,
