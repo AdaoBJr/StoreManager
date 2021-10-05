@@ -34,16 +34,21 @@ const errors = {
     message: 'Wrong product ID or invalid quantity',
     status: 422,
   },
-
-  notFound: {
+  
+  saleNotFound: {
     code: 'not_found',
     message: 'Sale not found',
     status: 404,
   },
+
+  unprocessable: {
+    code: 'invalid_data',
+    message: 'Wrong sale ID format',
+    status: 422,
+  },
 };
 
 module.exports = (err, _req, res, _next) => {
-  console.log(errors[err.statusCode]);
   if (err.statusCode) {
     const { code, message, status } = errors[err.statusCode];
     return res.status(status).json({ err: { code, message } });
