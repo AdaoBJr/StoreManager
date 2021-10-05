@@ -42,4 +42,4 @@ app.use(error);
 
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));
 
-// require('dotenv').config();
+require('dotenv').config();
