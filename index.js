@@ -14,4 +14,4 @@ app.get('/', (_request, response) => {
 const LOCALHOST = 3000;
 app.listen(LOCALHOST, () => {
   console.log(`Ouvindo a porta ${LOCALHOST}`);
-})
+});

@@ -4,4 +4,4 @@ const sales = require('./SalesController');
 module.exports = {
     products,
     sales,
-}
+};
