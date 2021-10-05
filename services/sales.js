@@ -26,6 +26,12 @@ const checkDelete = (sale) => {
   }
 };
 
+const updateStock = async (sale) => {
+  const sales = sale.map((item) =>
+    model.sellQuantity(item.productId, item.quantity));
+  Promise.all(sales);
+};
+
 const allSales = () => model.allSales();
 
 const selectById = async (id) => {
@@ -36,6 +42,7 @@ const selectById = async (id) => {
 
 const newSale = async (sale) => {
     saleValidation(sale);
+    await updateStock(sale);
     const ret = await model.newSale(sale);
     return ret;
 };
@@ -47,8 +54,12 @@ const saleUpdate = async (id, sale) => {
 };
 
 const saleDelete = async (id) => {
+  const sale = await model.selectById(id);
+  checkDelete(sale);
+  const { itensSold } = sale;
+  const item = [{ productId: itensSold[0].productId, quantity: itensSold[0].quantity * -1 }];
+  if (itensSold) await updateStock(item);
   const result = await model.saleDelete(id);
-  checkDelete(result);
   return result;
 };
 
