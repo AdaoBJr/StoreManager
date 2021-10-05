@@ -1,5 +1,5 @@
 const nextErrors = ((err, _req, res, next) => {
-  if (err.status) return res.status(err.status).json({ message: err.message });
+  if (err.status) return res.status(err.status).json({ ...err.message });
 
   if (!err.message) return next({ message: 'no message' });
   
