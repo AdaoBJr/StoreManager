@@ -1,698 +1,982 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
+const { ObjectId } = require('mongodb');
 
-const StoreModel = require('../../models/storeModel');
-const StoreService = require('../../services/storeService');
-const Validation = require('../../services/validation');
+const productsModel = require('../../models/Products');
+const salesModel = require('../../models/Sales');
+const productsService = require('../../services/Products');
+const salesService = require('../../services/Sales');
 
-
-const SalesModel = require('../../models/salesModel');
-const SalesService = require('../../services/salesService');
-
-const ID_VALID_1 = '60c13544b7b98a438cb1e2bc';
-const NAME_VALID_1 = 'Produto do Batista';
-const QUANTITY_VALID_1 = 100;
-
-const ID_VALID_2 = '60c13544b7b98a438cb1e2cd';
-const NAME_VALID_2 = 'Produto do Silva';
-const QUANTITY_VALID_2 = 10;
-
-
-const ID_VALID_3 = '60c6bbd36597202f5d3565ee';
-const NAME_VALID_3 = 'Produto da Joana';
-const QUANTITY_VALID_3 = 50;
-
-const ID_VALID_4 = '60c6bbd36597202f5d3565ff';
-const NAME_VALID_4 = 'Produto da Olivia';
-const QUANTITY_VALID_4 = 5;
-
-const ID_INVALID = '12345'
-const NAME_INVALID = 'Pro';
-const QUANTITY_INVALID = -100;
-
-const ID_SALE_1 = '5f43a7ca92d58904914656b6';
-const ID_SALE_2 = '5f43a7ca92d58904914656c7';
-
-const productResult = {
-  _id: ID_VALID_1,
-  name: NAME_VALID_1,
-  quantity: QUANTITY_VALID_1,
-};
-
-const productsResults = [
-  { _id: ID_VALID_1, name: NAME_VALID_1, quantity: QUANTITY_VALID_1 },
-  { _id: ID_VALID_2, name: NAME_VALID_2, quantity: QUANTITY_VALID_2 },
-];
-
-const payloadSales_1 = [
-  { productId: ID_VALID_1, quantity: QUANTITY_VALID_1 },
-  { productId: ID_VALID_2, quantity: QUANTITY_VALID_2 },
-];
-
-const payloadSales_2 = [
-  { productId: ID_VALID_3, quantity: QUANTITY_VALID_3 },
-  { productId: ID_VALID_4, quantity: QUANTITY_VALID_4 },
-];
-
-const saleResult = [
-  { _id: ID_SALE_1, itensSold: payloadSales_1 },
-];
-
-const salesResults = [
-  { _id: ID_SALE_1, itensSold: payloadSales_1 },
-  { _id: ID_SALE_2, itensSold: payloadSales_2 },
-];
-
-describe('Na camada SERVICES', () => {
-  describe('ao chamar CREATE para inserir um novo produto', () => {
-    describe('quando o payload contem no nome uma string com o tamanho menor do que 5 caracteres', () => {
-      it('o retorno é um objeto Joi', async () => {
-        const response = await StoreService.create(NAME_INVALID, QUANTITY_VALID_1);
-        expect(response.isJoi).to.be.equal(true);
-      });
-  
-      it('o retorno é proveniente da validaçao "string.min"', async () => {
-        const response = await StoreService.create(NAME_INVALID, QUANTITY_VALID_1);
-        expect(response.details[0].type).to.be.equal('string.min');
-      });
-    });
-  
-    describe('quando o payload contem na quantidade um inteiro menor do que 0', () => {
-      it('o retorno é um objeto Joi', async () => {
-        const response = await StoreService.create(NAME_VALID_1, QUANTITY_INVALID);
-        expect(response.isJoi).to.be.equal(true);
-      });
-  
-      it('o retorno é proveniente da validaçao "number.min"', async () => {
-        const response = await StoreService.create(NAME_VALID_1, QUANTITY_INVALID);
-        expect(response.details[0].type).to.be.equal('number.min');
-      });
-    });
-  
-    describe('o nome do novo produto já existe no banco de dados', () => {     
-      before(() => {
-        sinon.stub(StoreModel, 'getByIdOrName').resolves(productResult);
-      });
-  
-      after(() => {
-        StoreModel.getByIdOrName.restore();
-      });
-  
-      it('o retorno é um erro "Product already exists"', async () => {
-        const response = await StoreService.create(NAME_VALID_1, QUANTITY_VALID_1);
-        expect(response.message).to.be.equal('Product already exists');
-      });
-    });
-  
-    describe('o produto não existe no banco de dados e é adicionado com sucesso', () => {
-      before(() => {
-        sinon.stub(StoreModel, 'getByIdOrName').resolves(null);
-        sinon.stub(StoreModel, 'create').resolves(productResult);
-      });
-  
-      after(() => {
-        StoreModel.getByIdOrName.restore();
-        StoreModel.create.restore();
-      });
-  
-      it('retorna um objeto', async () => {
-        const response = await StoreService.create(NAME_VALID_1, QUANTITY_VALID_1);
-        expect(response).to.be.a('object');
-      });
-  
-      it('retorna objeto com "_id", "name" e "quantity" do produto inserido', async () => {
-        const response = await StoreService.create(NAME_VALID_1, QUANTITY_VALID_1);
-        expect(response).to.include.all.keys('_id', 'name', 'quantity');
-      });
-    });
-  });
-
-  describe('ao chamar GETALL para buscar todos os produtos', () => {
-    describe('quando não existe produtos criados', () => {
-      before(() => {
-        sinon.stub(StoreModel, 'getAll').resolves([]);
-      });
-  
-      after(() => {
-        StoreModel.getAll.restore();
-      });
-  
-      it('o retorno é uma array vazia', async () => {
-        const response = await StoreService.getAll();
-        expect(response).to.be.an('array');
-        expect(response).to.be.empty;
-      });
-    });
-  
-    describe('quando existem produtos criados', () => {
-      before(() => {
-        sinon.stub(StoreModel, 'getAll').resolves(productsResults);
-      });
-  
-      after(() => {
-        StoreModel.getAll.restore();
-      });
-  
-      it('retorna um array', async () => {
-        const response = await StoreService.getAll();
-        expect(response).to.be.an('array');
-      });
-
-      it('o array não está vazio', async () => {
-        const response = await StoreService.getAll();
-        expect(response).to.be.not.empty;
-      });
-  
-      it('o array possuem itens do tipo objeto', async () => {
-        const [ item ] = await StoreService.getAll();
-        expect(item).to.be.an('object');
-      });
-  
-      it('tais itens possuem as propriedades "_id", "name" e "quantity"', async () => {
-        const [ item ] = await StoreService.getAll();
-        expect(item).to.include.all.keys('_id', 'name', 'quantity')
-      });
-    });
-  });
-
-  describe('ao chamar GETBYIDORNAME para buscar um produto através do ID', () => {
-    describe('quando Id não é válido', () => {
-      before(() => {
-        sinon.stub(StoreModel, 'getByIdOrName').resolves(null);
-      });
-  
-      after(() => {
-        StoreModel.getByIdOrName.restore();
-      });
-  
-      it('o retorno é um objeto com mensagem "Wrong id format"', async () => {
-        const response = await StoreService.getByIdOrName(ID_INVALID);
-        expect(response).to.be.a('object');
-        expect(response.message).to.be.equal('Wrong id format');
-      });
-    });
-
-    describe('quando não é encontrado uma correspondência', () => {
-      before(() => {
-        sinon.stub(StoreModel, 'getByIdOrName').resolves(null);
-      });
-  
-      after(() => {
-        StoreModel.getByIdOrName.restore();
-      });
-  
-      it('o retorno é um objeto com mensagem "Wrong id format"', async () => {
-        const response = await StoreService.getByIdOrName(ID_VALID_1);
-        expect(response).to.be.a('object');
-        expect(response.message).to.be.equal('Wrong id format');
-      });
-    });
-      
-    describe('quando existe uma correspondência', () => {
-      before(() => {
-        sinon.stub(StoreModel, 'getByIdOrName').resolves(productResult);
-      });
-  
-      after(() => {
-        StoreModel.getByIdOrName.restore();
-      });
-  
-      it('retorna um objeto', async () => {
-        const response = await StoreService.getByIdOrName(ID_VALID_1);
-        expect(response).to.be.a('object');
-      });
-  
-      it('o objeto possui as propriedades "_id", "name" e "quantity"', async () => {
-        const response = await StoreService.getByIdOrName(ID_VALID_1);
-        expect(response).to.include.all.keys('_id', 'name', 'quantity')
-      });
-    });
-  });
-
-  describe('ao chamar UPDATEBYID para buscar um produto através do ID', () => {
-    describe('quando Id não é válido', () => {
-      before(() => {
-        sinon.stub(StoreModel, 'updateById').resolves({ modifiedCount: 0 });
-      });
-  
-      after(() => {
-        StoreModel.updateById.restore();
-      });
-  
-      it('o retorno é um objeto com mensagem "Wrong id format"', async () => {
-        const response = await StoreService.updateById(ID_INVALID, NAME_VALID_1, QUANTITY_VALID_1);
-        expect(response).to.be.a('object');
-        expect(response.message).to.be.equal('Wrong id format');
-      });
-    });
-  
-    describe('quando o payload contem no nome uma string com o tamanho menor do que 5 caracteres', () => {  
-      it('o retorno é um objeto Joi', async () => {
-        const response = await StoreService.updateById(ID_VALID_1, NAME_INVALID, QUANTITY_VALID_1);
-        expect(response.isJoi).to.be.equal(true);
-      });
-  
-      it('o retorno é proveniente da validaçao "string.min"', async () => {
-        const response = await StoreService.updateById(ID_VALID_1, NAME_INVALID, QUANTITY_VALID_1);
-        expect(response.details[0].type).to.be.equal('string.min');
-      });
-    });
-  
-    describe('quando o payload contem na quantidade um inteiro menor do que 0', () => {
-      it('o retorno é um objeto Joi', async () => {
-        const response = await StoreService.updateById(ID_VALID_1, NAME_VALID_1, QUANTITY_INVALID);
-        expect(response.isJoi).to.be.equal(true);
-      });
-  
-      it('o retorno é proveniente da validaçao "number.min"', async () => {
-        const response = await StoreService.updateById(ID_VALID_1, NAME_VALID_1, QUANTITY_INVALID);
-        expect(response.details[0].type).to.be.equal('number.min');
-      });
-    });
-    
-    describe('quando existe uma correspondência', () => {
-      before(() => {
-        sinon.stub(StoreModel, 'updateById').resolves({ modifiedCount: 1 });
-      });
-      
-      after(() => {
-        StoreModel.updateById.restore();
-      });
-      
-      it('retorna um objeto', async () => {
-        const response = await StoreService.updateById(ID_VALID_1, NAME_VALID_1, QUANTITY_VALID_1);
-        expect(response).to.be.an('object');
-      });
-      
-      it('o objeto possui as propriedades "modifiedCount"', async () => {
-        const response = await StoreService.updateById(ID_VALID_1, NAME_VALID_1, QUANTITY_VALID_1);
-        expect(response).to.have.a.property('modifiedCount')
-      });
-    });
-  });
-
-  describe('ao chamar DELETEBYID para deletar um produto através do ID', () => {
-    describe('quando Id não é válido', () => {
-      before(() => {
-        sinon.stub(StoreModel, 'deleteById').resolves(null);
-      });
-  
-      after(() => {
-        StoreModel.deleteById.restore();
-      });
-  
-      it('o retorno é um objeto com mensagem "Wrong id format"', async () => {
-        const response = await StoreService.deleteById(ID_INVALID);
-        expect(response).to.be.a('object');
-        expect(response.message).to.be.equal('Wrong id format');
-      });
-    });
-
-    describe('quando não é encontrado uma correspondência', () => {
-      before(() => {
-        sinon.stub(StoreModel, 'deleteById').resolves(null);
-      });
-  
-      after(() => {
-        StoreModel.deleteById.restore();
-      });
-  
-      it('o retorno é um objeto com mensagem "Wrong id format"', async () => {
-        const response = await StoreService.deleteById(ID_VALID_1);
-        expect(response).to.be.a('object');
-        expect(response.message).to.be.equal('Wrong id format');
-      });
-    });
-      
-    describe('quando existe uma correspondência', () => {
-      before(() => {
-        sinon.stub(StoreModel, 'deleteById').resolves(productResult);
-      });
-  
-      after(() => {
-        StoreModel.deleteById.restore();
-      });
-  
-      it('retorna um objeto', async () => {
-        const response = await StoreService.deleteById(ID_VALID_1);
-        expect(response).to.be.an('object');
-      });
-  
-      it('o objeto possui as propriedades "_id", "name" e "quantity"', async () => {
-        const response = await StoreService.deleteById(ID_VALID_1);
-        expect(response).to.include.all.keys('_id', 'name', 'quantity')
-      });
-    });
-  });
-
-  describe('ao chamar CREATE para cadastrar uma nova venda', () => {  
-    describe('quando o payload contem uma quantidade com um inteiro menor do que 0', () => {
-      const payloadSales = [
-        { productId: ID_VALID_1, quantity: QUANTITY_INVALID },
-        { productId: ID_VALID_2, quantity: QUANTITY_INVALID },
-      ];
-      
-      it('o retorno é um objeto com propriedade "message"', async () => {
-        const response = await SalesService.create(payloadSales);
-        expect(response).to.have.a.property('message');
-      });
-    });
-
-    describe('quando o payload contem um id inválido', () => {
-      const payloadSales = [
-        { productId: ID_INVALID, quantity: QUANTITY_VALID_1 },
-        { productId: ID_INVALID, quantity: QUANTITY_VALID_2 },
-      ];
-      
-      it('o retorno é um objeto com propriedade "message"', async () => {
-        const response = await SalesService.create(payloadSales);
-        expect(response).to.have.a.property('message');
-      });
-    });
-  
-    describe('o cadastro da venda falha, porque o id não existe no banco de dados', () => {     
-      const payloadSales = [
-        { productId: ID_VALID_1, quantity: QUANTITY_VALID_1 },
-        { productId: ID_VALID_2, quantity: QUANTITY_VALID_2 },
-      ];
-
-      before(() => {
-        sinon.stub(StoreModel, 'getByIds').resolves([]);
-      });
-  
-      after(() => {
-        StoreModel.getByIds.restore();
-      });
-  
-      it('o retorno é um objeto com propriedade "message"', async () => {
-        const response = await SalesService.create(payloadSales);
-        expect(response).to.have.a.property('message');
-      });
-    });
-
-    describe('o id existe no banco de dados, quantidade é suficiente e cadastro é efetuado com sucesso', () => {     
-      const payloadSales = [
-        { productId: ID_VALID_1, quantity: QUANTITY_VALID_1 },
-        { productId: ID_VALID_2, quantity: QUANTITY_VALID_2 },
-      ];
-
-      const resultById = [
-        { _id: ID_VALID_1, name: NAME_VALID_1, quantity: QUANTITY_VALID_1 },
-        { _id: ID_VALID_2, name: NAME_VALID_2, quantity: QUANTITY_VALID_2 },
-      ];
-
-      const result = {
-        itensSold: payloadSales,
-        _id: '60c6c65d71dfe53c7a466acd',
+describe('Retorna todos os Produtos cadastrados', () => {
+  describe('quando retorna com sucesso', () => {
+    describe('a resposta', () => {
+      const resposta = {
+        products: [
+          {
+            _id: "6140fc0fb8bed969a7f1713b",
+            name: "Playstation 5",
+            quantity: 988,
+          },
+        ],
       };
 
-      before(() => {
-        sinon.stub(StoreModel, 'getByIds').resolves(resultById);
-        sinon.stub(SalesModel, 'create').resolves(result);
-        sinon.stub(Validation, 'subtractQuantity').resolves(false);
-      });
-  
-      after(() => {
-        StoreModel.getByIds.restore();
-        SalesModel.create.restore();
-        Validation.subtractQuantity.restore();
-      });
-  
-      it('retorna objeto com "_id" e "itensSold" da venda inserida', async () => {
-        const response = await SalesService.create(payloadSales);
-        expect(response).to.include.all.keys('_id', 'itensSold')
+      beforeEach(() => {
+        sinon.stub(productsModel, 'getAll').resolves(resposta);
       });
 
-      it('na propriedade "itensSold" com um array de objetos', async () => {
-        const { itensSold } = await SalesService.create(payloadSales);
+      afterEach(() => {
+        productsModel.getAll.restore();
+      });
+
+      it('é um objeto', async () => {
+        const result = await productsService.getAll();
+        expect(result).to.be.an('object');
+
+      });
+
+      it('retorna os produtos', async () => {
+        const result = await productsService.getAll();
+        expect(result).to.be.equal(resposta)
+      });
+    });
+  });
+
+  describe('quando não há produtos', () => {
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(productsModel, 'getAll').resolves({ products: [] });
+      });
+
+      afterEach(() => {
+        productsModel.getAll.restore();
+      });
+
+      it('é um objeto', async () => {
+        const result = await productsService.getAll();
+        expect(result).to.be.an('object');
+      });
+
+      it('objeto contém a chave "products"', async () => {
+        const result = await productsService.getAll();
+        expect(result).to.have.property('products');
+      });
+
+      it('a chave "products" é um array vazio', async () => {
+        const { products } = await productsService.getAll();
+        expect(products).to.be.empty;
+      });
+    });
+  });
+});
+
+describe('Retorna um produto pelo ID', () => {
+  describe('quando o produto é encontrado', () => {
+    describe('a resposta', () => {
+      const resposta = {
+        _id: "6140fc0fb8bed969a7f1713b",
+        name: "Playstation 5",
+        quantity: 988,
+      }
+      beforeEach(() => {
+        sinon.stub(productsModel, 'getById').resolves(resposta)
+      });
+
+      afterEach(() => {
+        productsModel.getById.restore();
+      });
+
+      it('é um objeto', async () => {
+        const result = await productsService.getById("6140fc0fb8bed969a7f1713b")
+        expect(result).to.be.an('object');
+      });
+
+      it('o objeto contém o produto encontrado', async () => {
+        const result = await productsService.getById("6140fc0fb8bed969a7f1713b")
+        expect(result).to.be.equal(resposta);
+      });
+
+      it('o produto contém as chaves "_id", "name" e "quantity"', async () => {
+        const result = await productsService.getById("6140fc0fb8bed969a7f1713b")
+        expect(result).to.have.all.keys('_id', 'name', 'quantity');
+      });
+    });
+  });
+
+  describe('quando o ID não é válido', () => {
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(productsModel, 'getById').returns(null);
+      });
+
+      afterEach(() => {
+        productsModel.getById.restore();
+      });
+
+      it('é um erro', async () => {
+        const result = await productsService.getById('123').catch((err) => err);
+        expect(result).to.be.an('error')
+        // const promise = new Promise((resolve, rejects) => {
+        //   productsService.getById().then(rejects, resolve);
+        // });
+        // const res = await promise;
+        // console.log(res);
+        // expect(res).to.be.an("error");
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const result = await productsService.getById('123').catch((err) => err);
+        expect(result).to.have.property('statusCode');
+      });
+
+      it('a propriedade "statusCode" possui o valor "invalidIdFormat', async () => {
+        const { statusCode } = await productsService.getById().catch((err) => err);
+        expect(statusCode).to.be.equal('invalidIdFormat')
+      });
+    });
+  });
+});
+
+describe('Testes da função "updateProduct"', () => {
+  describe('quando o produto é atualizado com sucesso', () => {
+    describe('a resposta', () => {
+      const product = {
+        _id: '6140bb9cb466da93c6393d5f',
+        name: 'Produto Atualizado',
+        quantity: 100,
+      }
+      const updatedProduct = {
+        _id: '6140bb9cb466da93c6393d5f',
+        name: 'Produto Atualizado',
+        quantity: 100,
+      };
+
+      beforeEach(() => {
+        sinon.stub(productsModel, 'updateProduct').resolves(updatedProduct);
+      });
+
+      afterEach(() => {
+        productsModel.updateProduct.restore();
+      });
+
+      it('retorna o um objeto', async () => {
+        const result = await productsService.updateProduct('id', product.name, product.quantity);
+        expect(result).to.be.an('object');
+      });
+
+      it('o objeto possui as chaves "_id", "name" e "quantity"', async () => {
+        const result = await productsService.updateProduct('id', product.name, product.quantity);
+        expect(result).to.have.all.keys('_id', 'name', 'quantity');
+      });
+
+      it('objeto é o produto atualizado', async () => {
+        const result = await productsService.updateProduct('id', product.name, product.quantity);
+        expect(result).to.be.equal(updatedProduct);
+      });
+    });
+  });
+
+  describe('quando "name" é inválido', () => {
+    describe('a resposta', () => {
+
+      it('é um erro', async () => {
+        const result = await productsService.updateProduct('id', 'a', 1).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const result = await productsService.updateProduct('id', 'a', 1).catch((err) => err);
+        expect(result).to.have.property('statusCode');
+      });
+
+      it('o "statusCode" possui o valor "invalidName"', async () => {
+        const { statusCode } = await productsService.updateProduct('id', 'a', 1).catch((err) => err);
+        expect(statusCode).to.be.equal('invalidName');
+      });
+    });
+  });
+
+  describe('quando "quantity" é menor que 1', () => {
+    describe('a resposta', () => {
+
+      it('é um erro', async () => {
+        const result = await productsService.updateProduct('id', 'productName', 0).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const result = await productsService.updateProduct('id', 'productName', 0).catch((err) => err);
+        expect(result).to.have.property('statusCode');
+      });
+
+      it('o "statusCode" possui o valor "invalidName"', async () => {
+        const { statusCode } = await productsService.updateProduct('id', 'productName', 0).catch((err) => err);
+        expect(statusCode).to.be.equal('invalidQuantity');
+      });
+    });
+  });
+
+  describe('quando "quantity" não é do tipo "number"', () => {
+    describe('a resposta', () => {
+
+      it('é um erro', async () => {
+        const result = await productsService.updateProduct('id', 'productName', '10').catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const result = await productsService.updateProduct('id', 'productName', '10').catch((err) => err);
+        expect(result).to.have.property('statusCode');
+      });
+
+      it('o "statusCode" possui o valor "invalidName"', async () => {
+        const { statusCode } = await productsService.updateProduct('id', 'productName', '10').catch((err) => err);
+        expect(statusCode).to.be.equal('invalidQuantityType');
+      });
+    });
+  });
+
+  describe('quando o ID é inválido', () => {
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(ObjectId, 'isValid').returns(false);
+      });
+
+      afterEach(() => {
+        ObjectId.isValid.restore();
+      });
+
+      it('é um erro', async () => {
+        const result = await productsService.updateProduct('id', 'productName', 10).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const result = await productsService.updateProduct('id', 'productName', 10).catch((err) => err);
+        expect(result).to.have.property('statusCode');
+      });
+
+    it('o "statusCode" possui o valor "invalidQuantity"', async () => {
+        const { statusCode } = await productsService.updateProduct('id', 'productName', 10).catch((err) => err);
+        expect(statusCode).to.be.equal('invalidIdFormat');
+      });
+    });
+  });
+});
+
+describe('Testes da função "deleteProduct"', () => {
+  describe('quando um produto é deletado com sucesso', () => {
+    const resposta = {
+      _id: '614154f052108ab370e85b77',
+      name: 'Playstation 5',
+      quantity: 1000
+    }
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(productsModel, 'deleteProduct').resolves(resposta);
+      });
+
+      afterEach(() => {
+        productsModel.deleteProduct.restore();
+      });
+
+      it('retorna um objeto', async () => {
+        const result = await productsService.deleteProduct('614154f052108ab370e85b77');
+        expect(result).to.be.an('object');
+      });
+
+      it('o objeto é o produto removido', async () => {
+        const result = await productsService.deleteProduct('614154f052108ab370e85b77');
+        expect(result).to.be.equal(resposta);
+      });
+
+      it('o objeto possui as chaves "_id", "name" e "quantity"', async () => {
+        const result = await productsService.deleteProduct('614154f052108ab370e85b77');
+        expect(result).to.have.all.keys('_id', 'name', 'quantity');
+      });
+    });
+  });
+
+  describe('quando o ID é inválido', () => {
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(ObjectId, 'isValid').returns(false);
+      });
+
+      afterEach(() => {
+        ObjectId.isValid.restore();
+      });
+
+      it('é um erro', async () => {
+        const result = await productsService.deleteProduct('123').catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const result = await productsService.deleteProduct('123').catch((err) => err);
+        expect(result).to.have.property('statusCode');
+      });
+
+    it('o "statusCode" possui o valor "invalidQuantity"', async () => {
+        const { statusCode } = await productsService.deleteProduct('123').catch((err) => err);
+        expect(statusCode).to.be.equal('invalidIdFormat');
+      });
+    });
+  });
+});
+
+describe('Testes da função "createProduct', () => {
+  describe('quando um produto é criado com sucesso', () => {
+    const newProduct = {
+      _id: '61415781d7aba7c11d050146',
+      name: 'Playstation 5',
+      quantity: 1000,
+    };
+
+    const resposta = {
+      _id: '61415781d7aba7c11d050146',
+      name: 'Playstation 5',
+      quantity: 1000,
+    }
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(productsModel, 'createProduct').resolves(resposta);
+      });
+
+      afterEach(() => {
+        productsModel.createProduct.restore();
+      });
+
+      it('retorna um objeto', async () => {
+        const result = await productsService.createProduct(newProduct);
+        expect(result).to.be.an('object');
+      });
+
+      it('o objeto é o produto adicionado', async () => {
+        const result = await productsService.createProduct(newProduct);
+        expect(result).to.be.equal(resposta);
+      });
+
+      it('o objeto contém as chaves "_id", "name" e "quantity"', async () => {
+        const result = await productsService.createProduct(newProduct);
+        expect(result).to.have.all.keys('_id', 'name', 'quantity');
+      });
+    });
+  });
+
+  describe('quando "name" for inválido', () => {
+    const newProduct = { name: '', quantity: 100 };
+    describe('a resposta', () => {
+      it('é um erro', async () => {
+        const result = await productsService.createProduct(newProduct).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const { statusCode } = await productsService.createProduct(newProduct).catch((err) => err);
+        expect(statusCode).to.exist;
+      });
+
+      it('"statusCode" possui o valor "invalidName"', async () => {
+        const { statusCode } = await productsService.createProduct(newProduct).catch((err) => err);
+        expect(statusCode).to.equal('invalidName');
+      });
+    });
+  });
+
+  describe('quando "quantity" for uma string', () => {
+    const newProduct = { name: 'NewProduct', quantity: '10' };
+    describe('a resposta', () => {
+      it('é um erro', async () => {
+        const result = await productsService.createProduct(newProduct).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const { statusCode } = await productsService.createProduct(newProduct).catch((err) => err);
+        expect(statusCode).to.exist;
+      });
+
+      it('"statusCode" possui o valor "invalidQuantityType"', async () => {
+        const { statusCode } = await productsService.createProduct(newProduct).catch((err) => err);
+        expect(statusCode).to.equal('invalidQuantityType');
+      });
+    });
+  });
+
+  describe('quando "quantity" for menor que 1', () => {
+    const newProduct = { name: 'NewProduct', quantity: 0 };
+    describe('a resposta', () => {
+      it('é um erro', async () => {
+        const result = await productsService.createProduct(newProduct).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const { statusCode } = await productsService.createProduct(newProduct).catch((err) => err);
+        expect(statusCode).to.exist;
+      });
+
+      it('"statusCode" possui o valor "invalidQuantity"', async () => {
+        const { statusCode } = await productsService.createProduct(newProduct).catch((err) => err);
+        expect(statusCode).to.equal('invalidQuantity');
+      });
+    });
+  });
+
+  describe('quando já existe um produto com o mesmo nome', () => {
+    const alreadyExists = {
+      _id: '61415781d7aba7c11d050146',
+      name: 'Playstation 5',
+      quantity: 1000,
+    }
+
+    const newProduct = {
+      _id: '61415781d7aba7c11d050146',
+      name: 'Playstation 5',
+      quantity: 1000,
+    }
+
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(productsModel, 'findByName').resolves(alreadyExists);
+      });
+
+      afterEach(() => {
+        productsModel.findByName.restore();
+      });
+
+      it('é um erro', async () => {
+        const result = await productsService.createProduct(newProduct).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const { statusCode } = await productsService.createProduct(newProduct).catch((err) => err);
+        expect(statusCode).to.exist;
+      });
+
+      it('"statusCode" possui o valor "alreadyExists"', async () => {
+        const { statusCode } = await productsService.createProduct(newProduct).catch((err) => err);
+        expect(statusCode).to.equal('alreadyExists');
+      });
+    });
+  });
+});
+
+describe('Retorna todos as Vendas cadastradas', () => {
+  describe('quando existem vendas cadastradas', () => {
+    describe('a resposta', () => {
+      const resposta = {
+        sales: [
+          {
+            _id: '61415e989c49c0e2ee2c32a6',
+            itensSold: [
+              {
+                productId: '61415781d7aba7c11d050146',
+                quantity: 10,
+              },
+            ],
+          },
+        ],
+      };
+
+      beforeEach(() => {
+        sinon.stub(salesModel, 'getAll').resolves(resposta);
+      });
+
+      afterEach(() => {
+        salesModel.getAll.restore();
+      });
+
+      it('é um objeto', async () => {
+        const result = await salesService.getAll();
+        expect(result).to.be.an('object');
+
+      });
+
+      it('objeto contém a chave "sales"', async () => {
+        const result = await salesService.getAll();
+        expect(result).to.have.property('sales');
+      });
+
+      it('retorna as vendas cadastradas', async () => {
+        const result = await salesService.getAll();
+        expect(result).to.be.equal(resposta)
+      });
+    });
+  });
+
+  describe('quando não há produtos', () => {
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(salesModel, 'getAll').resolves({ sales: [] });
+      });
+
+      afterEach(() => {
+        salesModel.getAll.restore();
+      });
+
+      it('é um objeto', async () => {
+        const result = await salesService.getAll();
+        expect(result).to.be.an('object');
+      });
+
+      it('objeto contém a chave "sales"', async () => {
+        const result = await salesService.getAll();
+        expect(result).to.have.property('sales');
+      });
+
+      it('a chave "sales" é um array vazio', async () => {
+        const { sales } = await salesService.getAll();
+        expect(sales).to.be.empty;
+      });
+    });
+  });
+});
+
+describe('Retorna um produto pelo ID', () => {
+  describe('quando o produto é encontrado', () => {
+    describe('a resposta', () => {
+      const resposta = {
+        _id: '614160b4109145ec555b8426',
+        itensSold: [
+          {
+            productId: '614160ab109145ec555b8425',
+            quantity: 10,
+          },
+        ],
+      };
+
+      beforeEach(() => {
+        sinon.stub(salesModel, 'getById').resolves(resposta)
+      });
+
+      afterEach(() => {
+        salesModel.getById.restore();
+      });
+
+      it('é um objeto', async () => {
+        const result = await salesService.getById('14160b4109145ec555b8426');
+        expect(result).to.be.an('object');
+      });
+
+      it('o objeto contém a venda encontrado', async () => {
+        const result = await salesService.getById('14160b4109145ec555b8426');
+        expect(result).to.be.equal(resposta);
+      });
+
+      it('o produto contém as chaves "_id" e "itensSold"', async () => {
+        const result = await salesService.getById('14160b4109145ec555b8426');
+        expect(result).to.have.all.keys('_id', 'itensSold');
+      });
+
+      it('"itensSold" é um array', async () => {
+        const { itensSold } = await salesService.getById('14160b4109145ec555b8426');
         expect(itensSold).to.be.an('array');
-        expect(itensSold[0]).to.be.a('object');
+      });
+
+      it('"itensSold" possui as chaves "productId" e "quantity"', async () => {
+        const { itensSold } = await salesService.getById('14160b4109145ec555b8426');
+        expect(itensSold[0]).to.have.all.keys('productId', 'quantity');
       });
     });
+  });
 
-    describe('o id existe no banco de dados, porém a quantidade é insuficiente', () => {     
-      const payloadSales = [
-        { productId: ID_VALID_1, quantity: QUANTITY_VALID_1 },
-        { productId: ID_VALID_2, quantity: QUANTITY_VALID_2 },
-      ];
+  describe('quando o ID não é válido', () => {
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(ObjectId, 'isValid').returns(false);
+      });
 
-      const resultById = [
-        { _id: ID_VALID_1, name: NAME_VALID_1, quantity: QUANTITY_VALID_1 },
-        { _id: ID_VALID_2, name: NAME_VALID_2, quantity: QUANTITY_VALID_2 },
-      ];
+      afterEach(() => {
+        ObjectId.isValid.restore();
+      });
 
-      const result = {
-        itensSold: payloadSales,
-        _id: '60c6c65d71dfe53c7a466acd',
+      it('é um erro', async () => {
+        const result = await salesService.getById('123').catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const result = await salesService.getById('123').catch((err) => err);
+        expect(result).to.have.property('statusCode');
+      });
+
+      it('a propriedade "statusCode" possui o valor "saleNotFound', async () => {
+        const { statusCode } = await salesService.getById('123').catch((err) => err);
+        expect(statusCode).to.be.equal('saleNotFound')
+      });
+    });
+  });
+});
+
+describe('Testes da função "newSale"', () => {
+  describe('quando uma venda é criada com sucesso', () => {
+    const newSale = [
+      {
+        productId: '614160ab109145ec555b8425',
+        quantity: 10,
+      },
+    ];
+
+    const resposta = {
+      itensSold: [
+        {
+          productId: '614160ab109145ec555b8425',
+          quantity: 10,
+        },
+      ],
+      _id: '614162f012c7a6f7795bc5d1',
+    };
+
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(salesModel, 'newSale').resolves(resposta);
+        sinon.stub(salesModel, 'sellQuantity').returns({})
+      });
+
+      afterEach(() => {
+        salesModel.sellQuantity.restore();
+        salesModel.newSale.restore();
+      });
+
+      it('retorna um objeto', async () => {
+        const result = await salesService.newSale(newSale);
+        expect(result).to.be.an('object');
+      });
+
+      it('o objeto é a venda cadastrada', async () => {
+        const result = await salesService.newSale(newSale);
+        expect(result).to.equal(resposta);
+      });
+
+      it('o objeto contém as chaves "itensSold" e "_id"', async () => {
+        const result = await salesService.newSale(newSale);
+        expect(result).to.have.all.keys('_id', 'itensSold');
+      });
+
+      it('"itensSold é um array"', async () => {
+        const { itensSold } = await salesService.newSale(newSale);
+        expect(itensSold).to.be.an('array');
+      });
+
+      it('o array possui um objeto', async () => {
+        const { itensSold } = await salesService.newSale(newSale);
+        expect(itensSold[0]).to.be.an('object');
+      });
+
+      it('o objeto possui as chaves "productId" e "quantity"', async () => {
+        const { itensSold } = await salesService.newSale(newSale);
+        expect(itensSold[0]).to.have.all.keys('productId', 'quantity');
+      });
+    });
+  });
+
+  describe('a venda atualiza a quantidade dos produtos', () => {
+    const newSale = [
+      {
+        productId: '614160ab109145ec555b8425',
+        quantity: 10,
+      },
+    ];
+
+    const resposta = {
+      itensSold: [
+        {
+          productId: '614160ab109145ec555b8425',
+          quantity: 10,
+        },
+      ],
+      _id: '614162f012c7a6f7795bc5d1',
+    };
+
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(salesModel, 'sellQuantity').resolves({ modifiedCount: 1 })
+        sinon.stub(salesModel, 'newSale').resolves(resposta);
+      });
+
+      afterEach(() => {
+        salesModel.newSale.restore();
+        salesModel.sellQuantity.restore();
+      });
+
+      it('é um objeto', async () => {
+        const result = await salesService.newSale(newSale);
+        expect(result).to.be.an('object');
+      });
+
+      it('o objeto é a venda cadastrada', async () => {
+        const result = await salesService.newSale(newSale);
+        expect(result).to.be.equal(resposta);
+      });
+
+      it('o objeto contém as chaves "itensSold" e "_id"', async () => {
+        const result = await salesService.newSale(newSale);
+        expect(result).to.have.all.keys('_id', 'itensSold');
+      });
+
+      it('"itensSold é um array"', async () => {
+        const { itensSold } = await salesService.newSale(newSale);
+        expect(itensSold).to.be.an('array');
+      });
+
+      it('o array possui um objeto', async () => {
+        const { itensSold } = await salesService.newSale(newSale);
+        expect(itensSold[0]).to.be.an('object');
+      });
+
+      it('o objeto possui as chaves "productId" e "quantity"', async () => {
+        const { itensSold } = await salesService.newSale(newSale);
+        expect(itensSold[0]).to.have.all.keys('productId', 'quantity');
+      });
+    });
+  });
+
+  describe('quando não há estoque', () => {
+    const newSale = [
+      {
+        productId: '614160ab109145ec555b8425',
+        quantity: 10,
+      },
+    ];
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(salesModel, 'sellQuantity').resolves(null)
+      });
+
+      afterEach(() => {
+        salesModel.sellQuantity.restore();
+      });
+      it('é um erro', async () => {
+        const result = await salesService.newSale(newSale).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const { statusCode } = await salesService.newSale(newSale).catch((err) => err);
+        expect(statusCode).to.exist;
+      });
+
+      it('"statusCode" possui o valor "stockProblem"', async () => {
+        const { statusCode } = await salesService.newSale(newSale).catch((err) => err);
+        expect(statusCode).to.equal('stockProblem');
+      });
+    });
+  });
+
+  describe('quando a venda possui uma quantidade inválida', () => {
+    const newSale = [
+      {
+        productId: '614160ab109145ec555b8425',
+        quantity: 0,
+      },
+    ];
+
+    describe('a resposta', () => {
+      it('é um erro', async () => {
+        const result = await salesService.newSale(newSale).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const { statusCode } = await salesService.newSale(newSale).catch((err) => err);
+        expect(statusCode).to.exist;
+      });
+
+      it('"statusCode" possui o valor "invalidSale"', async () => {
+        const { statusCode } = await salesService.newSale(newSale).catch((err) => err);
+        expect(statusCode).to.equal('invalidSale');
+      });
+    });
+  });
+});
+
+describe('Testes da função "updateSale"', () => {
+  describe('quando a venda é atualizada com sucesso', () => {
+    describe('a resposta', () => {
+      const newSale = [{
+        productId: '6140bb9cb466da93c6393d5f',
+        quantity: 100,
+      }];
+
+      const resposta = {
+        _id: '614160b4109145ec555b8426',
+        itensSold: [
+          {
+            productId: '6140fd5080d16d1aed89az',
+            quantity: 100,
+          },
+        ],
       };
 
-      before(() => {
-        sinon.stub(StoreModel, 'getByIds').resolves(resultById);
-        sinon.stub(SalesModel, 'create').resolves(result);
-        sinon.stub(Validation, 'subtractQuantity').resolves(true);
-      });
-  
-      after(() => {
-        StoreModel.getByIds.restore();
-        SalesModel.create.restore();
-        Validation.subtractQuantity.restore();
-      });
-  
-      it('o retorno é um objeto com propriedade "message"', async () => {
-        const response = await SalesService.create(payloadSales);
-        expect(response).to.have.a.property('message');
-      });
-    });
-  });
-
-  describe('ao chamar GETALL para buscar todas as vendas', () => {
-    describe('quando não existe produtos criados', () => {
-      before(() => {
-        sinon.stub(SalesModel, 'getAll').resolves([]);
-      });
-  
-      after(() => {
-        SalesModel.getAll.restore();
-      });
-  
-      it('o retorno é uma array vazia', async () => {
-        const response = await SalesService.getAll();
-        expect(response).to.be.an('array');
-        expect(response).to.be.empty;
-      });
-    });
-  
-    describe('quando existem produtos criados', () => {
-      before(() => {
-        sinon.stub(SalesModel, 'getAll').resolves(salesResults);
-      });
-  
-      after(() => {
-        SalesModel.getAll.restore();
-      });
-  
-      it('retorna um array', async () => {
-        const response = await SalesService.getAll();
-        expect(response).to.be.an('array');
+      beforeEach(() => {
+        sinon.stub(salesModel, 'updateSale').resolves(resposta);
       });
 
-      it('o array não está vazio', async () => {
-        const response = await SalesService.getAll();
-        expect(response).to.be.not.empty;
-      });
-  
-      it('o array possuem itens do tipo objeto', async () => {
-        const [ item ] = await SalesService.getAll();
-        expect(item).to.be.an('object');
-      });
-  
-      it('tais itens possuem as propriedades "_id" e "itensSold"', async () => {
-        const [ item ] = await SalesService.getAll();
-        expect(item).to.include.all.keys('_id', 'itensSold');
-      });
-    });
-  });
-
-  describe('ao chamar GETBYID para buscar um produto através do ID', () => {
-    describe('quando Id não é válido', () => {
-      before(() => {
-        sinon.stub(SalesModel, 'getById').resolves(null);
-      });
-  
-      after(() => {
-        SalesModel.getById.restore();
-      });
-  
-      it('o retorno é um objeto com mensagem "Sale not found"', async () => {
-        const response = await SalesService.getById(ID_INVALID);
-        expect(response).to.be.a('object');
-        expect(response.message).to.be.equal('Sale not found');
-      });
-    });
-
-    describe('quando não é encontrado uma correspondência', () => {
-      before(() => {
-        sinon.stub(SalesModel, 'getById').resolves(null);
-      });
-  
-      after(() => {
-        SalesModel.getById.restore();
-      });
-  
-      it('o retorno é um objeto com mensagem "Sale not found"', async () => {
-        const response = await SalesService.getById(ID_VALID_1);
-        expect(response).to.be.a('object');
-        expect(response.message).to.be.equal('Sale not found');
-      });
-    });
-      
-    describe('quando existe uma correspondência', () => {
-      before(() => {
-        sinon.stub(SalesModel, 'getById').resolves(saleResult);
-      });
-  
-      after(() => {
-        SalesModel.getById.restore();
-      });
-  
-      it('retorna um array não vazio', async () => {
-        const response = await SalesService.getById(ID_VALID_1);
-        expect(response).to.be.an('array');
-      });
-  
-      it('o array possuem itens do tipo objeto', async () => {
-        const [ item ] = await SalesService.getById(ID_VALID_1);
-        expect(item).to.be.a('object');
+      afterEach(() => {
+        salesModel.updateSale.restore();
       });
 
-      it('tais itens possuem as propriedades "_id" e "itensSold"', async () => {
-        const [ item ] = await SalesService.getById(ID_VALID_1);
-        expect(item).to.include.all.keys('_id', 'itensSold');
-      });
-    });
-  });
-
-  describe('ao chamar UPDATEBYID para buscar uma venda através do ID', () => {
-    describe('quando ID da venda não é válido', () => { 
-      it('o retorno é um objeto com mensagem "Wrong product ID or invalid quantity"', async () => {
-        const response = await SalesService.updateById(ID_INVALID, ID_VALID_1, QUANTITY_VALID_1);
-        expect(response).to.be.a('object');
-        expect(response.message).to.be.equal('Wrong product ID or invalid quantity');
-      });
-    });
-
-    describe('quando ID do produto não é válido', () => {
-      it('o retorno é um objeto com mensagem "Wrong product ID or invalid quantity"', async () => {
-        const response = await SalesService.updateById(ID_SALE_1, ID_INVALID, QUANTITY_VALID_1);
-        expect(response).to.be.a('object');
-        expect(response.message).to.be.equal('Wrong product ID or invalid quantity');
-      });
-    });
-  
-    describe('quando o payload contem na quantidade um inteiro menor do que 0', () => {
-      it('o retorno é um objeto com mensagem "Wrong product ID or invalid quantity"', async () => {
-        const response = await SalesService.updateById(ID_SALE_1, ID_VALID_1, QUANTITY_INVALID);
-        expect(response).to.be.a('object');
-        expect(response.message).to.be.equal('Wrong product ID or invalid quantity');
-      });
-    });
-    
-    describe('quando existe uma correspondência e quantidade é suficiente', () => {
-      before(() => {
-        sinon.stub(SalesModel, 'updateById').resolves({ modifiedCount: 1 });
-        sinon.stub(Validation, 'updatingQuantity').resolves(false);
-      });
-      
-      after(() => {
-        SalesModel.updateById.restore();
-        Validation.updatingQuantity.restore();
-      });
-      
       it('retorna um objeto', async () => {
-        const response = await SalesService.updateById(ID_SALE_1, ID_VALID_1, QUANTITY_VALID_1);
-        expect(response).to.be.a('object');
+        const result = await salesService.updateSale('id', newSale);
+        expect(result).to.be.an('object');
       });
-      
-      it('o objeto possui as propriedades "modifiedCount"', async () => {
-        const response = await SalesService.updateById(ID_SALE_1, ID_VALID_1, QUANTITY_VALID_1);
-        expect(response).to.have.a.property('modifiedCount')
-      });
-    });
 
-    describe('quando existe uma correspondência, porém a quantidade não é suficiente', () => {
-      before(() => {
-        sinon.stub(SalesModel, 'updateById').resolves({ modifiedCount: 1 });
-        sinon.stub(Validation, 'updatingQuantity').resolves(true);
+      it('o objeto possui as chaves "_id" e "itensSold"', async () => {
+        const result = await salesService.updateSale('id', newSale);
+        expect(result).to.have.all.keys('_id', 'itensSold');
       });
-      
-      after(() => {
-        SalesModel.updateById.restore();
-        Validation.updatingQuantity.restore();
-      });
-      
-      it('retorna um objeto com mensagem "Such amount is not permitted to sell"', async () => {
-        const response = await SalesService.updateById(ID_SALE_1, ID_VALID_1, QUANTITY_VALID_1);
-        expect(response.message).to.be.equal('Such amount is not permitted to sell');
+
+      it('objeto é o produto atualizado', async () => {
+        const result = await salesService.updateSale('id', newSale);
+        expect(result).to.be.equal(resposta);
       });
     });
   });
 
+  describe('quando o ID é inválido', () => {
+    describe('a resposta', () => {
+      const newSale = [{
+        productId: '6140bb9cb466da93c6393d5f',
+        quantity: 100,
+      }];
 
-
-
-
-  describe('ao chamar DELETEBYID para deletar uma venda através do ID', () => {
-    describe('quando Id não é válido', () => {
-      before(() => {
-        sinon.stub(SalesModel, 'deleteById').resolves([]);
+      beforeEach(() => {
+        sinon.stub(ObjectId, 'isValid').returns(false);
       });
-  
-      after(() => {
-        SalesModel.deleteById.restore();
+
+      afterEach(() => {
+        ObjectId.isValid.restore();
       });
-  
-      it('o retorno é um objeto com mensagem "Wrong sale ID format"', async () => {
-        const response = await SalesService.deleteById(ID_INVALID);
-        expect(response).to.be.a('object');
-        expect(response.message).to.be.equal('Wrong sale ID format');
+
+      it('é null', async () => {
+        const result = await salesService.updateSale('id', newSale);
+        expect(result).to.be.null;
+      });
+    });
+  });
+
+  describe('quando a venda possui uma quantidade inválida', () => {
+    describe('a resposta', () => {
+      const newSale = [{
+        productId: '6140bb9cb466da93c6393d5f',
+        quantity: 0,
+      }];
+
+      it('é um erro', async () => {
+        const result = await salesService.updateSale('id', newSale).catch((err) => err);
+        expect(result).to.be.an('error');
+      });
+
+      it('o erro possui uma propriedade "statusCode"', async () => {
+        const result = await salesService.updateSale('id', newSale).catch((err) => err);
+        expect(result).to.have.property('statusCode');
+      });
+
+      it('o "statusCode" possui o valor "invalidSale"', async () => {
+        const { statusCode } = await salesService.updateSale('id', newSale).catch((err) => err);
+        expect(statusCode).to.be.equal('invalidSale');
+      });
+    });
+  });
+
+  describe('Testa a funcao "updateProductQtts"', () => {
+    describe('quando sucesso', () => {
+      describe('a resposta', () => {
+        beforeEach(() => {
+          sinon.stub(salesModel, 'sellQuantity').resolves({ _id: '123', name: 'Teste', quantity: 100 });
+        });
+
+        afterEach(() => {
+          salesModel.sellQuantity.restore();
+        });
+
+        it('é uma Promise', async () => {
+          const result = await salesService.updateProductQtts([{ productId: '614160ab109145ec555b8425' , quantity: 100 }]);
+          expect(result).to.be.an('array');
+        });
       });
     });
 
-    describe('quando não é encontrado uma correspondência', () => {
-      before(() => {
-        sinon.stub(SalesModel, 'deleteById').resolves(null);
-      });
-  
-      after(() => {
-        SalesModel.deleteById.restore();
-      });
-  
-      it('o retorno é um objeto com mensagem "Wrong sale ID format"', async () => {
-        const response = await SalesService.deleteById(ID_VALID_1);
-        expect(response).to.be.a('object');
-        expect(response.message).to.be.equal('Wrong sale ID format');
+    describe('quando falha', () => {
+      describe('a resposta', () => {
+        beforeEach(() => {
+          sinon.stub(salesModel, 'sellQuantity').resolves(false);
+        });
+
+        afterEach(() => {
+          salesModel.sellQuantity.restore();
+        });
+
+        it('é um erro', async () => {
+          const result = await salesService
+            .updateProductQtts(
+              [{ productId: '614160ab109145ec555b8425' , quantity: 100 }]
+            ).catch((err) => err);
+          expect(result).to.be.an('error');
+        });
       });
     });
+  });
+});
 
-    describe('quando existe uma correspondência', () => {
-      before(() => {
-        sinon.stub(SalesModel, 'deleteById').resolves(saleResult);
-        sinon.stub(Validation, 'addingQuantity').resolves();
+describe('Testes da função "deleteSale"', () => {
+  describe('quando uma venda é excluída com sucesso', () => {
+    const resposta = {
+      _id: '614177d2759bd24939c2059c',
+      itensSold: [
+        {
+          productId: '614177c3759bd24939c2059b',
+          quantity: 10,
+        },
+      ],
+    };
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(salesModel, 'deleteSale').resolves(resposta);
+        sinon.stub(salesModel, 'getById').returns(resposta);
+        sinon.stub(salesModel, 'sellQuantity').resolves(true)
       });
-  
-      after(() => {
-        SalesModel.deleteById.restore();
-        Validation.addingQuantity.restore();
+
+      afterEach(() => {
+        salesModel.sellQuantity.restore();
+        salesModel.getById.restore();
+        salesModel.deleteSale.restore();
       });
-  
-      it('retorna um array de objeto', async () => {
-        const response = await SalesService.deleteById(ID_VALID_1);
-        expect(response).to.be.an('array');
+
+      it('retorna um objeto', async () => {
+        const result = await salesService.deleteSale('614177d2759bd24939c2059c');
+        expect(result).to.be.an('object');
       });
-  
-      it('o objeto possui as propriedades "_id" e "itensSold"', async () => {
-        const [item] = await SalesService.deleteById(ID_VALID_1);
-        expect(item).to.include.all.keys('_id', 'itensSold')
+
+      it('o objeto é a venda removida', async () => {
+        const result = await salesService.deleteSale('614177d2759bd24939c2059c');
+        expect(result).to.be.equal(resposta);
+      });
+
+      it('o objeto possui as chaves "_id" e "itensSold"', async () => {
+        const result = await salesService.deleteSale('614177d2759bd24939c2059c');
+        expect(result).to.have.all.keys('_id', 'itensSold');
+      });
+    });
+  });
+
+  describe('quando o ID é inválido', () => {
+    describe('a resposta', () => {
+      beforeEach(() => {
+        sinon.stub(salesModel, 'getById').resolves(false);
+        sinon.stub(ObjectId, 'isValid').returns(false);
+      });
+
+      afterEach(() => {
+        salesModel.getById.restore();
+        ObjectId.isValid.restore();
+      });
+
+      it('retorna um erro', async () => {
+        const result = await salesService.deleteSale('614177d2759bd24939c2059c').catch((err) => err);
+        expect(result).to.be.an('error');
       });
     });
   });
