@@ -17,3 +17,18 @@ const connect = async () {
 
     return MongoClient.connect(URL, OPTIONS);
 };
+
+describe('Testing products list', () => {
+    describe('Testing products in storage', () => {
+        const payload = { name: 'Produto', quantity: 840};
+        describe('response', () => {
+            before(async () => {
+                const mockConn = await connect();
+                sinon.stub(MongoClient, 'connect').resolves(mockConn);
+                await mockConn.db('StoreManager').collection('products').insertOne(payload);
+              });
+            })
+        })
+
+    })
+});
