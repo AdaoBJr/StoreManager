@@ -91,4 +91,41 @@ describe('Testa a leitura dos produtos no banco de dados', () => {
   });
 });
 
+describe('Buscando produtos por id', () => {
+  describe('ID localizado com sucesso', () => {
+    let response;
+
+    before(async () => {
+      response = await productsModel.add('Produto', 100);
+    });
+
+    after(async () => {
+      await connectionMock.db('StoreManager').collection('products').deleteMany({});
+    });
+
+    it('Resultado retorna um objeto', async () => {
+      const foundProduct = await productsModel.getById(response._id);
+
+      expect(foundProduct).to.be.a('object');
+    });
+
+    it('A resposta tem que conter as chaves "_id", "name", "quantity"', async () => {
+      const foundProduct = await productsModel.getById(response._id);
+
+      expect(foundProduct).to.include.all.keys('_id', 'name', 'quantity');
+    });
+
+    describe('Busca por id ok!', () => {
+      describe('Produto não existente', () => {
+        it('Retorno null', async () => {
+          const inexistentId = 999999;
+          const foundProduct = await productsModel.getById(inexistentId);
+
+          expect(foundProduct).to.be.null;
+        });
+      });
+    });
+  });
+});
+
 });
