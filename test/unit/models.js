@@ -4,8 +4,8 @@ const { MongoClient, ObjectId } = require('mongodb');
 const { getConnection } = require('./mongoMockConnection');
 
 const mongoConnection = require('../../models/connection');
-const productsModel = require('../../models/Products');
-const salesModel = require('../../models/Sales');
+const productsModel = require('../../models/Product');
+const salesModel = require('../../models/Sale');
 
 
 describe('Exibe toda a lista de produtos', () => {
