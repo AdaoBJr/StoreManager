@@ -21,4 +21,4 @@ app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 
-// Esse projeto foi entregue com ajuda de colegas para que não houvesse mudança de turma, houve explicação da matéria, consulta a repositorios de outras pessoas.
+// Esse projeto foi entregue com ajuda de colegas para que não houvesse mudança de turma, houve explicação da matéria, consulta a repositorios de outras pessoas, principalmente do gabriel e cleber.
