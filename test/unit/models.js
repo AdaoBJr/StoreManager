@@ -195,4 +195,40 @@ describe('Teste do "delete" produtos', () => {
   });
 });
 
+describe('salesModel testes finais', () => {
+  let connectionMock;
+  let existentProduct;
+
+  before(async () => {
+    connectionMock = await getConnection();
+
+    sinon.stub(MongoClient, 'connect').resolves(connectionMock);
+
+    existentProduct = await productsModel.add('Testando produto', 100);
+  });
+
+  after(async () => {
+    MongoClient.connect.restore();
+
+   await connectionMock.db('StoreManager').collection('sales').deleteMany({});
+  });
+
+  describe('Teste de nova compra', () => {
+    describe('Testando produto já existente na compra', () => {
+
+      it('Retorno de um objeto', async () => {
+        const insertedSale = await salesModel.add([{ productId: existentProduct._id, quantity: 10 }]);
+
+        expect(insertedSale).to.be.a('object');
+      });
+
+      it('O objeto retornado tem que possuir as chaves "_id", "itensSold"', async () => {
+        const insertedSale = await salesModel.add([{ productId: existentProduct._id, quantity: 10 }]);
+
+        expect(insertedSale).to.include.all.keys('_id', 'itensSold');
+      });
+    }); 
+  });
+});
+
 });
