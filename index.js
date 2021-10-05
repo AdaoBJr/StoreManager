@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const rescue = require('express-rescue');
-const { createProduct } = require('./controllers/productController');
+const route = require('./routes');
+const error = require('./middlewares/error');
 
 const app = express();
 const PORT = 3000;
@@ -12,13 +12,13 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.post('/products', rescue(createProduct));
+route.product(app);
+route.sales(app);
 
-app.use((err, _req, res, _next) => {
-  const { status, err: { code, message } } = err;
-  res.status(status).json({ err: { code, message } });
-});
+app.use(error);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
+
+// Esse projeto foi entregue com ajuda de colegas para que não houvesse mudança de turma, houve explicação da matéria, consulta a repositorios de outras pessoas.
