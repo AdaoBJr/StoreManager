@@ -32,4 +32,63 @@ describe.skip('Iniciando testes do modulo productsService', () => {
     });
   });
 
+  describe('Teste de reconhecimento de produtos', () => {
+    let products;
+
+    before(async () => {
+      products = await productsService.getAll();
+
+      sinon.stub(productsModel, 'getAll').resolves([
+        {
+          name: 'Produto 1',
+          quantity: 100,
+          _id: '60e7331efa30b90f51fe8242',
+        },
+        {
+          name: 'Produto 2',
+          quantity: 50,
+          _id: '60e7331efa30b90f51fe8243',
+        },
+      ]);
+
+      sinon.stub(productsModel, 'getById').resolves({
+        name: 'Produto 1',
+        quantity: 100,
+        _id: '60e7331efa30b90f51fe8242',
+      });
+    });
+
+    after(() => {
+      productsModel.getAll.restore();
+    });
+
+    it('O retorno deve ser um objeto', async () => {
+      expect(products).to.be.a('object');
+    });
+
+    it('Este objeto deve possuir a chave "products"', async () => {
+      expect(products).to.include.keys('products');
+    });
+
+    it('Esta chave deve ser deve ser um array', () => {
+      expect(products.products).to.be.a('array');
+    });
+
+    it('Elementos da chave products devem ser objetos', () => {
+      products.products.forEach((product) => expect(typeof product === 'object'));
+    });
+
+    it('getById retorna um objeto', async () => {
+      const product = await productsService.getById();
+
+      expect(product).to.be.a('object');
+    });
+
+    it('getById terá que possuir as chaves "name", "quantity", "_id"', async () => {
+      const product = await productsService.getById();
+
+      expect(product).to.include.all.keys('name', 'quantity', '_id');
+    });
+  });
+
 });
