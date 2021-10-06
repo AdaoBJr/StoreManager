@@ -12,7 +12,7 @@ const ERROR_NOT_FOUND = { err: {
   message: 'Sale not found',
 } };
 
-const quantityTypeValidation = (quantity) => typeof(quantity) === 'number';
+const quantityTypeValidation = (quantity) => typeof (quantity) === 'number';
 
 const quantityValidation = (quantity) => quantity >= 1;
 
@@ -22,27 +22,29 @@ const idValidation = (id) => {
   return idRegex.test(id);
 };
 
-const storeSales = async (salesData) => {
-  let error = false;
+const storeSales = async (data) => {
+  const error = false;
 
-  const sales = salesData.map(({ productId, quantity }) => ({ productId, quantity }));
-
-  await sales.forEach(async ({ productId, quantity }) => {
+  await data.forEach(async ({ productId, quantity }) => {
     const test = await Model.products.getProductById(productId);
 
-    if(!test) error = true;
+    if (!test) return error;
 
-    if (!quantityTypeValidation(quantity)) error = true;
+    if (!quantityTypeValidation(quantity)) return error;
 
-    if (!quantityValidation(quantity)) error = true;
+    if (!quantityValidation(quantity)) return error;
   });
 
-  if (error) return ERROR_SALES;
+  const result = await Model.sales.storeSales(data);
 
-  return await Model.sales.storeSales(salesData);
+  return result;
 };
 
-const getAllSales = async () => await Model.sales.getAllSales();
+const getAllSales = async () => {
+  const sales = await Model.sales.getAllSales();
+  const allSales = { sales: [...sales] };
+  return allSales;
+};
 
 const getSalesById = async (id) => {  
   if (!idValidation(id)) return ERROR_NOT_FOUND;
@@ -54,9 +56,31 @@ const getSalesById = async (id) => {
   return product;
 };
 
+const updatedSale = async (id, updateSale) => {
+  if (!idValidation(id)) return ERROR_SALES;
+
+  let error = false;
+
+  await updateSale.forEach(async ({ productId, quantity }) => {
+    if (!quantityTypeValidation(quantity)) error = true;
+
+    if (!quantityValidation(quantity)) error = true;
+
+    const test = await Model.products.getProductsById(productId);
+
+    if (!test) error = true;
+  });
+
+  if (error) return ERROR_SALES;
+
+  const sale = await Model.sales.updatedSale(id, { itensSold: updatedSale });
+
+  return (sale.matchedCount === 1) ? { _id: id, itensSold: updatedSale } : ERROR_SALES;
+};
 
 module.exports = {
   storeSales,
   getAllSales,
   getSalesById,
+  updatedSale,
 };

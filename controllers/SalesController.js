@@ -29,8 +29,19 @@ const getSalesById = async (req, res) => {
   res.status(STATUS_OK).json(sale);
 };
 
+const updatedSale = async (req, res) => {
+  const { id } = req.params;
+
+  const sale = await Service.sales.updatedSale(id, req.body);
+
+  if (sale.err) return res.status(STATUS_UNPROCESSABLE).json(sale);
+
+  res.status(STATUS_OK).json(sale);
+};
+
 module.exports = {
   storeSales,
   getAllSales,
   getSalesById,
+  updatedSale,
 };

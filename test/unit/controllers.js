@@ -492,3 +492,71 @@ describe('Carrega uma venda cadastrada pela "_id"', () => {
     });
   });
 });
+
+describe('Atualiza as informações de uma venda', () => {
+  const updatedPayload = [{ productId: ID_EXAMPLE, quantity: 7 }];
+
+  describe('com dados inválidos', () => {
+    const response = {};
+    const request = {};
+
+    before(() => {
+      request.params = { id: NOT_VALID_ID };
+      request.body = updatedPayload;
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+
+      sinon.stub(Service.sales, 'updatedSale').resolves(ERROR_SALES);
+    });
+
+    after(() => {
+      Service.sales.updatedSale.restore();
+    });
+
+    it('é chamado o método "status" com o código 422', async () => {
+      await Controller.sales.updatedSale(request, response);
+
+      expect(response.status.calledWith(HTTP_UNPROCESSABLE_STATUS)).to.be.equal(true);
+    });
+
+    it('é chamado o método "json" com a mensagem correspondente', async () => {
+      await Controller.sales.updatedSale(request, response);
+
+      expect(response.json.calledWith(ERROR_SALES)).to.be.equal(true);
+    });
+  });
+
+  describe('quando é encontrada com sucesso', () => {
+    const response = {};
+    const request = {};
+
+    const payload = { _id: ID_EXAMPLE, itensSold: updatedPayload };
+
+    before(() => {
+      request.params = { id: ID_EXAMPLE };
+      request.body = updatedPayload;
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+
+      sinon.stub(Service.sales, 'updatedSale').resolves(payload);
+    });
+
+    after(() => {
+      Service.sales.updatedSale.restore();
+    });
+
+    it('é chamado o método "status" com o código 200', async () => {
+      await Controller.sales.updatedSale(request, response);
+
+      expect(response.status.calledWith(HTTP_OK_STATUS)).to.be.equal(true);
+    });
+
+    it('é chamado o método "json" com as novas informações do produto', async () => {
+      await Controller.sales.updatedSale(request, response);
+
+      expect(response.json.calledWith(payload)).to.be.equal(true);
+    });
+  });
+});

@@ -1,6 +1,5 @@
-const connection = require('./connection');
-
 const { ObjectId } = require('mongodb');
+const connection = require('./connection');
 
 const COLLECTION = 'sales';
 
@@ -26,12 +25,24 @@ const getAllSales = async () => {
 
 const getSalesById = async (id) => {
   const salesResult = await connection().then((db) => db.collection(COLLECTION));
+  const result = salesResult.findOne({ _id: ObjectId(id) });
+  return result;
+};
 
-  return await salesResult.findOne({ _id: ObjectId(id) });
+const updatedSale = async (id, updateSale) => {
+  const { itensSold } = updateSale;
+
+  const salesResult = await connection().then((db) => db.collection(COLLECTION));
+  const result = await salesResult.updateOne(
+    { _id: ObjectId(id) },
+    { $set: { itensSold } },
+  );
+  return result;
 };
 
 module.exports = {
   storeSales,
   getAllSales,
   getSalesById,
+  updatedSale,
 };
