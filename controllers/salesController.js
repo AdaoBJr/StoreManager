@@ -19,49 +19,42 @@ const getAll = rescue(async (_req, res, next) => {
   res.status(200).json(products);
 });
 
-const create = rescue(async (req, res) => {
+const create = rescue(async (req, res, next) => {
   const productArray = req.body;
   
   const newSale = await salesService.create(productArray);
-  
-  let STATUS_CODE = 200;
-  if (newSale.error) {
-    if (newSale.error.code === 'stock_problem') {
-      STATUS_CODE = 404;
-    } else {
-      STATUS_CODE = 422;
-    }
-    return res.status(STATUS_CODE).json({ err: newSale });
-  }
+  if (newSale.error) return next(newSale);
 
-  res.status(200).json(newSale);
+  return res.status(200).json(newSale);
 });
 
-const update = rescue(async (req, res) => {
+const update = rescue(async (req, res, next) => {
   const { id } = req.params;
   const productArray = req.body;
-  
-  let STATUS_CODE = 200;
+
   const updatedSale = await salesService.update(id, productArray);
   if (updatedSale.error) {
-  if (updatedSale.error.code === 'stock_problem') {
-      STATUS_CODE = 404;
-    } else {
-      STATUS_CODE = 422;
+    if (updatedSale.error.code === 'stock_problem') {
+        updatedSale.number = 404;
     }
-    return res.status(STATUS_CODE).json({ err: updatedSale });
+    return next(updatedSale);
   }
 
-  res.status(STATUS_CODE).json(updatedSale);
+  return res.status(200).json(updatedSale);
 });
 
-const deleteOne = rescue(async (req, res) => {
+const deleteOne = rescue(async (req, res, next) => {
   const { id } = req.params;
   
   const deleteSale = await salesService.deleteOne(id);
+  if (deleteSale.error) {
+    if (deleteSale.error.code === 'stock_problem') {
+      deleteSale.number = 404;
+    }
+    return next(deleteSale);
+  }
 
-  if (deleteSale.error) return res.status(422).json({ err: deleteSale });
-  res.status(200).json(deleteSale);
+  return res.status(200).json(deleteSale);
 });
 
 module.exports = {
