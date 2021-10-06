@@ -6,7 +6,7 @@ const productsModel = require('../../models/productsModel');
 
 const mockId = '604cb554311d68f491ba5781';
 
-describe('products - testa o service create', () => {
+describe('products - testa o service addProduct', () => {
   describe('quando o post é inválido', () => {
     it('quando o nome já existe', async () => {
       sinon.stub(productsModel, 'getByName').resolves([{
@@ -15,7 +15,7 @@ describe('products - testa o service create', () => {
         quantity: 50,
       }]);
 
-      const addedProduct = await productsService.create({
+      const addedProduct = await productsService.addProduct({
         name: 'produto',
         quantity: 10,
       })
@@ -30,7 +30,7 @@ describe('products - testa o service create', () => {
     it('quando o nome é inválido', async () => {
       sinon.stub(productsModel, 'getByName').resolves([]);
 
-      const addedProduct = await productsService.create({
+      const addedProduct = await productsService.addProduct({
         name: 'zé',
         quantity: 10,
       })
@@ -45,7 +45,7 @@ describe('products - testa o service create', () => {
     it('quando a quantidade não é um numero', async () => {
       sinon.stub(productsModel, 'getByName').resolves([]);
 
-      const addedProduct = await productsService.create({
+      const addedProduct = await productsService.addProduct({
         name: 'produto',
         quantity: 'oi',
       })
@@ -60,7 +60,7 @@ describe('products - testa o service create', () => {
     it('quando a quantidade é um numero inválido', async () => {
       sinon.stub(productsModel, 'getByName').resolves([]);
 
-      const addedProduct = await productsService.create({
+      const addedProduct = await productsService.addProduct({
         name: 'produto',
         quantity: -5,
       })
@@ -76,13 +76,13 @@ describe('products - testa o service create', () => {
   describe('quando o post é válido', () => {
     it('adição válida', async () => {
       sinon.stub(productsModel, 'getByName').resolves([]);
-      sinon.stub(productsModel, 'create').resolves({
+      sinon.stub(productsModel, 'addProduct').resolves({
         _id: mockId,
         name: 'produto',
         quantity: 10
       });
 
-      const addedProduct = await productsService.create({
+      const addedProduct = await productsService.addProduct({
         name: 'produto',
         quantity: 10,
       })
@@ -94,17 +94,17 @@ describe('products - testa o service create', () => {
       });
 
       productsModel.getByName.restore();
-      productsModel.create.restore();
+      productsModel.addProduct.restore();
     });
   });
 });
 
-describe('products - testa o service update', () => {
+describe('products - testa o service updateProduct', () => {
   describe('quando o update é inválido', () => {
     it('quando o nome é inválido', async () => {
       sinon.stub(productsModel, 'getByName').resolves([]);
 
-      const updatedProduct = await productsService.update({
+      const updatedProduct = await productsService.updateProduct({
         id: mockId,
         name: 'zé',
         quantity: 10,
@@ -120,7 +120,7 @@ describe('products - testa o service update', () => {
     it('quando a quantidade não é um numero', async () => {
       sinon.stub(productsModel, 'getByName').resolves([]);
 
-      const updatedProduct = await productsService.update({
+      const updatedProduct = await productsService.updateProduct({
         id: mockId,
         name: 'produto',
         quantity: 'oi',
@@ -136,7 +136,7 @@ describe('products - testa o service update', () => {
     it('quando a quantidade é um numero inválido', async () => {
       sinon.stub(productsModel, 'getByName').resolves([]);
 
-      const updatedProduct = await productsService.update({
+      const updatedProduct = await productsService.updateProduct({
         id: mockId,
         name: 'produto',
         quantity: -5,
@@ -153,13 +153,13 @@ describe('products - testa o service update', () => {
   describe('quando o update é válido', () => {
     it('update válido', async () => {
       sinon.stub(productsModel, 'getByName').resolves([]);
-      sinon.stub(productsModel, 'update').resolves({
+      sinon.stub(productsModel, 'updateProduct').resolves({
         _id: mockId,
         name: 'produto',
         quantity: 15
       });
 
-      const updatedProduct = await productsService.update({
+      const updatedProduct = await productsService.updateProduct({
         id: mockId,
         name: 'produto',
         quantity: 15,
@@ -172,17 +172,17 @@ describe('products - testa o service update', () => {
       });
 
       productsModel.getByName.restore();
-      productsModel.update.restore();
+      productsModel.updateProduct.restore();
     });
   })
 });
 
-describe('products - testa o deleteOne', () => {
+describe('products - testa o deleteProduct', () => {
   describe('tentando deletar um produto inexistente', () => {
     it('produto inexistente', async () => {
       sinon.stub(productsModel, 'getById').resolves(null);
 
-      const deletedProduct = await productsService.deleteOne(mockId);
+      const deletedProduct = await productsService.deleteProduct(mockId);
 
       expect(deletedProduct).to.deep.equal({
         code: 'invalid_data',
@@ -199,11 +199,11 @@ describe('products - testa o deleteOne', () => {
         name: 'produto',
         quantity: 10,
       });
-      sinon.stub(productsModel, 'deleteOne').resolves({
+      sinon.stub(productsModel, 'deleteProduct').resolves({
         _id: mockId
       })
 
-      const deletedProduct = await productsService.deleteOne(mockId);
+      const deletedProduct = await productsService.deleteProduct(mockId);
 
       expect(deletedProduct).to.deep.equal({
         _id: mockId,
@@ -211,18 +211,19 @@ describe('products - testa o deleteOne', () => {
         quantity: 10
       })
       productsModel.getById.restore();
-      productsModel.deleteOne.restore();
+      productsModel.deleteProduct.restore();
     });
   });
 });
 
+// tests for salesServices
 const salesService = require('../../services/salesService');
 const salesModel = require('../../models/salesModel');
 
-describe('sales - testa o service create', () => {
+describe('sales - testa o service addSales', () => {
   describe('ao tentar cadastrar uma venda inválida', () => {
     it('quando a quantidade é inválida', async () => {
-      const addedSale = await salesService.create([{
+      const addedSale = await salesService.addSales([{
         productId: mockId,
         quantity: -1,
       }]);
@@ -233,7 +234,7 @@ describe('sales - testa o service create', () => {
       });
     });
     it('quando o produto é inválido', async () => {
-      const addedSale = await salesService.create([{
+      const addedSale = await salesService.addSales([{
         productId: '123456789',
         quantity: 5,
       }]);
@@ -250,7 +251,7 @@ describe('sales - testa o service create', () => {
         quantity: 3
       });
 
-      const addedSale = await salesService.create([{
+      const addedSale = await salesService.addSales([{
         productId: mockId,
         quantity: 5,
       }]);
@@ -269,16 +270,16 @@ describe('sales - testa o service create', () => {
         name: 'produto',
         quantity: 15
       });
-      sinon.stub(productsModel, 'updateQty').resolves({
+      sinon.stub(productsModel, 'updateProductQty').resolves({
         _id: mockId,
         quantity: 10
       });
-      sinon.stub(salesModel, 'create').resolves({
+      sinon.stub(salesModel, 'addSales').resolves({
         _id: mockId,
         itensSold: [{ productId: mockId, quantity: 5 }]
       });
 
-      const addedSale = await salesService.create([{
+      const addedSale = await salesService.addSales([{
         productId: mockId,
         quantity: 5,
       }]);
@@ -289,16 +290,16 @@ describe('sales - testa o service create', () => {
       });
 
       productsModel.getById.restore();
-      productsModel.updateQty.restore();
-      salesModel.create.restore();
+      productsModel.updateProductQty.restore();
+      salesModel.addSales.restore();
     });
   })
 });
 
-describe('sales - testa o service update', () => {
+describe('sales - testa o service updateSales', () => {
   describe('ao tentar atualizar uma venda inválida', () => {
     it('quando a quantidade é inválida', async () => {
-      const updatedSale = await salesService.update({
+      const updatedSale = await salesService.updateSales({
         id: mockId,
         productId: mockId,
         quantity: -1,
@@ -310,7 +311,7 @@ describe('sales - testa o service update', () => {
       });
     });
     it('quando o produto é inválido', async () => {
-      const updatedSale = await salesService.update({
+      const updatedSale = await salesService.updateSales({
         id: mockId,
         productId: '123456789',
         quantity: 10,
@@ -327,7 +328,7 @@ describe('sales - testa o service update', () => {
 
       });
 
-      const updatedSale = await salesService.update({
+      const updatedSale = await salesService.updateSales({
         id: '12345789',
         productId: mockId,
         quantity: 10,
