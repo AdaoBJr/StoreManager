@@ -58,3 +58,40 @@ describe('Testing products list', () => {
               });
             });
         });
+
+        describe('inexistent prod', () => {
+            describe('response', () => {
+              before(async () => {
+                const mock = await getConnection();
+                sinon.stub(MongoClient, 'connect').resolves(mock);
+                await mock.db('StoreManager').collection('products').deleteMany({});
+              });
+
+              after(() => {
+                MongoClient.connect.restore();
+              })
+
+              it('expects to return an object', async () => {
+                const ret = await testProd.selectAll();
+                expect(ret).to.be.an('object');
+              });
+
+              it('object must have "products" property', async () => {
+                const ret = await testProd.selectAll();
+                expect(ret).to.have.property('products');
+              });
+              
+              it('property must be an array', async () => {
+                const { products } = await testProd.selectAll();
+                expect(products).to.be.an('array');
+              });
+        
+              it('array must be empty', async () => {
+                const { products } = await testProd.selectAll();
+                expect(products).to.be.empty;
+              });
+            });
+          })
+        });
+    })
+});
