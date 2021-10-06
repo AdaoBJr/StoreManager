@@ -33,7 +33,7 @@ const payloadProduct = {
 
 describe('products - recupera os valores do banco', async () => {
   it('retorna todos documentos', async () => {
-    const addedProduct = await productsModel.addProduct(payloadProduct);
+    const addedProduct = await productsModel.create(payloadProduct);
     const productsFromDB = await productsModel.getAll();
 
     expect(productsFromDB).to.deep.equal([{
@@ -44,7 +44,7 @@ describe('products - recupera os valores do banco', async () => {
   });
 
   it('retorna por name', async () => {
-    const { _id: id, name } = await productsModel.addProduct(payloadProduct);
+    const { _id: id, name } = await productsModel.create(payloadProduct);
     const productsFromDB = await productsModel.getByName(name);
     expect(productsFromDB[1]).to.deep.equal({
       _id: ObjectId(id),
@@ -57,17 +57,17 @@ describe('products - recupera os valores do banco', async () => {
 
 describe('products - adiciona um novo produto', () => {
   it('retorna um objeto', async () => {
-    const addedProduct = await productsModel.addProduct(payloadProduct);
+    const addedProduct = await productsModel.create(payloadProduct);
 
     expect(addedProduct).to.be.a('object');
   });
   it('objeto retornado possui propriedade _id', async () => {
-    const addedProduct = await productsModel.addProduct(payloadProduct);
+    const addedProduct = await productsModel.create(payloadProduct);
 
     expect(addedProduct).to.have.a.property('_id');
   });
   it('deve existir um produto com o nome cadastrado', async () => {
-    const { _id: productId } = await productsModel.addProduct(payloadProduct);
+    const { _id: productId } = await productsModel.create(payloadProduct);
 
     const productFromDB = await productsModel.getById(productId);
     expect(productFromDB).to.deep.equal({
@@ -79,9 +79,9 @@ describe('products - adiciona um novo produto', () => {
 
 describe('products - atualiza um produto', () => {
   it('retorna o produto atualizado', async () => {
-    const product = await productsModel.addProduct(payloadProduct);
+    const product = await productsModel.create(payloadProduct);
 
-    const updatedProduct = await productsModel.updateProduct({
+    const updatedProduct = await productsModel.update({
       id: product._id,
       name: 'produto mais novo ainda',
       quantity: 15,
@@ -95,9 +95,9 @@ describe('products - atualiza um produto', () => {
   });
 
   it('o produto atualizado está no BD', async () => {
-    const product = await productsModel.addProduct(payloadProduct);
+    const product = await productsModel.create(payloadProduct);
 
-    const updatedProduct = await productsModel.updateProduct({
+    const updatedProduct = await productsModel.update({
       id: product._id,
       name: 'produto mais novo ainda',
       quantity: 15,
@@ -115,9 +115,9 @@ describe('products - atualiza um produto', () => {
 
 describe('products - atualiza a quantidade de um produto', () => {
   it('retorna o produto atualizado', async () => {
-    const product = await productsModel.addProduct(payloadProduct);
+    const product = await productsModel.create(payloadProduct);
 
-    const updatedProduct = await productsModel.updateProductQty(product._id, 15);
+    const updatedProduct = await productsModel.updateQty(product._id, 15);
 
     expect(updatedProduct).to.deep.equal({
       _id: product._id,
@@ -126,9 +126,9 @@ describe('products - atualiza a quantidade de um produto', () => {
   });
 
   it('o produto com qty atualizada está no BD', async () => {
-    const product = await productsModel.addProduct(payloadProduct);
+    const product = await productsModel.create(payloadProduct);
 
-    const updatedProduct = await productsModel.updateProductQty(product._id, 15);
+    const updatedProduct = await productsModel.updateQty(product._id, 15);
 
     const productFromBD = await productsModel.getById(product._id);
 
@@ -142,9 +142,9 @@ describe('products - atualiza a quantidade de um produto', () => {
 
 describe('products - deleta um produto', () => {
   it('deleta um produto corretamente', async () => {
-    const product = await productsModel.addProduct(payloadProduct);
+    const product = await productsModel.create(payloadProduct);
 
-    const deletedProduct = await productsModel.deleteProduct(product._id);
+    const deletedProduct = await productsModel.deleteOne(product._id);
 
     expect(deletedProduct).to.have.property('_id');
 
@@ -156,7 +156,7 @@ describe('products - deleta um produto', () => {
 
 describe('sales - recupera os valores do banco', () => {
   it('retorna todos documentos', async () => {
-    const addedProduct = await productsModel.addProduct(payloadProduct);
+    const addedProduct = await productsModel.create(payloadProduct);
     const addedSale = await salesModel.addSales([{
       productId: addedProduct._id,
       quantity: 5
@@ -175,13 +175,13 @@ describe('sales - recupera os valores do banco', () => {
 
 describe('sales - atualiza uma venda', () => {
   it('funciona corretamente', async () => {
-    const addedProduct = await productsModel.addProduct(payloadProduct);
+    const addedProduct = await productsModel.create(payloadProduct);
     const addedSale = await salesModel.addSales([{
       productId: addedProduct._id,
       quantity: 5
     }]);
 
-    const updatedSale = await salesModel.updateSales({
+    const updatedSale = await salesModel.update({
       id: addedSale._id,
       productId: addedSale.itensSold.find((e) => e.productId === addedProduct._id).productId,
       quantity: 1,
@@ -201,13 +201,13 @@ describe('sales - atualiza uma venda', () => {
 
 describe('sales - deleta uma venda', () => {
   it('deleta corretamente', async () => {
-    const addedProduct = await productsModel.addProduct(payloadProduct);
+    const addedProduct = await productsModel.create(payloadProduct);
     const addedSale = await salesModel.addSales([{
       productId: addedProduct._id,
       quantity: 5
     }]);
 
-    await salesModel.deleteSales(addedSale._id);
+    await salesModel.deleteOne(addedSale._id);
 
     const saleFromDB = await salesModel.getById(addedSale._id);
 

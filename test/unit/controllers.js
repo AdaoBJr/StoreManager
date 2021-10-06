@@ -67,7 +67,7 @@ describe('products controller test', () => {
       productsService.getById.restore();
     });
   });
-  describe('ao chamar o controller addProduct', () => {
+  describe('ao chamar o controller create', () => {
     it('quando a operação funciona', async () => {
       let res = {}
       let req = { body: {name: 'produto', quantity: 10} }
@@ -78,14 +78,14 @@ describe('products controller test', () => {
         name: 'produto',
         quantity: 10
       }
-      sinon.stub(productsService, 'addProduct').resolves(mockProduct);
+      sinon.stub(productsService, 'create').resolves(mockProduct);
 
-      await productsController.addProduct(req, res);
+      await productsController.create(req, res);
 
       expect(res.status.calledWith(201)).to.be.equal(true);
       expect(res.json.calledWith(mockProduct)).to.be.equal(true);
 
-      productsService.addProduct.restore();
+      productsService.create.restore();
     });
     it('quando a operação retorna um erro', async () => {
       let res = {}
@@ -96,17 +96,17 @@ describe('products controller test', () => {
         code: 'mock_error',
         message: 'mock_error_message'
       }
-      sinon.stub(productsService, 'addProduct').resolves(error);
+      sinon.stub(productsService, 'create').resolves(error);
 
-      await productsController.addProduct(req, res);
+      await productsController.create(req, res);
 
       expect(res.status.calledWith(422)).to.be.equal(true);
       expect(res.json.calledWith({err: error})).to.be.equal(true);
 
-      productsService.addProduct.restore();
+      productsService.create.restore();
     });
   })
-  describe('ao chamar o controller updateProduct', () => {
+  describe('ao chamar o controller update', () => {
     it('quando a operação funciona', async () => {
       let res = {}
       let req = {
@@ -120,14 +120,14 @@ describe('products controller test', () => {
         name: 'produto',
         quantity: 10
       }
-      sinon.stub(productsService, 'updateProduct').resolves(mockProduct);
+      sinon.stub(productsService, 'update').resolves(mockProduct);
 
-      await productsController.updateProduct(req, res);
+      await productsController.update(req, res);
 
       expect(res.status.calledWith(200)).to.be.equal(true);
       expect(res.json.calledWith(mockProduct)).to.be.equal(true);
 
-      productsService.updateProduct.restore();
+      productsService.update.restore();
     });
     it('quando a operação retorna um erro', async () => {
       let res = {}
@@ -141,17 +141,17 @@ describe('products controller test', () => {
         code: 'mock_error',
         message: 'mock_error_message'
       }
-      sinon.stub(productsService, 'updateProduct').resolves(error);
+      sinon.stub(productsService, 'update').resolves(error);
 
-      await productsController.updateProduct(req, res);
+      await productsController.update(req, res);
 
       expect(res.status.calledWith(422)).to.be.equal(true);
       expect(res.json.calledWith({err: error})).to.be.equal(true);
 
-      productsService.updateProduct.restore();
+      productsService.update.restore();
     });
   });
-  describe('ao chamar o controller deleteProduct', () => {
+  describe('ao chamar o controller deleteOne', () => {
     it('quando a operação funciona', async () => {
       let res = {};
       let req = { params: { id: mockId } };
@@ -162,14 +162,14 @@ describe('products controller test', () => {
         name: 'produto',
         quantity: 10
       }
-      sinon.stub(productsService, 'deleteProduct').resolves(mockProduct);
+      sinon.stub(productsService, 'deleteOne').resolves(mockProduct);
 
-      await productsController.deleteProduct(req, res);
+      await productsController.deleteOne(req, res);
 
       expect(res.status.calledWith(200)).to.be.equal(true);
       expect(res.json.calledWith(mockProduct)).to.be.equal(true);
 
-      productsService.deleteProduct.restore();
+      productsService.deleteOne.restore();
     });
     it('quando a operação retorna um erro', async () => {
       let res = {}
@@ -183,14 +183,14 @@ describe('products controller test', () => {
         code: 'mock_error',
         message: 'mock_error_message'
       }
-      sinon.stub(productsService, 'deleteProduct').resolves(error);
+      sinon.stub(productsService, 'deleteOne').resolves(error);
 
-      await productsController.deleteProduct(req, res);
+      await productsController.deleteOne(req, res);
 
       expect(res.status.calledWith(422)).to.be.equal(true);
       expect(res.json.calledWith({err: error})).to.be.equal(true);
 
-      productsService.deleteProduct.restore();
+      productsService.deleteOne.restore();
     });
   })
 });
@@ -257,7 +257,7 @@ describe('sales controller test', () => {
       salesService.getById.restore();
     });
   });
-  describe('ao chamar o controller addSales', () => {
+  describe('ao chamar o controller create', () => {
     it('quando a operação funciona', async () => {
       const mockSales = [{
         _id: mockId,
@@ -267,14 +267,14 @@ describe('sales controller test', () => {
       let req = { body: mockSales }
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
-      sinon.stub(salesService, 'addSales').resolves(mockSales);
+      sinon.stub(salesService, 'create').resolves(mockSales);
 
-      await salesController.addSales(req, res);
+      await salesController.create(req, res);
 
       expect(res.status.calledWith(200)).to.be.equal(true);
       expect(res.json.calledWith(mockSales)).to.be.equal(true);
 
-      salesService.addSales.restore();
+      salesService.create.restore();
     });
     it('quando a operação retorna um erro generico', async () => {
       const mockSales = [{
@@ -289,14 +289,14 @@ describe('sales controller test', () => {
         code: 'mock_error',
         message: 'mock_error_message'
       }
-      sinon.stub(salesService, 'addSales').resolves(error);
+      sinon.stub(salesService, 'create').resolves(error);
 
-      await salesController.addSales(req, res);
+      await salesController.create(req, res);
 
       expect(res.status.calledWith(422)).to.be.equal(true);
       expect(res.json.calledWith({err: error})).to.be.equal(true);
 
-      salesService.addSales.restore();
+      salesService.create.restore();
     });
     it('quando a operação retorna um erro de estoque', async () => {
       const mockSales = [{
@@ -311,17 +311,17 @@ describe('sales controller test', () => {
         code: 'stock_problem',
         message: 'mock_error_message'
       }
-      sinon.stub(salesService, 'addSales').resolves(error);
+      sinon.stub(salesService, 'create').resolves(error);
 
-      await salesController.addSales(req, res);
+      await salesController.create(req, res);
 
       expect(res.status.calledWith(404)).to.be.equal(true);
       expect(res.json.calledWith({err: error})).to.be.equal(true);
 
-      salesService.addSales.restore();
+      salesService.create.restore();
     });
   })
-  describe('ao chamar o controller updateSales', () => {
+  describe('ao chamar o controller update', () => {
     it('quando a operação funciona', async () => {
       const mockSales = [{
         _id: mockId,
@@ -334,14 +334,14 @@ describe('sales controller test', () => {
       }
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
-      sinon.stub(salesService, 'updateSales').resolves(mockSales);
+      sinon.stub(salesService, 'update').resolves(mockSales);
 
-      await salesController.updateSales(req, res);
+      await salesController.update(req, res);
 
       expect(res.status.calledWith(200)).to.be.equal(true);
       expect(res.json.calledWith(mockSales)).to.be.equal(true);
 
-      salesService.updateSales.restore();
+      salesService.update.restore();
     });
     it('quando a operação retorna um erro generico', async () => {
       const mockSales = [{
@@ -359,14 +359,14 @@ describe('sales controller test', () => {
         code: 'mock_error',
         message: 'mock_error_message'
       }
-      sinon.stub(salesService, 'updateSales').resolves(error);
+      sinon.stub(salesService, 'update').resolves(error);
 
-      await salesController.updateSales(req, res);
+      await salesController.update(req, res);
 
       expect(res.status.calledWith(422)).to.be.equal(true);
       expect(res.json.calledWith({err: error})).to.be.equal(true);
 
-      salesService.updateSales.restore();
+      salesService.update.restore();
     });
     it('quando a operação retorna um erro de estoque', async () => {
       const mockSales = [{
@@ -384,17 +384,17 @@ describe('sales controller test', () => {
         code: 'stock_problem',
         message: 'mock_error_message'
       }
-      sinon.stub(salesService, 'updateSales').resolves(error);
+      sinon.stub(salesService, 'update').resolves(error);
 
-      await salesController.updateSales(req, res);
+      await salesController.update(req, res);
 
       expect(res.status.calledWith(404)).to.be.equal(true);
       expect(res.json.calledWith({err: error})).to.be.equal(true);
 
-      salesService.updateSales.restore();
+      salesService.update.restore();
     });
   });
-  describe('ao chamar o controller deleteSales', () => {
+  describe('ao chamar o controller deleteOne', () => {
     it('quando a operação funciona', async () => {});
     it('quando a operação retorna um erro', async () => {});
   })
