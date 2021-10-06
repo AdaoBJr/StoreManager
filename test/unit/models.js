@@ -193,4 +193,26 @@ describe('Testing products list', () => {
               });
             });
           });
-          
+
+          describe('Expects ID to exist', () => {
+            const mockID = "61409dcc05";
+        
+            describe('response', () => {
+              before(async () => {
+                const mockConn = await connect();
+                sinon.stub(MongoClient, 'connect').resolves(mockConn);
+                sinon.stub(ObjectId, 'isValid').returns(false);
+              });
+        
+              after(() => {
+                ObjectId.isValid.restore();
+                MongoClient.connect.restore();
+              });
+        
+              it('Expects to be null', async () => {
+                const ret = await testProd.selectById(mockID);
+                expect(ret).to.be.null;
+              });
+            });
+          });
+        });
