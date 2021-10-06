@@ -1,7 +1,6 @@
 const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
-
 const getAll = async () => connection()
   .then((db) => db.collection('products').find().toArray())
   .then((products) => ({ products }));
@@ -28,7 +27,6 @@ const findByName = async (name) => {
   const product = await connection()
     .then((db) => db.collection('products').findOne({ name }));
 
-  
   if (!product) return null;
 
   return (product);

@@ -1,5 +1,5 @@
 const rescue = require('express-rescue');
-const productsService = require('../services/productsService');
+const productsService = require('../services/productsServices');
 
 const getById = rescue(async (req, res, next) => {
   const { id } = req.params;
