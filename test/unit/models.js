@@ -8,7 +8,7 @@ const testSale = require('../../models/sales');
 
 const database = new MongoMemoryServer();
 
-const connect = async () {
+const connect = async () => {
     const URL = await database.getUri();
     const OPTIONS = {
         useNewUrlParser: true,
@@ -216,3 +216,51 @@ describe('Testing products list', () => {
             });
           });
         });
+
+        describe('Testing prod insertion', () => {
+            describe('Expects insertion to be sucessful', () => {
+              const payload = { name: 'Produto', quantity: 840 };
+          
+              describe('response', () => {
+                before(async () => {
+                  const mockConn = await connect();
+                  sinon.stub(MongoClient, 'connect').resolves(mockConn);
+                  await mockConn.db('StoreManager').collection('products').insertOne(payload);
+                });
+          
+                after(() => {
+                  MongoClient.connect.restore();
+                })
+          
+                it('Expects to be an object', async () => {
+                  const ret = await testProd.createProd(payload);
+                  expect(ret).to.be.an('object');
+                });
+          
+                it('Must contain the properties: "_id", "name" e "quantity"', async () => {
+                  const ret = await testProd.createProd(payload);
+                  expect(ret).to.have.all.keys('_id', 'name', 'quantity');
+                });
+              });
+            });
+          
+            describe('Expects insertion to fail', () => {
+              const payload = { name: 'Produto', quantity: 840 };
+          
+              describe('response', () => {
+                before(async () => {
+                  const mockConn = await connect();
+                  sinon.stub(MongoClient, 'connect').resolves(mockConn);
+                });
+          
+                after(() => {
+                  MongoClient.connect.restore();
+                })
+          
+                it('Expects to be null', async () => {
+                  const ret = await testProd.createProd(payload);
+                  expect(ret).to.be.null;
+                });
+              });
+            });
+          });
