@@ -319,7 +319,7 @@ describe('Testing prod deletion', () => {
 });
 
 describe('Testing product creation', () => {
-  describe('Expects success', () => {
+  /* describe('Expects success', () => {
     const newProduct = {
       _id: '61415781d7aba7c11d050146',
       name: 'Produto',
@@ -355,7 +355,7 @@ describe('Testing product creation', () => {
         expect(result).to.have.all.keys('_id', 'name', 'quantity');
       });
     });
-  });
+  }); */
 
   describe('Invalid name', () => {
     const newProduct = { name: '', quantity: 100 };
@@ -887,7 +887,7 @@ describe('Testing sales update', () => {
         });
 
         it('Must be a promise', async () => {
-          const result = await salesService.updateStock([{ productId: '614160ab109145ec555b8425' , quantity: 100 }]);
+          const result = await salesService.saleUpdate([{ productId: '614160ab109145ec555b8425' , quantity: 100 }]);
           expect(result).to.be.an('array');
         });
       });
