@@ -26,7 +26,7 @@ const create = rescue(async (req, res) => {
   
   let STATUS_CODE = 200;
   if (newSale.error) {
-    if (newSale.code === 'stock_problem') {
+    if (newSale.error.code === 'stock_problem') {
       STATUS_CODE = 404;
     } else {
       STATUS_CODE = 422;
@@ -43,8 +43,8 @@ const update = rescue(async (req, res) => {
   
   let STATUS_CODE = 200;
   const updatedSale = await salesService.update(id, productArray);
-  if (updatedSale.message) {
-  if (updatedSale.code === 'stock_problem') {
+  if (updatedSale.error) {
+  if (updatedSale.error.code === 'stock_problem') {
       STATUS_CODE = 404;
     } else {
       STATUS_CODE = 422;
@@ -60,7 +60,7 @@ const deleteOne = rescue(async (req, res) => {
   
   const deleteSale = await salesService.deleteOne(id);
 
-  if (deleteSale.message) return res.status(422).json({ err: deleteSale });
+  if (deleteSale.error) return res.status(422).json({ err: deleteSale });
   res.status(200).json(deleteSale);
 });
 
