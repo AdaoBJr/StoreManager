@@ -20,7 +20,7 @@ const ERROR_STOCK = { err: {
   message: 'Such amount is not permitted to sell',
 } };
 
-const quantityTypeValidator = (quantity) => typeof (quantity) === 'number';
+const quantityTypeValidator = (quantity) => typeof(quantity) === 'number';
 
 const quantityValidator = (quantity) => quantity >= 1;
 
@@ -30,39 +30,49 @@ const idValidator = (id) => {
   return idRegex.test(id);
 };
 
-const storeSales = async (salesData) => {
+const addSales = async (salesData) => {
   let errorData = false;
   let errorStock = false;
   const sale = [];
+
   salesData.forEach(({ productId, quantity }) => {
-    sale.push(Model.products.getProductsById(productId));
+    sale.push(Model.products.getProductById(productId));
+
     if (!quantityTypeValidator(quantity)) errorData = true;
+
     if (!quantityValidator(quantity)) errorData = true;
   });
+  
   const stock = await Promise.all(sale);
+
   stock.forEach((product) => {
     if (!product) errorData = true;
   });
+
   if (errorData) return ERROR_SALES;
+
   stock.forEach((_product, index) => {
     if (stock[index].quantity < salesData[index].quantity) errorStock = true;
   });
+
   if (errorStock) return ERROR_STOCK;
+
   stock.forEach((product, index) => {
-    Model.products.updatedProduct(
+    Model.products.updateProduct(
       product._id,
       { name: product.name, quantity: (product.quantity - salesData[index].quantity) },
     );
   });
-  return await Model.sales.storeSales(salesData);
+
+  return await Model.sales.addSales(salesData);
 };
 
-const getAllSales = async () => await Model.sales.getAllSales();
+const getSales = async () => await Model.sales.getSales();
 
-const getSalesById = async (id) => {  
+const getSaleById = async (id) => {  
   if (!idValidator(id)) return ERROR_NOT_FOUND;
 
-  const product = await Model.sales.getSalesById(id);
+  const product = await Model.sales.getSaleById(id);
   
   if (!product) return ERROR_NOT_FOUND;
 
@@ -70,21 +80,50 @@ const getSalesById = async (id) => {
 };
 
 const updateSale = async (id, updatedSale) => {
+  let errorData = false;
+  let errorStock = false;
+  const sales = [];
+
   if (!idValidator(id)) return ERROR_SALES;
 
-  let error = false;
+  updatedSale.forEach(({ productId, quantity }) => {
+    if (!quantityTypeValidator(quantity)) errorData = true;
 
-  await updatedSale.forEach(async ({ productId, quantity }) => {
-    if (!quantityTypeValidator(quantity)) error = true;
+    if (!quantityValidator(quantity)) errorData = true;
 
-    if (!quantityValidator(quantity)) error = true;
-
-    const test = await Model.products.getProductsById(productId);
-
-    if(!test) error = true;
+    sales.push(Model.products.getProductById(productId));
   });
 
-  if (error) return ERROR_SALES;
+  const stock = await Promise.all(sales);
+
+  stock.forEach((product) => {
+    if (!product) errorData = true;
+  });
+
+  if (errorData) return ERROR_SALES;
+
+  const oldSale = await Model.sales.getSaleById(id);
+
+  stock.forEach((_product, index) => {
+    if (stock[index].quantity <
+      (updatedSale[index].quantity - oldSale.itensSold[index].quantity))
+    {
+      errorStock = true;
+    } 
+  });
+
+  if (errorStock) return ERROR_STOCK;
+
+  stock.forEach((product, index) => {
+    Model.products.updateProduct(
+      product._id,
+      {
+        name: product.name,
+        quantity: product.quantity - 
+          (updatedSale[index].quantity - oldSale.itensSold[index].quantity),
+      },
+    );
+  });
 
   const sale = await Model.sales.updateSale(id, { itensSold: updatedSale });
 
@@ -94,24 +133,24 @@ const updateSale = async (id, updatedSale) => {
 const deleteSale = async (id) => {
   if (!idValidator(id)) return ERROR_SALE_ID;
 
-  const deletedSale = await Model.sales.getSalesById(id);
+  const deletedSale = await Model.sales.getSaleById(id);
 
   const sale = await Model.sales.deleteSale(id);
 
   const sales = [];
 
   deletedSale.itensSold.forEach(({ productId }) => {
-    sales.push(Model.products.getProductsById(productId));
+    sales.push(Model.products.getProductById(productId));
   });
 
   const stock = await Promise.all(sales);
 
   stock.forEach((product, index) => {
-    Model.products.updatedProduct(
+    Model.products.updateProduct(
       product._id,
       {
         name: product.name,
-        quantity: product.quantity + deletedSale.itensSold[index].quantity,
+        quantity: product.quantity + deletedSale.itensSold[index].quantity
       },
     );
   });
@@ -120,9 +159,9 @@ const deleteSale = async (id) => {
 };
 
 module.exports = {
-  storeSales,
-  getAllSales,
-  getSalesById,
+  addSales,
+  getSales,
+  getSaleById,
   updateSale,
   deleteSale,
 };

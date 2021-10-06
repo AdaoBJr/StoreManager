@@ -38,7 +38,7 @@ const quantityTypeValidator = (quantity) => typeof(quantity) === 'number';
 
 const quantityValidator = (quantity) => quantity >= 1;
 
-const storeProduct = async (productData) => {
+const addProduct = async (productData) => {
   const { name, quantity } = productData;
 
   if (!nameValidator(name)) return ERROR_NAME;
@@ -51,22 +51,22 @@ const storeProduct = async (productData) => {
 
   if (alreadyExists) return ERROR_ALREADY_EXISTS;
 
-  return await Model.products.storeProduct(productData);
+  return await Model.products.addProduct(productData);
 };
 
-const getAllProducts = async () => await Model.products.getAllProducts();
+const getProducts = async () => await Model.products.getProducts();
 
-const getProductsById = async (id) => {
+const getProductById = async (id) => {
   if (!idValidator(id)) return ERROR_ID;
 
-  const product = await Model.products.getProductsById(id);
+  const product = await Model.products.getProductById(id);
   
   if (!product) return ERROR_ID;
 
   return product;
 };
 
-const updatedProduct = async (id, updatedProduct) => {
+const updateProduct = async (id, updatedProduct) => {
   if (!idValidator(id)) return ERROR_ID;
 
   const { name, quantity } = updatedProduct;
@@ -77,7 +77,7 @@ const updatedProduct = async (id, updatedProduct) => {
 
   if (!quantityValidator(quantity)) return ERROR_QTY_NUMBER;
 
-  const product = await Model.products.updatedProduct(id, { name, quantity });
+  const product = await Model.products.updateProduct(id, { name, quantity });
 
   return (product.matchedCount === 1) ? { _id: id, name, quantity } : ERROR_ID;
 };
@@ -85,7 +85,7 @@ const updatedProduct = async (id, updatedProduct) => {
 const deleteProduct = async (id) => {
   if (!idValidator(id)) return ERROR_ID;
 
-  const deletedProduct = await Model.products.getProductsById(id);
+  const deletedProduct = await Model.products.getProductById(id);
 
   const product = await Model.products.deleteProduct(id);
 
@@ -93,9 +93,9 @@ const deleteProduct = async (id) => {
 };
 
 module.exports = {
-  storeProduct,
-  getAllProducts,
-  getProductsById,
-  updatedProduct,
+  addProduct,
+  getProducts,
+  getProductById,
+  updateProduct,
   deleteProduct,
 };

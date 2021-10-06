@@ -27,23 +27,23 @@ describe('Cadastro de um novo produto', () => {
     const payload = { name: 'Testy, the Tester', quantity: 30 };
 
     before(() => {
-      sinon.stub(Model.products, 'storeProduct').resolves({ _id: ID_EXAMPLE, ...payload });
+      sinon.stub(Model.products, 'addProduct').resolves({ _id: ID_EXAMPLE, ...payload });
       sinon.stub(Model.products, 'getProductByName').resolves(false);
     });
 
     after(() => {
-      Model.products.storeProduct.restore();
+      Model.products.addProduct.restore();
       Model.products.getProductByName.restore();
     });
 
-    it('retorna um objeto',  () => {
-      const response =  Service.products.storeProduct(payload);
+    it('retorna um objeto', async () => {
+      const response = await Service.products.addProduct(payload);
 
       expect(response).to.be.an('object');
     });
 
-    it('tal objeto possui a "_id" do produto',  () => {
-      const response =  Service.products.storeProduct(payload);
+    it('tal objeto possui a "_id" do produto', async () => {
+      const response = await Service.products.addProduct(payload);
 
       expect(response).to.have.property('_id');
     });
@@ -52,16 +52,16 @@ describe('Cadastro de um novo produto', () => {
   describe('com "name" curto demais', () => {
     const payload = { name: '', quantity: 30 };
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.storeProduct(payload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.addProduct(payload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.storeProduct(payload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.addProduct(payload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -72,16 +72,16 @@ describe('Cadastro de um novo produto', () => {
   describe('com uma string no campo "quantity"', () => {
     const payload = { name: 'Testy, the Tester', quantity: 'trinta' };
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.storeProduct(payload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.addProduct(payload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.storeProduct(payload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.addProduct(payload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -92,16 +92,16 @@ describe('Cadastro de um novo produto', () => {
   describe('com um número menor que 1 no campo "quantity"', () => {
     const payload = { name: 'Testy, the Tester', quantity: 0 };
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.storeProduct(payload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.addProduct(payload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.storeProduct(payload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.addProduct(payload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -120,16 +120,16 @@ describe('Cadastro de um novo produto', () => {
       Model.products.getProductByName.restore();
     });
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.storeProduct(payload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.addProduct(payload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.storeProduct(payload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.addProduct(payload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -141,21 +141,21 @@ describe('Cadastro de um novo produto', () => {
 describe('Carrega a lista de produtos', () => {
   describe('quando não tem nenhum cadastrado',() => {
     before(() => {
-      sinon.stub(Model.products, 'getAllProducts').resolves([]);
+      sinon.stub(Model.products, 'getProducts').resolves([]);
     });
 
     after(() => {
-      Model.products.getAllProducts.restore();
+      Model.products.getProducts.restore();
     });
 
-    it('retorna um array',  () => {
-      const response =  Model.products.getAllProducts();
+    it('retorna um array', async () => {
+      const response = await Model.products.getProducts();
 
       expect(response).to.be.an('array');
     });
 
-    it('vazio',  () => {
-      const response =  Model.products.getAllProducts();
+    it('vazio', async () => {
+      const response = await Model.products.getProducts();
 
       expect(response).to.be.empty;
     });
@@ -165,21 +165,21 @@ describe('Carrega a lista de produtos', () => {
     const payload = { name: 'Testy, the Tester', quantity: 30 };
 
     before(() => {
-      sinon.stub(Model.products, 'getAllProducts').resolves([payload]);
+      sinon.stub(Model.products, 'getProducts').resolves([payload]);
     });
 
     after(() => {
-      Model.products.getAllProducts.restore();
+      Model.products.getProducts.restore();
     });
 
-    it('retorna um array',  () => {
-      const response =  Model.products.getAllProducts();
+    it('retorna um array', async () => {
+      const response = await Model.products.getProducts();
 
       expect(response).to.be.an('array');
     });
 
-    it('de objetos contendo as informações dos produtos',  () => {
-      const response =  Model.products.getAllProducts();
+    it('de objetos contendo as informações dos produtos', async () => {
+      const response = await Model.products.getProducts();
 
       expect(response[0]).to.be.an('object');
 
@@ -196,16 +196,16 @@ describe('Carrega a lista de produtos', () => {
 
 describe('Carrega um produto cadastrado pela "_id"', () => {
   describe('quando o "_id" passado é inválido', () => {
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.getProductsById(NOT_VALID_ID);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.getProductById(NOT_VALID_ID);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.getProductsById(NOT_VALID_ID);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.getProductById(NOT_VALID_ID);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -215,23 +215,23 @@ describe('Carrega um produto cadastrado pela "_id"', () => {
 
   describe('quando não encontrado', () => {
     before(() => {
-      sinon.stub(Model.products, 'getProductsById').resolves(null);
+      sinon.stub(Model.products, 'getProductById').resolves(null);
     });
 
     after(() => {
-      Model.products.getProductsById.restore();
+      Model.products.getProductById.restore();
     });
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.getProductsById(ID_EXAMPLE);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.getProductById(ID_EXAMPLE);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.getProductsById(ID_EXAMPLE);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.getProductById(ID_EXAMPLE);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -243,15 +243,15 @@ describe('Carrega um produto cadastrado pela "_id"', () => {
     const payload = { name: 'Testy, the Tester', quantity: 30 };
 
     before(() => {
-      sinon.stub(Model.products, 'getProductsById').resolves(payload);
+      sinon.stub(Model.products, 'getProductById').resolves(payload);
     });
 
     after(() => {
-      Model.products.getProductsById.restore();
+      Model.products.getProductById.restore();
     });
 
-    it('o retorno é um objeto, com as informações do produto',  () => {
-      const response =  Service.products.getProductsById(ID_EXAMPLE);
+    it('o retorno é um objeto, com as informações do produto', async () => {
+      const response = await Service.products.getProductById(ID_EXAMPLE);
 
       expect(response).to.be.an('object');
 
@@ -270,16 +270,16 @@ describe('Atualiza as informações de um produto', () => {
   describe('quando o "_id" passado é inválido', () => {
     const updatedPayload = { name: 'Testy, the Tester', quantity: 45 };
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.updatedProduct(NOT_VALID_ID, updatedPayload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.updateProduct(NOT_VALID_ID, updatedPayload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.updatedProduct(NOT_VALID_ID, updatedPayload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.updateProduct(NOT_VALID_ID, updatedPayload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -291,23 +291,23 @@ describe('Atualiza as informações de um produto', () => {
     const updatedPayload = { name: 'Testy, the Tester', quantity: 45 };
 
     before(() => {
-      sinon.stub(Model.products, 'updatedProduct').resolves({ matchedCount: 0 });
+      sinon.stub(Model.products, 'updateProduct').resolves({ matchedCount: 0 });
     });
 
     after(() => {
-      Model.products.updatedProduct.restore();
+      Model.products.updateProduct.restore();
     });
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.updatedProduct(ID_EXAMPLE, updatedPayload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.updateProduct(ID_EXAMPLE, updatedPayload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.updatedProduct(ID_EXAMPLE, updatedPayload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.updateProduct(ID_EXAMPLE, updatedPayload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -318,16 +318,16 @@ describe('Atualiza as informações de um produto', () => {
   describe('com "name" curto demais', () => {
     const updatedPayload = { name: '', quantity: 30 };
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.updatedProduct(ID_EXAMPLE, updatedPayload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.updateProduct(ID_EXAMPLE, updatedPayload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.updatedProduct(ID_EXAMPLE, updatedPayload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.updateProduct(ID_EXAMPLE, updatedPayload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -338,16 +338,16 @@ describe('Atualiza as informações de um produto', () => {
   describe('com uma string no campo "quantity"', () => {
     const updatedPayload = { name: 'Testy, the Tester', quantity: 'trinta' };
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.updatedProduct(ID_EXAMPLE, updatedPayload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.updateProduct(ID_EXAMPLE, updatedPayload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.updatedProduct(ID_EXAMPLE, updatedPayload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.updateProduct(ID_EXAMPLE, updatedPayload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -358,16 +358,16 @@ describe('Atualiza as informações de um produto', () => {
   describe('com um número menor que 1 no campo "quantity"', () => {
     const updatedPayload = { name: 'Testy, the Tester', quantity: 0 };
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.updatedProduct(ID_EXAMPLE, updatedPayload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.updateProduct(ID_EXAMPLE, updatedPayload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.updatedProduct(ID_EXAMPLE, updatedPayload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.updateProduct(ID_EXAMPLE, updatedPayload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -379,15 +379,15 @@ describe('Atualiza as informações de um produto', () => {
     const updatedPayload = { name: 'Testy, the Tester', quantity: 45 };
 
     before(() => {
-      sinon.stub(Model.products, 'updatedProduct').resolves({ matchedCount: 1 });
+      sinon.stub(Model.products, 'updateProduct').resolves({ matchedCount: 1 });
     });
 
     after(() => {
-      Model.products.updatedProduct.restore();
+      Model.products.updateProduct.restore();
     });
 
-    it('e retorna o produto atualizado',  () => {
-      const response =  Service.products.updatedProduct(ID_EXAMPLE, updatedPayload);
+    it('e retorna o produto atualizado', async () => {
+      const response = await Service.products.updateProduct(ID_EXAMPLE, updatedPayload);
 
       expect(response).to.be.an('object');
 
@@ -406,16 +406,16 @@ describe('Deleta um produto cadastrado', () => {
   const payload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
 
   describe('quando o "_id" passado é inválido', () => {
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.deleteProduct(NOT_VALID_ID);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.deleteProduct(NOT_VALID_ID);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.deleteProduct(NOT_VALID_ID);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.deleteProduct(NOT_VALID_ID);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -426,24 +426,24 @@ describe('Deleta um produto cadastrado', () => {
   describe('quando não encontrado', () => {
     before(() => {
       sinon.stub(Model.products, 'deleteProduct').resolves({ deletedCount: 0 });
-      sinon.stub(Model.products, 'getProductsById').resolves(payload);
+      sinon.stub(Model.products, 'getProductById').resolves(payload);
     });
 
     after(() => {
       Model.products.deleteProduct.restore();
-      Model.products.getProductsById.restore();
+      Model.products.getProductById.restore();
     });
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.products.deleteProduct(ID_EXAMPLE);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.products.deleteProduct(ID_EXAMPLE);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.products.deleteProduct(ID_EXAMPLE);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.products.deleteProduct(ID_EXAMPLE);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -454,16 +454,16 @@ describe('Deleta um produto cadastrado', () => {
   describe('quando encontrado', () => {
     before(() => {
       sinon.stub(Model.products, 'deleteProduct').resolves({ deletedCount: 1 });
-      sinon.stub(Model.products, 'getProductsById').resolves(payload);
+      sinon.stub(Model.products, 'getProductById').resolves(payload);
     });
 
     after(() => {
       Model.products.deleteProduct.restore();
-      Model.products.getProductsById.restore();
+      Model.products.getProductById.restore();
     });
 
-    it('deleta o produto e retorna as suas informações',  () => {
-      const response =  Service.products.deleteProduct(ID_EXAMPLE);
+    it('deleta o produto e retorna as suas informações', async () => {
+      const response = await Service.products.deleteProduct(ID_EXAMPLE);
 
       expect(response).to.be.an('object');
 
@@ -488,25 +488,25 @@ describe('Cadastro de uma nova venda', () => {
     const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
 
     before(() => {
-      sinon.stub(Model.sales, 'storeSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductsById').resolves(productPayload);
-      sinon.stub(Model.products, 'updatedProduct').resolves(null);
+      sinon.stub(Model.sales, 'addSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
+      sinon.stub(Model.products, 'updateProduct').resolves(null);
     });
 
     after(() => {
-      Model.sales.storeSales.restore();
-      Model.products.getProductsById.restore();
-      Model.products.updatedProduct.restore();
+      Model.sales.addSales.restore();
+      Model.products.getProductById.restore();
+      Model.products.updateProduct.restore();
     });
 
-    it('retorna um objeto',  () => {
-      const response =  Service.sales.storeSales(payload);
+    it('retorna um objeto', async () => {
+      const response = await Service.sales.addSales(payload);
 
       expect(response).to.be.an('object');
     });
 
-    it('tal objeto possui a "_id" do produto',  () => {
-      const response =  Service.sales.storeSales(payload);
+    it('tal objeto possui a "_id" do produto', async () => {
+      const response = await Service.sales.addSales(payload);
 
       expect(response).to.have.property('_id');
     });
@@ -517,25 +517,25 @@ describe('Cadastro de uma nova venda', () => {
     const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
 
     before(() => {
-      sinon.stub(Model.sales, 'storeSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductsById').resolves(productPayload);
-      sinon.stub(Model.products, 'updatedProduct').resolves(null);
+      sinon.stub(Model.sales, 'addSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
+      sinon.stub(Model.products, 'updateProduct').resolves(null);
     });
 
     after(() => {
-      Model.sales.storeSales.restore();
-      Model.products.getProductsById.restore();
-      Model.products.updatedProduct.restore();
+      Model.sales.addSales.restore();
+      Model.products.getProductById.restore();
+      Model.products.updateProduct.restore();
     });
 
-    it('retorna um objeto',  () => {
-      const response =  Service.sales.storeSales(payload);
+    it('retorna um objeto', async () => {
+      const response = await Service.sales.addSales(payload);
 
       expect(response).to.be.an('object');
     });
 
-    it('tal objeto possui a "_id" do produto',  () => {
-      const response =  Service.sales.storeSales(payload);
+    it('tal objeto possui a "_id" do produto', async () => {
+      const response = await Service.sales.addSales(payload);
 
       expect(response).to.have.property('_id');
     });
@@ -545,23 +545,23 @@ describe('Cadastro de uma nova venda', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
 
     before(() => {
-      sinon.stub(Model.products, 'getProductsById').resolves(null);
+      sinon.stub(Model.products, 'getProductById').resolves(null);
     });
 
     after(() => {
-      Model.products.getProductsById.restore();
+      Model.products.getProductById.restore();
     });
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.storeSales(payload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.addSales(payload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.storeSales(payload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.addSales(payload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -574,25 +574,25 @@ describe('Cadastro de uma nova venda', () => {
     const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
 
     before(() => {
-      sinon.stub(Model.sales, 'storeSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductsById').resolves(productPayload);
+      sinon.stub(Model.sales, 'addSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
     });
 
     after(() => {
-      Model.sales.storeSales.restore();
-      Model.products.getProductsById.restore();
+      Model.sales.addSales.restore();
+      Model.products.getProductById.restore();
     });
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.storeSales(payload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.addSales(payload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.storeSales(payload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.addSales(payload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -605,25 +605,25 @@ describe('Cadastro de uma nova venda', () => {
     const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
 
     before(() => {
-      sinon.stub(Model.sales, 'storeSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductsById').resolves(productPayload);
+      sinon.stub(Model.sales, 'addSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
     });
 
     after(() => {
-      Model.sales.storeSales.restore();
-      Model.products.getProductsById.restore();
+      Model.sales.addSales.restore();
+      Model.products.getProductById.restore();
     });
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.storeSales(payload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.addSales(payload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.storeSales(payload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.addSales(payload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -636,25 +636,25 @@ describe('Cadastro de uma nova venda', () => {
     const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 10 };
 
     before(() => {
-      sinon.stub(Model.sales, 'storeSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductsById').resolves(productPayload);
+      sinon.stub(Model.sales, 'addSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
     });
 
     after(() => {
-      Model.sales.storeSales.restore();
-      Model.products.getProductsById.restore();
+      Model.sales.addSales.restore();
+      Model.products.getProductById.restore();
     });
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.storeSales(payload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.addSales(payload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.storeSales(payload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.addSales(payload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_401);
 
@@ -666,23 +666,23 @@ describe('Cadastro de uma nova venda', () => {
 describe('Carrega a lista de vendas', () => {
   describe('quando não tem nenhuma cadastrada',() => {
     before(() => {
-      sinon.stub(Model.sales, 'getAllSales').resolves({ sales: [] });
+      sinon.stub(Model.sales, 'getSales').resolves({ sales: [] });
     });
 
     after(() => {
-      Model.sales.getAllSales.restore();
+      Model.sales.getSales.restore();
     });
 
-    it('retorna um objeto contendo um array',  () => {
-      const response =  Model.sales.getAllSales();
+    it('retorna um objeto contendo um array', async () => {
+      const response = await Model.sales.getSales();
 
       expect(response).to.be.an('object');
 
       expect(response.sales).to.be.an('array');
     });
 
-    it('vazio',  () => {
-      const response =  Model.sales.getAllSales();
+    it('vazio', async () => {
+      const response = await Model.sales.getSales();
 
       expect(response.sales).to.be.empty;
     });
@@ -692,25 +692,25 @@ describe('Carrega a lista de vendas', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
 
     before(() => {
-      sinon.stub(Model.sales, 'getAllSales').resolves({
+      sinon.stub(Model.sales, 'getSales').resolves({
         sales: [{ _id: ID_EXAMPLE, itensSold: payload }]
       });
     });
 
     after(() => {
-      Model.sales.getAllSales.restore();
+      Model.sales.getSales.restore();
     });
 
-    it('retorna um objeto contendo um array',  () => {
-      const response =  Model.sales.getAllSales();
+    it('retorna um objeto contendo um array', async () => {
+      const response = await Model.sales.getSales();
 
       expect(response).to.be.an('object');
 
       expect(response.sales).to.be.an('array');
     });
 
-    it('de objetos contendo as informações dos produtos',  () => {
-      const response =  Model.sales.getAllSales();
+    it('de objetos contendo as informações dos produtos', async () => {
+      const response = await Model.sales.getSales();
 
       expect(response.sales[0]).to.be.an('object');
 
@@ -725,16 +725,16 @@ describe('Carrega a lista de vendas', () => {
 
 describe('Carrega uma venda cadastrada pela "_id"', () => {
   describe('quando o "_id" passado é inválido', () => {
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.getSalesById(NOT_VALID_ID);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.getSaleById(NOT_VALID_ID);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.getSalesById(NOT_VALID_ID);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.getSaleById(NOT_VALID_ID);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_404);
 
@@ -744,23 +744,23 @@ describe('Carrega uma venda cadastrada pela "_id"', () => {
 
   describe('quando não encontrada', () => {
     before(() => {
-      sinon.stub(Model.sales, 'getSalesById').resolves(null);
+      sinon.stub(Model.sales, 'getSaleById').resolves(null);
     });
 
     after(() => {
-      Model.sales.getSalesById.restore();
+      Model.sales.getSaleById.restore();
     });
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.getSalesById(ID_EXAMPLE);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.getSaleById(ID_EXAMPLE);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.getSalesById(ID_EXAMPLE);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.getSaleById(ID_EXAMPLE);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_404);
 
@@ -772,15 +772,15 @@ describe('Carrega uma venda cadastrada pela "_id"', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
 
     before(() => {
-      sinon.stub(Model.sales, 'getSalesById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
     });
 
     after(() => {
-      Model.sales.getSalesById.restore();
+      Model.sales.getSaleById.restore();
     });
 
-    it('o retorno é um objeto com as informações da venda',  () => {
-      const response =  Service.sales.getSalesById(ID_EXAMPLE);
+    it('o retorno é um objeto com as informações da venda', async () => {
+      const response = await Service.sales.getSaleById(ID_EXAMPLE);
 
       expect(response).to.be.an('object');
 
@@ -795,16 +795,16 @@ describe('Atualiza as informações de uma venda', () => {
   describe('quando o "_id" passado é inválido', () => {
     const updatedPayload = [{ productId: ID_EXAMPLE, quantity: 7 }];
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.updateSale(NOT_VALID_ID, updatedPayload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.updateSale(NOT_VALID_ID, updatedPayload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.updateSale(NOT_VALID_ID, updatedPayload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.updateSale(NOT_VALID_ID, updatedPayload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -819,28 +819,28 @@ describe('Atualiza as informações de uma venda', () => {
 
     before(() => {
       sinon.stub(Model.sales, 'updateSale').resolves({ matchedCount: 0 });
-      sinon.stub(Model.sales, 'getSalesById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductsById').resolves(productPayload);
-      sinon.stub(Model.products, 'updatedProduct').resolves(null);
+      sinon.stub(Model.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
+      sinon.stub(Model.products, 'updateProduct').resolves(null);
     });
 
     after(() => {
       Model.sales.updateSale.restore();
-      Model.sales.getSalesById.restore();
-      Model.products.getProductsById.restore();
-      Model.products.updatedProduct.restore();
+      Model.sales.getSaleById.restore();
+      Model.products.getProductById.restore();
+      Model.products.updateProduct.restore();
     });
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -851,16 +851,16 @@ describe('Atualiza as informações de uma venda', () => {
   describe('com uma string no campo "quantity"', () => {
     const updatedPayload = [{ productId: ID_EXAMPLE, quantity: 'sete' }];
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -871,16 +871,16 @@ describe('Atualiza as informações de uma venda', () => {
   describe('com um número menor que 1 no campo "quantity"', () => {
     const updatedPayload = [{ productId: ID_EXAMPLE, quantity: -2 }];
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -894,25 +894,25 @@ describe('Atualiza as informações de uma venda', () => {
     const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 3 };
 
     before(() => {
-      sinon.stub(Model.sales, 'getSalesById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductsById').resolves(productPayload);
+      sinon.stub(Model.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
     });
 
     after(() => {
-      Model.sales.getSalesById.restore();
-      Model.products.getProductsById.restore();
+      Model.sales.getSaleById.restore();
+      Model.products.getProductById.restore();
     });
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_401);
 
@@ -927,20 +927,20 @@ describe('Atualiza as informações de uma venda', () => {
 
     before(() => {
       sinon.stub(Model.sales, 'updateSale').resolves({ matchedCount: 1 });
-      sinon.stub(Model.sales, 'getSalesById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductsById').resolves(productPayload);
-      sinon.stub(Model.products, 'updatedProduct').resolves(null);
+      sinon.stub(Model.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
+      sinon.stub(Model.products, 'updateProduct').resolves(null);
     });
 
     after(() => {
       Model.sales.updateSale.restore();
-      Model.sales.getSalesById.restore();
-      Model.products.getProductsById.restore();
-      Model.products.updatedProduct.restore();
+      Model.sales.getSaleById.restore();
+      Model.products.getProductById.restore();
+      Model.products.updateProduct.restore();
     });
 
-    it('e retorna os produtos vendidos atualizados',  () => {
-      const response =  Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
+    it('e retorna os produtos vendidos atualizados', async () => {
+      const response = await Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
 
       expect(response).to.be.an('object');
 
@@ -956,16 +956,16 @@ describe('Deleta uma venda cadastrada', () => {
   const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 3 };
 
   describe('quando o "_id" passado é inválido', () => {
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.deleteSale(NOT_VALID_ID);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.deleteSale(NOT_VALID_ID);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.deleteSale(NOT_VALID_ID);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.deleteSale(NOT_VALID_ID);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -976,28 +976,28 @@ describe('Deleta uma venda cadastrada', () => {
   describe('quando não encontrada', () => {
     before(() => {
       sinon.stub(Model.sales, 'deleteSale').resolves({ deletedCount: 0 });
-      sinon.stub(Model.sales, 'getSalesById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductsById').resolves(productPayload);
-      sinon.stub(Model.products, 'updatedProduct').resolves(null);
+      sinon.stub(Model.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
+      sinon.stub(Model.products, 'updateProduct').resolves(null);
     });
 
     after(() => {
       Model.sales.deleteSale.restore();
-      Model.sales.getSalesById.restore();
-      Model.products.getProductsById.restore();
-      Model.products.updatedProduct.restore();
+      Model.sales.getSaleById.restore();
+      Model.products.getProductById.restore();
+      Model.products.updateProduct.restore();
     });
 
-    it('retorna um objeto de erro',  () => {
-      const response =  Service.sales.deleteSale(ID_EXAMPLE);
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.deleteSale(ID_EXAMPLE);
 
       expect(response).to.be.an('object');
 
       expect(response).to.have.property('err');
     });
 
-    it('contendo a mensagem correta',  () => {
-      const response =  Service.sales.deleteSale(ID_EXAMPLE);
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.deleteSale(ID_EXAMPLE);
 
       expect(response.err.code).to.be.equal(ERROR_CODE_400);
 
@@ -1008,20 +1008,20 @@ describe('Deleta uma venda cadastrada', () => {
   describe('quando encontrada', () => {
     before(() => {
       sinon.stub(Model.sales, 'deleteSale').resolves({ deletedCount: 1 });
-      sinon.stub(Model.sales, 'getSalesById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductsById').resolves(productPayload);
-      sinon.stub(Model.products, 'updatedProduct').resolves(null);
+      sinon.stub(Model.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
+      sinon.stub(Model.products, 'updateProduct').resolves(null);
     });
 
     after(() => {
       Model.sales.deleteSale.restore();
-      Model.sales.getSalesById.restore();
-      Model.products.getProductsById.restore();
-      Model.products.updatedProduct.restore();
+      Model.sales.getSaleById.restore();
+      Model.products.getProductById.restore();
+      Model.products.updateProduct.restore();
     });
 
-    it('deleta a venda e retorna as suas informações',  () => {
-      const response =  Service.sales.deleteSale(ID_EXAMPLE);
+    it('deleta a venda e retorna as suas informações', async () => {
+      const response = await Service.sales.deleteSale(ID_EXAMPLE);
 
       expect(response).to.be.an('object');
 

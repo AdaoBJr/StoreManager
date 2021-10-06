@@ -53,21 +53,21 @@ describe('Cadastro de um novo produto', () => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
-      sinon.stub(Service.products, 'storeProduct').resolves(ERROR_NAME);
+      sinon.stub(Service.products, 'addProduct').resolves(ERROR_NAME);
     });
 
     after(() => {
-      Service.products.storeProduct.restore();
+      Service.products.addProduct.restore();
     });
 
-    it('é chamado o método "status" com o código 422',  () => {
-       Controller.products.storeProduct(request, response);
+    it('é chamado o método "status" com o código 422', async () => {
+      await Controller.products.addProduct(request, response);
 
       expect(response.status.calledWith(HTTP_UNPROCESSABLE_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com a mensagem correspondente',  () => {
-       Controller.products.storeProduct(request, response);
+    it('é chamado o método "json" com a mensagem correspondente', async () => {
+      await Controller.products.addProduct(request, response);
 
       expect(response.json.calledWith(ERROR_NAME)).to.be.equal(true);
     });
@@ -88,21 +88,21 @@ describe('Cadastro de um novo produto', () => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
-      sinon.stub(Service.products, 'storeProduct').resolves(payload);
+      sinon.stub(Service.products, 'addProduct').resolves(payload);
     });
 
     after(() => {
-      Service.products.storeProduct.restore();
+      Service.products.addProduct.restore();
     });
 
-    it('é chamado o método "status" com o código 201',  () => {
-       Controller.products.storeProduct(request, response);
+    it('é chamado o método "status" com o código 201', async () => {
+      await Controller.products.addProduct(request, response);
 
       expect(response.status.calledWith(HTTP_CREATED_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com as informações do produto',  () => {
-       Controller.products.storeProduct(request, response);
+    it('é chamado o método "json" com as informações do produto', async () => {
+      await Controller.products.addProduct(request, response);
 
       expect(response.json.calledWith(payload)).to.be.equal(true);
     });
@@ -115,24 +115,24 @@ describe('Carrega a lista de produtos', () => {
     const response = {};
 
     before(() => {
-      sinon.stub(Service.products, 'getAllProducts').resolves([]);
+      sinon.stub(Service.products, 'getProducts').resolves([]);
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
     });
 
     after(() => {
-      Service.products.getAllProducts.restore();
+      Service.products.getProducts.restore();
     });
 
-    it('é chamado o método "status" com o código 200',  () => {
-       Controller.products.getAllProducts(request, response);
+    it('é chamado o método "status" com o código 200', async () => {
+      await Controller.products.getProducts(request, response);
 
       expect(response.status.calledWith(HTTP_OK_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com um array vazio',  () => {
-       Controller.products.getAllProducts(request, response);
+    it('é chamado o método "json" com um array vazio', async () => {
+      await Controller.products.getProducts(request, response);
 
       expect(response.json.calledWith([])).to.be.equal(true);
     });
@@ -145,24 +145,24 @@ describe('Carrega a lista de produtos', () => {
     const payload = { name: 'Testy, the Tester', quantity: 30 };
 
     before(() => {
-      sinon.stub(Service.products, 'getAllProducts').resolves([payload]);
+      sinon.stub(Service.products, 'getProducts').resolves([payload]);
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
     });
 
     after(() => {
-      Service.products.getAllProducts.restore();
+      Service.products.getProducts.restore();
     });
 
-    it('é chamado o método "status" com o código 200',  () => {
-       Controller.products.getAllProducts(request, response);
+    it('é chamado o método "status" com o código 200', async () => {
+      await Controller.products.getProducts(request, response);
 
       expect(response.status.calledWith(HTTP_OK_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com um array de produtos',  () => {
-       Controller.products.getAllProducts(request, response);
+    it('é chamado o método "json" com um array de produtos', async () => {
+      await Controller.products.getProducts(request, response);
 
       expect(response.json.calledWith([payload])).to.be.equal(true);
     });
@@ -177,24 +177,24 @@ describe('Carrega um produto cadastrado pela "_id"', () => {
     before(() => {
       request.params = { id: ID_EXAMPLE };
 
-      sinon.stub(Service.products, 'getProductsById').resolves(ERROR_ID);
+      sinon.stub(Service.products, 'getProductById').resolves(ERROR_ID);
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
     });
 
     after(() => {
-      Service.products.getProductsById.restore();
+      Service.products.getProductById.restore();
     });
 
-    it('é chamado o método "status" com o código 422',  () => {
-       Controller.products.getProductsById(request, response);
+    it('é chamado o método "status" com o código 422', async () => {
+      await Controller.products.getProductById(request, response);
 
       expect(response.status.calledWith(HTTP_UNPROCESSABLE_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com a mensagem correspondente',  () => {
-       Controller.products.getProductsById(request, response);
+    it('é chamado o método "json" com a mensagem correspondente', async () => {
+      await Controller.products.getProductById(request, response);
 
       expect(response.json.calledWith(ERROR_ID)).to.be.equal(true);
     });
@@ -209,24 +209,24 @@ describe('Carrega um produto cadastrado pela "_id"', () => {
     before(() => {
       request.params = { id: ID_EXAMPLE };
 
-      sinon.stub(Service.products, 'getProductsById').resolves(payload);
+      sinon.stub(Service.products, 'getProductById').resolves(payload);
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
     });
 
     after(() => {
-      Service.products.getProductsById.restore();
+      Service.products.getProductById.restore();
     });
 
-    it('é chamado o método "status" com o código 200',  () => {
-       Controller.products.getProductsById(request, response);
+    it('é chamado o método "status" com o código 200', async () => {
+      await Controller.products.getProductById(request, response);
 
       expect(response.status.calledWith(HTTP_OK_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com as informações do produto',  () => {
-       Controller.products.getProductsById(request, response);
+    it('é chamado o método "json" com as informações do produto', async () => {
+      await Controller.products.getProductById(request, response);
 
       expect(response.json.calledWith(payload)).to.be.equal(true);
     });
@@ -247,21 +247,21 @@ describe('Atualiza as informações de um produto', () => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
-      sinon.stub(Service.products, 'updatedProduct').resolves(ERROR_ID);
+      sinon.stub(Service.products, 'updateProduct').resolves(ERROR_ID);
     });
 
     after(() => {
-      Service.products.updatedProduct.restore();
+      Service.products.updateProduct.restore();
     });
 
-    it('é chamado o método "status" com o código 422',  () => {
-       Controller.products.updatedProduct(request, response);
+    it('é chamado o método "status" com o código 422', async () => {
+      await Controller.products.updateProduct(request, response);
 
       expect(response.status.calledWith(HTTP_UNPROCESSABLE_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com a mensagem correspondente',  () => {
-       Controller.products.updatedProduct(request, response);
+    it('é chamado o método "json" com a mensagem correspondente', async () => {
+      await Controller.products.updateProduct(request, response);
 
       expect(response.json.calledWith(ERROR_ID)).to.be.equal(true);
     });
@@ -280,21 +280,21 @@ describe('Atualiza as informações de um produto', () => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
-      sinon.stub(Service.products, 'updatedProduct').resolves(payload);
+      sinon.stub(Service.products, 'updateProduct').resolves(payload);
     });
 
     after(() => {
-      Service.products.updatedProduct.restore();
+      Service.products.updateProduct.restore();
     });
 
-    it('é chamado o método "status" com o código 200',  () => {
-       Controller.products.updatedProduct(request, response);
+    it('é chamado o método "status" com o código 200', async () => {
+      await Controller.products.updateProduct(request, response);
 
       expect(response.status.calledWith(HTTP_OK_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com as novas informações do produto',  () => {
-       Controller.products.updatedProduct(request, response);
+    it('é chamado o método "json" com as novas informações do produto', async () => {
+      await Controller.products.updateProduct(request, response);
 
       expect(response.json.calledWith(payload)).to.be.equal(true);
     });
@@ -320,14 +320,14 @@ describe('Deleta um produto cadastrado', () => {
       Service.products.deleteProduct.restore();
     });
 
-    it('é chamado o método "status" com o código 422',  () => {
-       Controller.products.deleteProduct(request, response);
+    it('é chamado o método "status" com o código 422', async () => {
+      await Controller.products.deleteProduct(request, response);
 
       expect(response.status.calledWith(HTTP_UNPROCESSABLE_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com a mensagem correspondente',  () => {
-       Controller.products.deleteProduct(request, response);
+    it('é chamado o método "json" com a mensagem correspondente', async () => {
+      await Controller.products.deleteProduct(request, response);
 
       expect(response.json.calledWith(ERROR_ID)).to.be.equal(true);
     });
@@ -353,14 +353,14 @@ describe('Deleta um produto cadastrado', () => {
       Service.products.deleteProduct.restore();
     });
 
-    it('é chamado o método "status" com o código 200',  () => {
-       Controller.products.deleteProduct(request, response);
+    it('é chamado o método "status" com o código 200', async () => {
+      await Controller.products.deleteProduct(request, response);
 
       expect(response.status.calledWith(HTTP_OK_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com as informações deletadas do produto',  () => {
-       Controller.products.deleteProduct(request, response);
+    it('é chamado o método "json" com as informações deletadas do produto', async () => {
+      await Controller.products.deleteProduct(request, response);
 
       expect(response.json.calledWith(payload)).to.be.equal(true);
     });
@@ -382,21 +382,21 @@ describe('Cadastro de uma nova venda', () => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
-      sinon.stub(Service.sales, 'storeSales').resolves(ERROR_SALES);
+      sinon.stub(Service.sales, 'addSales').resolves(ERROR_SALES);
     });
 
     after(() => {
-      Service.sales.storeSales.restore();
+      Service.sales.addSales.restore();
     });
 
-    it('é chamado o método "status" com o código 422',  () => {
-       Controller.sales.storeSales(request, response);
+    it('é chamado o método "status" com o código 422', async () => {
+      await Controller.sales.addSales(request, response);
 
       expect(response.status.calledWith(HTTP_UNPROCESSABLE_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com a mensagem correspondente',  () => {
-       Controller.sales.storeSales(request, response);
+    it('é chamado o método "json" com a mensagem correspondente', async () => {
+      await Controller.sales.addSales(request, response);
 
       expect(response.json.calledWith(ERROR_SALES)).to.be.equal(true);
     });
@@ -412,21 +412,21 @@ describe('Cadastro de uma nova venda', () => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
-      sinon.stub(Service.sales, 'storeSales').resolves(ERROR_STOCK);
+      sinon.stub(Service.sales, 'addSales').resolves(ERROR_STOCK);
     });
 
     after(() => {
-      Service.sales.storeSales.restore();
+      Service.sales.addSales.restore();
     });
 
-    it('é chamado o método "status" com o código 404',  () => {
-       Controller.sales.storeSales(request, response);
+    it('é chamado o método "status" com o código 404', async () => {
+      await Controller.sales.addSales(request, response);
 
       expect(response.status.calledWith(HTTP_NOT_FOUND_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com a mensagem correspondente',  () => {
-       Controller.sales.storeSales(request, response);
+    it('é chamado o método "json" com a mensagem correspondente', async () => {
+      await Controller.sales.addSales(request, response);
 
       expect(response.json.calledWith(ERROR_STOCK)).to.be.equal(true);
     });
@@ -447,21 +447,21 @@ describe('Cadastro de uma nova venda', () => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
-      sinon.stub(Service.sales, 'storeSales').resolves(payload);
+      sinon.stub(Service.sales, 'addSales').resolves(payload);
     });
 
     after(() => {
-      Service.sales.storeSales.restore();
+      Service.sales.addSales.restore();
     });
 
-    it('é chamado o método "status" com o código 200',  () => {
-       Controller.sales.storeSales(request, response);
+    it('é chamado o método "status" com o código 200', async () => {
+      await Controller.sales.addSales(request, response);
 
       expect(response.status.calledWith(HTTP_OK_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com as informações do produto',  () => {
-       Controller.sales.storeSales(request, response);
+    it('é chamado o método "json" com as informações do produto', async () => {
+      await Controller.sales.addSales(request, response);
 
       expect(response.json.calledWith(payload)).to.be.equal(true);
     });
@@ -474,24 +474,24 @@ describe('Carrega a lista de vendas', () => {
     const response = {};
 
     before(() => {
-      sinon.stub(Service.sales, 'getAllSales').resolves({ sales: [] });
+      sinon.stub(Service.sales, 'getSales').resolves({ sales: [] });
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
     });
 
     after(() => {
-      Service.sales.getAllSales.restore();
+      Service.sales.getSales.restore();
     });
 
-    it('é chamado o método "status" com o código 200',  () => {
-       Controller.sales.getAllSales(request, response);
+    it('é chamado o método "status" com o código 200', async () => {
+      await Controller.sales.getSales(request, response);
 
       expect(response.status.calledWith(HTTP_OK_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com um objeto contendo um array vazio',  () => {
-       Controller.sales.getAllSales(request, response);
+    it('é chamado o método "json" com um objeto contendo um array vazio', async () => {
+      await Controller.sales.getSales(request, response);
 
       expect(response.json.calledWith({ sales: [] })).to.be.equal(true);
     });
@@ -504,7 +504,7 @@ describe('Carrega a lista de vendas', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
 
     before(() => {
-      sinon.stub(Service.sales, 'getAllSales').resolves({
+      sinon.stub(Service.sales, 'getSales').resolves({
         sales:[{ _id: ID_EXAMPLE, itensSold: payload }]
       });
 
@@ -513,17 +513,17 @@ describe('Carrega a lista de vendas', () => {
     });
 
     after(() => {
-      Service.sales.getAllSales.restore();
+      Service.sales.getSales.restore();
     });
 
-    it('é chamado o método "status" com o código 200',  () => {
-       Controller.sales.getAllSales(request, response);
+    it('é chamado o método "status" com o código 200', async () => {
+      await Controller.sales.getSales(request, response);
 
       expect(response.status.calledWith(HTTP_OK_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com um objeto contendo um array de produtos',  () => {
-       Controller.sales.getAllSales(request, response);
+    it('é chamado o método "json" com um objeto contendo um array de produtos', async () => {
+      await Controller.sales.getSales(request, response);
 
       expect(response.json.calledWith({
         sales:[{ _id: ID_EXAMPLE, itensSold: payload }]
@@ -540,24 +540,24 @@ describe('Carrega uma venda cadastrada pela "_id"', () => {
     before(() => {
       request.params = { id: ID_EXAMPLE };
 
-      sinon.stub(Service.sales, 'getAllSalesById').resolves(ERROR_NOT_FOUND);
+      sinon.stub(Service.sales, 'getSaleById').resolves(ERROR_NOT_FOUND);
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
     });
 
     after(() => {
-      Service.sales.getSalesById.restore();
+      Service.sales.getSaleById.restore();
     });
 
-    it('é chamado o método "status" com o código 404',  () => {
-       Controller.sales.getSalesById(request, response);
+    it('é chamado o método "status" com o código 404', async () => {
+      await Controller.sales.getSaleById(request, response);
 
       expect(response.status.calledWith(HTTP_NOT_FOUND_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com a mensagem correspondente',  () => {
-       Controller.sales.getSalesById(request, response);
+    it('é chamado o método "json" com a mensagem correspondente', async () => {
+      await Controller.sales.getSaleById(request, response);
 
       expect(response.json.calledWith(ERROR_NOT_FOUND)).to.be.equal(true);
     });
@@ -572,24 +572,24 @@ describe('Carrega uma venda cadastrada pela "_id"', () => {
     before(() => {
       request.params = { id: ID_EXAMPLE };
 
-      sinon.stub(Service.sales, 'getSalesById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Service.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
     });
 
     after(() => {
-      Service.sales.getSalesById.restore();
+      Service.sales.getSaleById.restore();
     });
 
-    it('é chamado o método "status" com o código 200',  () => {
-       Controller.sales.getSalesById(request, response);
+    it('é chamado o método "status" com o código 200', async () => {
+      await Controller.sales.getSaleById(request, response);
 
       expect(response.status.calledWith(HTTP_OK_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com as informações do produto',  () => {
-       Controller.sales.getSalesById(request, response);
+    it('é chamado o método "json" com as informações do produto', async () => {
+      await Controller.sales.getSaleById(request, response);
 
       expect(response.json.calledWith({ _id: ID_EXAMPLE, itensSold: payload })).to.be.equal(true);
     });
@@ -617,14 +617,14 @@ describe('Atualiza as informações de uma venda', () => {
       Service.sales.updateSale.restore();
     });
 
-    it('é chamado o método "status" com o código 422',  () => {
-       Controller.sales.updateSale(request, response);
+    it('é chamado o método "status" com o código 422', async () => {
+      await Controller.sales.updateSale(request, response);
 
       expect(response.status.calledWith(HTTP_UNPROCESSABLE_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com a mensagem correspondente',  () => {
-       Controller.sales.updateSale(request, response);
+    it('é chamado o método "json" com a mensagem correspondente', async () => {
+      await Controller.sales.updateSale(request, response);
 
       expect(response.json.calledWith(ERROR_SALES)).to.be.equal(true);
     });
@@ -648,14 +648,14 @@ describe('Atualiza as informações de uma venda', () => {
       Service.sales.updateSale.restore();
     });
 
-    it('é chamado o método "status" com o código 404',  () => {
-       Controller.sales.updateSale(request, response);
+    it('é chamado o método "status" com o código 404', async () => {
+      await Controller.sales.updateSale(request, response);
 
       expect(response.status.calledWith(HTTP_NOT_FOUND_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com a mensagem correspondente',  () => {
-       Controller.sales.updateSale(request, response);
+    it('é chamado o método "json" com a mensagem correspondente', async () => {
+      await Controller.sales.updateSale(request, response);
 
       expect(response.json.calledWith(ERROR_STOCK)).to.be.equal(true);
     });
@@ -681,14 +681,14 @@ describe('Atualiza as informações de uma venda', () => {
       Service.sales.updateSale.restore();
     });
 
-    it('é chamado o método "status" com o código 200',  () => {
-       Controller.sales.updateSale(request, response);
+    it('é chamado o método "status" com o código 200', async () => {
+      await Controller.sales.updateSale(request, response);
 
       expect(response.status.calledWith(HTTP_OK_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com as novas informações dos produtos vendidos',  () => {
-       Controller.sales.updateSale(request, response);
+    it('é chamado o método "json" com as novas informações dos produtos vendidos', async () => {
+      await Controller.sales.updateSale(request, response);
 
       expect(response.json.calledWith(payload)).to.be.equal(true);
     });
@@ -714,14 +714,14 @@ describe('Deleta uma venda cadastrada', () => {
       Service.sales.deleteSale.restore();
     });
 
-    it('é chamado o método "status" com o código 422',  () => {
-       Controller.sales.deleteSale(request, response);
+    it('é chamado o método "status" com o código 422', async () => {
+      await Controller.sales.deleteSale(request, response);
 
       expect(response.status.calledWith(HTTP_UNPROCESSABLE_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com a mensagem correspondente',  () => {
-       Controller.sales.deleteSale(request, response);
+    it('é chamado o método "json" com a mensagem correspondente', async () => {
+      await Controller.sales.deleteSale(request, response);
 
       expect(response.json.calledWith(ERROR_SALE_ID)).to.be.equal(true);
     });
@@ -745,14 +745,14 @@ describe('Deleta uma venda cadastrada', () => {
       Service.sales.deleteSale.restore();
     });
 
-    it('é chamado o método "status" com o código 404',  () => {
-       Controller.sales.deleteSale(request, response);
+    it('é chamado o método "status" com o código 404', async () => {
+      await Controller.sales.deleteSale(request, response);
 
       expect(response.status.calledWith(HTTP_NOT_FOUND_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com a mensagem correspondente',  () => {
-       Controller.sales.deleteSale(request, response);
+    it('é chamado o método "json" com a mensagem correspondente', async () => {
+      await Controller.sales.deleteSale(request, response);
 
       expect(response.json.calledWith(ERROR_STOCK)).to.be.equal(true);
     });
@@ -778,14 +778,14 @@ describe('Deleta uma venda cadastrada', () => {
       Service.sales.deleteSale.restore();
     });
 
-    it('é chamado o método "status" com o código 200',  () => {
-       Controller.sales.deleteSale(request, response);
+    it('é chamado o método "status" com o código 200', async () => {
+      await Controller.sales.deleteSale(request, response);
 
       expect(response.status.calledWith(HTTP_OK_STATUS)).to.be.equal(true);
     });
 
-    it('é chamado o método "json" com as informações deletadas dos produtos vendidos',  () => {
-       Controller.sales.deleteSale(request, response);
+    it('é chamado o método "json" com as informações deletadas dos produtos vendidos', async () => {
+      await Controller.sales.deleteSale(request, response);
 
       expect(response.json.calledWith({ _id: ID_EXAMPLE, itensSold: payload })).to.be.equal(true);
     });

@@ -17,8 +17,8 @@ describe('Cadastro de um novo produto', () => {
   describe('quando é adicionado com sucesso', () => {
     const payload = { name: 'Testy, the Tester', quantity: 30 };
 
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
     });
@@ -27,14 +27,14 @@ describe('Cadastro de um novo produto', () => {
       MongoClient.connect.restore();
     });
 
-    it('retorna um objeto',  () => {
-      const response =  Model.products.storeProduct(payload);
+    it('retorna um objeto', async () => {
+      const response = await Model.products.addProduct(payload);
 
       expect(response).to.be.an('object');
     });
 
-    it('tal objeto possui a "_id" do produto',  () => {
-      const response =  Model.products.storeProduct(payload);
+    it('tal objeto possui a "_id" do produto', async () => {
+      const response = await Model.products.addProduct(payload);
 
       expect(response).to.have.property('_id');
     });
@@ -43,8 +43,8 @@ describe('Cadastro de um novo produto', () => {
 
 describe('Carrega a lista de produtos', () => {
   describe('quando não tem nenhum cadastrado',() => {
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
     });
@@ -53,16 +53,16 @@ describe('Carrega a lista de produtos', () => {
       MongoClient.connect.restore();
     });
 
-    it('retorna um objeto contendo um array',  () => {
-      const response =  Model.products.getAllProducts();
+    it('retorna um objeto contendo um array', async () => {
+      const response = await Model.products.getProducts();
 
       expect(response).to.be.an('object');
 
       expect(response.products).to.be.an('array');
     });
 
-    it('vazio',  () => {
-      const response =  Model.products.getAllProducts();
+    it('vazio', async () => {
+      const response = await Model.products.getProducts();
 
       expect(response.products).to.be.empty;
     });
@@ -71,28 +71,28 @@ describe('Carrega a lista de produtos', () => {
   describe('quando tem produtos cadastrados', () => {
     const payload = { name: 'Testy, the Tester', quantity: 30 };
 
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
 
-       connectionMock.db(DB_NAME).collection(COLLECTION_P).insertOne(payload);
+      await connectionMock.db(DB_NAME).collection(COLLECTION_P).insertOne(payload);
     });
 
     after(() => {
       MongoClient.connect.restore();
     });
 
-    it('retorna um objeto contendo um array',  () => {
-      const response =  Model.products.getAllProducts();
+    it('retorna um objeto contendo um array', async () => {
+      const response = await Model.products.getProducts();
 
       expect(response).to.be.an('object');
 
       expect(response.products).to.be.an('array');
     });
 
-    it('de objetos',  () => {
-      const response =  Model.products.getAllProducts();
+    it('de objetos', async () => {
+      const response = await Model.products.getProducts();
 
       expect(response.products[0]).to.be.an('object');
 
@@ -103,8 +103,8 @@ describe('Carrega a lista de produtos', () => {
 
 describe('Carrega um produto cadastrado pela "_id"', () => {
   describe('quando não encontrado', () => {
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
     });
@@ -113,24 +113,24 @@ describe('Carrega um produto cadastrado pela "_id"', () => {
       MongoClient.connect.restore();
     });
 
-    it('o retorno é null',  () => {
-      const response =  Model.products.getProductsById(ID_EXAMPLE);
+    it('o retorno é null', async () => {
+      const response = await Model.products.getProductById(ID_EXAMPLE);
 
       expect(response).to.be.equal(null);
     });
   });
 
   describe('quando encontrado', () => {
-    it('o retorno é um objeto com as informações do produto',  () => {
+    it('o retorno é um objeto com as informações do produto', async () => {
       const payload = { name: 'Testy, the Tester', quantity: 30 };
 
-      const connectionMock =  getConnection();
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
 
-      const { insertedId } =  connectionMock.db(DB_NAME).collection(COLLECTION_P).insertOne(payload);
+      const { insertedId } = await connectionMock.db(DB_NAME).collection(COLLECTION_P).insertOne(payload);
 
-      const response =  Model.products.getProductsById(insertedId);
+      const response = await Model.products.getProductById(insertedId);
 
       expect(response).to.be.an('object');
 
@@ -147,8 +147,8 @@ describe('Atualiza as informações de um produto', () => {
   const payload = { name: 'Testy, the Tester', quantity: 30 };
 
   describe('quando não encontra o produto', () => {
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
     });
@@ -157,8 +157,8 @@ describe('Atualiza as informações de um produto', () => {
       MongoClient.connect.restore();
     });
 
-    it('retorna um objeto com "matchedCount" com valor 0',  () => {
-      const response =  Model.products.updatedProduct(ID_EXAMPLE, payload);
+    it('retorna um objeto com "matchedCount" com valor 0', async () => {
+      const response = await Model.products.updateProduct(ID_EXAMPLE, payload);
 
       expect(response).to.be.an('object');
 
@@ -169,14 +169,14 @@ describe('Atualiza as informações de um produto', () => {
   describe('quando encontrado', () => {
     const updatedPayload = { name: 'Testy, the Tester', quantity: 45 };
 
-    it('atualiza o produto e retorna um objeto com "modifiedCount" com valor 1',  () => {
-      const connectionMock =  getConnection();
+    it('atualiza o produto e retorna um objeto com "modifiedCount" com valor 1', async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
 
-      const { insertedId } =  connectionMock.db(DB_NAME).collection(COLLECTION_P).insertOne(payload);
+      const { insertedId } = await connectionMock.db(DB_NAME).collection(COLLECTION_P).insertOne(payload);
 
-      const response =  Model.products.updatedProduct(insertedId, updatedPayload);
+      const response = await Model.products.updateProduct(insertedId, updatedPayload);
 
       expect(response).to.be.an('object');
 
@@ -189,8 +189,8 @@ describe('Atualiza as informações de um produto', () => {
 
 describe('Deleta um produto cadastrado', () => {
   describe('quando não encontrado', () => {
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
     });
@@ -199,8 +199,8 @@ describe('Deleta um produto cadastrado', () => {
       MongoClient.connect.restore();
     });
 
-    it('retorna um objeto com "deletedCount" com valor 0',  () => {
-      const response =  Model.products.deleteProduct(ID_EXAMPLE);
+    it('retorna um objeto com "deletedCount" com valor 0', async () => {
+      const response = await Model.products.deleteProduct(ID_EXAMPLE);
 
       expect(response).to.be.an('object');
 
@@ -211,14 +211,14 @@ describe('Deleta um produto cadastrado', () => {
   describe('quando encontrado', () => {
     const payload = { name: 'Testy, the Tester', quantity: 45 };
 
-    it('deleta o produto e retorna um objeto com "deletedCount" com valor 1',  () => {
-      const connectionMock =  getConnection();
+    it('deleta o produto e retorna um objeto com "deletedCount" com valor 1', async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
 
-      const { insertedId } =  connectionMock.db(DB_NAME).collection(COLLECTION_P).insertOne(payload);
+      const { insertedId } = await connectionMock.db(DB_NAME).collection(COLLECTION_P).insertOne(payload);
 
-      const response =  Model.products.deleteProduct(insertedId);
+      const response = await Model.products.deleteProduct(insertedId);
 
       expect(response).to.be.an('object');
 
@@ -237,8 +237,8 @@ describe('Cadastro de uma nova venda', () => {
   describe('quando uma venda de um produto é adicionada com sucesso', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
 
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
     });
@@ -247,14 +247,14 @@ describe('Cadastro de uma nova venda', () => {
       MongoClient.connect.restore();
     });
 
-    it('retorna um objeto',  () => {
-      const response =  Model.sales.storeSales(payload);
+    it('retorna um objeto', async () => {
+      const response = await Model.sales.addSales(payload);
 
       expect(response).to.be.an('object');
     });
 
-    it('tal objeto possui a "_id" do produto',  () => {
-      const response =  Model.sales.storeSales(payload);
+    it('tal objeto possui a "_id" do produto', async () => {
+      const response = await Model.sales.addSales(payload);
 
       expect(response).to.have.property('_id');
     });
@@ -263,8 +263,8 @@ describe('Cadastro de uma nova venda', () => {
   describe('quando uma venda de dois produtos é adicionada com sucesso', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }, { productId: ID_EXAMPLE, quantity: 7 }];
 
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
     });
@@ -273,14 +273,14 @@ describe('Cadastro de uma nova venda', () => {
       MongoClient.connect.restore();
     });
 
-    it('retorna um objeto',  () => {
-      const response =  Model.sales.storeSales(payload);
+    it('retorna um objeto', async () => {
+      const response = await Model.sales.addSales(payload);
 
       expect(response).to.be.an('object');
     });
 
-    it('tal objeto possui a "_id" do produto',  () => {
-      const response =  Model.sales.storeSales(payload);
+    it('tal objeto possui a "_id" do produto', async () => {
+      const response = await Model.sales.addSales(payload);
 
       expect(response).to.have.property('_id');
     });
@@ -289,8 +289,8 @@ describe('Cadastro de uma nova venda', () => {
 
 describe('Carrega a lista de vendas', () => {
   describe('quando não tem nenhuma cadastrada',() => {
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
     });
@@ -299,16 +299,16 @@ describe('Carrega a lista de vendas', () => {
       MongoClient.connect.restore();
     });
 
-    it('retorna um objeto contendo um array',  () => {
-      const response =  Model.sales.getAllSales();
+    it('retorna um objeto contendo um array', async () => {
+      const response = await Model.sales.getSales();
 
       expect(response).to.be.an('object');
 
       expect(response.sales).to.be.an('array');
     });
 
-    it('vazio',  () => {
-      const response =  Model.sales.getAllSales();
+    it('vazio', async () => {
+      const response = await Model.sales.getSales();
 
       expect(response.sales).to.be.empty;
     });
@@ -317,28 +317,28 @@ describe('Carrega a lista de vendas', () => {
   describe('quando tem vendas cadastradas', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
 
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
 
-       connectionMock.db(DB_NAME).collection(COLLECTION_S).insertOne({ itensSold: payload });
+      await connectionMock.db(DB_NAME).collection(COLLECTION_S).insertOne({ itensSold: payload });
     });
 
     after(() => {
       MongoClient.connect.restore();
     });
 
-    it('retorna um objeto contendo um array',  () => {
-      const response =  Model.sales.getAllSales();
+    it('retorna um objeto contendo um array', async () => {
+      const response = await Model.sales.getSales();
 
       expect(response).to.be.an('object');
 
       expect(response.sales).to.be.an('array');
     });
 
-    it('de objetos',  () => {
-      const response =  Model.sales.getAllSales();
+    it('de objetos', async () => {
+      const response = await Model.sales.getSales();
 
       expect(response.sales[0]).to.be.an('object');
 
@@ -349,8 +349,8 @@ describe('Carrega a lista de vendas', () => {
 
 describe('Carrega uma venda cadastrada pela "_id"', () => {
   describe('quando não encontrada', () => {
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
     });
@@ -359,24 +359,24 @@ describe('Carrega uma venda cadastrada pela "_id"', () => {
       MongoClient.connect.restore();
     });
 
-    it('o retorno é null',  () => {
-      const response =  Model.sales.getSalesById(ID_EXAMPLE);
+    it('o retorno é null', async () => {
+      const response = await Model.sales.getSaleById(ID_EXAMPLE);
 
       expect(response).to.be.equal(null);
     });
   });
 
   describe('quando encontrada', () => {
-    it('o retorno é um objeto com as informações dos produtos',  () => {
+    it('o retorno é um objeto com as informações dos produtos', async () => {
       const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
 
-      const connectionMock =  getConnection();
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
 
-      const { insertedId } =  connectionMock.db(DB_NAME).collection(COLLECTION_S).insertOne({ itensSold: payload });
+      const { insertedId } = await connectionMock.db(DB_NAME).collection(COLLECTION_S).insertOne({ itensSold: payload });
 
-      const response =  Model.sales.getSalesById(insertedId);
+      const response = await Model.sales.getSaleById(insertedId);
 
       expect(response).to.be.an('object');
 
@@ -391,8 +391,8 @@ describe('Atualiza as informações de uma venda', () => {
   const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
 
   describe('quando não encontra a venda', () => {
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
     });
@@ -401,8 +401,8 @@ describe('Atualiza as informações de uma venda', () => {
       MongoClient.connect.restore();
     });
 
-    it('retorna um objeto com "matchedCount" com valor 0',  () => {
-      const response =  Model.sales.updateSale(ID_EXAMPLE, { itensSold: payload });
+    it('retorna um objeto com "matchedCount" com valor 0', async () => {
+      const response = await Model.sales.updateSale(ID_EXAMPLE, { itensSold: payload });
 
       expect(response).to.be.an('object');
 
@@ -413,14 +413,14 @@ describe('Atualiza as informações de uma venda', () => {
   describe('quando encontrada', () => {
     const updatedPayload = [{ productId: ID_EXAMPLE, quantity: 7 }];
 
-    it('atualiza os produtos vendidos e retorna um objeto com "modifiedCount" com valor 1',  () => {
-      const connectionMock =  getConnection();
+    it('atualiza os produtos vendidos e retorna um objeto com "modifiedCount" com valor 1', async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
 
-      const { insertedId } =  connectionMock.db(DB_NAME).collection(COLLECTION_S).insertOne({ itensSold: payload });
+      const { insertedId } = await connectionMock.db(DB_NAME).collection(COLLECTION_S).insertOne({ itensSold: payload });
 
-      const response =  Model.sales.updateSale(insertedId, { itensSold: updatedPayload });
+      const response = await Model.sales.updateSale(insertedId, { itensSold: updatedPayload });
 
       expect(response).to.be.an('object');
 
@@ -433,8 +433,8 @@ describe('Atualiza as informações de uma venda', () => {
 
 describe('Deleta uma venda cadastrada', () => {
   describe('quando não encontrada', () => {
-    before( () => {
-      const connectionMock =  getConnection();
+    before(async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
     });
@@ -443,8 +443,8 @@ describe('Deleta uma venda cadastrada', () => {
       MongoClient.connect.restore();
     });
 
-    it('retorna um objeto com "deletedCount" com valor 0',  () => {
-      const response =  Model.sales.deleteSale(ID_EXAMPLE);
+    it('retorna um objeto com "deletedCount" com valor 0', async () => {
+      const response = await Model.sales.deleteSale(ID_EXAMPLE);
 
       expect(response).to.be.an('object');
 
@@ -455,15 +455,15 @@ describe('Deleta uma venda cadastrada', () => {
   describe('quando encontrada', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
 
-    it('deleta a venda e retorna um objeto com "deletedCount" com valor 1',  () => {
-      const connectionMock =  getConnection();
+    it('deleta a venda e retorna um objeto com "deletedCount" com valor 1', async () => {
+      const connectionMock = await getConnection();
 
       sinon.stub(MongoClient, 'connect').resolves(connectionMock);
 
-      const { insertedId } =  connectionMock.db(DB_NAME)
+      const { insertedId } = await connectionMock.db(DB_NAME)
         .collection(COLLECTION_S).insertOne({ itensSold: payload });
 
-      const response =  Model.sales.deleteSale(insertedId);
+      const response = await Model.sales.deleteSale(insertedId);
 
       expect(response).to.be.an('object');
 
