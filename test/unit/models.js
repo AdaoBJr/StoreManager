@@ -118,5 +118,27 @@ describe('Testing products list', () => {
                   const ret = await testProd.findByName(payload.name);
                   expect(ret).to.have.all.keys('_id', 'name', 'quantity');
                 });
-    })
-});
+            });
+        });
+
+        describe('Expecting prod not to exist', () => {
+            const payload = { name: 'Produto', quantity: 840 };
+            describe('response', () => {
+        
+              before(async () => {
+                const mockConn = await connect();
+                sinon.stub(MongoClient, 'connect').resolves(mockConn);
+                await mockConn.db('StoreManager').collection('products').deleteMany({});
+              });
+        
+              after(() => {
+                MongoClient.connect.restore();
+              });
+        
+              it('expecting to be null', async () => {
+                const ret = await testProd.findByName(payload.name);
+                expect(ret).to.be.null;
+              });
+            });
+        });
+    });
