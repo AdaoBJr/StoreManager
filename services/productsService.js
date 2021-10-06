@@ -25,7 +25,7 @@ const create = async (name, quantity) => {
   const isExist = validations.productExists(existingProduct);
 
   if (isExist) return isExist;
-  
+
   const isvalid = validations.isValidated({ name, quantity });
 
   if (isvalid) return isvalid;
@@ -37,7 +37,7 @@ const update = async (id, name, quantity) => {
   const getProduct = await getById(id);
 
   if (getProduct.error) return getProduct;
-  
+
   const isvalid = validations.isValidated({ name, quantity });
 
   if (isvalid) return isvalid;
