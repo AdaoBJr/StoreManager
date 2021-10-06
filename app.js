@@ -1,7 +1,7 @@
 const express = require('express');
 
-const { productsRoutes, salesRoutes } = require('./api/routes');
-const nextErrors = require('./api/errors/nextErrors');
+const { productsRoutes, salesRoutes } = require('./routes');
+const nextErrors = require('./src/api/errors/nextErrors');
 
 const app = express();
 

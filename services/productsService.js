@@ -1,7 +1,7 @@
-const { bodyValidation, nameValidation } = require('../validations/productValidation');
+const { bodyValidation, nameValidation } = require('../src/api/validations/productValidation');
 const { newProduct, getAllProducts, getProductById } = require('../models/productsModel');
 const productsModel = require('../models/productsModel');
-const throwError = require('../helpers/throwError');
+const throwError = require('../src/api/helpers/throwError');
 
 const addProduct = async (product) => {
     const { error } = bodyValidation(product);

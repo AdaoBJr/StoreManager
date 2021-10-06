@@ -1,7 +1,7 @@
-const { bodyValidation } = require('../validations/saleValidations');
+const { bodyValidation } = require('../src/api/validations/saleValidations');
 const salesModel = require('../models/salesModel');
 const productsModel = require('../models/productsModel');
-const throwError = require('../helpers/throwError');
+const throwError = require('../src/api/helpers/throwError');
 
 const updStockDown = (sale) => {
   sale.forEach(async ({ productId, quantity }) => {

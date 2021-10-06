@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb');
-const { getConnection } = require('../../config/mongoConnection');
+const { getConnection } = require('../src/config/mongoConnection');
 const productsModel = require('./productsModel');
 
 const newSale = async (sale) => {

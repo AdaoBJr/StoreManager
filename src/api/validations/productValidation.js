@@ -1,5 +1,5 @@
 const productSchema = require('../schemas/productSchema');
-const { getProductByName } = require('../models/productsModel');
+const { getProductByName } = require('../../../models/productsModel');
 
 const bodyValidation = (product) => productSchema.validate(product);
 
