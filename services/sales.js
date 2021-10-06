@@ -80,4 +80,5 @@ module.exports = {
     selectById,
     saleUpdate,
     saleDelete,
+    updateStock,
 };
