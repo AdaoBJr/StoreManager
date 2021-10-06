@@ -47,11 +47,12 @@ const selectById = async (id) => {
   return result;
 };
 
-const createProd = async (name, quantity) => {
+const createProd = async ({ name, quantity }) => {
   checkNameLength(name);
   checkValidQuantity(quantity);
   await findProductByName(name);
-  const result = await model.createProd(name, quantity);
+  const result = await model.createProd({ name, quantity });
+  console.log(result);
   return result;
 };
 
@@ -66,6 +67,7 @@ const updateProd = async (id, name, quantity) => {
 const deleteProd = async (id) => {
   const result = await model.deleteProd(id);
   checkProductId(result);
+  console.log(result);
   return result;
 };
 
