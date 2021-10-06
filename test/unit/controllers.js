@@ -15,30 +15,42 @@ const NOT_VALID_ID = 'I am not valid';
 const ERROR_CODE_400 = 'invalid_data';
 const ERROR_CODE_401 = 'stock_problem';
 const ERROR_CODE_404 = 'not_found';
-const ERROR_NAME = { err: {
-  code: ERROR_CODE_400,
-  message: '"name" length must be at least 5 characters long',
-} };
-const ERROR_ID = { err: {
-  code: ERROR_CODE_400,
-  message: 'Wrong id format',
-} };
-const ERROR_SALES = { err: {
-  code: ERROR_CODE_400,
-  message: 'Wrong product ID or invalid quantity',
-} };
-const ERROR_NOT_FOUND = { err: {
-  code: ERROR_CODE_404,
-  message: 'Sale not found',
-} };
-const ERROR_SALE_ID = { err: {
-  code: ERROR_CODE_400,
-  message: 'Wrong sale ID format',
-} };
-const ERROR_STOCK = { err: {
-  code: ERROR_CODE_401,
-  message: 'Such amount is not permitted to sell',
-} };
+const ERROR_NAME = {
+  err: {
+    code: ERROR_CODE_400,
+    message: '"name" length must be at least 5 characters long',
+  }
+};
+const ERROR_ID = {
+  err: {
+    code: ERROR_CODE_400,
+    message: 'Wrong id format',
+  }
+};
+const ERROR_SALES = {
+  err: {
+    code: ERROR_CODE_400,
+    message: 'Wrong product ID or invalid quantity',
+  }
+};
+const ERROR_NOT_FOUND = {
+  err: {
+    code: ERROR_CODE_404,
+    message: 'Sale not found',
+  }
+};
+const ERROR_SALE_ID = {
+  err: {
+    code: ERROR_CODE_400,
+    message: 'Wrong sale ID format',
+  }
+};
+const ERROR_STOCK = {
+  err: {
+    code: ERROR_CODE_401,
+    message: 'Such amount is not permitted to sell',
+  }
+};
 
 // TESTES PRODUCTS
 
@@ -110,7 +122,7 @@ describe('Cadastro de um novo produto', () => {
 });
 
 describe('Carrega a lista de produtos', () => {
-  describe('quando não tem nenhum cadastrado',() => {
+  describe('quando não tem nenhum cadastrado', () => {
     const request = {};
     const response = {};
 
@@ -469,7 +481,7 @@ describe('Cadastro de uma nova venda', () => {
 });
 
 describe('Carrega a lista de vendas', () => {
-  describe('quando não tem nenhuma cadastrada',() => {
+  describe('quando não tem nenhuma cadastrada', () => {
     const request = {};
     const response = {};
 
@@ -505,7 +517,7 @@ describe('Carrega a lista de vendas', () => {
 
     before(() => {
       sinon.stub(Service.sales, 'getSales').resolves({
-        sales:[{ _id: ID_EXAMPLE, itensSold: payload }]
+        sales: [{ _id: ID_EXAMPLE, itensSold: payload }]
       });
 
       response.status = sinon.stub().returns(response);
@@ -526,7 +538,7 @@ describe('Carrega a lista de vendas', () => {
       await Controller.sales.getSales(request, response);
 
       expect(response.json.calledWith({
-        sales:[{ _id: ID_EXAMPLE, itensSold: payload }]
+        sales: [{ _id: ID_EXAMPLE, itensSold: payload }]
       })).to.be.equal(true);
     });
   });

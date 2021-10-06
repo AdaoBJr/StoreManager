@@ -139,7 +139,7 @@ describe('Cadastro de um novo produto', () => {
 });
 
 describe('Carrega a lista de produtos', () => {
-  describe('quando não tem nenhum cadastrado',() => {
+  describe('quando não tem nenhum cadastrado', () => {
     before(() => {
       sinon.stub(Model.products, 'getProducts').resolves([]);
     });
@@ -664,7 +664,7 @@ describe('Cadastro de uma nova venda', () => {
 });
 
 describe('Carrega a lista de vendas', () => {
-  describe('quando não tem nenhuma cadastrada',() => {
+  describe('quando não tem nenhuma cadastrada', () => {
     before(() => {
       sinon.stub(Model.sales, 'getSales').resolves({ sales: [] });
     });
