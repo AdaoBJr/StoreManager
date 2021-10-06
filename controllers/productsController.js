@@ -28,8 +28,8 @@ const create = rescue(async (req, res, next) => {
 
 const update = rescue(async (req, res, next) => {
   const { id } = req.params;
-  
-  const updatedProduct = await productsService.update(id);
+  const { name, quantity } = req.body;
+  const updatedProduct = await productsService.update(id, name, quantity);
   if (updatedProduct.error) return next(updatedProduct);
 
   return res.status(200).json(updatedProduct);

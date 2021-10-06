@@ -1,4 +1,4 @@
-const productExists = ({ existingProduct }) => {
+const productExists = (existingProduct) => {
   if (existingProduct) {
     return {
       number: 422,
@@ -46,20 +46,20 @@ const validateQuantity = ({ quantity }) => {
   }
 };
 
-const isValidated = ({ name, quantity, existingProduct }) => {
+const isValidated = ({ name, quantity }) => {
   const validateFunctions = [
-    productExists,
     validateLenghtName,
     validateQuantityType,
     validateQuantity,
   ];
 
   for (let i = 0; i < validateFunctions.length; i += 1) {
-    const isValid = validateFunctions[i]({ name, quantity, existingProduct });
+    const isValid = validateFunctions[i]({ name, quantity });
     if (isValid) return (isValid);
   }
 };
 
 module.exports = {
+  productExists,
   isValidated,
 };
