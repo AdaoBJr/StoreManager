@@ -264,3 +264,78 @@ describe('Testing products list', () => {
               });
             });
           });
+
+          describe('Testing update', () => {
+            describe('Expects success', () => {
+              const payload = { name: 'Prod', quantity: 900 };
+              const update = { name: 'Produto', quantity: 9000 };
+          
+              describe('response', () => {
+                let ret;
+                before(async () => {
+                  const mockConn = await connect();
+                  sinon.stub(MongoClient, 'connect').resolves(mockConn);
+                  ret = await mockConn.db('StoreManager').collection('products').insertOne(payload);
+                });
+          
+                after(() => {
+                  MongoClient.connect.restore();
+                });
+          
+                it('Expects an object', async () => {
+                  const ret = await testProd.updateProd(result.insertedId, update.name, update.quantity);
+                  expect(ret).to.be.an('object');
+                });
+          
+                it('Must contain properties "_id", "name", "quantity"', async () => {
+                  const ret = await testProd.updateProd(result.insertedId, update.name, update.quantity);
+                  expect(ret).to.have.all.keys('_id', 'name', 'quantity');
+                });
+              });
+            });
+          
+            describe('Expects to fail', () => {
+              const payload = { name: 'Prod', quantity: 100 };
+              const update = { name: 'Produto', quantity: 1000 };
+              const invalidId = '666'
+              describe('response', () => {
+                before(async () => {
+                  const mockConn = await connect();
+                  sinon.stub(MongoClient, 'connect').resolves(mockConn);
+                  await mockConn.db('StoreManager').collection('products').insertOne(payload);
+                });
+          
+                after(() => {
+                  MongoClient.connect.restore();
+                })
+          
+                it('Expects to be null', async () => {
+                  const ret = await testProd.updateProd(invalidId, update.name, update.quantity);
+                  expect(ret).to.be.null;
+                });
+              })
+            });
+          
+            describe('Expects ID to be invalid', () => {
+              const update = { name: 'Produto', quantity: 1000 };
+              const invalidId = '666'
+          
+              describe('response', () => {
+                before(async () => {
+                  const mockConn = await connect();
+                  sinon.stub(MongoClient, 'connect').resolves(mockConn);
+                  sinon.stub(ObjectId, 'isValid').returns(false);
+                });
+          
+                after(() => {
+                  ObjectId.isValid.restore();
+                  MongoClient.connect.restore();
+                });
+          
+                it('expects to be null', async () => {
+                  const ret = await testProd.updateProd(invalidId, update.name, update.quantity);
+                  expect(ret).to.be.null;
+                });
+              });
+            });
+          });
