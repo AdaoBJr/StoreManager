@@ -5,6 +5,9 @@ const Model = require('../../models');
 const Service = require('../../services');
 const ID_EXAMPLE = '604cb554311d68f491ba5781';
 const NOT_VALID_ID = 'I am not valid';
+const ERROR_CODE_404 = 'not_found';
+const ERROR_NOT_FOUND = 'Sale not found';
+const ERROR_SALES = 'Wrong product ID or invalid quantity';
 
 describe('Cadastro de um novo produto', () => {
   describe('com dados válidos', () => {
@@ -453,6 +456,280 @@ describe('Deleta um produto cadastrado', () => {
       expect(response.name).to.be.equal(payload.name);
 
       expect(response.quantity).to.be.equal(payload.quantity);
+    });
+  });
+});
+
+describe('Cadastro de uma nova venda', () => {
+  describe('com dados válidos', () => {
+    const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
+    const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
+
+    before(() => {
+      sinon.stub(Model.sales, 'storeSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
+    });
+
+    after(() => {
+      Model.sales.storeSales.restore();
+      Model.products.getProductById.restore();
+    });
+
+    it('retorna um objeto', async () => {
+      const response = await Service.sales.storeSales(payload);
+
+      expect(response).to.be.an('object');
+    });
+
+    it('tal objeto possui a "_id" do produto', async () => {
+      const response = await Service.sales.storeSales(payload);
+
+      expect(response).to.have.property('_id');
+    });
+  });
+
+  describe('com dados válidos e mais de um produto', () => {
+    const payload = [{ productId: ID_EXAMPLE, quantity: 3 }, { productId: ID_EXAMPLE, quantity: 5 }];
+    const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
+
+    before(() => {
+      sinon.stub(Model.sales, 'storeSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
+    });
+
+    after(() => {
+      Model.sales.storeSales.restore();
+      Model.products.getProductById.restore();
+    });
+
+    it('retorna um objeto', async () => {
+      const response = await Service.sales.storeSales(payload);
+
+      expect(response).to.be.an('object');
+    });
+
+    it('tal objeto possui a "_id" do produto', async () => {
+      const response = await Service.sales.storeSales(payload);
+
+      expect(response).to.have.property('_id');
+    });
+  });
+
+  describe('com "productId" inexistente', () => {
+    const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
+
+    before(() => {
+      sinon.stub(Model.products, 'getProductById').resolves(null);
+    });
+
+    after(() => {
+      Model.products.getProductById.restore();
+    });
+
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.storeSales(payload);
+
+      expect(response).to.be.an('object');
+
+      expect(response).to.have.property('err');
+    });
+
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.storeSales(payload);
+
+      expect(response.err.code).to.be.equal(ERROR_CODE_400);
+
+      expect(response.err.message).to.be.equal(ERROR_SALES);
+    });
+  });
+
+  describe('com "quantity" menor que 1', () => {
+    const payload = [{ productId: ID_EXAMPLE, quantity: -3 }];
+    const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
+
+    before(() => {
+      sinon.stub(Model.sales, 'storeSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
+    });
+
+    after(() => {
+      Model.sales.storeSales.restore();
+      Model.products.getProductById.restore();
+    });
+
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.storeSales(payload);
+
+      expect(response).to.be.an('object');
+
+      expect(response).to.have.property('err');
+    });
+
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.storeSales(payload);
+
+      expect(response.err.code).to.be.equal(ERROR_CODE_400);
+
+      expect(response.err.message).to.be.equal(ERROR_SALES);
+    });
+  });
+
+  describe('com uma string no campo "quantity"', () => {
+    const payload = [{ productId: ID_EXAMPLE, quantity: "doze" }];
+    const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
+
+    before(() => {
+      sinon.stub(Model.sales, 'storeSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
+    });
+
+    after(() => {
+      Model.sales.storeSales.restore();
+      Model.products.getProductById.restore();
+    });
+
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.storeSales(payload);
+
+      expect(response).to.be.an('object');
+
+      expect(response).to.have.property('err');
+    });
+
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.storeSales(payload);
+
+      expect(response.err.code).to.be.equal(ERROR_CODE_400);
+
+      expect(response.err.message).to.be.equal(ERROR_SALES);
+    });
+  });
+});
+
+describe('Carrega a lista de vendas', () => {
+  describe('quando não tem nenhuma cadastrada',() => {
+    before(() => {
+      sinon.stub(Model.sales, 'getAllSales').resolves({ sales: [] });
+    });
+
+    after(() => {
+      Model.sales.getAllSales.restore();
+    });
+
+    it('retorna um objeto contendo um array', async () => {
+      const response = await Model.sales.getAllSales();
+
+      expect(response).to.be.an('object');
+
+      expect(response.sales).to.be.an('array');
+    });
+
+    it('vazio', async () => {
+      const response = await Model.sales.getAllSales();
+
+      expect(response.sales).to.be.empty;
+    });
+  });
+
+  describe('quando tem vendas cadastradas', () => {
+    const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
+
+    before(() => {
+      sinon.stub(Model.sales, 'getAllSales').resolves({
+        sales: [{ _id: ID_EXAMPLE, itensSold: payload }]
+      });
+    });
+
+    after(() => {
+      Model.sales.getAllSales.restore();
+    });
+
+    it('retorna um objeto contendo um array', async () => {
+      const response = await Model.sales.getAllSales();
+
+      expect(response).to.be.an('object');
+
+      expect(response.sales).to.be.an('array');
+    });
+
+    it('de objetos contendo as informações dos produtos', async () => {
+      const response = await Model.sales.getAllSales();
+
+      expect(response.sales[0]).to.be.an('object');
+
+      expect(response.sales[0]).to.have.property('_id');
+
+      expect(response.sales[0]).to.have.property('itensSold');
+
+      expect(response.sales[0].itensSold).to.be.equal(payload);
+    });
+  });
+});
+
+describe('Carrega uma venda cadastrada pela "_id"', () => {
+  describe('quando o "_id" passado é inválido', () => {
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.getSalesById(NOT_VALID_ID);
+
+      expect(response).to.be.an('object');
+
+      expect(response).to.have.property('err');
+    });
+
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.getSalesById(NOT_VALID_ID);
+
+      expect(response.err.code).to.be.equal(ERROR_CODE_404);
+
+      expect(response.err.message).to.be.equal(ERROR_NOT_FOUND);
+    });
+  });
+
+  describe('quando não encontrada', () => {
+    before(() => {
+      sinon.stub(Model.sales, 'getSalesById').resolves(null);
+    });
+
+    after(() => {
+      Model.sales.getSalesById.restore();
+    });
+
+    it('retorna um objeto de erro', async () => {
+      const response = await Service.sales.getSalesById(ID_EXAMPLE);
+
+      expect(response).to.be.an('object');
+
+      expect(response).to.have.property('err');
+    });
+
+    it('contendo a mensagem correta', async () => {
+      const response = await Service.sales.getSalesById(ID_EXAMPLE);
+
+      expect(response.err.code).to.be.equal(ERROR_CODE_404);
+
+      expect(response.err.message).to.be.equal(ERROR_NOT_FOUND);
+    });
+  });
+
+  describe('quando encontrada', () => {
+    const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
+
+    before(() => {
+      sinon.stub(Model.sales, 'getSalesById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
+    });
+
+    after(() => {
+      Model.sales.getSalesById.restore();
+    });
+
+    it('o retorno é um objeto com as informações da venda', async () => {
+      const response = await Service.sales.getSalesById(ID_EXAMPLE);
+
+      expect(response).to.be.an('object');
+
+      expect(response).to.have.property('itensSold');
+
+      expect(response.itensSold).to.be.equal(payload);
     });
   });
 });
