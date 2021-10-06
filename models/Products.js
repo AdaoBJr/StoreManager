@@ -15,7 +15,8 @@ const findByName = async (name) => {
 
 const selectAll = async () =>
   connection()
-    .then((db) => db.collection('products').find().toArray());
+    .then((db) => db.collection('products').find().toArray())
+    .then((result) => ({ products: result }));
 
 const selectById = async (id) => {
   if (!ObjectId.isValid(id)) return null;
