@@ -148,11 +148,11 @@ describe('Product by ID', () => {
     const payload = { name: 'Produto', quantity: 100 };
 
     describe('response', () => {
-      let ret;
+      let response;
       before(async () => {
         const mockConn = await connect();
         sinon.stub(MongoClient, 'connect').resolves(mockConn);
-        ret = await mockConn.db('StoreManager').collection('products').insertOne(payload);
+        response = await mockConn.db('StoreManager').collection('products').insertOne(payload);
       });
 
       after(async () => {
