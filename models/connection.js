@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
-const MONGO_DB = 'mongodb://localhost:27017';
-// const MONGO_DB = 'mongodb://mongodb:27017';
+// const MONGO_DB = 'mongodb://localhost:27017';
+const MONGO_DB = 'mongodb://mongodb:27017';
 const NAME_DB = 'StoreManager';
 
 const OPTIONS = {

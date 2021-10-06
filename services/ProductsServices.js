@@ -1,114 +1,95 @@
 const Model = require('../models');
 
-const INVALID_ERROR = 'invalid_data';
-const ID_ERROR = {
-  err: {
-    code: INVALID_ERROR,
-    message: 'Wrong id format',
-  },
-};
+const ERROR_CODE_400 = 'invalid_data';
+const ERROR_NAME = { err: {
+  code: ERROR_CODE_400,
+  message: '"name" length must be at least 5 characters long',
+} };
+const ERROR_QTY_STRING = { err: {
+  code: ERROR_CODE_400,
+  message: '"quantity" must be a number',
+} };
+const ERROR_QTY_NUMBER = { err: {
+  code: ERROR_CODE_400,
+  message: '"quantity" must be larger than or equal to 1',
+} };
+const ERROR_ALREADY_EXISTS = { err: {
+  code: ERROR_CODE_400,
+  message: 'Product already exists',
+} };
+const ERROR_ID = { err: {
+  code: ERROR_CODE_400,
+  message: 'Wrong id format',
+} };
 
-const NAME_ERROR = {
-  err: {
-    code: INVALID_ERROR,
-    message: '"name" length must be at least 5 characters long',
-  },
-};
-
-const TYPE_ERROR = {
-  err: {
-    code: INVALID_ERROR,
-    message: '"quantity" must be a number',
-  },
-};
-
-const QUANTITY_ERROR = {
-  err: {
-    code: INVALID_ERROR,
-    message: '"quantity" must be larger than or equal to 1',
-  },
-};
-
-const EXISTS_ERROR = {
-  err: {
-    code: INVALID_ERROR,
-    message: 'Product already exists',
-  },
-};
-
-const nameValidation = (name) => {
+const nameValidator = (name) => {
   const nameRegex = /^.{5,}$/;
 
   return nameRegex.test(name);
 };
 
-const idValidation = (id) => {
+const idValidator = (id) => {
   const idRegex = /^.{24}$/;
 
   return idRegex.test(id);
 };
 
-const quantityTypeValidation = (quantity) => typeof (quantity) === 'number';
+const quantityTypeValidator = (quantity) => typeof(quantity) === 'number';
 
-const quantityValidation = (quantity) => quantity > 0;
+const quantityValidator = (quantity) => quantity >= 1;
 
-const storeProduct = async (data) => {
-  const { name, quantity } = data;
+const storeProduct = async (productData) => {
+  const { name, quantity } = productData;
 
-  if (!nameValidation(name)) return NAME_ERROR;
+  if (!nameValidator(name)) return ERROR_NAME;
 
-  if (!quantityTypeValidation(quantity)) return TYPE_ERROR;
+  if (!quantityTypeValidator(quantity)) return ERROR_QTY_STRING;
 
-  if (!quantityValidation(quantity)) return QUANTITY_ERROR;
+  if (!quantityValidator(quantity)) return ERROR_QTY_NUMBER;
 
   const alreadyExists = await Model.products.getProductByName(name);
 
-  if (alreadyExists) return EXISTS_ERROR;
+  if (alreadyExists) return ERROR_ALREADY_EXISTS;
 
-  const store = await Model.products.storeProduct(data);
-
-  return store;
+  return await Model.products.storeProduct(productData);
 };
 
-const getAllProducts = async () => {
-  const products = await Model.products.getAllProducts();
-  const allProducts = { products: [...products] };
-
-  return allProducts;
-};
+const getAllProducts = async () => await Model.products.getAllProducts();
 
 const getProductsById = async (id) => {
-  if (!idValidation(id)) return ID_ERROR;
+  if (!idValidator(id)) return ERROR_ID;
 
-  const productById = await Model.products.getProductsById(id);
+  const product = await Model.products.getProductsById(id);
+  
+  if (!product) return ERROR_ID;
 
-  return productById;
+  return product;
 };
 
-const updatedProduct = async (id, updateProduct) => {
-  if (!idValidation(id)) return ID_ERROR;
+const updatedProduct = async (id, updatedProduct) => {
+  if (!idValidator(id)) return ERROR_ID;
 
-  const { name, quantity } = updateProduct;
+  const { name, quantity } = updatedProduct;
 
-  if (!nameValidation(name)) return NAME_ERROR;
+  if (!nameValidator(name)) return ERROR_NAME;
 
-  if (!quantityTypeValidation(quantity)) return TYPE_ERROR;
+  if (!quantityTypeValidator(quantity)) return ERROR_QTY_STRING;
 
-  if (!quantityValidation(quantity)) return QUANTITY_ERROR;
+  if (!quantityValidator(quantity)) return ERROR_QTY_NUMBER;
 
-  await Model.products.updatedProduct(id, { name, quantity });
+  const product = await Model.products.updatedProduct(id, { name, quantity });
 
-  return { _id: id, name, quantity };
+  return (product.matchedCount === 1) ? { _id: id, name, quantity } : ERROR_ID;
 };
 
 const deleteProduct = async (id) => {
-  if (!idValidation(id)) return ID_ERROR;
+  if (!idValidator(id)) return ERROR_ID;
 
   const deletedProduct = await Model.products.getProductsById(id);
 
   const product = await Model.products.deleteProduct(id);
 
-  return (product.deletedCount === 1) ? deletedProduct : ID_ERROR;
+  return (product.deletedCount === 1) ? deletedProduct : ERROR_ID;
 };
 
 module.exports = {

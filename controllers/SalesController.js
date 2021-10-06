@@ -1,22 +1,24 @@
 const Service = require('../services');
 
-const STATUS_OK = 200;
-const STATUS_CREATED = 201;
-const STATUS_UNPROCESSABLE = 422;
-const STATUS_NOT_FOUND = 404;
+const HTTP_OK_STATUS = 200;
+const HTTP_NOT_FOUND_STATUS = 404;
+const HTTP_UNPROCESSABLE_STATUS = 422;
+const ERROR_STOCK = 'stock_problem';
 
 const storeSales = async (req, res) => {
-  const sales = await Service.sales.storeSales(req.body);
+  const sale = await Service.sales.storeSales(req.body);
 
-  if (sales.err) return res.status(STATUS_UNPROCESSABLE).json(sales);
+  if (sale.err) return res.status(
+    sale.err.code === ERROR_STOCK ? HTTP_NOT_FOUND_STATUS : HTTP_UNPROCESSABLE_STATUS
+  ).json(sale);
 
-  res.status(STATUS_CREATED).json(sales);
+  res.status(HTTP_OK_STATUS).json(sale);
 };
 
 const getAllSales = async (_req, res) => {
   const sales = await Service.sales.getAllSales();
 
-  res.status(STATUS_OK).json(sales);
+  res.status(HTTP_OK_STATUS).json(sales);
 };
 
 const getSalesById = async (req, res) => {
@@ -24,24 +26,37 @@ const getSalesById = async (req, res) => {
 
   const sale = await Service.sales.getSalesById(id);
 
-  if (sale.err) return res.status(STATUS_NOT_FOUND).json(sale);
+  if (sale.err) return res.status(HTTP_NOT_FOUND_STATUS).json(sale);
 
-  res.status(STATUS_OK).json(sale);
+  res.status(HTTP_OK_STATUS).json(sale);
 };
 
-const updatedSale = async (req, res) => {
+const updateSale = async (req, res) => {
   const { id } = req.params;
 
-  const sale = await Service.sales.updatedSale(id, req.body);
+  const sale = await Service.sales.updateSale(id, req.body);
 
-  if (sale.err) return res.status(STATUS_UNPROCESSABLE).json(sale);
+  if (sale.err) return res.status(HTTP_UNPROCESSABLE_STATUS).json(sale);
 
-  res.status(STATUS_OK).json(sale);
+  res.status(HTTP_OK_STATUS).json(sale);
+};
+
+const deleteSale = async (req, res) => {
+  const { id } = req.params;
+
+  const sale = await Service.sales.deleteSale(id);
+
+  if (sale.err) return res.status(
+    sale.err.code === ERROR_STOCK ? HTTP_NOT_FOUND_STATUS : HTTP_UNPROCESSABLE_STATUS
+  ).json(sale);
+
+  res.status(HTTP_OK_STATUS).json(sale);
 };
 
 module.exports = {
   storeSales,
   getAllSales,
   getSalesById,
-  updatedSale,
+  updateSale,
+  deleteSale,
 };

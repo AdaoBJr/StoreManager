@@ -1,12 +1,15 @@
-const { ObjectId } = require('mongodb');
 const connection = require('./connection');
 
-const storeProduct = async (data) => {
-  const { name, quantity } = data;
+const { ObjectId } = require('mongodb');
 
-  const productsResult = await connection().then((db) => db.collection('products'));
+const COLLECTION = 'products';
 
-  const { insertedId: _id } = await productsResult.insertOne({
+const storeProduct = async (productData) => {
+  const { name, quantity } = productData;
+
+  const productsCollection = await connection().then((db) => db.collection(COLLECTION));
+
+  const { insertedId: _id } = await productsCollection.insertOne({
     name,
     quantity,
   });
@@ -14,39 +17,43 @@ const storeProduct = async (data) => {
   return { _id, name, quantity };
 };
 
-const getAllProducts = async () => {
-  const allProducts = await connection()
-    .then((db) => db.collection('products').find().toArray());
+const getProductByName = async (name) => {
+  const productsCollection = await connection().then((db) => db.collection(COLLECTION));
 
-  return allProducts;
+  return await productsCollection.findOne({ name });
 };
 
-const getProductByName = async (name) => {
-  const productsResult = await connection().then((db) => db.collection('products'));
-  const result = await productsResult.findOne({ name });
-  return result;
+const getAllProducts = async () => {
+  const product = {};
+
+  const productsCollection = await connection().then((db) => db.collection(COLLECTION));
+
+  product.products = await productsCollection.find({}).toArray();
+
+  return product;
 };
 
 const getProductsById = async (id) => {
-  const productsResult = await connection().then((db) => db.collection('products'));
-  const result = await productsResult.findOne({ _id: ObjectId(id) });
-  return result;
+  const productsCollection = await connection().then((db) => db.collection(COLLECTION));
+
+  return await productsCollection.findOne({ _id: ObjectId(id) });
 };
 
-const updatedProduct = async (id, name, quantity) => {
-  connection()
-    .then((db) => db.collection('products')
-      .updateOne(
-        { _id: ObjectId(id) },
-        { $set: { name, quantity } },
-      ));
+const updatedProduct = async (id, updatedProduct) => {
+  const { name, quantity } = updatedProduct;
+
+  const productsCollection = await connection().then((db) => db.collection(COLLECTION));
+
+  return await productsCollection.updateOne(
+    { _id: ObjectId(id) },
+    { $set: { name, quantity} },
+  );
 };
 
 const deleteProduct = async (id) => {
-  const product = await connection()
-    .then((db) => db.collection('products').deleteOne({ _id: ObjectId(id) }));
+  const productsCollection = await connection().then((db) => db.collection(COLLECTION));
 
-  return product;
+  return await productsCollection.deleteOne({ _id: ObjectId(id) });
 };
 
 module.exports = {
