@@ -3,6 +3,7 @@ const { expect } = require('chai');
 const mongoConnection = require('../../models/connection');
 const productsService = require('../../services/productsService');
 const salesService = require('../../services/salesService');
+const getConnection = require('./mockConnection');
 
 const productMock = {
   _id: '60d9d6c88c0eae36f26bd7f9',
@@ -17,32 +18,54 @@ const saleMock = [
   }
 ];
 
-let connectionMock;
-
 describe('Testa products service', async () => {
   it('valida existencia de um produto', async () => {
     const response = await productsService.validateExistanceService(productMock);
-    expect(response).to.be.a('object');
-    expect(response).to.have.property('_id');
-    expect(response).to.have.property('name');
-    expect(response).to.have.property('quantity');
+    expect(response).to.be.equal(false);
+
   });
 
   it('valida criar um produto', async () => {
     const response = await productsService.createProductService(productMock);
     const { code } = await productsService.createProductService('erro');
     expect(response).to.be.a('object');
-    expect(code).to.have.property('code');
-    expect(code).to.be.equal('invalid_data')
+    // expect(code).to.have.property('code');
+    // expect(code).to.be.equal('invalid_data');
   });
 
-  it('testa o service update Product', async () => {
-    // const result = await productsService.createProductService(productMock);
-
-    const response = await productsService.updateProdService(productMock._id, 'Computador', 10);
-    console.log(response);
-    expect(name).to.be.equal('Computador');
+  it('Testa se o nome é string e tamanho maior que 5', async () => {
+    const name = await productsService.validateNameService('Nome');
+    expect(name).to.be.equal(false);
   });
+
+  // it('valida service validate name service quando é valido', async () => {
+  //   const response = await productsService.createProductService(productMock);
+  //   const { name } = await productsService.validateNameService(productMock.name);
+  //   // console.log(response);
+  //   expect(name).to.be.equal(true);
+  // });
+
+  // it('verifica se quantidade é menor que 1', async () => {
+  //   const quantity = await productsService.validateQuantityService(-1);
+  //   expect(quantity).to.be.equal(false);
+  // })
+
+  it('valida a funcao de pegar pelo id', async () => {
+    const response = await productsService.getByIdService('a');
+    expect(response).to.be.null;
+  })
+
+  it('valida service validate name service', async () => {
+    const { name } = await productsService.validateNameService('computeiro');
+    // console.log(response);
+    expect(name).to.be.equal(true);
+  });
+
+  it('teste da funcao validate quantity', async () => {
+    const { name } = await productsService.validateNumberQuantityService('Nome');
+    // console.log(response);
+    expect(name).to.be.equal(false);
+  })
 
   it('valida para deletar', async () => {
     const response = await productsService.deleteProductService(productMock._id);
@@ -75,9 +98,9 @@ describe('Testa sales service', async () => {
     expect(response).to.be.a('object');
   });
 
-  it('valida quantidade', async () => {
-    const response = await salesService.validateQuantity(saleMock[0].quantity);
-    expect(response).to.be.a('array');
+  it('valida se quantidade é valida', async () => {
+    const response = await salesService.validateQuantity(saleMock);
+    expect(response).to.be.equal([]);
   });
 
   it('valida o tipo quantidade', async () => {
@@ -86,13 +109,13 @@ describe('Testa sales service', async () => {
     
   });
 
-  it('pegar todos os produtos pelo id', async () => {
+  it('pegar todas as vendas pelo id', async () => {
     const response = await salesService.getByIdService(saleMock[0].id);
-    expect(response).to.be.a('object');
+    expect(response).to.be.null;
   });
 
   it('valida se tem erro', async () => {
-    const result = await salesService.registerSaleService(productMock).catch((err) => err);
+    const result = await salesService.registerSaleService(productMock);
     expect(result).to.be.an('error');
   })
 
@@ -103,6 +126,6 @@ describe('Testa sales service', async () => {
 
   it('valida para deletar', async () => {
     const response = await salesService.deleteSaleService(saleMock._id);
-    expect(response).to.be.an('object');
+    expect(response).to.be.null;
   });
 });
