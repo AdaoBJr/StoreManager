@@ -55,7 +55,6 @@ const deleteOne = async (id) => {
   return getProduct;
 };
 
-
 module.exports = {
   getAll,
   getById,
