@@ -170,3 +170,27 @@ describe('Testing products list', () => {
             });
           });
         });
+
+        describe('Expects prod to not exist', () => {
+            const mockID = "4216d615516b0bf9168afc23";
+            const payload = { name: 'Produto', quantity: 840 };
+        
+            describe('response', () => {
+              let ret;
+              before(async () => {
+                const mockConn = await connect();
+                sinon.stub(MongoClient, 'connect').resolves(mockConn);
+                ret = await mockConn.db('StoreManager').collection('products').insertOne(payload);
+              });
+        
+              after(() => {
+                MongoClient.connect.restore();
+              });
+        
+              it('Expects "null"', async () => {
+                const ret = await testProd.selectById(mockID);
+                expect(ret).to.be.null;
+              });
+            });
+          });
+          
