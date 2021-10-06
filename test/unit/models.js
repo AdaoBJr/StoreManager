@@ -142,3 +142,31 @@ describe('Testing products list', () => {
             });
         });
     });
+
+    describe('Product by ID', () => {
+        describe('Expects product to exist', () => {
+          const payload = { name: 'Produto', quantity: 840 };
+      
+          describe('response', () => {
+            let ret;
+            before(async () => {
+              const mockConn = await connect();
+              sinon.stub(MongoClient, 'connect').resolves(mockConn);
+              ret = await mockConn.db('StoreManager').collection('products').insertOne(payload);
+            });
+      
+            after(async () => {
+              MongoClient.connect.restore();
+            });
+      
+            it('Expects an object', async () => {
+              const ret = await testProd.selectById(response.insertedId);
+              expect(ret).to.be.an('object');
+            });
+      
+            it('Must contain the properties: "_id", "name", "quantity"', async () => {
+              const ret = await testProd.selectById(response.insertedId);
+              expect(ret).to.have.all.keys('_id', 'name', 'quantity');
+            });
+          });
+        });
