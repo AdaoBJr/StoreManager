@@ -46,8 +46,18 @@ describe('Testing products list', () => {
                 const { products } = await testProd.selectAll();
                 expect(products).to.be.an('array');
               });
-            })
-        })
+
+              it('array of objects', async () => {
+                const { products } = await testProd.selectAll();
+                expect(products[0]).to.include.an('object')
+              });
+
+              it('object has the properties: "_id", "name", "quantity"', async () => {
+                const { products } = await testProd.selectAll();
+                expect(products[0]).to.have.all.keys('_id', 'name', 'quantity');
+              });
+            });
+        });
 
     })
 });
