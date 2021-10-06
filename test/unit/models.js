@@ -59,5 +59,26 @@ describe('Testing products list', () => {
             });
         });
 
+        describe('inexistent prod', () => {
+            describe('response', () => {
+              before(async () => {
+                const mock = await getConnection();
+                sinon.stub(MongoClient, 'connect').resolves(mock);
+                await mock.db('StoreManager').collection('products').deleteMany({});
+              });
+
+              after(() => {
+                MongoClient.connect.restore();
+              })
+
+              it('expects to return an object', async () => {
+                const ret = await testProd.selectAll();
+                expect(ret).to.be.an('object');
+              });
+
+              it('o objeto possui a chave "products"', async () => {
+                const response = await productsModel.getAll();
+                expect(response).to.have.property('products');
+              });
     })
 });
