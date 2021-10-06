@@ -1,57 +1,96 @@
 const { ObjectId } = require('mongodb');
-const connection = require('./connection');
+const mongoConnection = require('./connection');
 
-const getAll = async () => connection()
-    .then((db) => db.collection('products').find().toArray())
-    .then((products) => ({ products }));
+async function getAll() {
+  const db = await mongoConnection.getConnection();
+  const products = await db.collection('products').find().toArray();
 
-const getById = async (id) => {
-  if (!ObjectId.isValid(id)) {
-    return null;
-  }
+  return products;
+}
 
-  const productData = await connection()
-    .then((db) => db.collection('products').findOne(new ObjectId(id)));
+async function getByName(name) {
+  const db = await mongoConnection.getConnection();
+  const productsByName = await db
+  .collection('products')
+  .find({ name }, {})
+  .toArray();
 
-  if (!productData) return null;
+  return productsByName;
+}
 
-  return productData;
-};
+async function getById(id) {
+  if (!ObjectId.isValid(id)) return null;
 
-const create = async (name, quantity) => {
-  const db = await connection();
-  const product = await db.collection('products')
-    .insertOne({ name, quantity });
-    return { _id: product.insertedId, name, quantity };
-};
+  const db = await mongoConnection.getConnection();
+  const productsById = await db
+  .collection('products')
+  .find({ _id: ObjectId(id) })
+  .toArray();
 
-const update = async (_id, name, quantity) => {
-  const db = await connection();
-  await db.collection('products')
-    .updateOne({ _id: new ObjectId(_id) }, { $set: { name, quantity } });
+  return productsById[0];
+}
 
-      return { _id, name, quantity }; 
-};
+async function addProduct({ name, quantity }) {
+  const db = await mongoConnection.getConnection();
+  const { insertedId: _id } = await db.collection('products').insertOne(
+    { name, quantity },
+  );
 
-const deleteOne = async (id) => {
-  const db = await connection();
-  await db.collection('products').deleteOne({ _id: ObjectId(id) });
-};
+  return {
+    _id,
+    name,
+    quantity,
+  };
+}
 
-const findByName = async (name) => {
-  const product = await connection()
-    .then((db) => db.collection('products').findOne({ name }));
+async function updateProduct({ id, name, quantity }) {
+  if (!ObjectId.isValid(id)) return null;
 
-  if (!product) return null;
+  const db = await mongoConnection.getConnection();
+  await db.collection('products').updateOne(
+    { _id: ObjectId(id) },
+    { $set: { name, quantity } },
+  );
 
-  return (product);
-};
+  return {
+    _id: id,
+    name,
+    quantity,
+  };
+}
+
+async function updateProductQty(id, quantity) {
+  if (!ObjectId.isValid(id)) return null;
+
+  const db = await mongoConnection.getConnection();
+  await db.collection('products').updateOne(
+    { _id: ObjectId(id) },
+    { $set: { quantity } },
+  );
+
+  return {
+    _id: id,
+    quantity,
+  };
+}
+
+async function deleteProduct(id) {
+  if (!ObjectId.isValid(id)) return null;
+
+  const db = await mongoConnection.getConnection();
+  await db.collection('products').deleteOne(
+    { _id: ObjectId(id) },
+  );
+
+  return { _id: ObjectId(id) };
+}
 
 module.exports = {
   getAll,
+  getByName,
   getById,
-  create,
-  findByName,
-  update,
-  deleteOne,
+  addProduct,
+  updateProduct,
+  updateProductQty,
+  deleteProduct,
 };

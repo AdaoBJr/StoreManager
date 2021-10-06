@@ -1,12 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const errorMiddleware = require('./middlewares/error');
-const productsRouter = require('./routes/productsRouter');
-const salesRouter = require('./routes/salesRouter');
-
 const app = express();
-
 app.use(bodyParser.json());
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -14,13 +9,16 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.use('/products', productsRouter);
-app.use('/sales', salesRouter);
+const productsRouter = require('./routers/productsRouter');
 
-app.use(errorMiddleware);
+app.use('/products', productsRouter);
+
+const salesRouter = require('./routers/salesRouter');
+
+app.use('/sales', salesRouter);
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Ouvindo a porta ${PORT}`);
+  console.log(`API running on port ${PORT}`);
 });

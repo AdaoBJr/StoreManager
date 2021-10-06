@@ -1,64 +1,109 @@
 const productsModel = require('../models/productsModel');
-const validations = require('../middlewares/validate');
 
-const getAll = async () => productsModel.getAll();
+const code = 'invalid_data';
 
-const getById = async (id) => {
-  const product = await productsModel.getById(id);
+async function nameExists(name) {
+  // checks if the product's name is in the data
+  const productsByName = await productsModel.getByName(name);
 
-  if (!product) {
-    return {
-      number: 422,
-      error: {
-        code: 'invalid_data',
-        message: 'Wrong id format',
-      },
-    };
-  }
+  if (!productsByName.length) return { result: false };
+  return {
+    result: true,
+    message: 'Product already exists',
+  };
+}
 
-  return product;
-};
+async function nameIsValid(name) {
+  const nameLength = name.length;
 
-const create = async (name, quantity) => {
-  const existingProduct = await productsModel.findByName(name, quantity);
+  if (nameLength >= 5) return { result: true };
+  return {
+    result: false,
+    message: '"name" length must be at least 5 characters long',
+  };
+}
 
-  const isExist = validations.productExists(existingProduct);
+async function quantityIsNumber(quantity) {
+  const isNumber = typeof quantity === 'number';
 
-  if (isExist) return isExist;
+  if (isNumber) return { result: true };
+  return {
+    result: false,
+    message: '"quantity" must be a number',
+  };
+}
 
-  const isvalid = validations.isValidated({ name, quantity });
+async function quantityIsValid(quantity) {
+  const isPositive = quantity > 0;
 
-  if (isvalid) return isvalid;
+  if (isPositive) return { result: true };
+  return {
+    result: false,
+    message: '"quantity" must be larger than or equal to 1',
+  };
+}
 
-  return productsModel.create(name, quantity);
-};
+async function getAll() {
+  const products = await productsModel.getAll();
+  return products;
+}
 
-const update = async (id, name, quantity) => {
-  const getProduct = await getById(id);
+async function getById(id) {
+  const productsById = await productsModel.getById(id);
 
-  if (getProduct.error) return getProduct;
+  if (!productsById) return { code, message: 'Wrong id format' };
+  return productsById;
+}
 
-  const isvalid = validations.isValidated({ name, quantity });
+async function addProduct({ name, quantity }) {
+  const productNameExists = await nameExists(name);
+  if (productNameExists.result) return { code, message: productNameExists.message };
 
-  if (isvalid) return isvalid;
+  const productNameIsValid = await nameIsValid(name);
+  if (!productNameIsValid.result) return { code, message: productNameIsValid.message };
 
-  return productsModel.update(id, name, quantity);
-};
+  const productQuantityIsNumber = await quantityIsNumber(quantity);
+  if (!productQuantityIsNumber.result) return { code, message: productQuantityIsNumber.message };
 
-const deleteOne = async (id) => {
-  const getProduct = await getById(id);
+  const productQuantityIsValid = await quantityIsValid(quantity);
+  if (!productQuantityIsValid.result) return { code, message: productQuantityIsValid.message };
 
-  if (getProduct.error) return getProduct;
+  const addedProduct = await productsModel.addProduct({ name, quantity });
+  return addedProduct;
+}
 
-  productsModel.deleteOne(id);
+async function updateProduct({ id, name, quantity }) {
+  const productNameIsValid = await nameIsValid(name);
+  if (!productNameIsValid.result) return { code, message: productNameIsValid.message };
 
-  return getProduct;
-};
+  const productQuantityIsNumber = await quantityIsNumber(quantity);
+  if (!productQuantityIsNumber.result) return { code, message: productQuantityIsNumber.message };
+
+  const productQuantityIsValid = await quantityIsValid(quantity);
+  if (!productQuantityIsValid.result) return { code, message: productQuantityIsValid.message };
+
+  const updatedProduct = await productsModel.updateProduct({ id, name, quantity });
+  return updatedProduct;
+}
+
+async function deleteProduct(id) {
+  const productById = await getById(id);
+
+  if (productById.message) return productById;
+
+  const { _id } = await productsModel.deleteProduct(id);
+
+  return {
+    _id,
+    name: productById.name,
+    quantity: productById.quantity,
+  };
+}
 
 module.exports = {
   getAll,
   getById,
-  create,
-  update,
-  deleteOne,
+  addProduct,
+  updateProduct,
+  deleteProduct,
 };

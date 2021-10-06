@@ -1,54 +1,54 @@
-const rescue = require('express-rescue');
 const productsService = require('../services/productsService');
 
-const create = rescue(async (req, res, next) => {
-  const { name, quantity } = req.body;
-  
-  const newProduct = await productsService.create(name, quantity);
-  if (newProduct.error) return next(newProduct);
-
-  return res.status(201).json(newProduct);
-});
-
-const getById = rescue(async (req, res, next) => {
-  const { id } = req.params;
-
-  const product = await productsService.getById(id);
-
-  if (product.error) return next(product);
-
-  res.status(200).json(product);
-});
-
-const getAll = rescue(async (_req, res, _next) => {
+async function getAll(_req, res) {
   const products = await productsService.getAll();
+  res.status(200).json({ products });
+}
 
-  res.status(200).json(products);
-});
-
-const update = rescue(async (req, res, next) => {
+async function getById(req, res) {
   const { id } = req.params;
+
+  const productsById = await productsService.getById(id);
+
+  if (productsById.message) return res.status(422).json({ err: productsById });
+  res.status(200).json(productsById);
+}
+
+async function addProduct(req, res) {
   const { name, quantity } = req.body;
-  
-  const updatedProduct = await productsService.update(id, name, quantity);
-  if (updatedProduct.error) return next(updatedProduct);
+  const addedProduct = await productsService.addProduct({
+    name,
+    quantity,
+  });
 
-  return res.status(200).json(updatedProduct);
-});
+  if (addedProduct.message) {
+    return res.status(422).json({ err: addedProduct });
+  }
+  res.status(201).json(addedProduct);
+}
 
-const deleteOne = rescue(async (req, res, next) => {
+async function updateProduct(req, res) {
+  const { name, quantity } = req.body;
   const { id } = req.params;
-  
-  const deleteProduct = await productsService.deleteOne(id);
-  if (deleteProduct.error) return next(deleteProduct);
 
-  return res.status(200).json(deleteProduct);
-});
+  const updatedProduct = await productsService.updateProduct({ id, name, quantity });
+
+  if (updatedProduct.message) return res.status(422).json({ err: updatedProduct });
+  res.status(200).json(updatedProduct);
+}
+
+async function deleteProduct(req, res) {
+  const { id } = req.params;
+  const deletedProduct = await productsService.deleteProduct(id);
+
+  if (deletedProduct.message) return res.status(422).json({ err: deletedProduct });
+  res.status(200).json(deletedProduct);
+}
 
 module.exports = {
   getAll,
   getById,
-  create,
-  update,
-  deleteOne,
+  addProduct,
+  updateProduct,
+  deleteProduct,
 };
