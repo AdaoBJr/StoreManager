@@ -345,12 +345,12 @@ describe('Expects prod deletion', () => {
   describe('Expects success', () => {
     const payload = { name: 'Produto', quantity: 100 };
     describe('response', () => {
-      let ret;
+      let result;
 
       before(async () => {
         const mockConn = await connect();
         sinon.stub(MongoClient, 'connect').resolves(mockConn);
-        ret = await mockConn.db('StoreManager').collection('products').insertOne(payload);
+        result = await mockConn.db('StoreManager').collection('products').insertOne(payload);
       });
 
       after(() => {
