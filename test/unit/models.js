@@ -271,11 +271,11 @@ describe('Testing update', () => {
     const update = { name: 'Produto', quantity: 1000 };
 
     describe('response', () => {
-      let ret;
+      let result;
       before(async () => {
         const mockConn = await connect();
         sinon.stub(MongoClient, 'connect').resolves(mockConn);
-        ret = await mockConn.db('StoreManager').collection('products').insertOne(payload);
+        result = await mockConn.db('StoreManager').collection('products').insertOne(payload);
       });
 
       after(() => {
