@@ -62,7 +62,7 @@ describe('Testing products list', () => {
         describe('inexistent prod', () => {
             describe('response', () => {
               before(async () => {
-                const mock = await getConnection();
+                const mock = await connect();
                 sinon.stub(MongoClient, 'connect').resolves(mock);
                 await mock.db('StoreManager').collection('products').deleteMany({});
               });
@@ -93,5 +93,30 @@ describe('Testing products list', () => {
             });
           })
         });
+
+        describe('Search product by name', () => {
+            describe('Expecting product to exist', () => {
+              const payload = { name: 'Produto', quantity: 840 };
+              describe('API response', () => {
+          
+                before(async () => {
+                  const mockConn = await connect();
+                  sinon.stub(MongoClient, 'connect').resolves(mockConn);
+                  await mockConn.db('StoreManager').collection('products').insertOne(payload);
+                });
+          
+                after(() => {
+                  MongoClient.connect.restore();
+                });
+          
+                it('Expects object', async () => {
+                  const ret = await testProd.findByName(payload.name);
+                  expect(ret).to.be.an('object');
+                });
+          
+                it('Expects to have the properties "_id", "name", "quantity"', async () => {
+                  const ret = await testProd.findByName(payload.name);
+                  expect(ret).to.have.all.keys('_id', 'name', 'quantity');
+                });
     })
 });
