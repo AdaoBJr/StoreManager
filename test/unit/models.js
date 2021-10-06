@@ -27,6 +27,25 @@ describe('Testing products list', () => {
                 sinon.stub(MongoClient, 'connect').resolves(mockConn);
                 await mockConn.db('StoreManager').collection('products').insertOne(payload);
               });
+
+              after(() => {
+                  MongoClient.connect.restore();
+              })
+
+              it('Must be an object', async () => {
+                const ret = await testProd.selectAll();
+                expect(ret).to.be.an('object');
+              });
+
+              it('Object has "products" property', async () => {
+                const ret = await testProd.selectAll();
+                expect(ret).to.have.property('products');
+              });
+
+              it('"products" property is an array', async () => {
+                const { products } = await testProd.selectAll();
+                expect(products).to.be.an('array');
+              });
             })
         })
 
