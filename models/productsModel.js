@@ -10,7 +10,6 @@ async function getAll() {
 }
 
 async function getById({ id }) {
-  console.log({ id });
   const db = await getConnection();
   const product = await db.collection(collection).findOne({ _id: ObjectId(id) });
   return product;
