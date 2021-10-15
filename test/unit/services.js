@@ -26,16 +26,6 @@ describe('Cadastro de um novo produto', () => {
   describe('com dados válidos', () => {
     const payload = { name: 'Testy, the Tester', quantity: 30 };
 
-    before(() => {
-      sinon.stub(Model.products, 'addProduct').resolves({ _id: ID_EXAMPLE, ...payload });
-      sinon.stub(Model.products, 'getProductByName').resolves(false);
-    });
-
-    after(() => {
-      Model.products.addProduct.restore();
-      Model.products.getProductByName.restore();
-    });
-
     it('retorna um objeto', async () => {
       const response = await Service.products.addProduct(payload);
 
@@ -112,14 +102,6 @@ describe('Cadastro de um novo produto', () => {
   describe('com um produto que já está cadastrado', () => {
     const payload = { name: 'Testy, the Tester', quantity: 30 };
 
-    before(() => {
-      sinon.stub(Model.products, 'getProductByName').resolves(true);
-    });
-
-    after(() => {
-      Model.products.getProductByName.restore();
-    });
-
     it('retorna um objeto de erro', async () => {
       const response = await Service.products.addProduct(payload);
 
@@ -140,14 +122,6 @@ describe('Cadastro de um novo produto', () => {
 
 describe('Carrega a lista de produtos', () => {
   describe('quando não tem nenhum cadastrado', () => {
-    before(() => {
-      sinon.stub(Model.products, 'getProducts').resolves([]);
-    });
-
-    after(() => {
-      Model.products.getProducts.restore();
-    });
-
     it('retorna um array', async () => {
       const response = await Model.products.getProducts();
 
@@ -163,14 +137,6 @@ describe('Carrega a lista de produtos', () => {
 
   describe('quando tem produtos cadastrados', () => {
     const payload = { name: 'Testy, the Tester', quantity: 30 };
-
-    before(() => {
-      sinon.stub(Model.products, 'getProducts').resolves([payload]);
-    });
-
-    after(() => {
-      Model.products.getProducts.restore();
-    });
 
     it('retorna um array', async () => {
       const response = await Model.products.getProducts();
@@ -214,13 +180,6 @@ describe('Carrega um produto cadastrado pela "_id"', () => {
   });
 
   describe('quando não encontrado', () => {
-    before(() => {
-      sinon.stub(Model.products, 'getProductById').resolves(null);
-    });
-
-    after(() => {
-      Model.products.getProductById.restore();
-    });
 
     it('retorna um objeto de erro', async () => {
       const response = await Service.products.getProductById(ID_EXAMPLE);
@@ -241,14 +200,6 @@ describe('Carrega um produto cadastrado pela "_id"', () => {
 
   describe('quando encontrado', () => {
     const payload = { name: 'Testy, the Tester', quantity: 30 };
-
-    before(() => {
-      sinon.stub(Model.products, 'getProductById').resolves(payload);
-    });
-
-    after(() => {
-      Model.products.getProductById.restore();
-    });
 
     it('o retorno é um objeto, com as informações do produto', async () => {
       const response = await Service.products.getProductById(ID_EXAMPLE);
@@ -289,14 +240,6 @@ describe('Atualiza as informações de um produto', () => {
 
   describe('quando não encontrado', () => {
     const updatedPayload = { name: 'Testy, the Tester', quantity: 45 };
-
-    before(() => {
-      sinon.stub(Model.products, 'updateProduct').resolves({ matchedCount: 0 });
-    });
-
-    after(() => {
-      Model.products.updateProduct.restore();
-    });
 
     it('retorna um objeto de erro', async () => {
       const response = await Service.products.updateProduct(ID_EXAMPLE, updatedPayload);
@@ -378,14 +321,6 @@ describe('Atualiza as informações de um produto', () => {
   describe('quando encontrado, atualiza as informações', () => {
     const updatedPayload = { name: 'Testy, the Tester', quantity: 45 };
 
-    before(() => {
-      sinon.stub(Model.products, 'updateProduct').resolves({ matchedCount: 1 });
-    });
-
-    after(() => {
-      Model.products.updateProduct.restore();
-    });
-
     it('e retorna o produto atualizado', async () => {
       const response = await Service.products.updateProduct(ID_EXAMPLE, updatedPayload);
 
@@ -424,15 +359,6 @@ describe('Deleta um produto cadastrado', () => {
   });
 
   describe('quando não encontrado', () => {
-    before(() => {
-      sinon.stub(Model.products, 'deleteProduct').resolves({ deletedCount: 0 });
-      sinon.stub(Model.products, 'getProductById').resolves(payload);
-    });
-
-    after(() => {
-      Model.products.deleteProduct.restore();
-      Model.products.getProductById.restore();
-    });
 
     it('retorna um objeto de erro', async () => {
       const response = await Service.products.deleteProduct(ID_EXAMPLE);
@@ -452,15 +378,6 @@ describe('Deleta um produto cadastrado', () => {
   });
 
   describe('quando encontrado', () => {
-    before(() => {
-      sinon.stub(Model.products, 'deleteProduct').resolves({ deletedCount: 1 });
-      sinon.stub(Model.products, 'getProductById').resolves(payload);
-    });
-
-    after(() => {
-      Model.products.deleteProduct.restore();
-      Model.products.getProductById.restore();
-    });
 
     it('deleta o produto e retorna as suas informações', async () => {
       const response = await Service.products.deleteProduct(ID_EXAMPLE);
@@ -478,26 +395,13 @@ describe('Deleta um produto cadastrado', () => {
   });
 });
 
-/**  
+/**
  * *  * * * TESTES SALES  * * * *
 */
 
 describe('Cadastro de uma nova venda', () => {
   describe('com dados válidos', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
-    const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
-
-    before(() => {
-      sinon.stub(Model.sales, 'addSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
-      sinon.stub(Model.products, 'updateProduct').resolves(null);
-    });
-
-    after(() => {
-      Model.sales.addSales.restore();
-      Model.products.getProductById.restore();
-      Model.products.updateProduct.restore();
-    });
 
     it('retorna um objeto', async () => {
       const response = await Service.sales.addSales(payload);
@@ -514,19 +418,6 @@ describe('Cadastro de uma nova venda', () => {
 
   describe('com dados válidos e mais de um produto', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }, { productId: ID_EXAMPLE, quantity: 5 }];
-    const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
-
-    before(() => {
-      sinon.stub(Model.sales, 'addSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
-      sinon.stub(Model.products, 'updateProduct').resolves(null);
-    });
-
-    after(() => {
-      Model.sales.addSales.restore();
-      Model.products.getProductById.restore();
-      Model.products.updateProduct.restore();
-    });
 
     it('retorna um objeto', async () => {
       const response = await Service.sales.addSales(payload);
@@ -543,14 +434,6 @@ describe('Cadastro de uma nova venda', () => {
 
   describe('com "productId" inexistente', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
-
-    before(() => {
-      sinon.stub(Model.products, 'getProductById').resolves(null);
-    });
-
-    after(() => {
-      Model.products.getProductById.restore();
-    });
 
     it('retorna um objeto de erro', async () => {
       const response = await Service.sales.addSales(payload);
@@ -571,18 +454,6 @@ describe('Cadastro de uma nova venda', () => {
 
   describe('com "quantity" menor que 1', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: -3 }];
-    const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
-
-    before(() => {
-      sinon.stub(Model.sales, 'addSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
-    });
-
-    after(() => {
-      Model.sales.addSales.restore();
-      Model.products.getProductById.restore();
-    });
-
     it('retorna um objeto de erro', async () => {
       const response = await Service.sales.addSales(payload);
 
@@ -602,17 +473,6 @@ describe('Cadastro de uma nova venda', () => {
 
   describe('com uma string no campo "quantity"', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: "doze" }];
-    const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
-
-    before(() => {
-      sinon.stub(Model.sales, 'addSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
-    });
-
-    after(() => {
-      Model.sales.addSales.restore();
-      Model.products.getProductById.restore();
-    });
 
     it('retorna um objeto de erro', async () => {
       const response = await Service.sales.addSales(payload);
@@ -633,17 +493,6 @@ describe('Cadastro de uma nova venda', () => {
 
   describe('com dados válidos mas com problemas de estoque', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 12 }];
-    const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 10 };
-
-    before(() => {
-      sinon.stub(Model.sales, 'addSales').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
-    });
-
-    after(() => {
-      Model.sales.addSales.restore();
-      Model.products.getProductById.restore();
-    });
 
     it('retorna um objeto de erro', async () => {
       const response = await Service.sales.addSales(payload);
@@ -665,13 +514,6 @@ describe('Cadastro de uma nova venda', () => {
 
 describe('Carrega a lista de vendas', () => {
   describe('quando não tem nenhuma cadastrada', () => {
-    before(() => {
-      sinon.stub(Model.sales, 'getSales').resolves({ sales: [] });
-    });
-
-    after(() => {
-      Model.sales.getSales.restore();
-    });
 
     it('retorna um objeto contendo um array', async () => {
       const response = await Model.sales.getSales();
@@ -690,16 +532,6 @@ describe('Carrega a lista de vendas', () => {
 
   describe('quando tem vendas cadastradas', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
-
-    before(() => {
-      sinon.stub(Model.sales, 'getSales').resolves({
-        sales: [{ _id: ID_EXAMPLE, itensSold: payload }]
-      });
-    });
-
-    after(() => {
-      Model.sales.getSales.restore();
-    });
 
     it('retorna um objeto contendo um array', async () => {
       const response = await Model.sales.getSales();
@@ -743,14 +575,6 @@ describe('Carrega uma venda cadastrada pela "_id"', () => {
   });
 
   describe('quando não encontrada', () => {
-    before(() => {
-      sinon.stub(Model.sales, 'getSaleById').resolves(null);
-    });
-
-    after(() => {
-      Model.sales.getSaleById.restore();
-    });
-
     it('retorna um objeto de erro', async () => {
       const response = await Service.sales.getSaleById(ID_EXAMPLE);
 
@@ -770,14 +594,6 @@ describe('Carrega uma venda cadastrada pela "_id"', () => {
 
   describe('quando encontrada', () => {
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
-
-    before(() => {
-      sinon.stub(Model.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-    });
-
-    after(() => {
-      Model.sales.getSaleById.restore();
-    });
 
     it('o retorno é um objeto com as informações da venda', async () => {
       const response = await Service.sales.getSaleById(ID_EXAMPLE);
@@ -814,22 +630,6 @@ describe('Atualiza as informações de uma venda', () => {
 
   describe('quando não encontrada', () => {
     const updatedPayload = [{ productId: ID_EXAMPLE, quantity: 7 }];
-    const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
-    const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
-
-    before(() => {
-      sinon.stub(Model.sales, 'updateSale').resolves({ matchedCount: 0 });
-      sinon.stub(Model.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
-      sinon.stub(Model.products, 'updateProduct').resolves(null);
-    });
-
-    after(() => {
-      Model.sales.updateSale.restore();
-      Model.sales.getSaleById.restore();
-      Model.products.getProductById.restore();
-      Model.products.updateProduct.restore();
-    });
 
     it('retorna um objeto de erro', async () => {
       const response = await Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
@@ -890,18 +690,6 @@ describe('Atualiza as informações de uma venda', () => {
 
   describe('quando encontrada, mas com erro de estoque', () => {
     const updatedPayload = [{ productId: ID_EXAMPLE, quantity: 7 }];
-    const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
-    const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 3 };
-
-    before(() => {
-      sinon.stub(Model.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
-    });
-
-    after(() => {
-      Model.sales.getSaleById.restore();
-      Model.products.getProductById.restore();
-    });
 
     it('retorna um objeto de erro', async () => {
       const response = await Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
@@ -922,22 +710,6 @@ describe('Atualiza as informações de uma venda', () => {
 
   describe('quando encontrada, atualiza as informações', () => {
     const updatedPayload = [{ productId: ID_EXAMPLE, quantity: 7 }];
-    const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
-    const productPayload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
-
-    before(() => {
-      sinon.stub(Model.sales, 'updateSale').resolves({ matchedCount: 1 });
-      sinon.stub(Model.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
-      sinon.stub(Model.products, 'updateProduct').resolves(null);
-    });
-
-    after(() => {
-      Model.sales.updateSale.restore();
-      Model.sales.getSaleById.restore();
-      Model.products.getProductById.restore();
-      Model.products.updateProduct.restore();
-    });
 
     it('e retorna os produtos vendidos atualizados', async () => {
       const response = await Service.sales.updateSale(ID_EXAMPLE, updatedPayload);
@@ -974,19 +746,6 @@ describe('Deleta uma venda cadastrada', () => {
   });
 
   describe('quando não encontrada', () => {
-    before(() => {
-      sinon.stub(Model.sales, 'deleteSale').resolves({ deletedCount: 0 });
-      sinon.stub(Model.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
-      sinon.stub(Model.products, 'updateProduct').resolves(null);
-    });
-
-    after(() => {
-      Model.sales.deleteSale.restore();
-      Model.sales.getSaleById.restore();
-      Model.products.getProductById.restore();
-      Model.products.updateProduct.restore();
-    });
 
     it('retorna um objeto de erro', async () => {
       const response = await Service.sales.deleteSale(ID_EXAMPLE);
@@ -1006,19 +765,6 @@ describe('Deleta uma venda cadastrada', () => {
   });
 
   describe('quando encontrada', () => {
-    before(() => {
-      sinon.stub(Model.sales, 'deleteSale').resolves({ deletedCount: 1 });
-      sinon.stub(Model.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-      sinon.stub(Model.products, 'getProductById').resolves(productPayload);
-      sinon.stub(Model.products, 'updateProduct').resolves(null);
-    });
-
-    after(() => {
-      Model.sales.deleteSale.restore();
-      Model.sales.getSaleById.restore();
-      Model.products.getProductById.restore();
-      Model.products.updateProduct.restore();
-    });
 
     it('deleta a venda e retorna as suas informações', async () => {
       const response = await Service.sales.deleteSale(ID_EXAMPLE);

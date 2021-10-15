@@ -34,7 +34,7 @@ const idValidator = (id) => {
   return idRegex.test(id);
 };
 
-const quantityTypeValidator = (quantity) => typeof(quantity) === 'number';
+const quantityTypeValidator = (quantity) => typeof (quantity) === 'number';
 
 const quantityValidator = (quantity) => quantity >= 1;
 
@@ -50,17 +50,20 @@ const addProduct = async (productData) => {
   const alreadyExists = await Model.products.getProductByName(name);
 
   if (alreadyExists) return ERROR_ALREADY_EXISTS;
-
-  return await Model.products.addProduct(productData);
+  const product = await Model.products.addProduct(productData);
+  return product;
 };
 
-const getProducts = async () => await Model.products.getProducts();
+const getProducts = async () => {
+  const products = await Model.products.getProducts();
+  return products;
+};
 
 const getProductById = async (id) => {
   if (!idValidator(id)) return ERROR_ID;
 
   const product = await Model.products.getProductById(id);
-  
+
   if (!product) return ERROR_ID;
 
   return product;

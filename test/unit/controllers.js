@@ -59,19 +59,6 @@ describe('Cadastro de um novo produto', () => {
     const response = {};
     const request = {};
 
-    before(() => {
-      request.body = {};
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.products, 'addProduct').resolves(ERROR_NAME);
-    });
-
-    after(() => {
-      Service.products.addProduct.restore();
-    });
-
     it('é chamado o método "status" com o código 422', async () => {
       await Controller.products.addProduct(request, response);
 
@@ -90,22 +77,6 @@ describe('Cadastro de um novo produto', () => {
     const request = {};
 
     const payload = { _id: ID_EXAMPLE, ...request.body };
-
-    before(() => {
-      request.body = {
-        name: 'Testy, the Tester',
-        quantity: 30,
-      };
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.products, 'addProduct').resolves(payload);
-    });
-
-    after(() => {
-      Service.products.addProduct.restore();
-    });
 
     it('é chamado o método "status" com o código 201', async () => {
       await Controller.products.addProduct(request, response);
@@ -126,17 +97,6 @@ describe('Carrega a lista de produtos', () => {
     const request = {};
     const response = {};
 
-    before(() => {
-      sinon.stub(Service.products, 'getProducts').resolves([]);
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-    });
-
-    after(() => {
-      Service.products.getProducts.restore();
-    });
-
     it('é chamado o método "status" com o código 200', async () => {
       await Controller.products.getProducts(request, response);
 
@@ -155,17 +115,6 @@ describe('Carrega a lista de produtos', () => {
     const response = {};
 
     const payload = { name: 'Testy, the Tester', quantity: 30 };
-
-    before(() => {
-      sinon.stub(Service.products, 'getProducts').resolves([payload]);
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-    });
-
-    after(() => {
-      Service.products.getProducts.restore();
-    });
 
     it('é chamado o método "status" com o código 200', async () => {
       await Controller.products.getProducts(request, response);
@@ -186,19 +135,6 @@ describe('Carrega um produto cadastrado pela "_id"', () => {
     const request = {};
     const response = {};
 
-    before(() => {
-      request.params = { id: ID_EXAMPLE };
-
-      sinon.stub(Service.products, 'getProductById').resolves(ERROR_ID);
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-    });
-
-    after(() => {
-      Service.products.getProductById.restore();
-    });
-
     it('é chamado o método "status" com o código 422', async () => {
       await Controller.products.getProductById(request, response);
 
@@ -217,19 +153,6 @@ describe('Carrega um produto cadastrado pela "_id"', () => {
     const response = {};
 
     const payload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
-
-    before(() => {
-      request.params = { id: ID_EXAMPLE };
-
-      sinon.stub(Service.products, 'getProductById').resolves(payload);
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-    });
-
-    after(() => {
-      Service.products.getProductById.restore();
-    });
 
     it('é chamado o método "status" com o código 200', async () => {
       await Controller.products.getProductById(request, response);
@@ -252,20 +175,6 @@ describe('Atualiza as informações de um produto', () => {
     const response = {};
     const request = {};
 
-    before(() => {
-      request.params = { id: NOT_VALID_ID };
-      request.body = { ...updatedPayload };
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.products, 'updateProduct').resolves(ERROR_ID);
-    });
-
-    after(() => {
-      Service.products.updateProduct.restore();
-    });
-
     it('é chamado o método "status" com o código 422', async () => {
       await Controller.products.updateProduct(request, response);
 
@@ -284,20 +193,6 @@ describe('Atualiza as informações de um produto', () => {
     const request = {};
 
     const payload = { _id: ID_EXAMPLE, ...updatedPayload };
-
-    before(() => {
-      request.params = { id: ID_EXAMPLE };
-      request.body = { ...updatedPayload };
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.products, 'updateProduct').resolves(payload);
-    });
-
-    after(() => {
-      Service.products.updateProduct.restore();
-    });
 
     it('é chamado o método "status" com o código 200', async () => {
       await Controller.products.updateProduct(request, response);
@@ -318,20 +213,6 @@ describe('Deleta um produto cadastrado', () => {
     const response = {};
     const request = {};
 
-    before(() => {
-      request.params = { id: NOT_VALID_ID };
-      request.body = {};
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.products, 'deleteProduct').resolves(ERROR_ID);
-    });
-
-    after(() => {
-      Service.products.deleteProduct.restore();
-    });
-
     it('é chamado o método "status" com o código 422', async () => {
       await Controller.products.deleteProduct(request, response);
 
@@ -351,20 +232,6 @@ describe('Deleta um produto cadastrado', () => {
 
     const payload = { _id: ID_EXAMPLE, name: 'Testy, the Tester', quantity: 30 };
 
-    before(() => {
-      request.params = { id: ID_EXAMPLE };
-      request.body = {};
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.products, 'deleteProduct').resolves(payload);
-    });
-
-    after(() => {
-      Service.products.deleteProduct.restore();
-    });
-
     it('é chamado o método "status" com o código 200', async () => {
       await Controller.products.deleteProduct(request, response);
 
@@ -379,7 +246,7 @@ describe('Deleta um produto cadastrado', () => {
   });
 });
 
-/**  
+/**
  * *  * * * TESTES SALES  * * * *
 */
 
@@ -387,19 +254,6 @@ describe('Cadastro de uma nova venda', () => {
   describe('com dados inválidos', () => {
     const response = {};
     const request = {};
-
-    before(() => {
-      request.body = {};
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.sales, 'addSales').resolves(ERROR_SALES);
-    });
-
-    after(() => {
-      Service.sales.addSales.restore();
-    });
 
     it('é chamado o método "status" com o código 422', async () => {
       await Controller.sales.addSales(request, response);
@@ -417,19 +271,6 @@ describe('Cadastro de uma nova venda', () => {
   describe('com dados válidos, mas com erro de estoque', () => {
     const response = {};
     const request = {};
-
-    before(() => {
-      request.body = {};
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.sales, 'addSales').resolves(ERROR_STOCK);
-    });
-
-    after(() => {
-      Service.sales.addSales.restore();
-    });
 
     it('é chamado o método "status" com o código 404', async () => {
       await Controller.sales.addSales(request, response);
@@ -449,18 +290,6 @@ describe('Cadastro de uma nova venda', () => {
     const request = {};
 
     const payload = { _id: ID_EXAMPLE, itensSold: request.body };
-
-    before(() => {
-      request.body = [{
-        productId: ID_EXAMPLE,
-        quantity: 3,
-      }];
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.sales, 'addSales').resolves(payload);
-    });
 
     after(() => {
       Service.sales.addSales.restore();
@@ -485,17 +314,6 @@ describe('Carrega a lista de vendas', () => {
     const request = {};
     const response = {};
 
-    before(() => {
-      sinon.stub(Service.sales, 'getSales').resolves({ sales: [] });
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-    });
-
-    after(() => {
-      Service.sales.getSales.restore();
-    });
-
     it('é chamado o método "status" com o código 200', async () => {
       await Controller.sales.getSales(request, response);
 
@@ -514,19 +332,6 @@ describe('Carrega a lista de vendas', () => {
     const response = {};
 
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
-
-    before(() => {
-      sinon.stub(Service.sales, 'getSales').resolves({
-        sales: [{ _id: ID_EXAMPLE, itensSold: payload }]
-      });
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-    });
-
-    after(() => {
-      Service.sales.getSales.restore();
-    });
 
     it('é chamado o método "status" com o código 200', async () => {
       await Controller.sales.getSales(request, response);
@@ -549,19 +354,6 @@ describe('Carrega uma venda cadastrada pela "_id"', () => {
     const request = {};
     const response = {};
 
-    before(() => {
-      request.params = { id: ID_EXAMPLE };
-
-      sinon.stub(Service.sales, 'getSaleById').resolves(ERROR_NOT_FOUND);
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-    });
-
-    after(() => {
-      Service.sales.getSaleById.restore();
-    });
-
     it('é chamado o método "status" com o código 404', async () => {
       await Controller.sales.getSaleById(request, response);
 
@@ -580,19 +372,6 @@ describe('Carrega uma venda cadastrada pela "_id"', () => {
     const response = {};
 
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
-
-    before(() => {
-      request.params = { id: ID_EXAMPLE };
-
-      sinon.stub(Service.sales, 'getSaleById').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-    });
-
-    after(() => {
-      Service.sales.getSaleById.restore();
-    });
 
     it('é chamado o método "status" com o código 200', async () => {
       await Controller.sales.getSaleById(request, response);
@@ -615,20 +394,6 @@ describe('Atualiza as informações de uma venda', () => {
     const response = {};
     const request = {};
 
-    before(() => {
-      request.params = { id: NOT_VALID_ID };
-      request.body = updatedPayload;
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.sales, 'updateSale').resolves(ERROR_SALES);
-    });
-
-    after(() => {
-      Service.sales.updateSale.restore();
-    });
-
     it('é chamado o método "status" com o código 422', async () => {
       await Controller.sales.updateSale(request, response);
 
@@ -645,20 +410,6 @@ describe('Atualiza as informações de uma venda', () => {
   describe('com dados válidos, mas com erro de estoque', () => {
     const response = {};
     const request = {};
-
-    before(() => {
-      request.params = { id: ID_EXAMPLE };
-      request.body = updatedPayload;
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.sales, 'updateSale').resolves(ERROR_STOCK);
-    });
-
-    after(() => {
-      Service.sales.updateSale.restore();
-    });
 
     it('é chamado o método "status" com o código 404', async () => {
       await Controller.sales.updateSale(request, response);
@@ -679,20 +430,6 @@ describe('Atualiza as informações de uma venda', () => {
 
     const payload = { _id: ID_EXAMPLE, itensSold: updatedPayload };
 
-    before(() => {
-      request.params = { id: ID_EXAMPLE };
-      request.body = updatedPayload;
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.sales, 'updateSale').resolves(payload);
-    });
-
-    after(() => {
-      Service.sales.updateSale.restore();
-    });
-
     it('é chamado o método "status" com o código 200', async () => {
       await Controller.sales.updateSale(request, response);
 
@@ -712,20 +449,6 @@ describe('Deleta uma venda cadastrada', () => {
     const response = {};
     const request = {};
 
-    before(() => {
-      request.params = { id: NOT_VALID_ID };
-      request.body = {};
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.sales, 'deleteSale').resolves(ERROR_SALE_ID);
-    });
-
-    after(() => {
-      Service.sales.deleteSale.restore();
-    });
-
     it('é chamado o método "status" com o código 422', async () => {
       await Controller.sales.deleteSale(request, response);
 
@@ -742,20 +465,6 @@ describe('Deleta uma venda cadastrada', () => {
   describe('com dados válidos, mas com erro de estoque', () => {
     const response = {};
     const request = {};
-
-    before(() => {
-      request.params = { id: ID_EXAMPLE };
-      request.body = {};
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.sales, 'deleteSale').resolves(ERROR_STOCK);
-    });
-
-    after(() => {
-      Service.sales.deleteSale.restore();
-    });
 
     it('é chamado o método "status" com o código 404', async () => {
       await Controller.sales.deleteSale(request, response);
@@ -775,20 +484,6 @@ describe('Deleta uma venda cadastrada', () => {
     const request = {};
 
     const payload = [{ productId: ID_EXAMPLE, quantity: 3 }];
-
-    before(() => {
-      request.params = { id: ID_EXAMPLE };
-      request.body = {};
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(Service.sales, 'deleteSale').resolves({ _id: ID_EXAMPLE, itensSold: payload });
-    });
-
-    after(() => {
-      Service.sales.deleteSale.restore();
-    });
 
     it('é chamado o método "status" com o código 200', async () => {
       await Controller.sales.deleteSale(request, response);

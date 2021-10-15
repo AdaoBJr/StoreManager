@@ -1,6 +1,10 @@
 {
   "extends": "trybe-backend",
   "rules": {
-    "sonarjs/no-duplicate-string": ["error", 5]
+    "sonarjs/no-duplicate-string": ["error", 5],
+    "no-underscore-dangle": "off",
+    "complexity": ["error", 6],
+    "max-lines-per-function": ["error", 50],
+    "sonarjs/cognitive-complexity": ["error", 15]
   }
 }
