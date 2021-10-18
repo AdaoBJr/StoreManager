@@ -1,9 +1,18 @@
 const salesModel = require('../models/salesModel');
 const productsModel = require('../models/productsModel');
 const { dictionary } = require('../helpers/dictionary');
+const { validateQuantityTypeAndAmount } = require('../validations/validation');
 
-const { validateQuantityTypeAndAmount, /* validateQuantityAmount, validateQuantityType, */
-} = require('../validations/validation');
+const updateProductQuantity = (sale, operation) => {
+  sale.forEach(async (eachSale) => {
+    let quantity;
+    const { productId, quantity: quantitySale } = eachSale;
+    const { name, quantity: quantityProduct } = await productsModel.getProductById(productId);
+    if (operation === 'subtraction') quantity = quantityProduct - quantitySale;
+    else if (operation === 'sum') quantity = quantityProduct + quantitySale;
+    await productsModel.updateProductById(productId, name, quantity);
+  });
+};
 
 const addSale = async (saleArray) => {
   const verifiedSales = saleArray.map((sale) => {
@@ -19,12 +28,7 @@ const addSale = async (saleArray) => {
 
   const newSale = await salesModel.addSale(saleArray);
 
-  saleArray.forEach(async (eachSale) => {
-    const { productId, quantity: quantitySale } = eachSale;
-    const { name, quantity: quantityProduct } = await productsModel.getProductById(productId);
-    const quantity = quantityProduct - quantitySale;
-    await productsModel.updateProductById(productId, name, quantity);
-  });
+  updateProductQuantity(saleArray, 'subtraction');
 
   return newSale;
 };
@@ -59,11 +63,17 @@ const updateSaleById = async (id, productIdAndquantity) => {
     return undefined;
   });
 
-  const errorUpdate = verifiedSale.find((b) => b);
+  const errorUpdate = verifiedSale.find((verifyAnError) => verifyAnError);
 
   if (errorUpdate) return errorUpdate;
 
+  const previousSale = await salesModel.getSaleById(id);
+
+  updateProductQuantity(previousSale.itensSold, 'sum');
+
   const saleUpdated = await salesModel.updateSaleById(id, productIdAndquantity);
+
+  updateProductQuantity(saleUpdated.itensSold, 'subtraction');
 
   return saleUpdated;
 };
@@ -80,12 +90,8 @@ const deleteSaleById = async (id) => {
   }
 
   const sale = await salesModel.getSaleById(id);
-  sale.itensSold.forEach(async (eachSale) => {
-    const { productId, quantity: quantitySale } = eachSale;
-    const { name, quantity: quantityProduct } = await productsModel.getProductById(productId);
-    const quantity = quantityProduct + quantitySale;
-    await productsModel.updateProductById(productId, name, quantity);
-  });
+
+  updateProductQuantity(sale.itensSold, 'sum');
 
   await salesModel.deleteSaleById(id);
 
