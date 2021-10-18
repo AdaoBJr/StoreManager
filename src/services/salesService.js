@@ -1,4 +1,5 @@
 const salesModel = require('../models/salesModel');
+const productsModel = require('../models/productsModel');
 const { dictionary } = require('../helpers/dictionary');
 
 const { validateQuantityTypeAndAmount, /* validateQuantityAmount, validateQuantityType, */
@@ -17,6 +18,13 @@ const addSale = async (saleArray) => {
   if (errorOnAdd) return errorOnAdd;
 
   const newSale = await salesModel.addSale(saleArray);
+
+  saleArray.forEach(async (eachSale) => {
+    const { productId, quantity: quantitySale } = eachSale;
+    const { name, quantity: quantityProduct } = await productsModel.getProductById(productId);
+    const quantity = quantityProduct - quantitySale;
+    await productsModel.updateProductById(productId, name, quantity);
+  });
 
   return newSale;
 };
@@ -71,7 +79,13 @@ const deleteSaleById = async (id) => {
     };
   }
 
-  const sale = salesModel.getSaleById(id);
+  const sale = await salesModel.getSaleById(id);
+  sale.itensSold.forEach(async (eachSale) => {
+    const { productId, quantity: quantitySale } = eachSale;
+    const { name, quantity: quantityProduct } = await productsModel.getProductById(productId);
+    const quantity = quantityProduct + quantitySale;
+    await productsModel.updateProductById(productId, name, quantity);
+  });
 
   await salesModel.deleteSaleById(id);
 
