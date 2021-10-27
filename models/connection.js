@@ -4,7 +4,7 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
 // Definição da url do mongo
-const MONGO_DB_URL = process.env.MONGO_DB_URL || 'mongodb://localhost:27017/StoreManager';
+const MONGO_DB_URL = process.env.MONGO_DB_URL || 'mongodb://mongodb:27017/StoreManager';
 // Definição do nome do DB
 const DB_NAME = process.env.DB_NAME || 'StoreManager';
 // Criação do schema
