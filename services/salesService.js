@@ -1,36 +1,43 @@
-const SalesModel = require('../models/salesModel');
+// Importação do salesModel
+const salesModel = require('../models/salesModel');
 
+// Realiza o cadstro de uma nova venda
 const create = async (productsArray) => {
-  const result = await SalesModel.create(productsArray);
-
+  // Chama o salesModel para realizar a criação
+  const result = await salesModel.create(productsArray);
+  // Retorna o resultado
   return result;
 };
 
 const getAll = async () => {
-  const result = await SalesModel.getAll();
-
+  // Chama o salesModel para realizar a listagem
+  const result = await salesModel.getAll();
+  // Retorna o resultado
   return result;
 };
 
 const getById = async (id) => {
-  const result = await SalesModel.getById(id);
-  console.log(result);
-
+  // Chama o salesModel para realizar a busca pelo id
+  const result = await salesModel.getById(id);
+  // Retorna o resultado
   return result;
 };
 
 const update = async (id, sale) => {
-  const result = await SalesModel.update(id, sale);
-
+  // Chama o salesModel para realizar a atualização
+  const result = await salesModel.update(id, sale);
+  // Retorna o resultado
   return result;
 };
 
 const deleteById = async (id) => {
-  const result = await SalesModel.deleteById(id);
-
+  // Chama o salesModel para realizar a exclusão
+  const result = await salesModel.deleteById(id);
+  // Retorna o resultado
   return result;
 };
 
+// Exportação padrão
 module.exports = {
   create,
   getAll,
